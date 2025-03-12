@@ -1,0 +1,42 @@
+<article class="h-full flex flex-col gap-[1.5vh]">
+    <section class="flex flex-col pb-[1.5vh] border-b-[0.1vh]">
+        <h1 class="text-[4vh] font-semibold">¡Bienvenido!</h1>
+        <div class="flex items-baseline">
+            <p class="text-[1.7vh] font-light text-gray-400">
+                Este es el inicio en el mundo del factoring, por favor, sigue
+                toda la información siguiendo las instrucciones.
+            </p>
+            <div class="w-[60%] flex justify-end gap-[1vh]">
+                <form-step [active]="formSteps()[0]" [label]="'Selección de rol'" />
+                <form-step [active]="formSteps()[1]" [label]="'Empresa'" />
+                <form-step [active]="formSteps()[2]" [label]="'Documentación'" />
+                <form-step [active]="formSteps()[3]" [label]="'Usuario'" />
+                <form-step [active]="formSteps()[4]" [label]="'Finalizar'" />
+            </div>
+        </div>
+    </section>
+    <section class="flex-1 flex flex-col gap-[2.5vh]">
+        <article class="flex-1 flex flex-col gap-[2.5vh] px-[2vh] pt-[1vh]">
+            <div>
+                <h1 class="text-[2.5vh] font-semibold">Selección de rol</h1>
+                <p class="w-[40%] text-[1.7vh] font-light text-gray-400">
+                    Este es el inicio en el mundo del factoring, por favor, sigue
+                    toda la información siguiendo las instrucciones.
+                </p>
+            </div>
+            <div class="flex-1 bg-primary"></div>
+        </article>
+        <article class="flex items-center justify-between">
+            <span class="text-[1.7vh] text-gray-400 font-light">
+                ¿Ya tienes una cuenta?
+                <a [routerLink]="['/']" class="hover:text-primary hover:underline underline-offset-[0.5vh]">
+                    Inicia sesión aquí
+                </a>
+            </span>
+            <div class="flex gap-[2.5vh]">
+                <button frs-button>Siguiente</button>
+                <button frs-button>Siguiente</button>
+            </div>
+        </article>
+    </section>
+</article>
