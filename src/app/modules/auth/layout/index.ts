@@ -4,7 +4,7 @@ import { LayoutHero } from '../components/layout-hero/layout-hero';
 
 @Component({
 	selector: 'auth-layout',
-	imports: [LayoutHero, RouterOutlet],
-	templateUrl: 'index.html'
+	templateUrl: 'index.html',
+	imports: [LayoutHero, RouterOutlet]
 })
 export default class AuthLayout {}

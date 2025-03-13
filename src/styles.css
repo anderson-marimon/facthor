@@ -4,17 +4,10 @@
 
 @layer base {
     :root {
-        /* Colores principales actualizados */
         --primary: 166 64% 39%;
-        /* #24A185 */
         --primary-foreground: 0 0% 98%;
-        /* Blanco (se mantiene igual) */
         --accent: 160 100% 40%;
-        /* #00CC87 */
         --accent-foreground: 0 0% 98%;
-        /* Blanco (se mantiene igual) */
-
-        /* Colores neutrales (se mantienen igual) */
         --background: 0 0% 100%;
         --foreground: 240 10% 3.9%;
         --card: 0 0% 100%;

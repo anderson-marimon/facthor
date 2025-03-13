@@ -7,7 +7,9 @@ module.exports = {
         fontSize: {
             xs: "1.5vh",
             sm: "1.7vh",
-            md: "1.9vh"
+            md: "1.8vh",
+            lg: "1.9vh",
+            xl: "2.0vh"
         },
         extend: {
             colors: {
@@ -58,16 +60,16 @@ module.exports = {
     plugins: [
         ({ addUtilities }) => {
             addUtilities({
-                '.scrollbar': {
+                '*': {
                     '&::-webkit-scrollbar': {
-                        width: '0.2vh'
+                        width: '1vh'
                     },
                     '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'hsl(var(--primary))'
+                        backgroundColor: 'hsl(var(--primary))',
+                        borderRadius: 'var(--radius)'
                     },
                     '&::-webkit-scrollbar-track': {
                         backgroundColor: 'hsl(var(--secondary))',
-                        borderRadius: 'var(--radius)'
                     }
                 }
             });

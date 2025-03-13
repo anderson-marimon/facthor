@@ -1,6 +1,8 @@
 <main class="h-screen flex">
     <layout-hero />
-    <section class="flex-1 px-[4vh] py-[3vh]">
-        <router-outlet />
+    <section class="flex-1 h-screen py-[3vh] overflow-hidden">
+        <div class="h-full px-[4vh] overflow-y-auto lg:overflow-hidden">
+            <router-outlet />
+        </div>
     </section>
 </main>
