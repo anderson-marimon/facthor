@@ -2,11 +2,14 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FrsButtonModule } from '@fresco-ui/button/button.module';
 import { SignUpRoleCard } from '../sign-up-role-card/sign-up-role-card';
+import { FinancierLogo } from '@shared/icons/financier-logo/financier-logo';
+import { ProviderLogo } from '@shared/icons/provider-logo/provider-logo';
+import { PayerLogo } from '@shared/icons/payer-logo/payer-logo';
 
 @Component({
 	selector: 'sign-up-role-form',
 	templateUrl: 'sign-up-role-form.html',
-	imports: [FrsButtonModule, ReactiveFormsModule, SignUpRoleCard],
+	imports: [FrsButtonModule, ReactiveFormsModule, SignUpRoleCard, FinancierLogo, ProviderLogo, PayerLogo],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignUpRoleForm {

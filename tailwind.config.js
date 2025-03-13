@@ -4,13 +4,6 @@ module.exports = {
         fontFamily: {
             nunito: ['nunito', 'sans-serif']
         },
-        fontSize: {
-            xs: "1.5vh",
-            sm: "1.7vh",
-            md: "1.8vh",
-            lg: "1.9vh",
-            xl: "2.0vh"
-        },
         extend: {
             colors: {
                 border: "hsl(var(--border))",
