@@ -1,12 +1,12 @@
-<article class="h-full flex flex-col gap-[1.5vh] lg:gap-[0.75vw] font-light">
-    <section class="flex flex-col pb-[1.5vh] lg:pb-[0.75vw] border-b-[0.1vw]">
-        <h1 class="text-[4vh] lg:text-[2vw] font-semibold">¡Bienvenido!</h1>
-        <div class="flex flex-col lg:flex-row items-baseline gap-[2.5vh] lg:gap-[1vw]">
-            <p class="text-[1.7vh] lg:text-[0.85vw] text-foreground/40">
+<article class="h-full flex flex-col gap-[1.5vh] font-light">
+    <section class="flex flex-col pb-[1.5vh] border-b-[0.1vw]">
+        <h1 class="text-[4vh] font-semibold">¡Bienvenido!</h1>
+        <div class="flex flex-col lg:flex-row justify-between items-baseline gap-[2.5vh]">
+            <p class="text-[1.7vh] text-foreground/40">
                 Este es el inicio en el mundo del factoring, por favor, sigue
                 toda la información siguiendo las instrucciones.
             </p>
-            <div class="flex justify-start lg:justify-end flex-wrap lg:flex-nowrap gap-[1.5vh] lg:gap-[0.5vw]">
+            <div class="flex justify-start lg:justify-end flex-wrap lg:flex-nowrap gap-[1.5vh]">
                 <sign-up-step [active]="_formSteps()[0]" [label]="'Selección de rol'" />
                 <sign-up-step [active]="_formSteps()[1]" [label]="'Empresa'" />
                 <sign-up-step [active]="_formSteps()[2]" [label]="'Documentación'" />
@@ -15,11 +15,11 @@
             </div>
         </div>
     </section>
-    <section class="flex-1 flex flex-col gap-[2.5vh] lg:gap-[1vw]">
-        <article class="flex-1 flex flex-col gap-[2.5vh] lg:gap-[1vw]">
+    <section class="flex-1 flex flex-col gap-[2.5vh]">
+        <article class="flex-1 flex flex-col gap-[2.5vh]">
             <div>
-                <h1 class="text-[2.5vh] lg:text-[1.25vw] font-semibold">Selección de rol</h1>
-                <p class="w-full lg:w-[40%] text-[1.7vh] lg:text-[0.85vw] text-foreground/40">
+                <h1 class="text-[2.5vh] font-semibold">Selección de rol</h1>
+                <p class="w-full lg:w-[50%] lx:w-[40%] text-[1.7vh] text-foreground/40">
                     Este es el inicio en el mundo del factoring, por favor, completa
                     toda la información siguiendo las instrucciones.
                 </p>
@@ -28,17 +28,17 @@
                 <sign-up-role-form />
             </div>
         </article>
-        <article class="flex flex-col lg:flex-row items-center justify-between gap-[2.5vh] lg:gap-[1vw]">
-            <span class="text-[1.7vh] lg:text-[0.85vw] text-foreground/40 ">
+        <article class="flex flex-col lg:flex-row items-center justify-between gap-[2.5vh]">
+            <span class="text-[1.7vh] text-foreground/40 ">
                 ¿Ya tienes una cuenta?
-                <a [routerLink]="['/']" class="text-primary font-medium ml-[0.5vh] lg:ml-[0.25vw] hover:underline underline-offset-[0.5vh] 
-                    lg:underline-offset-[0.25vw]">
+                <a [routerLink]="['/']"
+                    class="text-primary font-medium ml-[0.5vh] hover:underline underline-offset-[0.5vh]">
                     Inicia sesión aquí
                 </a>
             </span>
-            <div class="flex gap-[2.5vh] lg:gap-[1vw]">
-                <button frs-button>Siguiente</button>
-                <button (click)="_nextStep()" frs-button>Siguiente</button>
+            <div class="flex gap-[2.5vh]">
+                <button frs-button [disabled]="_isAvailablePreviousStep()" (click)="_previousStep()">Anterior</button>
+                <button frs-button [disabled]="_isAvailableNextStep()" (click)="_nextStep()">Siguiente</button>
             </div>
         </article>
     </section>

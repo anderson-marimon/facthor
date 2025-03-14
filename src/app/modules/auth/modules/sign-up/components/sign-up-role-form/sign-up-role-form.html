@@ -1,15 +1,14 @@
-<form [formGroup]="_roleForm" (ngSubmit)="_onSubmit()"
-    class="h-full flex gap-[2.5vh] lg:gap-[1vw] text-[1.7vh] lg:text-[0.85vw]">
-    <section class="flex-1 flex flex-col lg:flex-row gap-[2.5vh] lg:gap-[1vw]">
+<form [formGroup]="_roleForm" (ngSubmit)="_onSubmit()" class="h-full flex gap-[2.5vh] text-[1.7vh]">
+    <section class="relative flex-1 flex flex-col lg:flex-row gap-[2.5vh]">
         <sing-up-role-card [title]="'Financiador'" [description]="`Entidad que adelanta el pago de facturas a cambio de una comisión. 
             Proporciona liquidez inmediata a empresas y facilita la gestión de sus cuentas por cobrar. 
-            Consulta su disponibilidad y condiciones de financiamiento.`" [value]="'1'" [inputFormControl]="inputRole">
+            Consulta su disponibilidad y condiciones de financiamiento.`" [value]="'2'" [inputFormControl]="inputRole">
             <financier-logo />
         </sing-up-role-card>
 
         <sing-up-role-card [title]="'Proveedor'" [description]="`Entidad que adelanta el pago de facturas a cambio de una comisión. 
             Proporciona liquidez inmediata a empresas y facilita la gestión de sus cuentas por cobrar. 
-            Consulta su disponibilidad y condiciones de financiamiento.`" [value]="'1'" [inputFormControl]="inputRole">
+            Consulta su disponibilidad y condiciones de financiamiento.`" [value]="'3'" [inputFormControl]="inputRole">
             <provider-logo />
         </sing-up-role-card>
 

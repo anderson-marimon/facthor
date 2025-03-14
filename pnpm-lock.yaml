@@ -45,7 +45,7 @@ importers:
         specifier: ^4.18.2
         version: 4.21.2
       rxjs:
-        specifier: ~7.8.0
+        specifier: ~7.8.2
         version: 7.8.2
       tailwind-merge:
         specifier: ^3.0.2

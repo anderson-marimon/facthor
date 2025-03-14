@@ -12,25 +12,27 @@ import { SignUpRoleForm } from '../components/sign-up-role-form/sign-up-role-for
 })
 export default class SignUpPage implements AfterViewInit {
 	private readonly _roleForm = viewChild(SignUpRoleForm);
-	private readonly _currentStep = 0;
+	private readonly _currentStep = signal(0);
+
 	protected readonly _formSteps = signal(Array(5).fill(false));
 
-	private _startForm(): void {
-		this._setStep(0, true);
+	public ngAfterViewInit(): void {
+		this._setStep(0);
 	}
 
-	private _setStep(index: number, value: boolean) {
-		this._formSteps.update(steps => {
-			const newSteps = [...steps];
-			newSteps[index] = value;
-			return newSteps;
+	private _setStep(index: number): void {
+		const newSteps = this._formSteps().map((_, _index) => {
+			return _index <= index;
 		});
+
+		this._formSteps.set(newSteps);
+		this._currentStep.set(index);
 	}
 
 	private _confirmRoleForm(): void {
 		const roleForm = this._roleForm();
 		if (!roleForm) {
-			throw 'No se encontró el formulario de roles, por favor revisar la implementación';
+			throw new Error('No se encontró el formulario de roles, por favor revisar la implementación');
 		}
 
 		const formData = roleForm.getRoleForm();
@@ -40,18 +42,34 @@ export default class SignUpPage implements AfterViewInit {
 			return;
 		}
 
-		console.log(formData.value);
-		this._setStep(1, true);
+		this._setStep(1);
 	}
 
 	protected _nextStep(): void {
-		switch (this._currentStep) {
+		switch (this._currentStep()) {
 			case 0:
 				this._confirmRoleForm();
+				break;
 		}
 	}
 
-	public ngAfterViewInit(): void {
-		this._startForm();
+	protected _previousStep(): void {
+		if (this._currentStep() > 0) {
+			console.log();
+			this._setStep(this._currentStep() - 1);
+		}
+	}
+
+	protected _isAvailableNextStep(): boolean {
+		switch (this._currentStep()) {
+			case 0:
+				return this._roleForm()?.getRoleForm().invalid ?? true;
+			default:
+				return true;
+		}
+	}
+
+	protected _isAvailablePreviousStep(): boolean {
+		return this._currentStep() === 0;
 	}
 }

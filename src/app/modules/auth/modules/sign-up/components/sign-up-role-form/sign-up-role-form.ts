@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { type AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, viewChildren } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FrsButtonModule } from '@fresco-ui/button/button.module';
+import { FinancierLogo } from '@shared/logos/financier-logo/financier-logo';
+import { PayerLogo } from '@shared/logos/payer-logo/payer-logo';
+import { ProviderLogo } from '@shared/logos/provider-logo/provider-logo';
 import { SignUpRoleCard } from '../sign-up-role-card/sign-up-role-card';
-import { FinancierLogo } from '@shared/icons/financier-logo/financier-logo';
-import { ProviderLogo } from '@shared/icons/provider-logo/provider-logo';
-import { PayerLogo } from '@shared/icons/payer-logo/payer-logo';
 
 @Component({
 	selector: 'sign-up-role-form',
@@ -12,14 +13,33 @@ import { PayerLogo } from '@shared/icons/payer-logo/payer-logo';
 	imports: [FrsButtonModule, ReactiveFormsModule, SignUpRoleCard, FinancierLogo, ProviderLogo, PayerLogo],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SignUpRoleForm {
+export class SignUpRoleForm implements AfterViewInit {
 	private readonly _formBuilder = inject(FormBuilder);
+	private readonly _destroyRef = inject(DestroyRef);
+	private readonly _roleCard = viewChildren(SignUpRoleCard);
 
 	public readonly inputRole = this._formBuilder.control('', Validators.required);
 
-	protected readonly _roleForm = this._formBuilder.group({
-		option: this.inputRole
-	});
+	protected readonly _roleForm = this._formBuilder.group({ option: this.inputRole });
+
+	private _onSelectRole(): void {
+		this._roleForm.valueChanges.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(({ option }) => {
+			this._setSelectedRole(option || '0');
+		});
+	}
+
+	private _setSelectedRole(selectedRole: string): void {
+		const roles = this._roleCard();
+		if (roles.length === 0) return;
+
+		roles.forEach(role => {
+			if (role.value() === selectedRole) {
+				return role.setSelected(true);
+			}
+
+			role.setSelected(false);
+		});
+	}
 
 	protected _onSubmit() {
 		if (this._roleForm.valid) {
@@ -30,5 +50,9 @@ export class SignUpRoleForm {
 
 	public getRoleForm(): FormGroup {
 		return this._roleForm;
+	}
+
+	public ngAfterViewInit(): void {
+		this._onSelectRole();
 	}
 }

@@ -1,14 +1,15 @@
-<label class="w-full h-full flex flex-col p-[2.5vh] lg:p-[1vw] border-[0.1vw] rounded-md bg-cover cursor-pointer">
-    <input type="radio" [id]="'sign-up-role-'+title()" [name]="'sign-up-role-'+title()" value="1"
+<label [class]="_frsClass()">
+    <input type="radio" [id]="'sign-up-role-'+title()" [name]="'sign-up-role'" [value]="value()"
         [formControl]="inputFormControl()" class="absolute invisible" />
 
-    <div class="flex-1 flex flex-col items-center justify-center py-[4vh] lg:py-[2vw]">
-        <div class="w-[80%] lg:w-[80%] max-w-[25vh] lg:max-w-[10vw] aspect-square">
+    @if(_isSelect()) {<check-icon [color]="'hsl(166 64% 39%)'" class="absolute top-[2.5vh] right-[2.5vh] w-[3.5vh]" />}
+    <div class="flex-1 flex flex-col items-center justify-center py-[4vh]">
+        <div class="w-[18vh] aspect-square group-hover:scale-110 transition-transform">
             <ng-content />
         </div>
     </div>
     <div>
-        <h2 class="text-[2.5vh] lg:text-[1.25vw] font-semibold">{{ title()}}</h2>
+        <h2 class="text-[2.5vh] font-semibold">{{ title()}}</h2>
         <p class="text-foreground/40">{{ description() }}</p>
     </div>
 </label>
