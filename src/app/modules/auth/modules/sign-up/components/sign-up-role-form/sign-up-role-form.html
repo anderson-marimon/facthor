@@ -1,4 +1,12 @@
-<form [formGroup]="_roleForm" (ngSubmit)="_onSubmit()" class="h-full flex gap-[2.5vh] text-[1.7vh]">
+<form [formGroup]="_roleForm" (ngSubmit)="_onSubmit()"
+    class="h-full flex flex-col gap-[2.5vh] text-[1.7vh] animate-opacity-in">
+    <section>
+        <h1 class="text-[2.5vh] font-semibold">Selección de rol</h1>
+        <p class="w-full lg:w-[50%] lx:w-[40%] text-[1.7vh] text-foreground/40">
+            Este es el inicio en el mundo del factoring, por favor, completa
+            toda la información siguiendo las instrucciones.
+        </p>
+    </section>
     <section class="relative flex-1 flex flex-col lg:flex-row gap-[2.5vh]">
         <sing-up-role-card [title]="'Financiador'" [description]="`Entidad que adelanta el pago de facturas a cambio de una comisión. 
             Proporciona liquidez inmediata a empresas y facilita la gestión de sus cuentas por cobrar. 

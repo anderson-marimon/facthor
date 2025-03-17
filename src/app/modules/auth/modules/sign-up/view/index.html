@@ -1,5 +1,5 @@
-<article class="h-full flex flex-col gap-[1.5vh] font-light">
-    <section class="flex flex-col pb-[1.5vh] border-b-[0.1vw]">
+<article class="h-full flex flex-col gap-[2vh] font-light">
+    <section class="flex flex-col pb-[1.5vh] border-b-[0.1vh]">
         <h1 class="text-[4vh] font-semibold">¡Bienvenido!</h1>
         <div class="flex flex-col lg:flex-row justify-between items-baseline gap-[2.5vh]">
             <p class="text-[1.7vh] text-foreground/40">
@@ -16,17 +16,11 @@
         </div>
     </section>
     <section class="flex-1 flex flex-col gap-[2.5vh]">
-        <article class="flex-1 flex flex-col gap-[2.5vh]">
-            <div>
-                <h1 class="text-[2.5vh] font-semibold">Selección de rol</h1>
-                <p class="w-full lg:w-[50%] lx:w-[40%] text-[1.7vh] text-foreground/40">
-                    Este es el inicio en el mundo del factoring, por favor, completa
-                    toda la información siguiendo las instrucciones.
-                </p>
-            </div>
-            <div class="flex-1 overflow-y-auto">
-                <sign-up-role-form />
-            </div>
+        <article class="flex-1">
+            @switch(_currentStep()) {
+            @case(0) {<sign-up-role-form />}
+            @case(1) {<sign-up-business-form />}
+            }
         </article>
         <article class="flex flex-col lg:flex-row items-center justify-between gap-[2.5vh]">
             <span class="text-[1.7vh] text-foreground/40 ">

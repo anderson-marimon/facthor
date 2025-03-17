@@ -1,20 +1,15 @@
-import { type AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, viewChildren } from '@angular/core';
+import { Component, DestroyRef, inject, viewChildren } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators, type FormGroup } from '@angular/forms';
 import { FrsButtonModule } from '@fresco-ui/button/button.module';
-import { FinancierLogo } from '@shared/logos/financier-logo/financier-logo';
-import { PayerLogo } from '@shared/logos/payer-logo/payer-logo';
-import { ProviderLogo } from '@shared/logos/provider-logo/provider-logo';
 import { SignUpRoleCard } from '../sign-up-role-card/sign-up-role-card';
 
 @Component({
-	selector: 'sign-up-role-form',
-	templateUrl: 'sign-up-role-form.html',
-	host: { 'class': 'flex-1' },
-	imports: [FrsButtonModule, ReactiveFormsModule, SignUpRoleCard, FinancierLogo, ProviderLogo, PayerLogo],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	selector: 'sign-up-business-form',
+	templateUrl: 'sign-up-business-form.html',
+	imports: [FrsButtonModule, ReactiveFormsModule]
 })
-export class SignUpRoleForm implements AfterViewInit {
+export class SignUpBusinessForm {
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _roleCard = viewChildren(SignUpRoleCard);

@@ -3,17 +3,18 @@ import { RouterLink } from '@angular/router';
 import { FrsButtonDirective } from '@fresco-ui/button/button.directive';
 import { SignUpStep } from '../components/sign-up-step/sign-up-step';
 import { SignUpRoleForm } from '../components/sign-up-role-form/sign-up-role-form';
+import { SignUpBusinessForm } from '../components/sign-up-business-form/sign-up-business-form';
 
 @Component({
 	selector: 'sign-up-page',
 	templateUrl: 'index.html',
-	imports: [SignUpStep, RouterLink, FrsButtonDirective, SignUpRoleForm],
+	imports: [SignUpStep, RouterLink, FrsButtonDirective, SignUpRoleForm, SignUpBusinessForm],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export default class SignUpPage implements AfterViewInit {
 	private readonly _roleForm = viewChild(SignUpRoleForm);
-	private readonly _currentStep = signal(0);
 
+	protected readonly _currentStep = signal(0);
 	protected readonly _formSteps = signal(Array(5).fill(false));
 
 	public ngAfterViewInit(): void {
