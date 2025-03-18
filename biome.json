@@ -19,7 +19,7 @@
 		"attributePosition": "auto",
 		"indentStyle": "tab",
 		"indentWidth": 4,
-		"lineWidth": 150,
+		"lineWidth": 180,
 		"lineEnding": "lf",
 		"useEditorconfig": true
 	},

@@ -1,4 +1,6 @@
-<form [formGroup]="_roleForm" (ngSubmit)="_onSubmit()"
+<form
+    [formGroup]="_businessForm"
+    (ngSubmit)="_onSubmit()"
     class="h-full flex flex-col gap-[2.5vh] text-[1.7vh] animate-opacity-in">
     <section>
         <h1 class="text-[2.5vh] font-semibold">Empresa y representante legal</h1>
@@ -7,6 +9,23 @@
             toda la información siguiendo las instrucciones.
         </p>
     </section>
-    <section class="relative flex-1 flex flex-col lg:flex-row gap-[2.5vh]">
+    <section class="relative flex-1 grid place-content-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[2.5vh]">
+        <input-field [inputFormControl]="_personType" [label]="'Tipo de persona'" [placeholder]="'Jurídica'" [disabled]="true" />
+        <input-field [inputFormControl]="_business" [label]="'Empresa'" [placeholder]="'Ingrese el nombre de la empresa'" />
+        <input-field [inputFormControl]="_tradeName" [label]="'Nombre comercial'" [placeholder]="'Ingrese el nombre comercial'" />
+        <input-field [inputFormControl]="_nit" [label]="'Ingrese el NIT'" [placeholder]="'123456789-6'" />
+        
+        <select-field [inputFormControl]="_economicActivity" [label]="'Actividad económica'" [options]="_economicActivities" />
+        <input-field [inputFormControl]="_country" [label]="'País'" [placeholder]="'Colombia'" [disabled]="true" />
+        <input-field [inputFormControl]="_province" [label]="'Departamento'" [placeholder]="'Atlántico'" [disabled]="true" />
+        <input-field [inputFormControl]="_city" [label]="'Ciudad'" [placeholder]="'Barranquilla'" [disabled]="true" />
+
+        <div class="flex items-end gap-[1vh] [&_input::placeholder]:text-center [&_input]:text-center [&_span]:pb-[1vh]">
+            <input-field [inputFormControl]="_addressStreetNumber" [label]="'Número'" [showErrorMessage]="false" [placeholder]="'345c'" />
+            <span>#</span>
+            <input-field [inputFormControl]="_addressStreetPlaceNumber" [showLabel]="false"  [showErrorMessage]="false" [placeholder]="'345c'"/>
+            <span>-</span>
+            <input-field [inputFormControl]="_addressStreetPlaceSubNumber" [showLabel]="false" [showErrorMessage]="false" [placeholder]="'345c'" />
+        </div>
     </section>
 </form>
