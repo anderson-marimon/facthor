@@ -67,7 +67,7 @@ module.exports = {
             addUtilities({
                 '*': {
                     '&::-webkit-scrollbar': {
-                        width: '1vh'
+                        width: '0.5vh'
                     },
                     '&::-webkit-scrollbar-thumb': {
                         backgroundColor: 'hsl(var(--primary))',

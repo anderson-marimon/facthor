@@ -13,12 +13,13 @@ import { SignUpBusinessForm } from '../components/sign-up-business-form/sign-up-
 })
 export default class SignUpPage implements AfterViewInit {
 	private readonly _roleForm = viewChild(SignUpRoleForm);
+	private readonly _businessForm = viewChild(SignUpBusinessForm);
 
 	protected readonly _currentStep = signal(0);
 	protected readonly _formSteps = signal(Array(5).fill(false));
 
 	public ngAfterViewInit(): void {
-		this._setStep(0);
+		this._setStep(1);
 	}
 
 	private _setStep(index: number): void {
