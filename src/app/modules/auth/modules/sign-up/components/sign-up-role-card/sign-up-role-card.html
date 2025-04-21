@@ -2,14 +2,14 @@
     <input type="radio" [id]="'sign-up-role-'+title()" [name]="'sign-up-role'" [value]="value()"
         [formControl]="inputFormControl()" class="absolute invisible" />
 
-    @if(_isSelect()) {<check-icon [color]="'hsl(166 64% 39%)'" class="absolute top-[2.5vh] right-[2.5vh] w-[3.5vh]" />}
-    <div class="flex-1 flex flex-col items-center justify-center py-[4vh]">
-        <div class="w-[18vh] aspect-square group-hover:scale-110 transition-transform">
+    @if(_isSelect()) {<check-icon [color]="'hsl(166 64% 39%)'" class="absolute top-5 right-5 w-7" />}
+    <div class="flex-1 flex flex-col items-center justify-center py-6">
+        <div class="w-[40%] max-w-[200px] aspect-square group-hover:scale-110 transition-transform">
             <ng-content />
         </div>
     </div>
     <div>
-        <h2 class="text-[2.5vh] font-semibold">{{ title()}}</h2>
+        <h2 class="text-5 font-semibold">{{ title()}}</h2>
         <p class="text-foreground/40">{{ description() }}</p>
     </div>
 </label>
