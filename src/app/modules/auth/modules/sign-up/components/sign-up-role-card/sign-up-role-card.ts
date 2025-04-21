@@ -1,6 +1,6 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { type FormControl, ReactiveFormsModule } from '@angular/forms';
-import { frs } from '@fresco-core/frs.core';
+import { frs } from '@fresco-core/frs-core';
 import { CheckIcon } from '@shared/icons/check-icon/check-icon';
 
 @Component({

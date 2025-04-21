@@ -1,11 +1,11 @@
 export const ADDRESS_STREETS = [
-	{ name: 'Calle', value: 0 },
-	{ name: 'Carrera', value: 0 },
-	{ name: 'Avenida', value: 0 },
-	{ name: 'Transversal', value: 0 },
-	{ name: 'Diagonal', value: 0 },
-	{ name: 'Autopista', value: 0 },
-	{ name: 'Circular', value: 0 },
-	{ name: 'Vía', value: 0 },
-	{ name: 'Circunvalar', value: 0 }
+    { label: 'Calle', value: 0 },
+    { label: 'Carrera', value: 0 },
+    { label: 'Avenida', value: 0 },
+    { label: 'Transversal', value: 0 },
+    { label: 'Diagonal', value: 0 },
+    { label: 'Autopista', value: 0 },
+    { label: 'Circular', value: 0 },
+    { label: 'Vía', value: 0 },
+    { label: 'Circunvalar', value: 0 },
 ];

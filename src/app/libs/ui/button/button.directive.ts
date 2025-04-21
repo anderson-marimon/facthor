@@ -1,5 +1,5 @@
 import { computed, Directive, input } from '@angular/core';
-import { frs } from '@fresco-core/frs.core';
+import { frs } from '@fresco-core/frs-core';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 @Directive({
