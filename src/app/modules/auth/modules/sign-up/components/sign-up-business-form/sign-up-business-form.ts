@@ -23,36 +23,41 @@ export class SignUpBusinessForm {
     protected readonly _economicActivities = ECONOMIC_ACTIVITIES as { label: any; value: any }[];
     protected readonly _addressStreets = ADDRESS_STREETS;
 
-    //form inputs
-    protected readonly _personType = this._formBuilder.control('');
-    protected readonly _business = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-    protected readonly _tradeName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-    protected readonly _nit = this._formBuilder.control('', [Validators.required, this._formValidator.nit()]);
-    protected readonly _economicActivity = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
-    protected readonly _country = this._formBuilder.control('');
-    protected readonly _province = this._formBuilder.control('', [Validators.required]);
-    protected readonly _city = this._formBuilder.control('', [Validators.required]);
-    protected readonly _addressStreet = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
-    protected readonly _addressStreetNumber = this._formBuilder.control('', [Validators.required]);
-    protected readonly _addressStreetSecondaryNumber = this._formBuilder.control('', [Validators.required]);
-    protected readonly _addressStreetBuildNumber = this._formBuilder.control('', [Validators.required]);
-    protected readonly _addressStreetComplement = this._formBuilder.control('');
+    // Business form inputs
+    protected readonly _businessPersonType = this._formBuilder.control('');
+    protected readonly _businessName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
+    protected readonly _businessTradeName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
+    protected readonly _businessNit = this._formBuilder.control('', [Validators.required, this._formValidator.nit()]);
+    protected readonly _businessEconomicActivity = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
+    protected readonly _businessCountry = this._formBuilder.control('');
+    protected readonly _businessProvince = this._formBuilder.control('', [Validators.required]);
+    protected readonly _businessCity = this._formBuilder.control('', [Validators.required]);
+    protected readonly _businessAddressStreet = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
+    protected readonly _businessAddressStreetNumber = this._formBuilder.control('', [Validators.required]);
+    protected readonly _businessAddressStreetSecondaryNumber = this._formBuilder.control('', [Validators.required]);
+    protected readonly _businessAddressStreetBuildNumber = this._formBuilder.control('', [Validators.required]);
+    protected readonly _businessAddressStreetComplement = this._formBuilder.control('');
+    protected readonly _businessEmail = this._formBuilder.control('', [Validators.required, Validators.email]);
+    protected readonly _businessPrefix = this._formBuilder.control('+57', [Validators.required]);
+    protected readonly _businessNumber = this._formBuilder.control('', [Validators.required]);
+
+    // Legal representative
 
     //form group
     protected readonly _businessForm = this._formBuilder.group({
-        personType: this._personType,
-        business: this._business,
-        tradeName: this._tradeName,
-        nit: this._nit,
-        economicActivity: this._economicActivity,
-        country: this._country,
-        province: this._province,
-        city: this._city,
-        addressStreet: this._addressStreet,
-        addressStreetNumber: this._addressStreetNumber,
-        addressStreetSecondaryNumber: this._addressStreetSecondaryNumber,
-        addressStreetBuildNumber: this._addressStreetBuildNumber,
-        addressStreetComplement: this._addressStreetComplement,
+        personType: this._businessPersonType,
+        business: this._businessName,
+        tradeName: this._businessTradeName,
+        nit: this._businessNit,
+        economicActivity: this._businessEconomicActivity,
+        country: this._businessCountry,
+        province: this._businessProvince,
+        city: this._businessCity,
+        addressStreet: this._businessAddressStreet,
+        addressStreetNumber: this._businessAddressStreetNumber,
+        addressStreetSecondaryNumber: this._businessAddressStreetSecondaryNumber,
+        addressStreetBuildNumber: this._businessAddressStreetBuildNumber,
+        addressStreetComplement: this._businessAddressStreetComplement,
     });
 
     protected _onSubmit(): void {

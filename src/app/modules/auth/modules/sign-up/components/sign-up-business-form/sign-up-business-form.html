@@ -1,9 +1,9 @@
 <form
     [formGroup]="_businessForm"
     (ngSubmit)="_onSubmit()"
-    class="h-full flex flex-col gap-5 animate-opacity-in">
+    class="flex flex-col gap-5 animate-opacity-in">
     <section>
-        <h1 class="text-2xl font-semibold">Empresa y representante legal</h1>
+        <h1 class="text-2xl font-semibold">Información de la empresa</h1>
         <p class="w-full lg:w-[50%] lx:w-[40%] text- text-foreground/40">
             Este es el inicio en el mundo del factoring, por favor, completa
             toda la información siguiendo las instrucciones.
@@ -13,15 +13,16 @@
         <frs-field [label]="'Tipo de persona'">
             <frs-input
                 #field
-                [control]="_personType"
+                [control]="_businessPersonType"
                 [placeholder]="'Jurídica'"
+                [disabled]="true"
             />
         </frs-field>
 
         <frs-field [label]="'Empresa'">
             <frs-input
                 #field
-                [control]="_business"
+                [control]="_businessName"
                 [placeholder]="'Ingrese el nombre de la empresa'"
             />
         </frs-field>
@@ -29,7 +30,7 @@
         <frs-field [label]="'Nombre comercial'">
             <frs-input
                 #field
-                [control]="_tradeName"
+                [control]="_businessTradeName"
                 [placeholder]="'Ingrese el nombre comercial'"
             />
         </frs-field>
@@ -37,13 +38,13 @@
         <frs-field [label]="'Ingrese el NIT'">
             <frs-input
                 #field
-                [control]="_nit"
+                [control]="_businessNit"
                 [placeholder]="'123456789-6'"
             />
         </frs-field>
 
         <frs-field [label]="'Actividad económica'">
-            <frs-combobox #field [control]="_economicActivity">
+            <frs-combobox #field [control]="_businessEconomicActivity">
                 <frs-combobox-trigger [placeholder]="'Seleccione una actividad económica'" />
                 <frs-combobox-options [options]="_economicActivities" />
             </frs-combobox>
@@ -52,15 +53,16 @@
         <frs-field [label]="'País'">
             <frs-input
                 #field
-                [control]="_country"
+                [control]="_businessCountry"
                 [placeholder]="'Colombia'"
+                [disabled]="true"
             />
         </frs-field>
 
         <frs-field [label]="'Departamento'">
             <frs-input
                 #field
-                [control]="_province"
+                [control]="_businessProvince"
                 [placeholder]="'Atlántico'"
             />
         </frs-field>
@@ -68,70 +70,107 @@
         <frs-field [label]="'Ciudad'">
             <frs-input
                 #field
-                [control]="_country"
+                [control]="_businessCountry"
                 [placeholder]="'Barranquilla'"
             />
         </frs-field>
-    </section>
-    <section class="flex items-start flex-wrap gap-5">
-        <frs-field [label]="'Dirección'">
-            <frs-select #field [control]="_addressStreet">
-                <frs-select-trigger [class]="'w-36'" [placeholder]="'Seleccione'" />
-                <frs-select-options [options]="_addressStreets" />
-            </frs-select>
-        </frs-field>
 
-        <frs-field 
-            [label]="'_'"
-            [showLabelIcon]="false"
-            [class]="'[&>span]:text-background [&_input::placeholder]:text-center [&_input]:text-center'">
-            <div class="flex items-center gap-5">
-                <frs-input
-                    #field
-                    [control]="_addressStreetNumber"
-                    [placeholder]="'53'"
-                    [class]="'w-20'"
-                />
-                <span>#</span>
+        <div class="flex flex-col col-span-1 md:col-span-2">
+            <span class="text-sm">Dirección <span class="text-red-400">*</span></span>
+            <div class="flex items-baseline flex-wrap gap-5 ">
+                <frs-field [showLabelIcon]="false">
+                    <frs-select #field [control]="_businessAddressStreet">
+                        <frs-select-trigger [class]="'w-36'" [placeholder]="'Seleccione'" />
+                        <frs-select-options [options]="_addressStreets" />
+                    </frs-select>
+                </frs-field>
+        
+                <frs-field 
+                    [showLabelIcon]="false"
+                    [class]="'[&_input::placeholder]:text-center [&_input]:text-center'">
+                    <div class="flex items-center gap-5">
+                        <frs-input
+                            #field
+                            [control]="_businessAddressStreetNumber"
+                            [placeholder]="'53'"
+                            [class]="'w-20'"
+                        />
+                        <span>#</span>
+                    </div>
+                </frs-field>
+        
+                
+                <frs-field
+                    [showLabelIcon]="false"
+                    [class]="'[&_input::placeholder]:text-center [&_input]:text-center'">
+                    <div class="flex items-center gap-5">
+                        <frs-input
+                            #field
+                            [control]="_businessAddressStreetSecondaryNumber"
+                            [placeholder]="'46'"
+                            [class]="'w-20'"
+                        />
+                        <span>-</span>
+                    </div>
+                </frs-field>
+                
+                
+                <frs-field
+                    [showLabelIcon]="false"
+                    [class]="'[&_input::placeholder]:text-center [&_input]:text-center'">
+                    <frs-input
+                        #field
+                        [control]="_businessAddressStreetBuildNumber"
+                        [placeholder]="'192'"
+                        [class]="'w-20'"
+                    />
+                </frs-field>
+        
+                <frs-field
+                    [showLabelIcon]="false"
+                    [class]="'flex-1'">
+                    <frs-input
+                        #field
+                        [control]="_businessAddressStreetComplement"
+                        [placeholder]="'Piso 6'"
+                    />
+                </frs-field>
             </div>
-        </frs-field>
+        </div>
 
-        
-        <frs-field
-            [label]="'_'"
-            [showLabelIcon]="false"
-            [class]="'[&>span]:text-background [&_input::placeholder]:text-center [&_input]:text-center'">
-            <div class="flex items-center gap-5">
-                <frs-input
-                    #field
-                    [control]="_addressStreetSecondaryNumber"
-                    [placeholder]="'46'"
-                    [class]="'w-20'"
-                />
-                <span>-</span>
-            </div>
-        </frs-field>
-        
-        
-        <frs-field
-            [label]="'_'"
-            [showLabelIcon]="false"
-            [class]="'[&>span]:text-background [&_input::placeholder]:text-center [&_input]:text-center'">
+        <frs-field [label]="'Correo electrónico'">
             <frs-input
                 #field
-                [control]="_addressStreetBuildNumber"
-                [placeholder]="'192'"
-                [class]="'w-20'"
+                [control]="_businessEmail"
+                [placeholder]="'facthor@silvertec.com.co'"
             />
         </frs-field>
 
-        <frs-field [label]="'_'" [showLabelIcon]="false" [class]="'[&>span]:text-background'">
-            <frs-input
-                #field
-                [control]="_addressStreetComplement"
-                [placeholder]="'Piso 6'"
-                [class]="'w-48'"
-            />
-        </frs-field>
+        <div class="flex items-start flex-wrap gap-5">
+            <frs-field
+                [label]="'Prefijo'"
+                    [showLabelIcon]="false"
+                [class]="'[&_input::placeholder]:text-center [&_input]:text-center'">
+                <frs-input
+                    #field
+                    [control]="_businessPrefix"
+                    [placeholder]="'+57'"
+                    [type]="'custom'"
+                    [decorator]="'+'"
+                    [mask]="'xxx'"
+                    [regex]="'[^\\d]'"
+                    [disabled]="true"
+                    [class]="'w-20'"
+                />
+            </frs-field>
+    
+            <frs-field [label]="'Número de celular'" [class]="'flex-1'">
+                <frs-input
+                    #field
+                    [control]="_businessNumber"
+                    [placeholder]="'Piso 6'"
+                />
+            </frs-field>
+        </div>
     </section>
 </form>
