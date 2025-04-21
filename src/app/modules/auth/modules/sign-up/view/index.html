@@ -1,12 +1,12 @@
-<article class="h-full flex flex-col gap-[2vh] font-light">
-    <section class="flex flex-col pb-[1.5vh] border-b-[0.1vh]">
-        <h1 class="text-[4vh] font-semibold">¡Bienvenido!</h1>
-        <div class="flex flex-col lg:flex-row justify-between items-baseline gap-[2.5vh]">
-            <p class="text-[1.7vh] text-foreground/40">
+<article class="h-full flex flex-col gap-5 font-light">
+    <section class="flex flex-col pb-5 border-b">
+        <h1 class="text-4xl font-semibold">¡Bienvenido!</h1>
+        <div class="flex flex-col lg:flex-row justify-between items-baseline lg:items-center gap-5">
+            <p class="text-foreground/40">
                 Este es el inicio en el mundo del factoring, por favor, sigue
                 toda la información siguiendo las instrucciones.
             </p>
-            <div class="flex justify-start lg:justify-end flex-wrap lg:flex-nowrap gap-[1.5vh]">
+            <div class="flex justify-start lg:justify-end flex-wrap lg:flex-nowrap gap-4">
                 <sign-up-step [active]="_formSteps()[0]" [label]="'Selección de rol'" />
                 <sign-up-step [active]="_formSteps()[1]" [label]="'Empresa'" />
                 <sign-up-step [active]="_formSteps()[2]" [label]="'Documentación'" />
@@ -15,22 +15,22 @@
             </div>
         </div>
     </section>
-    <section class="flex-1 flex flex-col gap-[2.5vh]">
+    <section class="flex-1 flex flex-col gap-5">
         <article class="flex-1">
             @switch(_currentStep()) {
                 @case(0) {<sign-up-role-form />}
                 @case(1) {<sign-up-business-form />}
             }
         </article>
-        <article class="flex flex-col lg:flex-row items-center justify-between gap-[2.5vh]">
-            <span class="text-[1.7vh] text-foreground/40 ">
+        <article class="flex flex-col lg:flex-row items-center justify-between gap-5">
+            <span class="text-foreground/40 ">
                 ¿Ya tienes una cuenta?
                 <a [routerLink]="['/']"
-                    class="text-primary font-medium ml-[0.5vh] hover:underline underline-offset-[0.5vh]">
+                    class="text-primary font-medium ml-1 hover:underline underline-offset-4">
                     Inicia sesión aquí
                 </a>
             </span>
-            <div class="flex gap-[2.5vh]">
+            <div class="flex gap-5">
                 <button frs-button [disabled]="_isAvailablePreviousStep()" (click)="_previousStep()">Anterior</button>
                 <button frs-button [disabled]="_isAvailableNextStep()" (click)="_nextStep()">Siguiente</button>
             </div>

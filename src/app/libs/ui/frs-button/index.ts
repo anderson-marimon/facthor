@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FrsButtonDirective } from './button.directive';
+import { FrsButtonDirective } from '@fresco-ui/frs-button/frs-button';
 
 @NgModule({
 	imports: [FrsButtonDirective],
