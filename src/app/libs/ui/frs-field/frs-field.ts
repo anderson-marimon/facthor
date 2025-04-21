@@ -122,7 +122,7 @@ export class FrsField implements OnDestroy {
     protected readonly _frsClass = computed(() =>
         frs(
             `flex flex-col gap-1.5 text-sm [&>span]:text-nowrap [&>span>span]:text-red-400 [&>span:last-child]:text-xs
-      [&>span:last-child]:text-red-400`,
+            [&>span:last-child]:text-red-400`,
             this.class()
         )
     );
