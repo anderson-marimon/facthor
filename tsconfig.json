@@ -16,6 +16,9 @@
     "target": "ES2022",
     "module": "ES2022",
     "paths": {
+      "@auth/*": [
+        "./src/app/modules/auth/*"
+      ],
       "@shared/*": [
         "./src/app/shared/*"
       ],
