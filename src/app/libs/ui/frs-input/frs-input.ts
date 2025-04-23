@@ -1,13 +1,4 @@
-import {
-    afterRenderEffect,
-    Component,
-    computed,
-    effect,
-    input,
-    signal,
-    viewChild,
-    type ElementRef,
-} from '@angular/core';
+import { afterRenderEffect, Component, computed, effect, input, signal, viewChild, type ElementRef } from '@angular/core';
 import { ReactiveFormsModule, type FormControl } from '@angular/forms';
 import { frs, frsGenerateId, frsInputFormat, frsNumberFormat, frsPercentageFormat } from '@fresco-core/frs-core';
 import { tap } from 'rxjs';
@@ -52,12 +43,6 @@ export class FrsInput {
     protected readonly inputId = frsGenerateId();
 
     constructor() {
-        // Efecto para formatear el valor inicial
-        effect(() => {
-            const control = this.control();
-            const initialValue = control?.value;
-        });
-
         afterRenderEffect(() => this._syncControl());
     }
 
@@ -164,7 +149,7 @@ export class FrsInput {
                             input: value || '',
                             decimals: this.decimals(),
                             mask: this.mask(),
-                            decorator: this.decorator() || '$',
+                            decorator: this.decorator(),
                             formatStyle: this.formatStyle(),
                         })
                     )
