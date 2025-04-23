@@ -152,9 +152,7 @@ export class FrsComboboxOptions {
             .replace(/[\u0300-\u036f]/g, '')
             .toLocaleLowerCase();
 
-        this._filteredOptions.set(
-            this.options().filter(option => this._normalizeText(option.label).includes(normalizedValue))
-        );
+        this._filteredOptions.set(this.options().filter(option => this._normalizeText(option.label).includes(normalizedValue)));
     }
 
     private _normalizeText(text: string): string {
@@ -167,16 +165,11 @@ export class FrsComboboxOptions {
     protected _isSelected(option: { label: string; value: any }): boolean {
         if (this._selectedOptions().length === 0) return false;
 
-        return this._selectedOptions().some(
-            selected => selected.label === option.label && selected.value === option.value
-        );
+        return this._selectedOptions().some(selected => selected.label === option.label && selected.value === option.value);
     }
 
     protected _select(label?: string): void {
-        const selectedOption =
-            label !== undefined
-                ? this.options().find(option => option.label === label)
-                : this.filteredOptions()[this._tabIndex()];
+        const selectedOption = label !== undefined ? this.options().find(option => option.label === label) : this.filteredOptions()[this._tabIndex()];
 
         const selectedOptions = this._selectedOptions();
 
@@ -211,7 +204,7 @@ export class FrsComboboxOptions {
 }
 
 const variants = cva(
-    `block w-full flex flex-col p-2 pt-0 overflow-hidden [&_svg]:pointer-events-none [&_svg]:shrink-0
+    `w-full flex flex-col p-2 pt-0 overflow-hidden [&_svg]:pointer-events-none [&_svg]:shrink-0
 	[&_svg]:opacity-50 [&>_div:first-child]:flex [&>_div:first-child]:items-center [&>_div:first-child]:gap-2
 	[&_input]:flex-1 [&_input]:shrink-0 [&_input]:outline-none [&_input]:border-none [&_input]:w-full [&_input]:bg-background [&>_div:last-child]:flex-1
 	[&>_div:last-child]:flex [&>_div:last-child]:flex-col [&>_div:last-child]:gap-1 [&>_div:last-child]:pt-2 [&>_div:last-child]:overflow-y-auto
@@ -222,7 +215,7 @@ const variants = cva(
     {
         variants: {
             size: {
-                default: '[&_input]:h-9 min-h-10 max-h-40 [&_svg]:size-4',
+                default: '[&_input]:h-9 max-h-40 [&_svg]:size-4',
                 sm: '[&_input]:h-8 [&_input]:rounded-md text-xs [&_svg]:size-3.5',
             },
         },

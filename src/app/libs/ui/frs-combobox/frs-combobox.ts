@@ -1,15 +1,4 @@
-import {
-    afterNextRender,
-    afterRenderEffect,
-    Component,
-    computed,
-    contentChild,
-    DestroyRef,
-    effect,
-    inject,
-    input,
-    viewChild,
-} from '@angular/core';
+import { afterNextRender, afterRenderEffect, Component, computed, contentChild, DestroyRef, effect, inject, input, viewChild } from '@angular/core';
 import { outputToObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { frs } from '@fresco-core/frs-core';

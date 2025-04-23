@@ -92,7 +92,7 @@ export class FrsField implements OnDestroy {
 
             const errorKeys = Object.keys(errors) as TInputErrorKey[];
             const firstErrorKey = errorKeys[0];
-            this._errorToRender.set(INPUT_ERRORS[firstErrorKey] || 'Invalid Format');
+            this._errorToRender.set(INPUT_ERRORS[firstErrorKey] || 'Invalid input');
         } else {
             this._renderError.set(false);
             this._errorToRender.set('');

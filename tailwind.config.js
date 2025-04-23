@@ -8,7 +8,7 @@ module.exports = {
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
-                ring: "hsl(var(--ring))",
+                ring: "hsl(var(--primary))",
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
                 primary: {
@@ -49,7 +49,7 @@ module.exports = {
                 DEFAULT: "hsl(var(--border))"
             },
             ringColor: {
-                DEFAULT: "hsl(var(--foreground))"
+                DEFAULT: "hsl(var(--secondary))"
             },
             keyframes: {
                 'opacity-in': {
@@ -58,7 +58,8 @@ module.exports = {
                 }
             },
             animation: {
-                'opacity-in': 'opacity-in 0.5s ease'
+                'opacity-in': 'opacity-in 0.5s ease',
+                'rotate3dx': 'rotate3d(0, 1, 0, 360deg);'
             }
         },
     },
