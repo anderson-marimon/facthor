@@ -4,11 +4,12 @@ import {
 	computed,
 	contentChild,
 	DestroyRef,
+	effect,
 	ElementRef,
 	HostListener,
 	inject,
 	input,
-	signal
+	signal,
 } from '@angular/core';
 import { outputToObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { frs } from '@fresco-core/frs-core';
@@ -20,14 +21,14 @@ import { fromEvent, throttleTime, timer } from 'rxjs';
 	selector: 'frs-popover',
 	standalone: true,
 	host: {
-		'[class]': '_frsClass()'
+		'[class]': '_frsClass()',
 	},
 	template: `
-	  <ng-content select="frs-popover-trigger" />
-	  @if (isOpen()) {
+		<ng-content select="frs-popover-trigger" />
+		@if (isOpen()) {
 		<ng-content select="frs-popover-content" />
-	  }
-	`
+		}
+	`,
 })
 export class FrsPopover {
 	private readonly _element = inject(ElementRef);
@@ -41,8 +42,9 @@ export class FrsPopover {
 	public readonly isOpen = computed(() => this._isOpen());
 
 	public constructor() {
+		this._verifyTrigger();
+
 		afterNextRender(() => {
-			this._verifyTrigger();
 			this._syncTriggerAndHoverListeners();
 		});
 	}
@@ -95,13 +97,15 @@ export class FrsPopover {
 	}
 
 	private _verifyTrigger(): void {
-		const trigger = this._trigger();
+		effect(() => {
+			const trigger = this._trigger();
 
-		if (!trigger) {
-			throw new Error('The popover component must contain a popover trigger');
-		}
+			if (!trigger) {
+				throw new Error('The popover component must contain a popover trigger');
+			}
 
-		trigger.setDisabled(this.disabled());
+			trigger.setDisabled(this.disabled());
+		});
 	}
 
 	@HostListener('document:click', ['$event'])
