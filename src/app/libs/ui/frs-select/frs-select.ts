@@ -1,15 +1,4 @@
-import {
-	Component,
-	DestroyRef,
-	afterNextRender,
-	afterRenderEffect,
-	computed,
-	contentChild,
-	effect,
-	inject,
-	input,
-	viewChild
-} from '@angular/core';
+import { Component, DestroyRef, afterNextRender, computed, contentChild, effect, inject, input, viewChild } from '@angular/core';
 import { outputToObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { frs } from '@fresco-core/frs-core';
@@ -27,18 +16,18 @@ export type TSelectOption = { label: string; value: any };
 	standalone: true,
 	imports: [FrsPopoverModule],
 	host: {
-		'[class]': '_frsClass()'
+		'[class]': '_frsClass()',
 	},
 	template: `
-      <frs-popover [disabled]="disabled()">
-        <frs-popover-trigger>
-          <ng-content select="frs-select-trigger" />
-        </frs-popover-trigger>
-        <frs-popover-content [position]="position()">
-          <ng-content select="frs-select-options" />
-        </frs-popover-content>
-      </frs-popover>
-    `
+		<frs-popover [disabled]="disabled()">
+			<frs-popover-trigger>
+				<ng-content select="frs-select-trigger" />
+			</frs-popover-trigger>
+			<frs-popover-content [position]="position()">
+				<ng-content select="frs-select-options" />
+			</frs-popover-content>
+		</frs-popover>
+	`,
 })
 export class FrsSelect {
 	private readonly _destroyRef = inject(DestroyRef);
@@ -55,13 +44,12 @@ export class FrsSelect {
 
 	constructor() {
 		this._syncInputs();
+		this._syncControl();
 
 		afterNextRender(() => {
 			this._syncTrigger();
 			this._syncOptionsSelected();
 		});
-
-		afterRenderEffect(() => this._syncControl());
 	}
 
 	private _syncInputs(): void {
@@ -71,9 +59,8 @@ export class FrsSelect {
 			this._options()?.setSize(this.size());
 
 			const formControl = this.control();
-
 			if (formControl) {
-				formControl.valueChanges.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(value => {
+				formControl.valueChanges.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((value) => {
 					const options = this._options();
 					if (options) {
 						this._trigger()?.setSelectedOptions(value as TSelectOption[]);
@@ -84,12 +71,14 @@ export class FrsSelect {
 	}
 
 	private _syncControl(): void {
-		if (this.disabled()) {
-			this.control()?.disable();
-			return;
-		}
+		effect(() => {
+			if (this.disabled()) {
+				this.control()?.disable();
+				return;
+			}
 
-		this.control()?.enable();
+			this.control()?.enable();
+		});
 	}
 
 	private _syncTrigger(): void {
@@ -119,7 +108,7 @@ export class FrsSelect {
 
 		outputToObservable(options.selectedOptionsEmitter)
 			.pipe(takeUntilDestroyed(this._destroyRef))
-			.subscribe(selectedOptions => {
+			.subscribe((selectedOptions) => {
 				this._trigger()?.setSelectedOptions(selectedOptions);
 
 				const formControl = this.control();

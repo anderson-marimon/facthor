@@ -1,11 +1,10 @@
 <form
     [formGroup]="_businessForm"
-    (ngSubmit)="_onSubmit()"
     class="flex flex-col gap-5 animate-opacity-in">
     <section>
         <h1 class="text-2xl font-semibold">Información de la empresa</h1>
-        <p class="w-full lg:w-[50%] lx:w-[40%] text- text-foreground/40">
-            Este es el inicio en el mundo del factoring, por favor, completa
+        <p class="w-full lg:w-[50%] lx:w-[40%] text- text-foreground/50">
+            Por favor, completa
             toda la información siguiendo las instrucciones.
         </p>
     </section>
@@ -59,26 +58,31 @@
             />
         </frs-field>
 
-        <frs-field [label]="'Departamento'">
-            <frs-input
+        <frs-field [label]="'Departamento de nacimiento'">
+            <frs-select
                 #field
-                [control]="_businessProvince"
-                [placeholder]="'Atlántico'"
-            />
+                [position]="'top'"
+                [control]="_businessDepartment">
+                <frs-select-trigger [placeholder]="'Seleccione un departamento'" />
+                <frs-select-options [options]="_departments() || []" />
+            </frs-select>
         </frs-field>
 
-        <frs-field [label]="'Ciudad'">
-            <frs-input
+        <frs-field [label]="'Ciudad de nacimiento'">
+            <frs-select
                 #field
+                [position]="'top'"
                 [control]="_businessCity"
-                [placeholder]="'Barranquilla'"
-            />
+                [disabled]="_businessCityDisabled()">
+                <frs-select-trigger [placeholder]="'Seleccione una ciudad'" />
+                <frs-select-options [options]="_businessCities() || []" />
+            </frs-select>
         </frs-field>
 
         <div class="flex flex-col col-span-1 md:col-span-2">
             <span class="text-sm">Dirección <span class="text-red-400">*</span></span>
             <div class="flex items-baseline flex-wrap gap-5 ">
-                <frs-field [showLabelIcon]="false">
+                <frs-field [showAsterisk]="false">
                     <frs-select #field [control]="_businessAddressStreet">
                         <frs-select-trigger [class]="'w-36'" [placeholder]="'Seleccione'" />
                         <frs-select-options [options]="_addressStreets" />
@@ -86,7 +90,7 @@
                 </frs-field>
         
                 <frs-field 
-                    [showLabelIcon]="false"
+                    [showAsterisk]="false"
                     [class]="'[&_input::placeholder]:text-center [&_input]:text-center'">
                     <div class="flex items-center gap-5">
                         <frs-input
@@ -101,7 +105,7 @@
         
                 
                 <frs-field
-                    [showLabelIcon]="false"
+                    [showAsterisk]="false"
                     [class]="'[&_input::placeholder]:text-center [&_input]:text-center'">
                     <div class="flex items-center gap-5">
                         <frs-input
@@ -116,7 +120,7 @@
                 
                 
                 <frs-field
-                    [showLabelIcon]="false"
+                    [showAsterisk]="false"
                     [class]="'[&_input::placeholder]:text-center [&_input]:text-center'">
                     <frs-input
                         #field
@@ -127,7 +131,7 @@
                 </frs-field>
         
                 <frs-field
-                    [showLabelIcon]="false"
+                    [showAsterisk]="false"
                     [class]="'flex-1'">
                     <frs-input
                         #field
@@ -149,7 +153,7 @@
         <div class="flex items-start flex-wrap gap-5">
             <frs-field
                 [label]="'Prefijo'"
-                    [showLabelIcon]="false"
+                    [showAsterisk]="false"
                 [class]="'[&_input::placeholder]:text-center [&_input]:text-center'">
                 <frs-input
                     #field
@@ -159,7 +163,7 @@
                     [decorator]="'+'"
                     [mask]="'xxx'"
                     [regex]="'[^\\d]'"
-                    [disabled]="true"
+                    [disabled]="false"
                     [class]="'w-16'"
                 />
             </frs-field>
@@ -177,16 +181,10 @@
             </frs-field>
         </div>
     </section>
-</form>
-
-<form
-    [formGroup]="_businessForm"
-    (ngSubmit)="_onSubmit()"
-    class="flex flex-col gap-5 animate-opacity-in mt-5">
-    <section>
+    <section class="mt-5">
         <h1 class="text-2xl font-semibold">Información del representante legal</h1>
-        <p class="w-full lg:w-[50%] lx:w-[40%] text- text-foreground/40">
-            Este es el inicio en el mundo del factoring, por favor, completa
+        <p class="w-full lg:w-[50%] lx:w-[40%] text- text-foreground/50">
+            Por favor, completa
             toda la información siguiendo las instrucciones.
         </p>
     </section>
@@ -273,16 +271,23 @@
         </frs-field>
 
         <frs-field [label]="'Departamento de nacimiento'">
-            <frs-select #field [position]="'top'" [control]="_legalRepresentativeBirthProvince">
-                <frs-select-trigger [placeholder]="'Seleccione'" />
-                <frs-select-options [options]="_addressStreets" />
+            <frs-select
+                #field
+                [position]="'top'"
+                [control]="_legalRepresentativeBirthDepartment">
+                <frs-select-trigger [placeholder]="'Seleccione un departamento'" />
+                <frs-select-options [options]="_departments() || []" />
             </frs-select>
         </frs-field>
 
         <frs-field [label]="'Ciudad de nacimiento'">
-            <frs-select #field [position]="'top'" [control]="_legalRepresentativeBirthCity">
-                <frs-select-trigger [placeholder]="'Seleccione'" />
-                <frs-select-options [options]="_addressStreets" />
+            <frs-select
+                #field
+                [position]="'top'"
+                [control]="_legalRepresentativeBirthCity"
+                [disabled]="_legalRepresentativeBirthCityDisabled()">
+                <frs-select-trigger [placeholder]="'Seleccione una ciudad'" />
+                <frs-select-options [options]="_legalRepresentativeBirthCities() || []" />
             </frs-select>
         </frs-field>
         
@@ -292,7 +297,7 @@
                 [position]="'top'"
                 [control]="_legalRepresentativeExpeditionDate"
                 [class]="'w-full'"
-                [formatType]="'monthDayYear'"
+                [formatType]="'isoShort'"
                 [disabled]="false"
                 [placeholder]="'Seleccionar fecha'"
             />
@@ -308,16 +313,20 @@
         </frs-field>
 
         <frs-field [label]="'Departamentos de expedición'">
-            <frs-select #field [position]="'top'" [control]="_legalRepresentativeExpeditionProvince">
-                <frs-select-trigger [placeholder]="'Seleccione'" />
-                <frs-select-options [options]="_addressStreets" />
+            <frs-select #field [position]="'top'" [control]="_legalRepresentativeExpeditionDepartment">
+                <frs-select-trigger [placeholder]="'Seleccione un departamento'" />
+                <frs-select-options [options]="_departments() || []" />
             </frs-select>
         </frs-field>
 
         <frs-field [label]="'Ciudad de expedición'">
-            <frs-select #field [position]="'top'" [control]="_legalRepresentativeExpeditionCity">
-                <frs-select-trigger [placeholder]="'Seleccione'" />
-                <frs-select-options [options]="_addressStreets" />
+            <frs-select
+                #field
+                [position]="'top'"
+                [control]="_legalRepresentativeExpeditionCity"
+                [disabled]="_legalRepresentativeExpeditionCityDisabled()">
+                <frs-select-trigger [placeholder]="'Seleccione una ciudad'" />
+                <frs-select-options [options]="_legaRepresentativeExpeditionCities() || []" />
             </frs-select>
         </frs-field>
 

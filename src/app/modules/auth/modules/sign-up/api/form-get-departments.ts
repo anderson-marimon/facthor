@@ -1,46 +1,47 @@
-import { Signal, signal } from '@angular/core';
+import { resource, ResourceLoaderParams, signal } from '@angular/core';
+import { envs } from '@envs/envs';
+import { TApi } from '@shared/types/api-response';
 
-type TApiDepartment = {
-    name: string;
-    value: number;
+type TDepartmentOption = {
+	label: string;
+	value: any;
 };
 
-export class DepartmentService {
-    private _departments = signal<TApiDepartment[]>([]);
-    private _isLoading = signal(false);
-    private _error = signal<Error | null>(null);
+interface TApiDepartment extends TApi<TDepartmentOption[]> {}
 
-    get departments(): Signal<TApiDepartment[]> {
-        return this._departments;
-    }
+export class FormDepartmentApi {
+	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
+	private readonly _countryId = signal(82);
 
-    get isLoading(): Signal<boolean> {
-        return this._isLoading;
-    }
+	private readonly _departmentsResource = resource({
+		request: this._countryId,
+		loader: (params) => this._fetchDepartments(params),
+	});
 
-    get error(): Signal<Error | null> {
-        return this._error;
-    }
+	public readonly departments = this._departmentsResource.value;
+	public readonly isLoading = this._departmentsResource.isLoading;
+	public readonly error = this._departmentsResource.error;
 
-    public async loadDepartments(countryId: number): Promise<void> {
-        this._isLoading.set(true);
-        this._error.set(null);
+	private async _fetchDepartments(params: ResourceLoaderParams<number>) {
+		if (params.request === 0) return [];
 
-        try {
-            const response = await fetch(`https://api.example.com/countries/${countryId}/departments`);
-            if (!response.ok) throw new Error('Failed to fetch departments');
+		const query = new URLSearchParams();
+		query.append('IdCountry', params.request.toString());
 
-            const data = (await response.json()) as TApiDepartment[];
-            this._departments.set(data);
-        } catch (err) {
-            this._error.set(err as Error);
-            this._departments.set([]);
-        } finally {
-            this._isLoading.set(false);
-        }
-    }
+		const url = `${this._url}/MasterData/GetDepartments?${query}`;
 
-    reloadDepartments(countryId: number): void {
-        this.loadDepartments(countryId);
-    }
+		try {
+			const response = await fetch(url, {
+				method: 'GET',
+				signal: params.abortSignal,
+			});
+
+			if (!response.ok) throw new Error('Error al cargar los departamentos');
+
+			const result: TApiDepartment = await response.json();
+			return result.data ?? [];
+		} catch {
+			return [];
+		}
+	}
 }

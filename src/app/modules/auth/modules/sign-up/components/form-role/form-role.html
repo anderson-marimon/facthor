@@ -2,7 +2,7 @@
     class="h-full flex flex-col gap-5 animate-opacity-in">
     <section>
         <h1 class="text-2xl font-semibold">Selección de rol</h1>
-        <p class="w-full lg:w-[50%] lx:w-[40%] text-foreground/40">
+        <p class="w-full lg:w-[50%] lx:w-[40%] text-foreground/50">
             Este es el inicio en el mundo del factoring, por favor, completa
             toda la información siguiendo las instrucciones.
         </p>
@@ -11,19 +11,19 @@
         <sing-up-role-card [title]="'Financiador'" [description]="`Entidad que adelanta el pago de facturas a cambio de una comisión. 
             Proporciona liquidez inmediata a empresas y facilita la gestión de sus cuentas por cobrar. 
             Consulta su disponibilidad y condiciones de financiamiento.`" [value]="'2'" [inputFormControl]="inputRole">
-            <financier-logo />
+            <facthor-logo [textColor]="'#041C2C'" />
         </sing-up-role-card>
 
         <sing-up-role-card [title]="'Proveedor'" [description]="`Entidad que adelanta el pago de facturas a cambio de una comisión. 
             Proporciona liquidez inmediata a empresas y facilita la gestión de sus cuentas por cobrar. 
             Consulta su disponibilidad y condiciones de financiamiento.`" [value]="'3'" [inputFormControl]="inputRole">
-            <provider-logo />
+            <facthor-logo [textColor]="'#041C2C'"  />
         </sing-up-role-card>
 
         <sing-up-role-card [title]="'Pagador'" [description]="`Entidad que adelanta el pago de facturas a cambio de una comisión. 
             Proporciona liquidez inmediata a empresas y facilita la gestión de sus cuentas por cobrar. 
             Consulta su disponibilidad y condiciones de financiamiento.`" [value]="'1'" [inputFormControl]="inputRole">
-            <payer-logo />
+            <facthor-logo [textColor]="'#041C2C'"  />
         </sing-up-role-card>
     </section>
 </form>

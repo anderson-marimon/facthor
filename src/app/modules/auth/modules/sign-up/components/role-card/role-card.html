@@ -4,12 +4,12 @@
 
     @if(_isSelect()) {<check-icon [color]="'hsl(166 64% 39%)'" class="absolute top-5 right-5 w-7" />}
     <div class="flex-1 flex flex-col items-center justify-center py-6">
-        <div class="w-[40%] max-w-[200px] aspect-square group-hover:scale-110 transition-transform">
+        <div class="w-[50%] max-w-[200px] aspect-square group-hover:scale-110 transition-transform">
             <ng-content />
         </div>
     </div>
     <div>
-        <h2 class="text-5 font-semibold">{{ title()}}</h2>
-        <p class="text-foreground/40">{{ description() }}</p>
+        <h2 class="text-2xl font-semibold">{{ title() }}</h2>
+        <p class="text-foreground/50">{{ description() }}</p>
     </div>
 </label>

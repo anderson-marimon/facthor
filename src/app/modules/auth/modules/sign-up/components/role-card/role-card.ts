@@ -5,9 +5,9 @@ import { CheckIcon } from '@shared/icons/check-icon/check-icon';
 
 @Component({
 	selector: 'sing-up-role-card',
-	templateUrl: 'sign-up-role-card.html',
-	host: { 'class': 'block w-full h-auto' },
-	imports: [ReactiveFormsModule, CheckIcon]
+	templateUrl: 'role-card.html',
+	host: { class: 'block w-full h-auto' },
+	imports: [ReactiveFormsModule, CheckIcon],
 })
 export class SignUpRoleCard {
 	public readonly value = input('');

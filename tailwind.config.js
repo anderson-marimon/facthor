@@ -39,6 +39,7 @@ module.exports = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
+                pantone: '#041C2C'
             },
             borderRadius: {
                 lg: "var(--radius)",
@@ -68,16 +69,16 @@ module.exports = {
             addUtilities({
                 '*': {
                     '&::-webkit-scrollbar': {
-                        width: '0.5vh'
+                        width: '0.5vh',
                     },
                     '&::-webkit-scrollbar-thumb': {
                         backgroundColor: 'hsl(var(--primary))',
-                        borderRadius: 'var(--radius)'
+                        borderRadius: 'var(--radius)',
                     },
                     '&::-webkit-scrollbar-track': {
                         backgroundColor: 'hsl(var(--secondary))',
-                    }
-                }
+                    },
+                },
             });
         }
     ],
