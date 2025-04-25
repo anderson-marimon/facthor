@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
 import {
-    Component,
-    DestroyRef,
-    type ElementRef,
-    afterNextRender,
-    computed,
-    effect,
-    inject,
-    input,
-    output,
-    signal,
-    viewChild,
-    viewChildren,
+	Component,
+	DestroyRef,
+	type ElementRef,
+	afterNextRender,
+	computed,
+	effect,
+	inject,
+	input,
+	output,
+	signal,
+	viewChild,
+	viewChildren,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { frs, frsIsMobileDevice } from '@fresco-core/frs-core';
@@ -20,191 +20,198 @@ import { Check, LucideAngularModule, Search } from 'lucide-angular';
 import { fromEvent, timer } from 'rxjs';
 
 @Component({
-    selector: 'frs-combobox-options',
-    standalone: true,
-    imports: [LucideAngularModule, CommonModule],
-    host: {
-        '[class]': '_frsClass()',
-    },
-    template: `
-        <div class="border-b">
-            <i-lucide [img]="_search" />
-            <input #searchInput (keyup.enter)="_select()" [placeholder]="searchPlaceholder()" />
-        </div>
-        <div [tabindex]="-1">
-            @for(option of filteredOptions(); track option.label; let index = $index) {
-            <span #elementOptions (click)="_select(option.label)" [ngClass]="{ 'bg-muted': _tabIndex() === index }"
-                >{{ option.label }}
-                @if(_isSelected(option)) {
-                <i-lucide [img]="_check" />
-                }
-            </span>
-            } @empty {
-            <p>{{ emptyPlaceholder() }}</p>
-            }
-        </div>
-    `,
+	selector: 'frs-combobox-options',
+	standalone: true,
+	imports: [LucideAngularModule, CommonModule],
+	host: {
+		'[class]': '_frsClass()',
+	},
+	template: `
+		<div class="border-b">
+			<i-lucide [img]="_search" />
+			<input #searchInput (keyup.enter)="_select()" [placeholder]="searchPlaceholder()" />
+		</div>
+		<div [tabindex]="-1">
+			@for(option of filteredOptions(); track option.label; let index = $index) {
+			<span #elementOptions (click)="_select(option.label)" [ngClass]="{ 'bg-muted': _tabIndex() === index }"
+				>{{ option.label }}
+				@if(_isSelected(option)) {
+				<i-lucide [img]="_check" />
+				}
+			</span>
+			} @empty {
+			<p>{{ emptyPlaceholder() }}</p>
+			}
+		</div>
+	`,
 })
 export class FrsComboboxOptions {
-    private readonly _destroyRef = inject(DestroyRef);
-    private readonly _elementOptions = viewChildren<ElementRef<HTMLSpanElement>>('elementOptions');
-    private readonly _filteredOptions = signal<{ label: any; value: any }[]>([]);
+	private readonly _destroyRef = inject(DestroyRef);
+	private readonly _elementOptions = viewChildren<ElementRef<HTMLSpanElement>>('elementOptions');
+	private readonly _filteredOptions = signal<{ label: any; value: any }[]>([]);
 
-    public readonly class = input('');
-    public readonly options = input<{ label: any; value: any }[]>([]);
-    public readonly selectLength = input(1);
-    public readonly searchPlaceholder = input('Search');
-    public readonly emptyPlaceholder = input('No options available');
-    public readonly size = signal<TSizeVariant>('default');
-    public readonly selectedOptionsEmitter = output<{ label: any; value: any }[]>();
-    public readonly input = viewChild<ElementRef<HTMLInputElement>>('searchInput');
+	public readonly class = input('');
+	public readonly options = input<{ label: any; value: any }[]>([]);
+	public readonly selectLength = input(1);
+	public readonly searchPlaceholder = input('Search');
+	public readonly emptyPlaceholder = input('No options available');
+	public readonly size = signal<TSizeVariant>('default');
+	public readonly selectedOptionsEmitter = output<{ label: any; value: any }[]>();
+	public readonly input = viewChild<ElementRef<HTMLInputElement>>('searchInput');
 
-    protected readonly _selectedOptions = signal<{ label: any; value: any }[]>([]);
-    protected readonly _tabIndex = signal(0);
-    protected readonly _search = Search;
-    protected readonly _check = Check;
+	protected readonly _selectedOptions = signal<{ label: any; value: any }[]>([]);
+	protected readonly _tabIndex = signal(0);
+	protected readonly _search = Search;
+	protected readonly _check = Check;
 
-    public readonly filteredOptions = computed(() => this._filteredOptions());
+	public readonly filteredOptions = computed(() => this._filteredOptions());
 
-    constructor() {
-        effect(() => {
-            const elements = this._elementOptions();
-            if (elements.length > 0) {
-                const activeElement = elements[this._tabIndex()].nativeElement;
-                activeElement.focus();
-                activeElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                });
-            }
-        });
+	constructor() {
+		effect(() => {
+			const elements = this._elementOptions();
+			if (elements.length > 0) {
+				const activeElement = elements[this._tabIndex()].nativeElement;
+				activeElement.focus();
+				activeElement.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center',
+				});
+			}
+		});
 
-        afterNextRender(() => this._handleKeydown());
-    }
+		afterNextRender(() => this._handleKeydown());
+	}
 
-    private _handleKeydown(): void {
-        fromEvent<KeyboardEvent>(document, 'keydown')
-            .pipe(takeUntilDestroyed(this._destroyRef))
-            .subscribe(event => {
-                const elements = this._elementOptions();
-                if (elements.length === 0) return;
+	private _handleKeydown(): void {
+		fromEvent<KeyboardEvent>(document, 'keydown')
+			.pipe(takeUntilDestroyed(this._destroyRef))
+			.subscribe((event) => {
+				const optionsElements = this._elementOptions();
+				if (optionsElements.length === 0 || !optionsElements[0].nativeElement.offsetParent) return;
 
-                switch (event.key) {
-                    case 'ArrowDown':
-                        event.preventDefault();
-                        this._tabIndex.update(prev => (prev + 1) % elements.length);
-                        break;
-                    case 'ArrowUp':
-                        event.preventDefault();
-                        this._tabIndex.update(prev => (prev === 0 ? elements.length - 1 : prev - 1));
-                        break;
-                    case 'Enter': {
-                        event.preventDefault();
-                        const selectedOption = this.filteredOptions()[this._tabIndex()];
-                        if (selectedOption) {
-                            this._select(selectedOption.label);
-                        }
-                        break;
-                    }
-                }
-            });
-    }
+				switch (event.key) {
+					case 'ArrowDown':
+					case 'ArrowUp':
+					case 'Enter':
+						event.preventDefault();
+						event.stopPropagation();
+						break;
+				}
 
-    public getInput(): HTMLInputElement | undefined {
-        return this.input()?.nativeElement;
-    }
+				switch (event.key) {
+					case 'ArrowDown':
+						this._tabIndex.update((prev) => (prev + 1) % optionsElements.length);
+						break;
+					case 'ArrowUp':
+						this._tabIndex.update((prev) => (prev === 0 ? optionsElements.length - 1 : prev - 1));
+						break;
+					case 'Enter': {
+						const selectedOption = this.options()[this._tabIndex()];
+						if (selectedOption) {
+							this._select(selectedOption.label);
+						}
+						break;
+					}
+				}
+			});
+	}
 
-    public getSelectedOptionsLength(): number {
-        return this._selectedOptions().length;
-    }
+	public getInput(): HTMLInputElement | undefined {
+		return this.input()?.nativeElement;
+	}
 
-    public setSize(size: TSizeVariant): void {
-        this.size.set(size);
-    }
+	public getSelectedOptionsLength(): number {
+		return this._selectedOptions().length;
+	}
 
-    public focusInput(): void {
-        timer(0)
-            .pipe(takeUntilDestroyed(this._destroyRef))
-            .subscribe(() => this.input()?.nativeElement.focus());
-    }
+	public setSize(size: TSizeVariant): void {
+		this.size.set(size);
+	}
 
-    public resetTabIndex(): void {
-        this._tabIndex.set(0);
-    }
+	public focusInput(): void {
+		timer(0)
+			.pipe(takeUntilDestroyed(this._destroyRef))
+			.subscribe(() => this.input()?.nativeElement.focus());
+	}
 
-    public resetOptions(): void {
-        this.resetTabIndex();
+	public resetTabIndex(): void {
+		this._tabIndex.set(0);
+	}
 
-        const input = this.input();
-        if (input === undefined) return;
+	public resetOptions(): void {
+		this.resetTabIndex();
 
-        input.nativeElement.value = '';
-        this._filteredOptions.set(this.options());
-    }
+		const input = this.input();
+		if (input === undefined) return;
 
-    public setSelectedOptions(options: { label: string; value: any }[]): void {
-        this._selectedOptions.set(options);
-    }
+		input.nativeElement.value = '';
+		this._filteredOptions.set(this.options());
+	}
 
-    public filterOptions(value: string): void {
-        const normalizedValue = value
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLocaleLowerCase();
+	public setSelectedOptions(options: { label: string; value: any }[]): void {
+		this._selectedOptions.set(options);
+	}
 
-        this._filteredOptions.set(this.options().filter(option => this._normalizeText(option.label).includes(normalizedValue)));
-    }
+	public filterOptions(value: string): void {
+		const normalizedValue = value
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '')
+			.toLocaleLowerCase();
 
-    private _normalizeText(text: string): string {
-        return text
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLocaleLowerCase();
-    }
+		this._filteredOptions.set(this.options().filter((option) => this._normalizeText(option.label).includes(normalizedValue)));
+	}
 
-    protected _isSelected(option: { label: string; value: any }): boolean {
-        if (this._selectedOptions().length === 0) return false;
+	private _normalizeText(text: string): string {
+		return text
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '')
+			.toLocaleLowerCase();
+	}
 
-        return this._selectedOptions().some(selected => selected.label === option.label && selected.value === option.value);
-    }
+	protected _isSelected(option: { label: string; value: any }): boolean {
+		if (this._selectedOptions().length === 0) return false;
 
-    protected _select(label?: string): void {
-        const selectedOption = label !== undefined ? this.options().find(option => option.label === label) : this.filteredOptions()[this._tabIndex()];
+		return this._selectedOptions().some((selected) => selected.label === option.label && selected.value === option.value);
+	}
 
-        const selectedOptions = this._selectedOptions();
+	protected _select(label?: string): void {
+		const selectedOption =
+			label !== undefined ? this.options().find((option) => option.label === label) : this.filteredOptions()[this._tabIndex()];
 
-        if (!selectedOption) return;
+		const selectedOptions = this._selectedOptions();
 
-        if (this.selectLength() > 1) {
-            if (selectedOptions.includes(selectedOption)) {
-                this._selectedOptions.set(selectedOptions.filter(option => option !== selectedOption));
-            } else {
-                if (selectedOptions.length >= this.selectLength()) return;
-                this._selectedOptions.set([...selectedOptions, selectedOption]);
-            }
-        } else {
-            this._selectedOptions.set([selectedOption]);
-        }
+		if (!selectedOption) return;
 
-        if (label !== undefined && !frsIsMobileDevice()) {
-            this.focusInput();
-        }
+		if (this.selectLength() > 1) {
+			if (selectedOptions.includes(selectedOption)) {
+				this._selectedOptions.set(selectedOptions.filter((option) => option !== selectedOption));
+			} else {
+				if (selectedOptions.length >= this.selectLength()) return;
+				this._selectedOptions.set([...selectedOptions, selectedOption]);
+			}
+		} else {
+			this._selectedOptions.set([selectedOption]);
+		}
 
-        this.selectedOptionsEmitter.emit(this._selectedOptions());
-    }
+		if (label !== undefined && !frsIsMobileDevice()) {
+			this.focusInput();
+		}
 
-    protected readonly _frsClass = computed(() =>
-        frs(
-            variants({
-                size: this.size(),
-            }),
-            this.class()
-        )
-    );
+		this.selectedOptionsEmitter.emit(this._selectedOptions());
+	}
+
+	protected readonly _frsClass = computed(() =>
+		frs(
+			variants({
+				size: this.size(),
+			}),
+			this.class()
+		)
+	);
 }
 
 const variants = cva(
-    `w-full flex flex-col p-2 pt-0 overflow-hidden [&_svg]:pointer-events-none [&_svg]:shrink-0
+	`w-full flex flex-col p-2 pt-0 overflow-hidden [&_svg]:pointer-events-none [&_svg]:shrink-0
 	[&_svg]:opacity-50 [&>_div:first-child]:flex [&>_div:first-child]:items-center [&>_div:first-child]:gap-2
 	[&_input]:flex-1 [&_input]:shrink-0 [&_input]:outline-none [&_input]:border-none [&_input]:w-full [&_input]:bg-background [&>_div:last-child]:flex-1
 	[&>_div:last-child]:flex [&>_div:last-child]:flex-col [&>_div:last-child]:gap-1 [&>_div:last-child]:pt-2 [&>_div:last-child]:overflow-y-auto
@@ -212,17 +219,17 @@ const variants = cva(
 	[&_p]:opacity-40 [&_span]:flex [&_span]:justify-between [&_span]:items-center [&_span]:px-2 [&_span]:py-1 [&_span]:rounded
 	[&_span:hover]:bg-muted [&_span]:cursor-pointer
 	`,
-    {
-        variants: {
-            size: {
-                default: '[&_input]:h-9 max-h-40 [&_svg]:size-4',
-                sm: '[&_input]:h-8 [&_input]:rounded-md text-xs [&_svg]:size-3.5',
-            },
-        },
-        defaultVariants: {
-            size: 'default',
-        },
-    }
+	{
+		variants: {
+			size: {
+				default: '[&_input]:h-9 max-h-40 [&_svg]:size-4',
+				sm: '[&_input]:h-8 [&_input]:rounded-md text-xs [&_svg]:size-3.5',
+			},
+		},
+		defaultVariants: {
+			size: 'default',
+		},
+	}
 );
 
 type TSizeVariant = NonNullable<VariantProps<typeof variants>['size']>;

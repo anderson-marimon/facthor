@@ -73,11 +73,7 @@ export class SignUpBusinessForm {
 	protected readonly _legalRepresentativeBirthCountry = this._formBuilder.control('', [Validators.required]);
 	protected readonly _legalRepresentativeBirthDepartment = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
 	protected readonly _legalRepresentativeBirthCity = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
-	protected readonly _legalRepresentativeExpeditionDate = this._formBuilder.control<TCalendarDate>(null, [
-		Validators.required,
-		this._formValidator.atLeast18Years(),
-		this._formValidator.atMost80Years(),
-	]);
+	protected readonly _legalRepresentativeExpeditionDate = this._formBuilder.control<TCalendarDate>(null, [Validators.required]);
 	protected readonly _legalRepresentativeExpeditionCountry = this._formBuilder.control('', [Validators.required]);
 	protected readonly _legalRepresentativeExpeditionDepartment = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
 	protected readonly _legalRepresentativeExpeditionCity = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
@@ -123,11 +119,7 @@ export class SignUpBusinessForm {
 		this._syncDepartments();
 	}
 
-	private _syncForm(): void {
-		setTimeout(() => {
-			console.log(this._businessPhoneNumber.value);
-		}, 10000);
-	}
+	private _syncForm(): void {}
 
 	private _syncDepartments(): void {
 		const setupDepartmentSync = (

@@ -122,7 +122,10 @@ export class FrsInput {
 				tap((value) => {
 					if (value && regex) {
 						const formatted = value.replace(regex, '');
-						this.control()?.setValue(formatted, { emitEvent: false });
+						this._updateInputValue([formatted, formatted]);
+					} else {
+						const val = value || '';
+						this._updateInputValue([val, val]);
 					}
 				})
 			)
@@ -184,7 +187,6 @@ export class FrsInput {
 	private _updateInputValue([formatted, original]: [string, string]): void {
 		const inputEl = this._inputElement()?.nativeElement;
 		const isFocused = document.activeElement === inputEl;
-
 		const start = inputEl?.selectionStart ?? 0;
 
 		this.control()?.setValue(original, { emitEvent: false });
@@ -206,7 +208,6 @@ export class FrsInput {
 
 			this._isOnLimit.set(originalLength === maskLength);
 		}
-		console.log('isOnLimit', this._isOnLimit());
 	}
 
 	protected _onKeydown(event: KeyboardEvent): void {
@@ -222,9 +223,12 @@ export class FrsInput {
 		const inputEl = this._inputElement()?.nativeElement;
 		inputEl!.value = this._originalValue();
 	}
+
 	protected _onBlur(): void {
 		const inputEl = this._inputElement()?.nativeElement;
-		inputEl!.value = this._formattedValue();
+		const formatted = this._formattedValue();
+		const fallback = this.control()?.value ?? '';
+		inputEl!.value = formatted || fallback;
 	}
 
 	public setHasError(value: boolean): void {

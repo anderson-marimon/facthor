@@ -76,7 +76,6 @@ export default class SignUpPage implements AfterViewInit {
 
 	protected _previousStep(): void {
 		if (this._currentStep() > 0) {
-			console.log();
 			this._setStep(this._currentStep() - 1);
 		}
 	}
