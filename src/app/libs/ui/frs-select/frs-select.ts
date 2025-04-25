@@ -1,4 +1,4 @@
-import { Component, DestroyRef, afterNextRender, computed, contentChild, effect, inject, input, viewChild } from '@angular/core';
+import { Component, DestroyRef, afterNextRender, computed, contentChild, effect, inject, input, signal, viewChild } from '@angular/core';
 import { outputToObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormControl } from '@angular/forms';
 import { frs } from '@fresco-core/frs-core';
@@ -85,14 +85,15 @@ export class FrsSelect {
 		const options = this._options();
 		const trigger = this._trigger();
 		const popoverTrigger = this._popoverTrigger();
+		const popover = this._popover();
 
-		if (!popoverTrigger || !options || !trigger) return;
+		if (!popoverTrigger || !options || !trigger || !popover) return;
 
 		outputToObservable(popoverTrigger.triggerEvent)
 			.pipe(takeUntilDestroyed(this._destroyRef))
 			.subscribe(() => {
-				trigger.toggleState();
-				this._options()?.resetTabIndex();
+				options.resetTabIndex();
+				trigger.setExpandedState(popover.isOpen());
 			});
 
 		outputToObservable(trigger.emitTouched)
@@ -101,7 +102,6 @@ export class FrsSelect {
 				this.control()?.markAsTouched();
 			});
 	}
-
 	private _syncOptionsSelected(): void {
 		const options = this._options();
 		if (options === undefined) return;

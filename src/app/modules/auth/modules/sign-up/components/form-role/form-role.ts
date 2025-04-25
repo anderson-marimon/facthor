@@ -40,13 +40,6 @@ export class SignUpRoleForm implements AfterViewInit {
 		});
 	}
 
-	protected _onSubmit() {
-		if (this._roleForm.valid) {
-			const selectedOption = this.inputRole.value;
-			console.log('Opción seleccionada:', selectedOption);
-		}
-	}
-
 	public getRoleForm(): FormGroup {
 		return this._roleForm;
 	}

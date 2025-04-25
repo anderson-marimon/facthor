@@ -10,25 +10,25 @@ import { ChevronsDownUp, ChevronsUpDown, LucideAngularModule } from 'lucide-angu
 	imports: [LucideAngularModule, CommonModule],
 	host: {
 		'[class]': '_frsClass()',
-		'[tabindex]': "_disabled() ? '-1' : '0'"
+		'[tabindex]': "_disabled() ? '-1' : '0'",
 	},
 	template: `
-    <div [title]="selectedText()" class="truncate">
-      {{ selectedText() || placeholder() || "Select an option" }}
-    </div>
-    <i-lucide [img]="isExpanded() ? iconExpanded() : icon()" />
-  `,
+		<div [title]="selectedText()" class="truncate">
+			{{ selectedText() || placeholder() || 'Select an option' }}
+		</div>
+		<i-lucide [img]="isExpanded() ? iconExpanded() : icon()" />
+	`,
 	styles: [
 		`
-      .truncate {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        display: block;
-        max-width: 100%;
-      }
-    `
-	]
+			.truncate {
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				display: block;
+				max-width: 100%;
+			}
+		`,
+	],
 })
 export class FrsSelectTrigger {
 	private readonly _size = signal<TSizeVariants>('default');
@@ -61,13 +61,13 @@ export class FrsSelectTrigger {
 		this._hasError.set(value);
 	}
 
-	public toggleState(): void {
-		this._isExpanded.update(prev => !prev);
+	public setExpandedState(value: boolean): void {
+		this._isExpanded.set(value);
 	}
 
 	public selectedText = computed(() =>
 		this._selectedOptions()
-			.map(opt => opt.label)
+			.map((opt) => opt.label)
 			.join(', ')
 	);
 
@@ -79,7 +79,7 @@ export class FrsSelectTrigger {
 	protected readonly _frsClass = computed(() =>
 		frs(
 			variants({
-				size: this._size()
+				size: this._size(),
 			}),
 			this._hasError() ? 'border-red-400 focus-visible:ring-red-400 text-red-400' : '',
 			this.class()
@@ -96,12 +96,12 @@ const variants = cva(
 		variants: {
 			size: {
 				default: 'h-9 pl-4 pr-3',
-				sm: ' h-8 rounded-md pl-3 pr-2 text-xs [&_svg]:size-3.5'
-			}
+				sm: ' h-8 rounded-md pl-3 pr-2 text-xs [&_svg]:size-3.5',
+			},
 		},
 		defaultVariants: {
-			size: 'default'
-		}
+			size: 'default',
+		},
 	}
 );
 
