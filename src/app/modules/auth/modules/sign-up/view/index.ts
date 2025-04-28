@@ -1,6 +1,7 @@
 import { type AfterViewInit, ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SignUpBusinessForm } from '@auth/modules/sign-up/components/form-business/form-business';
+import { SignUpDocumentsForm } from '@auth/modules/sign-up/components/form-documents/form-documents';
 import { SignUpRoleForm } from '@auth/modules/sign-up/components/form-role/form-role';
 import { SignUpRoleStep } from '@auth/modules/sign-up/components/role-step/role-step';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
@@ -8,7 +9,7 @@ import { FrsButtonModule } from '@fresco-ui/frs-button';
 @Component({
 	selector: 'sign-up-page',
 	templateUrl: 'index.html',
-	imports: [SignUpRoleStep, RouterLink, FrsButtonModule, SignUpRoleForm, SignUpBusinessForm],
+	imports: [SignUpRoleStep, RouterLink, FrsButtonModule, SignUpBusinessForm, SignUpRoleForm, SignUpDocumentsForm],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class SignUpPage implements AfterViewInit {
@@ -19,7 +20,7 @@ export default class SignUpPage implements AfterViewInit {
 	protected readonly _formSteps = signal(Array(5).fill(false));
 
 	public ngAfterViewInit(): void {
-		this._setStep(0);
+		this._setStep(2);
 	}
 
 	private _setStep(index: number): void {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import type { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
 import { calculateAge } from '@shared/utils/calculate-age.util';
 import { verificationNumberCalculator } from '@shared/utils/verification-number-calculator';
 
@@ -98,6 +99,24 @@ export class FormValidator {
 			const age = calculateAge(birthDate, today);
 
 			if (age > 80) return { over80: true };
+			return null;
+		};
+	}
+
+	public bancAccountNumber(currentBankType: TSelectOption[]): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const bankType = currentBankType[0]?.value ?? 1;
+			const value = control.value ?? '';
+			const regex = /^\d+$/;
+
+			if (bankType === 1) {
+				if (value.length < 11 || value.length > 11) return { invalidSavingAccountBankMinMax: true };
+			} else if (bankType === 2) {
+				if (value.length < 10 || value.length > 12) return { invalidCheckingAccountBankMinMax: true };
+			}
+
+			if (!regex.test(value)) return { invalidBankAccountNumber: true };
+
 			return null;
 		};
 	}
