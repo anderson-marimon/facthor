@@ -45,7 +45,7 @@
         <frs-field [label]="'Actividad económica'">
             <frs-combobox #field [control]="_businessEconomicActivity">
                 <frs-combobox-trigger [placeholder]="'Seleccione una actividad económica'" />
-                <frs-combobox-options [options]="_economicActivities" />
+                <frs-combobox-options [options]="_economicActivitiesOptions() || []" />
             </frs-combobox>
         </frs-field>
 
@@ -64,7 +64,7 @@
                 [position]="'top'"
                 [control]="_businessDepartment">
                 <frs-select-trigger [placeholder]="'Seleccione un departamento'" />
-                <frs-select-options [options]="_departments() || []" />
+                <frs-select-options [options]="_departmentsOptions() || []" />
             </frs-select>
         </frs-field>
 
@@ -75,7 +75,7 @@
                 [control]="_businessCity"
                 [disabled]="_businessCityDisabled()">
                 <frs-select-trigger [placeholder]="'Seleccione una ciudad'" />
-                <frs-select-options [options]="_businessCities() || []" />
+                <frs-select-options [options]="_businessCitiesOptions() || []" />
             </frs-select>
         </frs-field>
 
@@ -85,7 +85,7 @@
                 <frs-field [showAsterisk]="false">
                     <frs-select #field [control]="_businessAddressStreet">
                         <frs-select-trigger [class]="'w-36'" [placeholder]="'Seleccione'" />
-                        <frs-select-options [options]="_addressStreets" />
+                        <frs-select-options [options]="_addressStreetsOptions" />
                     </frs-select>
                 </frs-field>
         
@@ -276,7 +276,7 @@
                 [position]="'top'"
                 [control]="_legalRepresentativeBirthDepartment">
                 <frs-select-trigger [placeholder]="'Seleccione un departamento'" />
-                <frs-select-options [options]="_departments() || []" />
+                <frs-select-options [options]="_departmentsOptions() || []" />
             </frs-select>
         </frs-field>
 
@@ -287,7 +287,7 @@
                 [control]="_legalRepresentativeBirthCity"
                 [disabled]="_legalRepresentativeBirthCityDisabled()">
                 <frs-select-trigger [placeholder]="'Seleccione una ciudad'" />
-                <frs-select-options [options]="_legalRepresentativeBirthCities() || []" />
+                <frs-select-options [options]="_legalRepresentativeBirthCitiesOptions() || []" />
             </frs-select>
         </frs-field>
         
@@ -315,7 +315,7 @@
         <frs-field [label]="'Departamentos de expedición'">
             <frs-select #field [position]="'top'" [control]="_legalRepresentativeExpeditionDepartment">
                 <frs-select-trigger [placeholder]="'Seleccione un departamento'" />
-                <frs-select-options [options]="_departments() || []" />
+                <frs-select-options [options]="_departmentsOptions() || []" />
             </frs-select>
         </frs-field>
 
@@ -326,7 +326,7 @@
                 [control]="_legalRepresentativeExpeditionCity"
                 [disabled]="_legalRepresentativeExpeditionCityDisabled()">
                 <frs-select-trigger [placeholder]="'Seleccione una ciudad'" />
-                <frs-select-options [options]="_legaRepresentativeExpeditionCities() || []" />
+                <frs-select-options [options]="_legaRepresentativeExpeditionCitiesOptions() || []" />
             </frs-select>
         </frs-field>
 

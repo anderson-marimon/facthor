@@ -1,0 +1,40 @@
+<form class="flex flex-col gap-5 animate-opacity-in">
+    <section>
+        <h1 class="text-2xl font-semibold">Información Bancaria</h1>
+        <p class="w-full lg:w-[50%] lx:w-[40%] text- text-foreground/50">
+            Por favor, completa
+            toda la información siguiendo las instrucciones.
+        </p>
+    </section>
+    <section class="relative grid place-content-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <frs-field [label]="'Banco'">
+            <frs-select
+                #field
+                [control]="_bankName">
+                <frs-select-trigger [placeholder]="'Seleccione un banco'" />
+                <frs-select-options [options]="_bankNameOptions || []" />
+            </frs-select>
+        </frs-field>
+
+        <frs-field [label]="'Tipo de cuenta'">
+            <frs-select
+                #field
+                [control]="_bankAccountType">
+                <frs-select-trigger [placeholder]="'Seleccione un tipo de cuenta'" />
+                <frs-select-options [options]="_bankAccountTypeOptions || []" />
+            </frs-select>
+        </frs-field>
+
+        <frs-field [label]="'Número de cuenta'" [class]="'flex-1'">
+            <frs-input
+                #field
+                [control]="_bankAccountNumber"
+                [placeholder]="'Ingrese el número de cuenta'"
+                [type]="'custom'"
+                [mask]="'xxxxxxxxxxxx'"
+                [regex]="'[^\\d]'"
+                [disabled]="_disableBankAccountNumber()"
+            />
+        </frs-field>
+    </section>
+</form>

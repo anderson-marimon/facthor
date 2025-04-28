@@ -1,7 +1,9 @@
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormControl, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormCitiesApi } from '@auth/modules/sign-up/api/form-get-cities';
+import { FormCiuuCodesApi } from '@auth/modules/sign-up/api/form-get-ciuu-codes';
 import { FormDepartmentApi } from '@auth/modules/sign-up/api/form-get-departments';
+import { ADDRESS_STREETS } from '@auth/modules/sign-up/common/address-streets';
 import { FormValidator } from '@auth/modules/sign-up/services/form-validator';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { TCalendarDate } from '@fresco-ui/frs-calendar/frs-calendar';
@@ -11,30 +13,30 @@ import { FrsFieldModule } from '@fresco-ui/frs-field';
 import { FrsInputModule } from '@fresco-ui/frs-input';
 import { FrsSelectModule } from '@fresco-ui/frs-select';
 import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
-import { ADDRESS_STREETS } from '@shared/common/address-streets';
-import { ECONOMIC_ACTIVITIES } from '@shared/common/economic-activity';
 
 @Component({
 	selector: 'sign-up-business-form',
 	templateUrl: 'form-business.html',
-	viewProviders: [FormDepartmentApi, FormCitiesApi],
+	viewProviders: [FormCitiesApi, FormCiuuCodesApi, FormDepartmentApi],
 	imports: [FrsButtonModule, FrsComboboxModule, FrsDatePickerModule, FrsFieldModule, FrsInputModule, FrsSelectModule, ReactiveFormsModule],
 })
 export class SignUpBusinessForm {
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _formValidator = inject(FormValidator);
-	private readonly _departmentService = inject(FormDepartmentApi);
-	private readonly _cityService = inject(FormCitiesApi);
+	private readonly _formDepartmentApi = inject(FormDepartmentApi);
+	private readonly _formCiuuCodesApi = inject(FormCiuuCodesApi);
+	private readonly _formCitiesApi = inject(FormCitiesApi);
 
-	protected readonly _disabled = signal(true);
-	protected readonly _economicActivities = ECONOMIC_ACTIVITIES as { label: any; value: any }[];
-	protected readonly _addressStreets = ADDRESS_STREETS;
-	protected readonly _departments = this._departmentService.departments;
-	protected readonly _businessCities = this._cityService.businessCities;
-	protected readonly _legalRepresentativeBirthCities = this._cityService.legalRepresentativeBirthCities;
-	protected readonly _legaRepresentativeExpeditionCities = this._cityService.legalRepresentativeBirthCities;
+	// Inputs data
+	protected readonly _addressStreetsOptions = ADDRESS_STREETS;
+	protected readonly _departmentsOptions = this._formDepartmentApi.departments;
+	protected readonly _businessCitiesOptions = this._formCitiesApi.businessCities;
+	protected readonly _economicActivitiesOptions = this._formCiuuCodesApi.ciuuCodes;
+	protected readonly _legalRepresentativeBirthCitiesOptions = this._formCitiesApi.legalRepresentativeBirthCities;
+	protected readonly _legaRepresentativeExpeditionCitiesOptions = this._formCitiesApi.legalRepresentativeBirthCities;
 
 	// Disable controls
+	protected readonly _disabled = signal(true);
 	protected readonly _businessCityDisabled = signal(true);
 	protected readonly _legalRepresentativeBirthCityDisabled = signal(true);
 	protected readonly _legalRepresentativeExpeditionCityDisabled = signal(true);
@@ -141,21 +143,21 @@ export class SignUpBusinessForm {
 		setupDepartmentSync(
 			this._businessDepartment,
 			this._businessCity,
-			this._cityService.updateBusinessDepartment.bind(this._cityService),
+			this._formCitiesApi.updateBusinessDepartment.bind(this._formCitiesApi),
 			this._businessCityDisabled
 		);
 
 		setupDepartmentSync(
 			this._legalRepresentativeBirthDepartment,
 			this._legalRepresentativeBirthCity,
-			this._cityService.updateLegalRepresentativeBirthDepartment.bind(this._cityService),
+			this._formCitiesApi.updateLegalRepresentativeBirthDepartment.bind(this._formCitiesApi),
 			this._legalRepresentativeBirthCityDisabled
 		);
 
 		setupDepartmentSync(
 			this._legalRepresentativeExpeditionDepartment,
 			this._legalRepresentativeExpeditionCity,
-			this._cityService.updateLegalRepresentativeExpeditionDepartment.bind(this._cityService),
+			this._formCitiesApi.updateLegalRepresentativeExpeditionDepartment.bind(this._formCitiesApi),
 			this._legalRepresentativeExpeditionCityDisabled
 		);
 	}
