@@ -1,5 +1,6 @@
 import { type AfterViewInit, ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { SignUpAccountForm } from '@auth/modules/sign-up/components/form-account/form-account';
 import { SignUpBusinessForm } from '@auth/modules/sign-up/components/form-business/form-business';
 import { SignUpDocumentsForm } from '@auth/modules/sign-up/components/form-documents/form-documents';
 import { SignUpRoleForm } from '@auth/modules/sign-up/components/form-role/form-role';
@@ -9,19 +10,20 @@ import { FrsButtonModule } from '@fresco-ui/frs-button';
 @Component({
 	selector: 'sign-up-page',
 	templateUrl: 'index.html',
-	imports: [SignUpRoleStep, RouterLink, FrsButtonModule, SignUpBusinessForm, SignUpRoleForm, SignUpDocumentsForm],
+	imports: [FrsButtonModule, RouterLink, SignUpRoleStep, SignUpRoleForm, SignUpBusinessForm, SignUpDocumentsForm, SignUpAccountForm],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class SignUpPage implements AfterViewInit {
 	private readonly _roleForm = viewChild(SignUpRoleForm);
 	private readonly _businessForm = viewChild(SignUpBusinessForm);
 	private readonly _documentsForm = viewChild(SignUpDocumentsForm);
+	private readonly _accountForm = viewChild(SignUpAccountForm);
 
 	protected readonly _currentStep = signal(0);
 	protected readonly _formSteps = signal(Array(5).fill(false));
 
 	public ngAfterViewInit(): void {
-		this._setStep(2);
+		this._setStep(3);
 	}
 
 	private _setStep(index: number): void {
@@ -81,6 +83,22 @@ export default class SignUpPage implements AfterViewInit {
 		this._setStep(3);
 	}
 
+	private _confirmAccountForm(): void {
+		const accountForm = this._accountForm();
+		if (!accountForm) {
+			throw new Error('No se encontró el formulario de configuración de cuenta, por favor revisar la implementación');
+		}
+
+		const formData = accountForm.getAccountForm();
+
+		if (formData.invalid) {
+			formData.markAsUntouched();
+			return;
+		}
+
+		this._setStep(4);
+	}
+
 	protected _nextStep(): void {
 		switch (this._currentStep()) {
 			case 0:
@@ -91,6 +109,9 @@ export default class SignUpPage implements AfterViewInit {
 				break;
 			case 2:
 				this._confirmDocumentsForm();
+				break;
+			case 3:
+				this._confirmAccountForm();
 				break;
 		}
 	}
@@ -109,6 +130,8 @@ export default class SignUpPage implements AfterViewInit {
 				return this._businessForm()?.getBusinessForm().invalid ?? true;
 			case 2:
 				return this._documentsForm()?.getDocumentsForm().invalid ?? true;
+			case 3:
+				return this._accountForm()?.getAccountForm().invalid ?? true;
 			default:
 				return true;
 		}

@@ -153,4 +153,34 @@ export class FormValidator {
 			return null;
 		};
 	}
+
+	public password(): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const value: string = control.value ?? '';
+
+			if (value.length < 8 || value.length > 20) {
+				return { invalidPasswordMinMax: true };
+			}
+
+			const hasUpperCase = /[A-Z]/.test(value);
+			const hasNumber = /\d/.test(value);
+			const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+
+			if (!hasUpperCase) return { missingUpperCase: true };
+			if (!hasNumber) return { missingNumber: true };
+			if (!hasSpecialChar) return { missingSpecialChar: true };
+
+			return null;
+		};
+	}
+
+	public confirmPassword(password: WritableSignal<string>): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const value: string = control.value ?? '';
+
+			if (value !== password()) return { passwordNotMatch: true };
+
+			return null;
+		};
+	}
 }
