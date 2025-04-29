@@ -16,8 +16,14 @@
     "target": "ES2022",
     "module": "ES2022",
     "paths": {
+      "@app/*": [
+        "./src/*"
+      ],
       "@envs/*": [
         "./src/envs/*"
+      ],
+      "@tools/*": [
+        "./src/tools/*"
       ],
       "@auth/*": [
         "./src/app/modules/auth/*"
