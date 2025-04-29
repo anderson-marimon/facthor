@@ -17,6 +17,11 @@ export const INPUT_ERRORS = {
 	invalidBankAccountNumber: 'Solo se permiten números',
 	pdfInvalidFileType: 'Solo se permiten archivos PDF',
 	invalidFileSizeTwoMb: 'El tamaño máximo permitido es de 2 MB',
+	invalidPasswordMinMax: 'La contraseña debe tener entre 7 y 10 caracteres',
+	missingUpperCase: 'Debe contener al menos una letra mayúscula',
+	missingNumber: 'Debe contener al menos un número',
+	missingSpecialChar: 'Debe contener al menos un carácter especial',
+	passwordNotMatch: 'La contraseña no coincide',
 	pattern: 'El formato no es válido',
 } as const;
 

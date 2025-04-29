@@ -1,0 +1,79 @@
+<form
+    [formGroup]="_form"
+    class="flex flex-col gap-5 animate-opacity-in">
+    <section>
+        <h1 class="text-2xl font-semibold">Configuración de usuario</h1>
+        <p class="w-full lg:w-[50%] lx:w-[40%] text- text-foreground/50">
+            Configura el usuario con el que administraras tu empresa.
+        </p>
+    </section>
+    <section class="relative grid place-content-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <frs-field [label]="'Primer nombre'">
+            <frs-input
+                #field
+                [control]="_firstName"
+                [placeholder]="'Ingrese el primer nombre'"
+            />
+        </frs-field>
+
+        <frs-field [label]="'Segundo nombre'">
+            <frs-input
+                #field
+                [control]="_surName"
+                [placeholder]="'Ingrese el segundo nombre'"
+            />
+        </frs-field>
+
+        <frs-field [label]="'Primer apellido'">
+            <frs-input
+                #field
+                [control]="_lastName"
+                [placeholder]="'Ingrese el primer apellido'"
+            />
+        </frs-field>
+
+        <frs-field [label]="'Segundo apellido'">
+            <frs-input
+                #field
+                [control]="_surLastName"
+                [placeholder]="'Ingrese el segundo apellido'"
+            />
+        </frs-field>
+
+        <frs-field [label]="'Número de documento'">
+            <frs-input
+                #field
+                [control]="_dniNumber"
+                [placeholder]="'Ingrese el número de documento'"
+            />
+        </frs-field>
+
+        <frs-field [label]="'Correo electrónico'">
+            <frs-input
+                #field
+                [control]="_email"
+                [placeholder]="'Ingrese el correo electrónico'"
+            />
+        </frs-field>
+        
+        <frs-field [label]="'Contraseña'">
+            <frs-input
+                #field
+                [control]="_password"
+                [placeholder]="'Ingrese la contraseña'"
+                [type]="'custom'"
+                [mask]="'xxxxxxxxxxxxxxxxxxxx'"
+            />
+        </frs-field>
+
+        <frs-field [label]="'Confirmar contraseña'">
+            <frs-input
+                #field
+                [control]="_confirmPassword"
+                [placeholder]="'Ingrese nuevamente la contraseña'"
+                [type]="'custom'"
+                [mask]="'xxxxxxxxxxxxxxxxxxxx'"
+            />
+        </frs-field>
+    </section>
+</form>
