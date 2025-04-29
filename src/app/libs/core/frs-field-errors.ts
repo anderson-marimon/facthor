@@ -15,6 +15,8 @@ export const INPUT_ERRORS = {
 	invalidSavingAccountBankMinMax: 'Mínimo 11 - máximo 11 caracteres',
 	invalidCheckingAccountBankMinMax: 'Mínimo 10 - máximo 12 caracteres',
 	invalidBankAccountNumber: 'Solo se permiten números',
+	pdfInvalidFileType: 'Solo se permiten archivos PDF',
+	invalidFileSizeTwoMb: 'El tamaño máximo permitido es de 2 MB',
 	pattern: 'El formato no es válido',
 } as const;
 
