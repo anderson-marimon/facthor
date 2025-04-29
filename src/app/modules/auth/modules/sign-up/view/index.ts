@@ -15,6 +15,7 @@ import { FrsButtonModule } from '@fresco-ui/frs-button';
 export default class SignUpPage implements AfterViewInit {
 	private readonly _roleForm = viewChild(SignUpRoleForm);
 	private readonly _businessForm = viewChild(SignUpBusinessForm);
+	private readonly _documentsForm = viewChild(SignUpDocumentsForm);
 
 	protected readonly _currentStep = signal(0);
 	protected readonly _formSteps = signal(Array(5).fill(false));
@@ -64,6 +65,22 @@ export default class SignUpPage implements AfterViewInit {
 		this._setStep(2);
 	}
 
+	private _confirmDocumentsForm(): void {
+		const documentsForm = this._documentsForm();
+		if (!documentsForm) {
+			throw new Error('No se encontró el formulario de documentación, por favor revisar la implementación');
+		}
+
+		const formData = documentsForm.getDocumentsForm();
+
+		if (formData.invalid) {
+			formData.markAllAsTouched();
+			return;
+		}
+
+		this._setStep(3);
+	}
+
 	protected _nextStep(): void {
 		switch (this._currentStep()) {
 			case 0:
@@ -71,6 +88,9 @@ export default class SignUpPage implements AfterViewInit {
 				break;
 			case 1:
 				this._confirmBusinessForm();
+				break;
+			case 2:
+				this._confirmDocumentsForm();
 				break;
 		}
 	}
@@ -85,9 +105,10 @@ export default class SignUpPage implements AfterViewInit {
 		switch (this._currentStep()) {
 			case 0:
 				return this._roleForm()?.getRoleForm().invalid ?? true;
-
 			case 1:
 				return this._businessForm()?.getBusinessForm().invalid ?? true;
+			case 2:
+				return this._documentsForm()?.getDocumentsForm().invalid ?? true;
 			default:
 				return true;
 		}

@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ApiFormGetBanks } from '@auth/modules/sign-up/api/form-get-banks';
 import { BANK_TYPE_OPTIONS } from '@auth/modules/sign-up/common/bank-select-options';
 import { FormValidator } from '@auth/modules/sign-up/services/form-validator';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
@@ -11,16 +12,18 @@ import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
 @Component({
 	selector: 'sign-up-documents-form',
 	templateUrl: 'form-documents.html',
+	viewProviders: [ApiFormGetBanks],
 	imports: [FrsFieldModule, FrsFileInputModule, FrsInputModule, FrsSelectModule, ReactiveFormsModule],
 })
 export class SignUpDocumentsForm {
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _formValidator = inject(FormValidator);
+	private readonly _apiFormGetBanks = inject(ApiFormGetBanks);
 	private readonly _bankAccountTypeToValidate = signal<TSelectOption[]>([]);
 	private readonly _files = signal<Record<string, File[]>>({});
 
 	// Inputs data
-	protected readonly _bankNameOptions = [] as TSelectOption[];
+	protected readonly _bankNameOptions = this._apiFormGetBanks.banks;
 	protected readonly _bankAccountTypeOptions = BANK_TYPE_OPTIONS;
 
 	// Disable controls
@@ -31,14 +34,26 @@ export class SignUpDocumentsForm {
 	protected readonly _bankAccountType = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
 	protected readonly _bankAccountNumber = this._formBuilder.control('', [
 		Validators.required,
-		this._formValidator.bankAccountNumber(this._bankAccountTypeToValidate()),
+		this._formValidator.bankAccountNumber(this._bankAccountTypeToValidate),
 	]);
-
 	protected readonly _bankCertification = this._formBuilder.control<File[] | null>(null, [Validators.required]);
+
+	// Business Documents
 	protected readonly _rut = this._formBuilder.control<File[] | null>(null, [Validators.required]);
 	protected readonly _chamberOfCommerce = this._formBuilder.control<File[] | null>(null, [Validators.required]);
 	protected readonly _legalRepresentativeDni = this._formBuilder.control<File[] | null>(null, [Validators.required]);
 	protected readonly _financialStatements = this._formBuilder.control<File[] | null>(null, [Validators.required]);
+
+	protected readonly _form = this._formBuilder.group({
+		bank: this._bankName,
+		accountType: this._bankAccountType,
+		accountNumber: this._bankAccountNumber,
+		bankCertification: this._bankCertification,
+		rut: this._rut,
+		chamberOfCommerce: this._chamberOfCommerce,
+		legalRepresentativeDni: this._legalRepresentativeDni,
+		financialStatements: this._financialStatements,
+	});
 
 	constructor() {
 		this._syncBankAccountType();
@@ -49,17 +64,9 @@ export class SignUpDocumentsForm {
 			this._onBankAccountTypeChange(bankAccountType ?? []);
 		});
 	}
-
 	private _onBankAccountTypeChange(bankAccountType: TSelectOption[]): void {
 		this._bankAccountTypeToValidate.set(bankAccountType);
 		this._disableBankAccountNumber.set(bankAccountType.length === 0);
-		this._bankAccountNumber.setValidators([Validators.required, this._formValidator.bankAccountNumber(this._bankAccountTypeToValidate())]);
-		this._bankAccountNumber.updateValueAndValidity();
-	}
-
-	protected _onFileUpload(key: string, files: File[], multiple = false): void {
-		this._files.update((current) => ({ ...current, [key]: files }));
-		this._updateFileValidator(key, multiple);
 	}
 
 	private _updateFileValidator(key: string, multiple = false): void {
@@ -85,11 +92,15 @@ export class SignUpDocumentsForm {
 				return;
 		}
 
-		const files = this._files()[key] ?? [];
-		const validator = multiple ? this._formValidator.pdfFiles(files) : this._formValidator.pdfFile(files);
-
+		const getFiles = () => this._files()[key] ?? [];
+		const validator = multiple ? this._formValidator.pdfFiles(getFiles) : this._formValidator.pdfFile(getFiles);
 		control.setValidators([Validators.required, validator]);
 		control.updateValueAndValidity();
+	}
+
+	protected _onFileUpload(key: string, files: File[], multiple = false): void {
+		this._files.update((current) => ({ ...current, [key]: files }));
+		this._updateFileValidator(key, multiple);
 	}
 
 	protected _onBankCertificationUpload(files: File[]): void {
@@ -110,5 +121,9 @@ export class SignUpDocumentsForm {
 
 	protected _onFinancialStatementsUpload(files: File[]): void {
 		this._onFileUpload('financialStatements', files, true);
+	}
+
+	public getDocumentsForm(): FormGroup {
+		return this._form;
 	}
 }
