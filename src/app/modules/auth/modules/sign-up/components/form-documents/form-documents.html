@@ -36,5 +36,59 @@
                 [disabled]="_disableBankAccountNumber()"
             />
         </frs-field>
+
+        <frs-field [label]="'Certificado bancario'">
+            <frs-file-input
+                #field
+                [accept]="'application/pdf'"
+                [control]="_bankCertification"
+                (files)="_onBankCertificationUpload($event)"
+            />
+        </frs-field>
+    </section>
+    <section class="mt-5">
+        <h1 class="text-2xl font-semibold">Documentación de la empresa</h1>
+        <p class="w-full lg:w-[50%] lx:w-[40%] text- text-foreground/50">
+            Por favor, completa
+            toda la información siguiendo las instrucciones.
+        </p>
+    </section>
+    <section class="relative grid place-content-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <frs-field [label]="'Cámara de comercio'">
+            <frs-file-input
+                #field
+                [accept]="'application/pdf'"
+                [control]="_chamberOfCommerce"
+                (files)="_onChamberOfCommerceUpload($event)"
+            />
+        </frs-field>
+
+        <frs-field [label]="'RUT'">
+            <frs-file-input
+                #field
+                [accept]="'application/pdf'"
+                [control]="_rut"
+                (files)="_onRutUpload($event)"
+            />
+        </frs-field>
+
+        <frs-field [label]="'Documento de identidad del representante'">
+            <frs-file-input
+                #field
+                [accept]="'application/pdf'"
+                [control]="_legalRepresentativeDni"
+                (files)="_onLegalRepresentativeDniUpload($event)"
+            />
+        </frs-field>
+
+        <frs-field [label]="'Estados financieros'">
+            <frs-file-input
+                #field
+                [accept]="'application/pdf'"
+                [multiple]="true"
+                [control]="_financialStatements"
+                (files)="_onFinancialStatementsUpload($event)"
+            />
+        </frs-field>
     </section>
 </form>

@@ -103,7 +103,7 @@ export class FormValidator {
 		};
 	}
 
-	public bancAccountNumber(currentBankType: TSelectOption[]): ValidatorFn {
+	public bankAccountNumber(currentBankType: TSelectOption[]): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors | null => {
 			const bankType = currentBankType[0]?.value ?? 1;
 			const value = control.value ?? '';
@@ -116,6 +116,39 @@ export class FormValidator {
 			}
 
 			if (!regex.test(value)) return { invalidBankAccountNumber: true };
+
+			return null;
+		};
+	}
+
+	public pdfFile(files: File[]): ValidatorFn {
+		return (): ValidationErrors | null => {
+			const file = files[0];
+
+			const contentType = (file as File)?.type ?? '';
+			const fileSize = (file as File)?.size ?? 0;
+			const maxSize = 2 * 1024 * 1024;
+			const allowedTypes = ['application/pdf'];
+
+			if (!allowedTypes.includes(contentType)) return { pdfInvalidFileType: true };
+			if (fileSize > maxSize) return { invalidFileSizeTwoMb: true };
+
+			return null;
+		};
+	}
+
+	public pdfFiles(files: File[]): ValidatorFn {
+		return (): ValidationErrors | null => {
+			const maxSize = 2 * 1024 * 1024;
+			const allowedTypes = ['application/pdf'];
+
+			for (const file of files) {
+				const contentType = (file as File)?.type ?? '';
+				const fileSize = (file as File)?.size ?? 0;
+
+				if (!allowedTypes.includes(contentType)) return { pdfInvalidFileType: true };
+				if (fileSize > maxSize) return { invalidFileSizeTwoMb: true };
+			}
 
 			return null;
 		};
