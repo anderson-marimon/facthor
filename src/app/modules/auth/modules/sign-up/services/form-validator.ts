@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, WritableSignal } from '@angular/core';
 import type { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
 import { calculateAge } from '@shared/utils/calculate-age.util';
@@ -103,14 +103,14 @@ export class FormValidator {
 		};
 	}
 
-	public bankAccountNumber(currentBankType: TSelectOption[]): ValidatorFn {
+	public bankAccountNumber(getCurrentBankType: WritableSignal<TSelectOption[]>): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors | null => {
-			const bankType = currentBankType[0]?.value ?? 1;
+			const bankType = getCurrentBankType()[0]?.value ?? 1;
 			const value = control.value ?? '';
 			const regex = /^\d+$/;
 
 			if (bankType === 1) {
-				if (value.length < 11 || value.length > 11) return { invalidSavingAccountBankMinMax: true };
+				if (value.length !== 11) return { invalidSavingAccountBankMinMax: true };
 			} else if (bankType === 2) {
 				if (value.length < 10 || value.length > 12) return { invalidCheckingAccountBankMinMax: true };
 			}
@@ -121,33 +121,33 @@ export class FormValidator {
 		};
 	}
 
-	public pdfFile(files: File[]): ValidatorFn {
+	public pdfFile(getFiles: () => File[]): ValidatorFn {
 		return (): ValidationErrors | null => {
+			const files = getFiles();
+			if (!files || files.length === 0) return { required: true };
+
 			const file = files[0];
-
-			const contentType = (file as File)?.type ?? '';
-			const fileSize = (file as File)?.size ?? 0;
-			const maxSize = 2 * 1024 * 1024;
 			const allowedTypes = ['application/pdf'];
+			const maxSize = 2 * 1024 * 1024;
 
-			if (!allowedTypes.includes(contentType)) return { pdfInvalidFileType: true };
-			if (fileSize > maxSize) return { invalidFileSizeTwoMb: true };
+			if (!allowedTypes.includes(file.type)) return { pdfInvalidFileType: true };
+			if (file.size > maxSize) return { invalidFileSizeTwoMb: true };
 
 			return null;
 		};
 	}
 
-	public pdfFiles(files: File[]): ValidatorFn {
+	public pdfFiles(getFiles: () => File[]): ValidatorFn {
 		return (): ValidationErrors | null => {
-			const maxSize = 2 * 1024 * 1024;
+			const files = getFiles();
+			if (!files || files.length === 0) return { required: true };
+
 			const allowedTypes = ['application/pdf'];
+			const maxSize = 2 * 1024 * 1024;
 
 			for (const file of files) {
-				const contentType = (file as File)?.type ?? '';
-				const fileSize = (file as File)?.size ?? 0;
-
-				if (!allowedTypes.includes(contentType)) return { pdfInvalidFileType: true };
-				if (fileSize > maxSize) return { invalidFileSizeTwoMb: true };
+				if (!allowedTypes.includes(file.type)) return { pdfInvalidFileType: true };
+				if (file.size > maxSize) return { invalidFileSizeTwoMb: true };
 			}
 
 			return null;

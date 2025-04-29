@@ -11,10 +11,7 @@ interface TApiCiuuCodes extends TApi<TCiuuOption[]> {}
 
 export class FormCiuuCodesApi {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
-
-	private readonly _ciuuResource = resource({
-		loader: () => this._fetchCiuuCodes(),
-	});
+	private readonly _ciuuResource = resource({ loader: () => this._fetchCiuuCodes() });
 
 	public readonly ciuuCodes = this._ciuuResource.value;
 	public readonly isLoading = this._ciuuResource.isLoading;
@@ -24,9 +21,7 @@ export class FormCiuuCodesApi {
 		const url = `${this._url}/MasterData/GetCodeCiuu`;
 
 		try {
-			const response = await fetch(url, {
-				method: 'GET',
-			});
+			const response = await fetch(url, { method: 'GET' });
 
 			if (!response.ok) throw new Error('Error al cargar los códigos CIUU');
 
