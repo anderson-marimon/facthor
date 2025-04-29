@@ -1,15 +1,17 @@
-import { type AfterViewInit, ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/core';
+import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SignUpAccountForm } from '@auth/modules/sign-up/components/form-account/form-account';
 import { SignUpBusinessForm } from '@auth/modules/sign-up/components/form-business/form-business';
 import { SignUpDocumentsForm } from '@auth/modules/sign-up/components/form-documents/form-documents';
 import { SignUpRoleForm } from '@auth/modules/sign-up/components/form-role/form-role';
 import { SignUpRoleStep } from '@auth/modules/sign-up/components/role-step/role-step';
+import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 
 @Component({
 	selector: 'sign-up-page',
 	templateUrl: 'index.html',
+	providers: [SignUpFormStore],
 	imports: [FrsButtonModule, RouterLink, SignUpRoleStep, SignUpRoleForm, SignUpBusinessForm, SignUpDocumentsForm, SignUpAccountForm],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -18,6 +20,7 @@ export default class SignUpPage implements AfterViewInit {
 	private readonly _businessForm = viewChild(SignUpBusinessForm);
 	private readonly _documentsForm = viewChild(SignUpDocumentsForm);
 	private readonly _accountForm = viewChild(SignUpAccountForm);
+	private readonly _signUpFormStore = inject(SignUpFormStore);
 
 	protected readonly _currentStep = signal(0);
 	protected readonly _formSteps = signal(Array(5).fill(false));
@@ -48,6 +51,7 @@ export default class SignUpPage implements AfterViewInit {
 			return;
 		}
 
+		this._signUpFormStore.setRoleForm(formData.value);
 		this._setStep(1);
 	}
 
