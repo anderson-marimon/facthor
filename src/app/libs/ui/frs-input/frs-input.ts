@@ -1,19 +1,21 @@
 import { afterRenderEffect, Component, computed, input, signal, viewChild, type ElementRef } from '@angular/core';
 import { ReactiveFormsModule, type FormControl } from '@angular/forms';
 import { frs, frsGenerateId, frsInputFormat, frsNumberFormat, frsPercentageFormat } from '@fresco-core/frs-core';
+import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { Eye, EyeClosed, LucideAngularModule } from 'lucide-angular';
 import { tap } from 'rxjs';
 
 @Component({
 	selector: 'frs-input',
 	standalone: true,
-	imports: [ReactiveFormsModule],
+	imports: [FrsButtonModule, LucideAngularModule, ReactiveFormsModule],
 	host: {
-		class: 'flex-1 w-full',
+		class: 'relative flex-1 w-full max-h-fit',
 	},
 	template: `
 		<input
 			#input
-			type="text"
+			[type]="_isEyeOpen() ? 'text' : 'password'"
 			[formControl]="control()"
 			[class]="_frsClass()"
 			[placeholder]="placeholder()"
@@ -24,6 +26,12 @@ import { tap } from 'rxjs';
 			(keydown)="_onKeydown($event)"
 			[attr.disabled]="disabled() ? '' : null"
 		/>
+
+		@if(showEye()) {
+		<button frs-button type="button" [variant]="'ghost'" [size]="'icon'" (click)="_onClickEye()">
+			<i-lucide [img]="_eyeIcon" [strokeWidth]="1.5" />
+		</button>
+		}
 	`,
 	exportAs: 'frsInput',
 })
@@ -45,9 +53,12 @@ export class FrsInput {
 	public readonly fill = input<string>('');
 	public readonly mask = input<string>('');
 	public readonly formatStyle = input<'American' | 'European'>('American');
+	public readonly showEye = input(false);
 
 	protected readonly _inputId = frsGenerateId();
 	protected readonly _inputValue = signal<string>('');
+	protected readonly _isEyeOpen = signal(false);
+	protected _eyeIcon = EyeClosed;
 
 	constructor() {
 		afterRenderEffect(() => this._syncControl());
@@ -231,6 +242,12 @@ export class FrsInput {
 		inputEl!.value = formatted || fallback;
 	}
 
+	protected _onClickEye(): void {
+		if (!this.showEye || !this.disabled) return;
+		this._isEyeOpen.update((prev) => !prev);
+		this._eyeIcon = this._isEyeOpen() ? Eye : EyeClosed;
+	}
+
 	public setHasError(value: boolean): void {
 		this._hasError.set(value);
 	}
@@ -240,7 +257,8 @@ export class FrsInput {
 			`flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base 
 			file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground
 			focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-background
-			focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-sm placeholder:text-sm`,
+			focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-sm placeholder:text-sm
+			[&~button]:absolute [&~button]:right-1 [&~button]:top-1/2 [&~button]:-translate-y-1/2`,
 			this.disabled() ? 'opacity-50 cursor-not-allowed pointer-events-none select-none' : '',
 			this._hasError() ? 'border-red-400 focus-visible:ring-red-400 text-red-400' : '',
 			this.class()
