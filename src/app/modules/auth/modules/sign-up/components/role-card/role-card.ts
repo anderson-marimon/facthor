@@ -13,7 +13,7 @@ export class SignUpRoleCard {
 	public readonly value = input('');
 	public readonly title = input('Role title');
 	public readonly description = input('Role description');
-	public readonly inputFormControl = input.required<FormControl<any>>();
+	public readonly control = input.required<FormControl<any>>();
 
 	protected readonly _isSelect = signal(false);
 

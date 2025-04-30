@@ -46,7 +46,7 @@ export class SignUpAccountForm {
 		});
 	}
 
-	public getAccountForm(): FormGroup {
+	public getForm(): FormGroup {
 		return this._form;
 	}
 }

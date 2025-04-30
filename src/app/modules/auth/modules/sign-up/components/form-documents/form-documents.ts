@@ -123,7 +123,7 @@ export class SignUpDocumentsForm {
 		this._onFileUpload('financialStatements', files, true);
 	}
 
-	public getDocumentsForm(): FormGroup {
+	public getForm(): FormGroup {
 		return this._form;
 	}
 }

@@ -1,4 +1,4 @@
-import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SignUpAccountForm } from '@auth/modules/sign-up/components/form-account/form-account';
 import { SignUpBusinessForm } from '@auth/modules/sign-up/components/form-business/form-business';
@@ -14,110 +14,67 @@ import { FrsButtonModule } from '@fresco-ui/frs-button';
 	providers: [SignUpFormStore],
 	imports: [FrsButtonModule, RouterLink, SignUpRoleStep, SignUpRoleForm, SignUpBusinessForm, SignUpDocumentsForm, SignUpAccountForm],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
 })
-export default class SignUpPage implements AfterViewInit {
-	private readonly _roleForm = viewChild(SignUpRoleForm);
-	private readonly _businessForm = viewChild(SignUpBusinessForm);
-	private readonly _documentsForm = viewChild(SignUpDocumentsForm);
-	private readonly _accountForm = viewChild(SignUpAccountForm);
+export default class SignUpPage {
+	private readonly _roleForm = viewChild.required<SignUpRoleForm>(SignUpRoleForm);
+	private readonly _businessForm = viewChild.required<SignUpBusinessForm>(SignUpBusinessForm);
+	private readonly _documentsForm = viewChild.required<SignUpDocumentsForm>(SignUpDocumentsForm);
+	private readonly _accountForm = viewChild.required<SignUpAccountForm>(SignUpAccountForm);
 	private readonly _signUpFormStore = inject(SignUpFormStore);
 
+	protected readonly _isAvailableNextStep = signal(true);
 	protected readonly _currentStep = signal(0);
 	protected readonly _formSteps = signal(Array(5).fill(false));
 
-	public ngAfterViewInit(): void {
-		this._setStep(3);
+	constructor() {
+		this._setStep(0);
 	}
 
 	private _setStep(index: number): void {
-		const newSteps = this._formSteps().map((_, _index) => {
-			return _index <= index;
-		});
-
-		this._formSteps.set(newSteps);
+		this._formSteps.update((steps) => steps.map((_, i) => i <= index));
 		this._currentStep.set(index);
 	}
 
-	private _confirmRoleForm(): void {
-		const roleForm = this._roleForm();
-		if (!roleForm) {
-			throw new Error('No se encontró el formulario de roles, por favor revisar la implementación');
-		}
-
-		const formData = roleForm.getRoleForm();
-
+	private _validateForm(form: any): boolean {
+		const formData = form.getForm();
 		if (formData.invalid) {
 			formData.markAllAsTouched();
-			return;
+			return false;
 		}
-
-		this._signUpFormStore.setRoleForm(formData.value);
-		this._setStep(1);
-	}
-
-	private _confirmBusinessForm(): void {
-		const businessForm = this._businessForm();
-		if (!businessForm) {
-			throw new Error('No se encontró el formulario del negocio, por favor revisar la implementación');
-		}
-
-		const formData = businessForm.getBusinessForm();
-
-		if (formData.invalid) {
-			formData.markAllAsTouched();
-			return;
-		}
-
-		this._setStep(2);
-	}
-
-	private _confirmDocumentsForm(): void {
-		const documentsForm = this._documentsForm();
-		if (!documentsForm) {
-			throw new Error('No se encontró el formulario de documentación, por favor revisar la implementación');
-		}
-
-		const formData = documentsForm.getDocumentsForm();
-
-		if (formData.invalid) {
-			formData.markAllAsTouched();
-			return;
-		}
-
-		this._setStep(3);
-	}
-
-	private _confirmAccountForm(): void {
-		const accountForm = this._accountForm();
-		if (!accountForm) {
-			throw new Error('No se encontró el formulario de configuración de cuenta, por favor revisar la implementación');
-		}
-
-		const formData = accountForm.getAccountForm();
-
-		if (formData.invalid) {
-			formData.markAsUntouched();
-			return;
-		}
-
-		this._setStep(4);
+		return true;
 	}
 
 	protected _nextStep(): void {
-		switch (this._currentStep()) {
-			case 0:
-				this._confirmRoleForm();
-				break;
-			case 1:
-				this._confirmBusinessForm();
-				break;
-			case 2:
-				this._confirmDocumentsForm();
-				break;
-			case 3:
-				this._confirmAccountForm();
-				break;
-		}
+		const stepActions = [
+			() => {
+				const form = this._roleForm();
+				if (this._validateForm(form)) {
+					this._signUpFormStore.setRoleForm(form.getForm().value);
+					this._setStep(1);
+				}
+			},
+			() => {
+				const form = this._businessForm();
+				if (this._validateForm(form)) {
+					this._setStep(2);
+				}
+			},
+			() => {
+				const form = this._documentsForm();
+				if (this._validateForm(form)) {
+					this._setStep(3);
+				}
+			},
+			() => {
+				const form = this._accountForm();
+				if (this._validateForm(form)) {
+					this._setStep(4);
+				}
+			},
+		];
+
+		stepActions[this._currentStep()]?.();
 	}
 
 	protected _previousStep(): void {
@@ -126,19 +83,8 @@ export default class SignUpPage implements AfterViewInit {
 		}
 	}
 
-	protected _isAvailableNextStep(): boolean {
-		switch (this._currentStep()) {
-			case 0:
-				return this._roleForm()?.getRoleForm().invalid ?? true;
-			case 1:
-				return this._businessForm()?.getBusinessForm().invalid ?? true;
-			case 2:
-				return this._documentsForm()?.getDocumentsForm().invalid ?? true;
-			case 3:
-				return this._accountForm()?.getAccountForm().invalid ?? true;
-			default:
-				return true;
-		}
+	protected _onFormChange(isInvalid: boolean): void {
+		this._isAvailableNextStep.set(isInvalid);
 	}
 
 	protected _isAvailablePreviousStep(): boolean {
