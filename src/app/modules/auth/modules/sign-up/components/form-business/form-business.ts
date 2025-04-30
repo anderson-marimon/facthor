@@ -162,7 +162,7 @@ export class SignUpBusinessForm {
 		);
 	}
 
-	public getBusinessForm(): FormGroup {
+	public getForm(): FormGroup {
 		return this._businessForm;
 	}
 }
