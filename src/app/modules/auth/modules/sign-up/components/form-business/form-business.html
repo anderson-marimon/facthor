@@ -1,5 +1,5 @@
 <form
-    [formGroup]="_businessForm"
+    [formGroup]="_form"
     class="flex flex-col gap-5 animate-opacity-in">
     <section>
         <h1 class="text-2xl font-semibold">Información de la empresa</h1>
@@ -61,7 +61,6 @@
         <frs-field [label]="'Departamento de nacimiento'">
             <frs-select
                 #field
-                [position]="'top'"
                 [control]="_businessDepartment">
                 <frs-select-trigger [placeholder]="'Seleccione un departamento'" />
                 <frs-select-options [options]="_departmentsOptions() || []" />
@@ -71,7 +70,6 @@
         <frs-field [label]="'Ciudad de nacimiento'">
             <frs-select
                 #field
-                [position]="'top'"
                 [control]="_businessCity"
                 [disabled]="_businessCityDisabled()">
                 <frs-select-trigger [placeholder]="'Seleccione una ciudad'" />
@@ -163,7 +161,7 @@
                     [decorator]="'+'"
                     [mask]="'xxx'"
                     [regex]="'[^\\d]'"
-                    [disabled]="false"
+                    [disabled]="true"
                     [class]="'w-16'"
                 />
             </frs-field>
@@ -256,7 +254,6 @@
                 [control]="_legalRepresentativeBirthdate"
                 [class]="'w-full'"
                 [formatType]="'isoShort'"
-                [disabled]="false"
                 [placeholder]="'Seleccionar fecha'"
             />
         </frs-field>

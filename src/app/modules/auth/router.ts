@@ -1,11 +1,9 @@
 import type { Routes } from '@angular/router';
-import AuthLayout from './layout';
-import SignUpPage from './modules/sign-up/view';
 
 export const authRoutes: Routes = [
 	{
 		path: '',
-		component: AuthLayout,
+		loadComponent: () => import('./layout'),
 		children: [
 			{
 				path: '',
@@ -14,7 +12,7 @@ export const authRoutes: Routes = [
 			},
 			{
 				path: 'sign-up',
-				component: SignUpPage,
+				loadComponent: () => import('./modules/sign-up/view').then((m) => m.default),
 			},
 		],
 	},

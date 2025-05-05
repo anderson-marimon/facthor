@@ -57,7 +57,7 @@ export class FrsInput {
 
 	protected readonly _inputId = frsGenerateId();
 	protected readonly _inputValue = signal<string>('');
-	protected readonly _isEyeOpen = signal(false);
+	protected readonly _isEyeOpen = signal(true);
 	protected _eyeIcon = EyeClosed;
 
 	constructor() {

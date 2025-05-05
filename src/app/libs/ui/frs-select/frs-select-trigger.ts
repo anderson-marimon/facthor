@@ -54,6 +54,7 @@ export class FrsSelectTrigger {
 	}
 
 	public setSelectedOptions(options: { label: string; value: any }[]): void {
+		if (!options || options.length === 0) return;
 		this._selectedOptions.set(options);
 	}
 
@@ -67,7 +68,7 @@ export class FrsSelectTrigger {
 
 	public selectedText = computed(() =>
 		this._selectedOptions()
-			.map((opt) => opt.label)
+			.map((opt) => opt?.label)
 			.join(', ')
 	);
 

@@ -30,7 +30,6 @@ export type TCalendarRange = { start: Date; end: Date } | null;
 				<i-lucide [strokeWidth]="1.5" [img]="_ChevronsLeft" />
 			</button>
 
-			<!-- IMPORTANTE: En los templates directos en el TS no se usan [] para el regex porque omite los \\ -->
 			<frs-input
 				[class]="_inputClass()"
 				[control]="_yearControl"
@@ -38,6 +37,7 @@ export type TCalendarRange = { start: Date; end: Date } | null;
 				[type]="'custom'"
 				[mask]="'xxxx'"
 				regex="[^\\d]"
+				(blur)="_resetYearInput()"
 			/>
 
 			<button frs-button [variant]="'ghost'" [size]="'icon'" (click)="_nextYear($event)">
@@ -111,21 +111,21 @@ export class FrsCalendar {
 	protected readonly _showCalendar = signal(false);
 
 	protected readonly _yearControl = this._formBuilder.control('', [Validators.required]);
-	protected readonly _weekDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+	protected readonly _weekDays = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'];
 
 	protected readonly _monthOptions = [
-		{ value: 0, label: 'January' },
-		{ value: 1, label: 'February' },
-		{ value: 2, label: 'March' },
-		{ value: 3, label: 'April' },
-		{ value: 4, label: 'May' },
-		{ value: 5, label: 'June' },
-		{ value: 6, label: 'July' },
-		{ value: 7, label: 'August' },
-		{ value: 8, label: 'September' },
-		{ value: 9, label: 'October' },
-		{ value: 10, label: 'November' },
-		{ value: 11, label: 'December' },
+		{ value: 0, label: 'Enero' },
+		{ value: 1, label: 'Febrero' },
+		{ value: 2, label: 'Marzo' },
+		{ value: 3, label: 'Abril' },
+		{ value: 4, label: 'Mayo' },
+		{ value: 5, label: 'Junio' },
+		{ value: 6, label: 'Julio' },
+		{ value: 7, label: 'Agosto' },
+		{ value: 8, label: 'Septiembre' },
+		{ value: 9, label: 'Octubre' },
+		{ value: 10, label: 'Noviembre' },
+		{ value: 11, label: 'Diciembre' },
 	];
 
 	protected readonly _currentYear = computed(() => this._currentDate().getFullYear());
@@ -175,7 +175,6 @@ export class FrsCalendar {
 	});
 
 	constructor() {
-		// Sincronización reactiva de inputs externos
 		effect(() => {
 			const start = this.startDate();
 			const end = this.endDate();
@@ -200,7 +199,7 @@ export class FrsCalendar {
 		});
 
 		this._syncInputs();
-		this._showCalendar.set(true); // Mostrar calendario inmediatamente
+		this._showCalendar.set(true);
 	}
 
 	private _syncInputs(): void {
@@ -220,10 +219,16 @@ export class FrsCalendar {
 				if (newYear !== this._currentDate().getFullYear()) {
 					this._changeYear(newYear);
 				}
-			} else {
-				this._yearControl.setValue(this._currentDate().getFullYear().toString(), { emitEvent: false });
 			}
 		});
+	}
+
+	protected _resetYearInput(): void {
+		if (!this._yearControl.valid) {
+			this._yearControl.setValue(this._currentYear().toString());
+		} else if (this._yearControl.value !== this._currentYear().toString()) {
+			this._yearControl.setValue(this._currentYear().toString());
+		}
 	}
 
 	private _handleRangeSelection(date: Date): void {
@@ -241,7 +246,6 @@ export class FrsCalendar {
 			this._selectedEndDate.set(null);
 			this._inSelectionProcess.set(true);
 		} else {
-			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			if (date < this._selectedStartDate()!) {
 				this._selectedEndDate.set(this._selectedStartDate());
 				this._selectedStartDate.set(date);
@@ -251,16 +255,12 @@ export class FrsCalendar {
 
 			this._inSelectionProcess.set(false);
 			this.rangeSelected.emit({
-				// biome-ignore lint/style/noNonNullAssertion: <explanation>
 				start: this._selectedStartDate()!,
-				// biome-ignore lint/style/noNonNullAssertion: <explanation>
 				end: this._selectedEndDate()!,
 			});
 
 			this.rangeControl()?.setValue({
-				// biome-ignore lint/style/noNonNullAssertion: <explanation>
 				start: this._selectedStartDate()!,
-				// biome-ignore lint/style/noNonNullAssertion: <explanation>
 				end: this._selectedEndDate()!,
 			});
 		}
@@ -268,9 +268,7 @@ export class FrsCalendar {
 
 	private _isValidYear(inputYear: string): boolean {
 		const year = Number.parseInt(inputYear, 10);
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		const minYear = this.minDate() ? this.minDate()!.getFullYear() : 1900;
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		const maxYear = this.maxDate() ? this.maxDate()!.getFullYear() : 2100;
 		return year >= minYear && year <= maxYear;
 	}
@@ -343,7 +341,6 @@ export class FrsCalendar {
 		if (this.rangeMode()) {
 			this._handleRangeSelection(day.date);
 		} else {
-			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			if (this._selectedStartDate() && day.date.getTime() === this._selectedStartDate()!.getTime()) {
 				this._selectedStartDate.set(null);
 				this.dateSelected.emit(null);
@@ -366,11 +363,8 @@ export class FrsCalendar {
 
 		if (!this.rangeMode()) {
 			return (
-				// biome-ignore lint/style/noNonNullAssertion: <explanation>
 				date.getDate() === this._selectedStartDate()!.getDate() &&
-				// biome-ignore lint/style/noNonNullAssertion: <explanation>
 				date.getMonth() === this._selectedStartDate()!.getMonth() &&
-				// biome-ignore lint/style/noNonNullAssertion: <explanation>
 				date.getFullYear() === this._selectedStartDate()!.getFullYear()
 			);
 		}
@@ -384,9 +378,7 @@ export class FrsCalendar {
 		const dateToCheck = new Date(date);
 		dateToCheck.setHours(0, 0, 0, 0);
 
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		const minDate = this.minDate() ? new Date(this.minDate()!) : null;
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		const maxDate = this.maxDate() ? new Date(this.maxDate()!) : null;
 
 		if (minDate && maxDate) {
@@ -407,20 +399,17 @@ export class FrsCalendar {
 
 	protected _isRangeStart(date: Date): boolean {
 		if (!this.rangeMode() || !this._selectedStartDate()) return false;
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		return date.toDateString() === this._selectedStartDate()!.toDateString();
 	}
 
 	protected _isRangeEnd(date: Date): boolean {
 		if (!this.rangeMode() || !this._selectedEndDate()) return false;
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		return date.toDateString() === this._selectedEndDate()!.toDateString();
 	}
 
 	protected _isInRange(date: Date): boolean {
 		if (!this.rangeMode() || !this._selectedStartDate() || !this._selectedEndDate()) return false;
 		const time = date.getTime();
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		return time > this._selectedStartDate()!.getTime() && time < this._selectedEndDate()!.getTime();
 	}
 	protected readonly _frsClass = computed(() => frs(variants()));
