@@ -1,4 +1,4 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SignUpAccountForm } from '@auth/modules/sign-up/components/form-account/form-account';
 import { SignUpBusinessForm } from '@auth/modules/sign-up/components/form-business/form-business';

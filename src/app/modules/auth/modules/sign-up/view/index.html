@@ -17,8 +17,8 @@
     </section>
     <section class="flex-1 flex flex-col gap-5 px-1.5 pb-2 md:overflow-y-auto">
         @switch(_currentStep()) {
-            @case(0) {<sign-up-role-form (changeForm)="_onFormChange($event)" />}
-            @case(1) {<sign-up-business-form />}
+            @case(0) {<sign-up-role-form (formChange)="_onFormChange($event)" />}
+            @case(1) {<sign-up-business-form (formChange)="_onFormChange($event)" />}
             @case(2) {<sign-up-documents-form />}
             @case(3) {<sign-up-account-form />}
             @case(4) {}

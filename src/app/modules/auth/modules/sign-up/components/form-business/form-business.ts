@@ -1,10 +1,12 @@
-import { Component, inject, signal, WritableSignal } from '@angular/core';
+import { afterNextRender, Component, DestroyRef, inject, output, signal, WritableSignal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormCitiesApi } from '@auth/modules/sign-up/api/form-get-cities';
 import { FormCiuuCodesApi } from '@auth/modules/sign-up/api/form-get-ciuu-codes';
 import { FormDepartmentApi } from '@auth/modules/sign-up/api/form-get-departments';
 import { ADDRESS_STREETS } from '@auth/modules/sign-up/common/address-streets';
 import { FormValidator } from '@auth/modules/sign-up/services/form-validator';
+import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { TCalendarDate } from '@fresco-ui/frs-calendar/frs-calendar';
 import { FrsComboboxModule } from '@fresco-ui/frs-combobox';
@@ -13,6 +15,7 @@ import { FrsFieldModule } from '@fresco-ui/frs-field';
 import { FrsInputModule } from '@fresco-ui/frs-input';
 import { FrsSelectModule } from '@fresco-ui/frs-select';
 import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
 	selector: 'sign-up-business-form',
@@ -21,11 +24,15 @@ import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
 	imports: [FrsButtonModule, FrsComboboxModule, FrsDatePickerModule, FrsFieldModule, FrsInputModule, FrsSelectModule, ReactiveFormsModule],
 })
 export class SignUpBusinessForm {
+	private readonly _signUpFormStore = inject(SignUpFormStore);
+	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _formValidator = inject(FormValidator);
 	private readonly _formDepartmentApi = inject(FormDepartmentApi);
 	private readonly _formCiuuCodesApi = inject(FormCiuuCodesApi);
 	private readonly _formCitiesApi = inject(FormCitiesApi);
+
+	public readonly formChange = output<boolean>();
 
 	// Inputs data
 	protected readonly _addressStreetsOptions = ADDRESS_STREETS;
@@ -83,9 +90,9 @@ export class SignUpBusinessForm {
 	protected readonly _legalRepresentativePhoneNumber = this._formBuilder.control('', [Validators.required, this._formValidator.phoneNumber()]);
 
 	// Form group
-	protected readonly _businessForm = this._formBuilder.group({
+	protected readonly _form = this._formBuilder.group({
 		businessPersonType: this._businessPersonType,
-		businessBusiness: this._businessName,
+		businessName: this._businessName,
 		businessTradeName: this._businessTradeName,
 		businessNit: this._businessNit,
 		businessEconomicActivity: this._businessEconomicActivity,
@@ -97,6 +104,10 @@ export class SignUpBusinessForm {
 		businessAddressStreetSecondaryNumber: this._businessAddressStreetSecondaryNumber,
 		businessAddressStreetBuildNumber: this._businessAddressStreetBuildNumber,
 		businessAddressStreetComplement: this._businessAddressStreetComplement,
+		businessEmail: this._businessEmail,
+		businessPrefix: this._businessPrefix,
+		businessPhoneNumber: this._businessPhoneNumber,
+
 		legalRepresentativeName: this._legalRepresentativeName,
 		legalRepresentativeSurName: this._legalRepresentativeSurName,
 		legalRepresentativeLastName: this._legalRepresentativeLastName,
@@ -117,11 +128,26 @@ export class SignUpBusinessForm {
 	});
 
 	constructor() {
+		afterNextRender(() => {
+			this._fillForm();
+		});
+
 		this._syncForm();
 		this._syncDepartments();
 	}
 
-	private _syncForm(): void {}
+	private _syncForm(): void {
+		this._form.valueChanges
+			.pipe(
+				takeUntilDestroyed(this._destroyRef),
+				debounceTime(300),
+				distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
+			)
+			.subscribe((form) => {
+				this._signUpFormStore.setBusinessForm(form);
+				this.formChange.emit(this._form.invalid);
+			});
+	}
 
 	private _syncDepartments(): void {
 		const setupDepartmentSync = (
@@ -162,7 +188,51 @@ export class SignUpBusinessForm {
 		);
 	}
 
+	private _fillForm(): void {
+		this._signUpFormStore
+			.select((state) => state.businessForm)
+			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
+			.subscribe((form) => {
+				if (!form || Object.keys(form).length === 0) return;
+
+				this._businessPersonType.setValue(form['businessPersonType']);
+				this._businessName.setValue(form['businessName']);
+				this._businessTradeName.setValue(form['businessTradeName']);
+				this._businessNit.setValue(form['businessNit']);
+				this._businessEconomicActivity.setValue(form['businessEconomicActivity']);
+				this._businessCountry.setValue(form['businessCountry']);
+				this._businessDepartment.setValue(form['businessProvince']);
+				this._businessCity.setValue(form['businessCity']);
+				this._businessAddressStreet.setValue(form['businessAddressStreet']);
+				this._businessAddressStreetNumber.setValue(form['businessAddressStreetPhoneNumber']);
+				this._businessAddressStreetSecondaryNumber.setValue(form['businessAddressStreetSecondaryNumber']);
+				this._businessAddressStreetBuildNumber.setValue(form['businessAddressStreetBuildNumber']);
+				this._businessAddressStreetComplement.setValue(form['businessAddressStreetComplement']);
+				this._businessEmail.setValue(form['businessEmail']);
+				this._businessPrefix.setValue(form['businessPrefix']);
+				this._businessPhoneNumber.setValue(form['businessPhoneNumber']);
+
+				this._legalRepresentativeName.setValue(form['legalRepresentativeName']);
+				this._legalRepresentativeSurName.setValue(form['legalRepresentativeSurName']);
+				this._legalRepresentativeLastName.setValue(form['legalRepresentativeLastName']);
+				this._legalRepresentativeSurLastName.setValue(form['legalRepresentativeSurLastName']);
+				this._legalRepresentativeCharge.setValue(form['legalRepresentativeCharge']);
+				this._legalRepresentativeArea.setValue(form['legalRepresentativeArea']);
+				this._legalRepresentativeDocumentNumber.setValue(form['legalRepresentativeDocumentNumber']);
+				this._legalRepresentativeBirthdate.setValue(new Date(form['legalRepresentativeBirthdate']));
+				this._legalRepresentativeBirthCountry.setValue(form['legalRepresentativeBirthCountry']);
+				this._legalRepresentativeBirthDepartment.setValue(form['legalRepresentativeBirthDepartment']);
+				this._legalRepresentativeBirthCity.setValue(form['legalRepresentativeBirthCity']);
+				this._legalRepresentativeExpeditionDate.setValue(new Date(form['legalRepresentativeExpeditionDate']));
+				this._legalRepresentativeExpeditionCountry.setValue(form['legalRepresentativeExpeditionCountry']);
+				this._legalRepresentativeExpeditionDepartment.setValue(form['legalRepresentativeExpeditionDepartment']);
+				this._legalRepresentativeExpeditionCity.setValue(form['legalRepresentativeExpeditionCity']);
+				this._legalRepresentativePrefix.setValue(form['legalRepresentativePrefix']);
+				this._legalRepresentativePhoneNumber.setValue(form['legalRepresentativePhoneNumber']);
+			});
+	}
+
 	public getForm(): FormGroup {
-		return this._businessForm;
+		return this._form;
 	}
 }
