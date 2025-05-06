@@ -8,9 +8,9 @@ import { frs } from '@fresco-core/frs-core';
 		'(click)': '_togglePopover($event)',
 		'(keyup.enter)': '_togglePopover($event)',
 		'(keyup.space)': '_togglePopover($event)',
-		'[class]': '_frsClass()'
+		'[class]': '_frsClass()',
 	},
-	template: '<ng-content />'
+	template: '<ng-content />',
 })
 export class FrsPopoverTrigger {
 	public readonly class = input('');
@@ -30,7 +30,10 @@ export class FrsPopoverTrigger {
 	protected _togglePopover(event: Event): void {
 		if (this.disabled()) return;
 
-		event.preventDefault();
+		if (event.eventPhase !== (Event as any).REPLAY) {
+			event.preventDefault();
+		}
+
 		this.popoverOpen.emit();
 	}
 

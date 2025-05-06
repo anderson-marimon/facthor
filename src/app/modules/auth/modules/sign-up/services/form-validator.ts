@@ -1,5 +1,6 @@
 import { Injectable, WritableSignal } from '@angular/core';
 import type { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
 import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
 import { calculateAge } from '@shared/utils/calculate-age.util';
 import { verificationNumberCalculator } from '@shared/utils/verification-number-calculator';
@@ -103,7 +104,7 @@ export class FormValidator {
 		};
 	}
 
-	public bankAccountNumber(getCurrentBankType: WritableSignal<TSelectOption[]>): ValidatorFn {
+	public bankNumber(getCurrentBankType: WritableSignal<TSelectOption[]>): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors | null => {
 			const bankType = getCurrentBankType()[0]?.value ?? 1;
 			const value = control.value ?? '';
@@ -121,9 +122,8 @@ export class FormValidator {
 		};
 	}
 
-	public pdfFile(getFiles: () => File[]): ValidatorFn {
+	public pdfFile(files: TFile[]): ValidatorFn {
 		return (): ValidationErrors | null => {
-			const files = getFiles();
 			if (!files || files.length === 0) return { required: true };
 
 			const file = files[0];
@@ -137,9 +137,8 @@ export class FormValidator {
 		};
 	}
 
-	public pdfFiles(getFiles: () => File[]): ValidatorFn {
+	public pdfFiles(files: TFile[]): ValidatorFn {
 		return (): ValidationErrors | null => {
-			const files = getFiles();
 			if (!files || files.length === 0) return { required: true };
 
 			const allowedTypes = ['application/pdf'];

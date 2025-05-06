@@ -96,8 +96,8 @@ const variants = cva(
 	{
 		variants: {
 			size: {
-				default: 'h-9 pl-4 pr-3',
-				sm: ' h-8 rounded-md pl-3 pr-2 text-xs [&_svg]:size-3.5',
+				default: 'h-9 px-3',
+				sm: 'h-8 rounded-md pl-3 pr-2 text-xs [&_svg]:size-3.5',
 			},
 		},
 		defaultVariants: {

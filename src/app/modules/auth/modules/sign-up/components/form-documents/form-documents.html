@@ -37,12 +37,13 @@
             />
         </frs-field>
 
-        <frs-field [label]="'Certificado bancario'">
+        <frs-field [forceShowAsterisk]="true" [label]="'Certificado bancario'">
             <frs-file-input
                 #field
                 [accept]="'application/pdf'"
-                [control]="_bankCertification"
-                (files)="_onBankCertificationUpload($event)"
+                [control]="_getFileControl('bankCertification')"
+                [currentFiles]="_files()['bankCertificationFile'] || []"
+                (files)="_onUploadFile($event, 'bankCertification')"
             />
         </frs-field>
     </section>
@@ -54,41 +55,46 @@
         </p>
     </section>
     <section class="relative grid place-content-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        <frs-field [label]="'Cámara de comercio'">
+        <frs-field [forceShowAsterisk]="true" [label]="'Cámara de comercio'">
             <frs-file-input
                 #field
                 [accept]="'application/pdf'"
-                [control]="_chamberOfCommerce"
-                (files)="_onChamberOfCommerceUpload($event)"
+                [control]="_getFileControl('chamberOfCommerce')"
+                [currentFiles]="_files()['chamberOfCommerceFile'] || []"
+                (files)="_onUploadFile($event, 'chamberOfCommerce')"
             />
         </frs-field>
 
-        <frs-field [label]="'RUT'">
+        <frs-field [forceShowAsterisk]="true" [label]="'RUT'">
             <frs-file-input
                 #field
                 [accept]="'application/pdf'"
-                [control]="_rut"
-                (files)="_onRutUpload($event)"
+                [control]="_getFileControl('rut')"
+                [currentFiles]="_files()['rutFile'] || []"
+                (files)="_onUploadFile($event, 'rut')"
             />
         </frs-field>
 
-        <frs-field [label]="'Documento de identidad del representante'">
+        <frs-field [forceShowAsterisk]="true" [label]="'Documento de identidad del representante'">
             <frs-file-input
                 #field
                 [accept]="'application/pdf'"
-                [control]="_legalRepresentativeDni"
-                (files)="_onLegalRepresentativeDniUpload($event)"
+                [control]="_getFileControl('legalRepresentativeDni')"
+                [currentFiles]="_files()['legalRepresentativeDniFile'] || []"
+                (files)="_onUploadFile($event, 'legalRepresentativeDni')"
             />
         </frs-field>
-
-        <frs-field [label]="'Estados financieros'">
-            <frs-file-input
-                #field
-                [accept]="'application/pdf'"
-                [multiple]="true"
-                [control]="_financialStatements"
-                (files)="_onFinancialStatementsUpload($event)"
-            />
-        </frs-field>
+        
+        @if(selectedRole() !== '2') {
+            <frs-field [forceShowAsterisk]="true" [label]="'Estados financieros'">
+                <frs-file-input
+                    #field
+                    [accept]="'application/pdf'"
+                    [control]="_getFileControl('financialStatements')"
+                    [currentFiles]="_files()['financialStatementsFile'] || []"
+                    (files)="_onUploadFile($event, 'financialStatements')"
+                />
+            </frs-field>
+        }
     </section>
 </form>

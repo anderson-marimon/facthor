@@ -1,13 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
+import { afterNextRender, Component, DestroyRef, inject, input, output, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiFormGetBanks } from '@auth/modules/sign-up/api/form-get-banks';
 import { BANK_TYPE_OPTIONS } from '@auth/modules/sign-up/common/bank-select-options';
 import { FormValidator } from '@auth/modules/sign-up/services/form-validator';
+import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
 import { FrsFileInputModule } from '@fresco-ui/frs-file-input';
+import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
 import { FrsInputModule } from '@fresco-ui/frs-input';
 import { FrsSelectModule } from '@fresco-ui/frs-select';
 import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
+import { debounceTime, distinctUntilChanged, take } from 'rxjs';
+
+type TFileControlKey = 'bankCertification' | 'rut' | 'chamberOfCommerce' | 'legalRepresentativeDni' | 'financialStatements';
 
 @Component({
 	selector: 'sign-up-documents-form',
@@ -16,111 +22,131 @@ import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
 	imports: [FrsFieldModule, FrsFileInputModule, FrsInputModule, FrsSelectModule, ReactiveFormsModule],
 })
 export class SignUpDocumentsForm {
+	private readonly _signUpFormStore = inject(SignUpFormStore);
+	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _formBuilder = inject(FormBuilder);
-	private readonly _formValidator = inject(FormValidator);
+	private readonly _validator = inject(FormValidator);
 	private readonly _apiFormGetBanks = inject(ApiFormGetBanks);
-	private readonly _bankAccountTypeToValidate = signal<TSelectOption[]>([]);
-	private readonly _files = signal<Record<string, File[]>>({});
+	private readonly _bankAc = signal<TSelectOption[]>([]);
 
-	// Inputs data
+	public readonly formChange = output<boolean>();
+	public readonly selectedRole = input<string>('');
+
+	protected readonly _files = signal<Record<string, TFile[]>>({});
 	protected readonly _bankNameOptions = this._apiFormGetBanks.banks;
 	protected readonly _bankAccountTypeOptions = BANK_TYPE_OPTIONS;
-
-	// Disable controls
 	protected readonly _disableBankAccountNumber = signal<boolean>(false);
+	protected readonly _bankName = this._formBuilder.control<TSelectOption[]>([], Validators.required);
+	protected readonly _bankAccountType = this._formBuilder.control<TSelectOption[]>([], Validators.required);
+	protected readonly _bankAccountNumber = this._formBuilder.control('', [Validators.required, this._validator.bankNumber(this._bankAc)]);
 
-	// Bank information
-	protected readonly _bankName = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
-	protected readonly _bankAccountType = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
-	protected readonly _bankAccountNumber = this._formBuilder.control('', [
-		Validators.required,
-		this._formValidator.bankAccountNumber(this._bankAccountTypeToValidate),
-	]);
-	protected readonly _bankCertification = this._formBuilder.control<File[] | null>(null, [Validators.required]);
-
-	// Business Documents
-	protected readonly _rut = this._formBuilder.control<File[] | null>(null, [Validators.required]);
-	protected readonly _chamberOfCommerce = this._formBuilder.control<File[] | null>(null, [Validators.required]);
-	protected readonly _legalRepresentativeDni = this._formBuilder.control<File[] | null>(null, [Validators.required]);
-	protected readonly _financialStatements = this._formBuilder.control<File[] | null>(null, [Validators.required]);
+	protected readonly _fileControls: Record<TFileControlKey, FormControl<TFile[]>> = {
+		bankCertification: this._formBuilder.control<TFile[]>([], { nonNullable: true }),
+		rut: this._formBuilder.control<TFile[]>([], { nonNullable: true }),
+		chamberOfCommerce: this._formBuilder.control<TFile[]>([], { nonNullable: true }),
+		legalRepresentativeDni: this._formBuilder.control<TFile[]>([], { nonNullable: true }),
+		financialStatements: this._formBuilder.control<TFile[]>([], { nonNullable: true }),
+	};
 
 	protected readonly _form = this._formBuilder.group({
 		bank: this._bankName,
 		accountType: this._bankAccountType,
 		accountNumber: this._bankAccountNumber,
-		bankCertification: this._bankCertification,
-		rut: this._rut,
-		chamberOfCommerce: this._chamberOfCommerce,
-		legalRepresentativeDni: this._legalRepresentativeDni,
-		financialStatements: this._financialStatements,
+		...this._fileControls,
 	});
 
 	constructor() {
+		afterNextRender(() => this._fillForm());
+
 		this._syncBankAccountType();
+		this._syncFormChanges();
+	}
+
+	private _syncFormChanges(): void {
+		this._form.valueChanges
+			.pipe(
+				takeUntilDestroyed(this._destroyRef),
+				debounceTime(300),
+				distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+			)
+			.subscribe((form) => {
+				this._signUpFormStore.setDocumentsForm({
+					...form,
+					...this._files(),
+				});
+
+				this.formChange.emit(this._filesValidator());
+			});
 	}
 
 	private _syncBankAccountType(): void {
-		this._bankAccountType.valueChanges.subscribe((bankAccountType) => {
-			this._onBankAccountTypeChange(bankAccountType ?? []);
+		this._bankAccountType.valueChanges.subscribe((type) => {
+			this._bankAc.set(type ?? []);
+			this._disableBankAccountNumber.set((type?.length ?? 0) === 0);
 		});
 	}
-	private _onBankAccountTypeChange(bankAccountType: TSelectOption[]): void {
-		this._bankAccountTypeToValidate.set(bankAccountType);
-		this._disableBankAccountNumber.set(bankAccountType.length === 0);
+
+	private _fillForm(): void {
+		this._signUpFormStore
+			.select((store) => store.documentsForm)
+			.pipe(take(1), distinctUntilChanged())
+			.subscribe((form) => {
+				if (!form || Object.keys(form).length === 0) return;
+
+				this._bankName.setValue(form['bank']);
+				this._bankAccountType.setValue(form['accountType']);
+				this._bankAccountNumber.setValue(form['accountNumber']);
+
+				this._files.set({
+					['bankCertificationFile']: form['bankCertificationFile'],
+					['rutFile']: form['rutFile'],
+					['chamberOfCommerceFile']: form['chamberOfCommerceFile'],
+					['legalRepresentativeDniFile']: form['legalRepresentativeDniFile'],
+				});
+
+				if (this.selectedRole() !== '2') {
+					this._files.update((prev) => ({
+						...prev,
+						['financialStatementsFile']: form['financialStatementsFile'],
+					}));
+				}
+			});
 	}
 
-	private _updateFileValidator(key: string, multiple = false): void {
-		let control: FormControl;
+	protected _onUploadFile(files: TFile[], key: TFileControlKey, multiple = false): void {
+		const control = this._fileControls[key];
+		if (!control) return;
 
-		switch (key) {
-			case 'bankCertification':
-				control = this._bankCertification;
-				break;
-			case 'rut':
-				control = this._rut;
-				break;
-			case 'chamberOfCommerce':
-				control = this._chamberOfCommerce;
-				break;
-			case 'legalRepresentativeDni':
-				control = this._legalRepresentativeDni;
-				break;
-			case 'financialStatements':
-				control = this._financialStatements;
-				break;
-			default:
-				return;
-		}
+		const validator = multiple ? this._validator.pdfFiles(files) : this._validator.pdfFile(files);
 
-		const getFiles = () => this._files()[key] ?? [];
-		const validator = multiple ? this._formValidator.pdfFiles(getFiles) : this._formValidator.pdfFile(getFiles);
 		control.setValidators([Validators.required, validator]);
 		control.updateValueAndValidity();
+
+		this._files.update((prev) => ({
+			...prev,
+			[`${key}File`]: files,
+		}));
 	}
 
-	protected _onFileUpload(key: string, files: File[], multiple = false): void {
-		this._files.update((current) => ({ ...current, [key]: files }));
-		this._updateFileValidator(key, multiple);
+	protected _getFileControl(key: TFileControlKey): FormControl<TFile[]> {
+		return this._fileControls[key];
 	}
 
-	protected _onBankCertificationUpload(files: File[]): void {
-		this._onFileUpload('bankCertification', files);
-	}
+	private _filesValidator(): boolean {
+		const files = this._files();
+		const requiredKeys = Object.keys(this._fileControls) as TFileControlKey[];
 
-	protected _onRutUpload(files: File[]): void {
-		this._onFileUpload('rut', files);
-	}
+		const allFilesValid = requiredKeys.every((key) => {
+			const keyWithSuffix = `${key}File`;
+			if (this.selectedRole() === '2') {
+				if (keyWithSuffix === 'financialStatementsFile') return true;
+			}
 
-	protected _onChamberOfCommerceUpload(files: File[]): void {
-		this._onFileUpload('chamberOfCommerce', files);
-	}
+			const fileList = files[keyWithSuffix];
+			return Array.isArray(fileList) && fileList.length > 0;
+		});
 
-	protected _onLegalRepresentativeDniUpload(files: File[]): void {
-		this._onFileUpload('legalRepresentativeDni', files);
-	}
-
-	protected _onFinancialStatementsUpload(files: File[]): void {
-		this._onFileUpload('financialStatements', files, true);
+		return !(allFilesValid && this._form.valid);
 	}
 
 	public getForm(): FormGroup {
