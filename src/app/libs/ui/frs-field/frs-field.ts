@@ -20,7 +20,9 @@ interface IControlComponent {
 		<span>
 			{{ label() }}
 
-			@if(_required() && showAsterisk()) {
+			@if(forceShowAsterisk()){
+			<span>*</span>
+			} @else if((_required() && showAsterisk())) {
 			<span>*</span>
 			}
 		</span>
@@ -38,6 +40,7 @@ export class FrsField implements OnDestroy {
 	public readonly label = input('');
 	public readonly showLabel = input(true);
 	public readonly showAsterisk = input(true);
+	public readonly forceShowAsterisk = input(false);
 	public readonly showErrorMessage = input(true);
 
 	protected readonly _required = signal(false);

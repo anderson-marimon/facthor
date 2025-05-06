@@ -36,4 +36,9 @@ export class SignUpFormStore extends ComponentStore<SignUpFormState> {
 		...state,
 		businessForm,
 	}));
+
+	public setDocumentsForm = this.updater((state, documentsForm: Record<string, any>) => ({
+		...state,
+		documentsForm,
+	}));
 }

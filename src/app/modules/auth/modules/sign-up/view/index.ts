@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { SignUpAccountForm } from '@auth/modules/sign-up/components/form-account/form-account';
 import { SignUpBusinessForm } from '@auth/modules/sign-up/components/form-business/form-business';
@@ -7,6 +8,7 @@ import { SignUpRoleForm } from '@auth/modules/sign-up/components/form-role/form-
 import { SignUpRoleStep } from '@auth/modules/sign-up/components/role-step/role-step';
 import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
 	selector: 'sign-up-page',
@@ -17,6 +19,7 @@ import { FrsButtonModule } from '@fresco-ui/frs-button';
 	standalone: true,
 })
 export default class SignUpPage {
+	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _roleForm = viewChild.required<SignUpRoleForm>(SignUpRoleForm);
 	private readonly _businessForm = viewChild.required<SignUpBusinessForm>(SignUpBusinessForm);
 	private readonly _documentsForm = viewChild.required<SignUpDocumentsForm>(SignUpDocumentsForm);
@@ -26,9 +29,18 @@ export default class SignUpPage {
 	protected readonly _isAvailableNextStep = signal(true);
 	protected readonly _currentStep = signal(0);
 	protected readonly _formSteps = signal(Array(5).fill(false));
+	protected readonly _selectedRole = signal<string>('1');
 
 	constructor() {
-		this._setStep(0);
+		this._setStep(3);
+
+		this._signUpFormStore
+			.select((state) => state.roleForm)
+			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
+			.subscribe(({ option }) => {
+				if (!option) return;
+				this._selectedRole.set(option);
+			});
 	}
 
 	private _setStep(index: number): void {

@@ -15,7 +15,7 @@ import { FrsFieldModule } from '@fresco-ui/frs-field';
 import { FrsInputModule } from '@fresco-ui/frs-input';
 import { FrsSelectModule } from '@fresco-ui/frs-select';
 import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take } from 'rxjs';
 
 @Component({
 	selector: 'sign-up-business-form',
@@ -141,7 +141,7 @@ export class SignUpBusinessForm {
 			.pipe(
 				takeUntilDestroyed(this._destroyRef),
 				debounceTime(300),
-				distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
+				distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
 			)
 			.subscribe((form) => {
 				this._signUpFormStore.setBusinessForm(form);
@@ -191,7 +191,7 @@ export class SignUpBusinessForm {
 	private _fillForm(): void {
 		this._signUpFormStore
 			.select((state) => state.businessForm)
-			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
+			.pipe(take(1), distinctUntilChanged())
 			.subscribe((form) => {
 				if (!form || Object.keys(form).length === 0) return;
 
