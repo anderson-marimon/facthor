@@ -1,0 +1,364 @@
+<section class="h-full flex flex-col gap-5 animate-opacity-in">
+    <section>
+        <h1 class="text-2xl font-semibold">Resumen del registro</h1>
+        <p class="w-full lg:w-[50%] lx:w-[40%] text-foreground/60">
+            A continuación se visualiza toda la información ingresada en los pasos anteriores. <br>
+            Por favor, verifique bien la información antes de enviar
+        </p>
+    </section>
+    <section class="relative flex-1 space-y-4">
+        <h2 class="text-xl font-semibold py-1 rounded-md bg-secondary/50">Información de la empresa</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 pb-1">
+            <ul class="flex flex-col gap-2.5">
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Tipo de persona',
+                        value: 'Jurídica'
+                    }"
+                />
+                
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Empresa',
+                        value: 'Geronimo Martins S.A'
+                    }"
+                />
+    
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Nombre comercial',
+                        value: 'Tiendas Ara'
+                    }"
+                />
+                
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Nit',
+                        value: '123456789-6'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'País',
+                        value: 'Colombia'
+                    }"
+                />
+    
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Actividad económica',
+                        value: 'Ventas de productos comerciales y al consumidor'
+                    }"
+                />
+            </ul>
+            <ul class="flex flex-col gap-2.5"> 
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Departamento',
+                        value: 'Atlántico'
+                    }"
+                />
+    
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Ciudad',
+                        value: 'Barranquilla'
+                    }"
+                />
+                
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Dirección',
+                        value: 'Carrera 45 45 45 complemento'
+                    }"
+                />
+    
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Correo electrónico',
+                        value: 'tiendasara@hotmail.com'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Número celular',
+                        value: '+57 3204904362'
+                    }"
+                />
+            </ul>
+        </div>
+        <hr>
+    </section>
+    <section class="relative flex-1 space-y-4">
+        <h2 class="text-xl font-semibold py-1 rounded-md bg-secondary/50">Representante legal de la empresa</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 pb-1">
+            <ul class="flex flex-col gap-2.5">
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Primer nombre',
+                        value: 'Anderson'
+                    }"
+                />
+                
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Segundo nombre',
+                        value: 'No aplica'
+                    }"
+                />
+    
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Primer apellido',
+                        value: 'Marimon'
+                    }"
+                />
+                
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Segundo apellido',
+                        value: 'Cavadia'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Cargo',
+                        value: 'Administrador'
+                    }"
+                />
+    
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Área',
+                        value: 'Administración'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Número de cédula',
+                        value: '123456789'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Fecha de nacimiento',
+                        value: '1999-09-26'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'País de nacimiento',
+                        value: 'Colombia'
+                    }"
+                />
+            </ul>
+            <ul class="flex flex-col gap-2.5"> 
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Departamento de nacimiento',
+                        value: 'Atlántico'
+                    }"
+                />
+    
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Ciudad de nacimiento',
+                        value: 'Barranquilla'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Fecha de expedición',
+                        value: '2018-06-12'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'País de expedición',
+                        value: 'Colombia'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Departamento de expedición',
+                        value: 'Atlántico'
+                    }"
+                />
+                
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Ciudad de expedición',
+                        value: 'Barranquilla'
+                    }"
+                />
+    
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Correo electrónico',
+                        value: 'tiendasara@hotmail.com'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Número celular',
+                        value: '+57 3204904362'
+                    }"
+                />
+            </ul>
+        </div>
+        <hr>
+    </section>
+    <section class="relative flex-1 space-y-4">
+        <h2 class="text-xl font-semibold py-1 rounded-md bg-secondary/50">Información de bancaria</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 pb-1">
+            <ul class="flex flex-col gap-2.5">
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Banco',
+                        value: 'Banco de Bogotá'
+                    }"
+                />
+                
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Tipo de cuenta',
+                        value: 'Ahorros'
+                    }"
+                />
+    
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Número de cuenta',
+                        value: '12345678900'
+                    }"
+                />
+                
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Nit',
+                        value: '123456789-6'
+                    }"
+                />
+            </ul>
+            <ul class="flex flex-col gap-2.5">
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Certificado bancario',
+                        value: 'certificadoBancario.pdf'
+                    }"
+                />
+            </ul>
+        </div>
+        <hr>
+    </section>
+    <section class="relative flex-1 space-y-4">
+        <h2 class="text-xl font-semibold py-1 rounded-md bg-secondary/50">Documentación de la empresa</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 pb-1">
+            <ul class="flex flex-col gap-2.5">
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Cámara de comercio',
+                        value: 'camaraDeComercio.pdf'
+                    }"
+                />
+                
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Registro único tributario',
+                        value: 'rut.pdf'
+                    }"
+                />
+            </ul>
+            <ul class="flex flex-col gap-2.5">
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Cédula del representante legal',
+                        value: 'cedulaDelRepresentante.pdf'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Estados financieros',
+                        value: 'estadosFinancieros.pdf'
+                    }"
+                />
+            </ul>
+        </div>
+        <hr>
+    </section>
+    <section class="relative flex-1 space-y-4">
+        <h2 class="text-xl font-semibold py-1 rounded-md bg-secondary/50">Configuración de la cuenta</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 pb-1">
+            <ul class="flex flex-col gap-2.5">
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Primer nombre',
+                        value: 'Anderson'
+                    }"
+                />
+            
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Segundo nombre',
+                        value: 'No aplica'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Primer apellido',
+                        value: 'Marimon'
+                    }"
+                />
+                
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Segundo apellido',
+                        value: 'Cavadia'
+                    }"
+                />
+            </ul>
+            <ul class="flex flex-col gap-2.5">
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Número de cédula',
+                        value: '1234567890'
+                    }"
+                />
+            
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Correo electrónico',
+                        value: 'tiendasara@hotmail.com'
+                    }"
+                />
+
+                <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Contraseña',
+                        value: '**********'
+                    }"
+                />
+                
+            </ul>
+        </div>
+        <hr>
+    </section>
+</section>
+
+<ng-template #detail let-title="title" let-value="value">
+    <li class="flex items-start gap-2.5">
+        <p><span class="text-nowrap font-semibold mr-2">{{title}}:</span> <span class="text-foreground/60">{{value}}</span></p>
+    </li>
+</ng-template>

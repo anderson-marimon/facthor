@@ -5,6 +5,7 @@ import { SignUpAccountForm } from '@auth/modules/sign-up/components/form-account
 import { SignUpBusinessForm } from '@auth/modules/sign-up/components/form-business/form-business';
 import { SignUpDocumentsForm } from '@auth/modules/sign-up/components/form-documents/form-documents';
 import { SignUpRoleForm } from '@auth/modules/sign-up/components/form-role/form-role';
+import { SignUpFormSummary } from '@auth/modules/sign-up/components/form-summary/form-summary';
 import { SignUpRoleStep } from '@auth/modules/sign-up/components/role-step/role-step';
 import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
@@ -14,9 +15,17 @@ import { distinctUntilChanged } from 'rxjs';
 	selector: 'sign-up-page',
 	templateUrl: 'index.html',
 	providers: [SignUpFormStore],
-	imports: [FrsButtonModule, RouterLink, SignUpRoleStep, SignUpRoleForm, SignUpBusinessForm, SignUpDocumentsForm, SignUpAccountForm],
+	imports: [
+		FrsButtonModule,
+		RouterLink,
+		SignUpRoleStep,
+		SignUpRoleForm,
+		SignUpBusinessForm,
+		SignUpDocumentsForm,
+		SignUpAccountForm,
+		SignUpFormSummary,
+	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	standalone: true,
 })
 export default class SignUpPage {
 	private readonly _destroyRef = inject(DestroyRef);
@@ -32,7 +41,7 @@ export default class SignUpPage {
 	protected readonly _selectedRole = signal<string>('1');
 
 	constructor() {
-		this._setStep(0);
+		this._setStep(4);
 
 		this._signUpFormStore
 			.select((state) => state.roleForm)
