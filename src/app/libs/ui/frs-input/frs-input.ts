@@ -15,7 +15,7 @@ import { tap } from 'rxjs';
 	template: `
 		<input
 			#input
-			[type]="_isEyeOpen() ? 'text' : 'password'"
+			[type]="_isEyeOpen() && showEye() ? 'password' : 'text'"
 			[formControl]="control()"
 			[class]="_frsClass()"
 			[placeholder]="placeholder()"
@@ -243,11 +243,10 @@ export class FrsInput {
 	}
 
 	protected _onClickEye(): void {
-		if (!this.showEye || !this.disabled) return;
+		if (!this.showEye()) return;
 		this._isEyeOpen.update((prev) => !prev);
-		this._eyeIcon = this._isEyeOpen() ? Eye : EyeClosed;
+		this._eyeIcon = this._isEyeOpen() ? EyeClosed : Eye;
 	}
-
 	public setHasError(value: boolean): void {
 		this._hasError.set(value);
 	}

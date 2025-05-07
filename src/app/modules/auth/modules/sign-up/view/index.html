@@ -20,7 +20,7 @@
             @case(0) {<sign-up-role-form (formChange)="_onFormChange($event)" />}
             @case(1) {<sign-up-business-form (formChange)="_onFormChange($event)" />}
             @case(2) {<sign-up-documents-form [selectedRole]="_selectedRole()" (formChange)="_onFormChange($event)" />}
-            @case(3) {<sign-up-account-form />}
+            @case(3) {<sign-up-account-form (formChange)="_onFormChange($event)"/>}
             @case(4) {}
         }
     </section>
