@@ -22,7 +22,7 @@ export class SignUpAccountForm {
 	public readonly formChange = output<boolean>();
 
 	protected readonly _firstName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-	protected readonly _surName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
+	protected readonly _surName = this._formBuilder.control('', [this._formValidator.name()]);
 	protected readonly _lastName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
 	protected readonly _surLastName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
 	protected readonly _dniNumber = this._formBuilder.control('', [Validators.required, this._formValidator.dni()]);
@@ -75,8 +75,6 @@ export class SignUpAccountForm {
 			.pipe(take(1), distinctUntilChanged())
 			.subscribe((form) => {
 				if (!form || Object.keys(form).length === 0) return;
-
-				console.log(form);
 
 				this._firstName.setValue(form['firsName']);
 				this._surName.setValue(form['surName']);

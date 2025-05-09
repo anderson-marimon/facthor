@@ -22,9 +22,9 @@ interface IControlComponent {
 
 			@if(forceShowAsterisk()){
 			<span>*</span>
-			} @else if((_required() && showAsterisk())) {
+			} @else { @if(showAsterisk()) { @if(_required()) {
 			<span>*</span>
-			}
+			} } }
 		</span>
 		}
 		<ng-content />
@@ -73,7 +73,7 @@ export class FrsField implements OnDestroy {
 			.subscribe(() => this._catchErrors());
 
 		this._catchErrors();
-		this._required.set(!!control.validator?.({} as any));
+		this._required.set(control.hasError('required'));
 	}
 
 	private _catchErrors(): void {

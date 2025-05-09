@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
+import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
+import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
+import { PreviewPdf } from '@shared/components/preview-pdf/preview-pdf';
 
 type TRecord = Record<string, any>;
 
@@ -13,11 +16,13 @@ type TRecord = Record<string, any>;
 export class SignUpFormSummary {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _signUpFormStore = inject(SignUpFormStore);
+	private readonly _dialogRef = inject(FrsDialogRef);
 
 	protected _roleForm: TRecord = {};
 	protected _businessForm: TRecord = {};
 	protected _documentsForm: TRecord = {};
 	protected _accountForm: TRecord = {};
+	protected _showPassword = signal(false);
 
 	constructor() {
 		this._signUpFormStore
@@ -29,5 +34,19 @@ export class SignUpFormSummary {
 				this._documentsForm = documentsForm;
 				this._accountForm = accountForm;
 			});
+	}
+
+	protected _onClickFile(fileName: string): void {
+		const file = this._documentsForm[fileName][0] as TFile;
+
+		this._dialogRef.openDialog({
+			title: 'modal para visualizar pdf del pdf',
+			content: PreviewPdf,
+			data: file.base64,
+		});
+	}
+
+	protected _onClickPassword(): void {
+		this._showPassword.update((prev) => !prev);
 	}
 }

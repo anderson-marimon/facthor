@@ -1,0 +1,9 @@
+<section class="w-fit h-fit grid place-content-center text-xl pt-6">
+    <pdf-viewer
+        [src]="data()"
+        [render-text]="true"
+        [original-size]="false"
+        [zoom]="zoom()"
+        class="relative w-[72vw] md:w-[60vw] h-[60vh] md:h-[85vh] [&>div]:!w-full [&>div]:!h-full"
+    />
+  </section>

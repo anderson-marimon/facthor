@@ -68,7 +68,7 @@ export class SignUpBusinessForm {
 
 	// Legal representative controls
 	protected readonly _legalRepresentativeName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-	protected readonly _legalRepresentativeSurName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
+	protected readonly _legalRepresentativeSurName = this._formBuilder.control('', [this._formValidator.name()]);
 	protected readonly _legalRepresentativeLastName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
 	protected readonly _legalRepresentativeSurLastName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
 	protected readonly _legalRepresentativeCharge = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
@@ -100,7 +100,7 @@ export class SignUpBusinessForm {
 		businessProvince: this._businessDepartment,
 		businessCity: this._businessCity,
 		businessAddressStreet: this._businessAddressStreet,
-		businessAddressStreetPhoneNumber: this._businessAddressStreetNumber,
+		businessAddressStreetNumber: this._businessAddressStreetNumber,
 		businessAddressStreetSecondaryNumber: this._businessAddressStreetSecondaryNumber,
 		businessAddressStreetBuildNumber: this._businessAddressStreetBuildNumber,
 		businessAddressStreetComplement: this._businessAddressStreetComplement,
@@ -204,7 +204,7 @@ export class SignUpBusinessForm {
 				this._businessDepartment.setValue(form['businessProvince']);
 				this._businessCity.setValue(form['businessCity']);
 				this._businessAddressStreet.setValue(form['businessAddressStreet']);
-				this._businessAddressStreetNumber.setValue(form['businessAddressStreetPhoneNumber']);
+				this._businessAddressStreetNumber.setValue(form['businessAddressStreetNumber']);
 				this._businessAddressStreetSecondaryNumber.setValue(form['businessAddressStreetSecondaryNumber']);
 				this._businessAddressStreetBuildNumber.setValue(form['businessAddressStreetBuildNumber']);
 				this._businessAddressStreetComplement.setValue(form['businessAddressStreetComplement']);

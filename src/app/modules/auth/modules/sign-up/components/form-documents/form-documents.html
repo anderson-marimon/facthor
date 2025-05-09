@@ -25,7 +25,7 @@
             </frs-select>
         </frs-field>
 
-        <frs-field [label]="'Número de cuenta'" [class]="'flex-1'">
+        <frs-field [forceShowAsterisk]="true" [label]="'Número de cuenta'" [class]="'flex-1'">
             <frs-input
                 #field
                 [control]="_bankAccountNumber"

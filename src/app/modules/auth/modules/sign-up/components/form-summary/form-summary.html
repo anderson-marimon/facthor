@@ -16,39 +16,34 @@
                         value: 'Jurídica'
                     }"
                 />
-                
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Empresa',
-                        value: 'Geronimo Martins S.A'
+                        value: _businessForm['businessName']
                     }"
                 />
-    
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Nombre comercial',
-                        value: 'Tiendas Ara'
+                        value: _businessForm['businessTradeName']
                     }"
                 />
-                
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Nit',
-                        value: '123456789-6'
+                        value: _businessForm['businessNit']
                     }"
                 />
-
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'País',
                         value: 'Colombia'
                     }"
                 />
-    
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Actividad económica',
-                        value: 'Ventas de productos comerciales y al consumidor'
+                        value: _businessForm['businessEconomicActivity'][0].label
                     }"
                 />
             </ul>
@@ -56,35 +51,36 @@
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Departamento',
-                        value: 'Atlántico'
+                        value: _businessForm['businessProvince'][0].label
                     }"
                 />
-    
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Ciudad',
-                        value: 'Barranquilla'
+                        value: _businessForm['businessCity'][0].label
                     }"
                 />
-                
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Dirección',
-                        value: 'Carrera 45 45 45 complemento'
+                        value:
+                            _businessForm['businessAddressStreet'][0].label + ' ' + 
+                            _businessForm['businessAddressStreetNumber'] + ' ' + '#' + ' ' +
+                            _businessForm['businessAddressStreetSecondaryNumber'] + '-' + ' ' +
+                            _businessForm['businessAddressStreetBuildNumber'] + ' ' +
+                            _businessForm['businessAddressStreetComplement']  
                     }"
                 />
-    
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Correo electrónico',
-                        value: 'tiendasara@hotmail.com'
+                        value: _businessForm['businessEmail'].toLowerCase()
                     }"
                 />
-
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Número celular',
-                        value: '+57 3204904362'
+                        value: '+57' + ' ' + _businessForm['businessPhoneNumber']
                     }"
                 />
             </ul>
@@ -93,64 +89,56 @@
     </section>
     <section class="relative flex-1 space-y-4">
         <h2 class="text-xl font-semibold py-1 rounded-md bg-secondary/50">Representante legal de la empresa</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 pb-1">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5 pb-1">
             <ul class="flex flex-col gap-2.5">
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Primer nombre',
-                        value: 'Anderson'
+                        value: _businessForm['legalRepresentativeName']
                     }"
                 />
-                
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Segundo nombre',
-                        value: 'No aplica'
+                        value: _businessForm['legalRepresentativeSurName'] || 'No aplica'
                     }"
                 />
-    
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Primer apellido',
-                        value: 'Marimon'
+                        value: _businessForm['legalRepresentativeLastName']
                     }"
                 />
-                
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Segundo apellido',
-                        value: 'Cavadia'
+                        value: _businessForm['legalRepresentativeSurLastName']
                     }"
                 />
-
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Cargo',
-                        value: 'Administrador'
+                        value: _businessForm['legalRepresentativeCharge']
                     }"
                 />
-    
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Área',
-                        value: 'Administración'
+                        value: _businessForm['legalRepresentativeArea']
                     }"
                 />
-
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Número de cédula',
-                        value: '123456789'
+                        value: _businessForm['legalRepresentativeDocumentNumber']
                     }"
                 />
-
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Fecha de nacimiento',
-                        value: '1999-09-26'
+                        value: _businessForm['legalRepresentativeBirthdate'].toLocaleDateString()
                     }"
                 />
-
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'País de nacimiento',
@@ -162,56 +150,46 @@
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Departamento de nacimiento',
-                        value: 'Atlántico'
+                        value: _businessForm['legalRepresentativeBirthDepartment'][0].label
                     }"
                 />
-    
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Ciudad de nacimiento',
-                        value: 'Barranquilla'
+                        value: 'Colombia'
                     }"
                 />
-
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Fecha de expedición',
-                        value: '2018-06-12'
+                        value: _businessForm['legalRepresentativeExpeditionDate'].toLocaleDateString()
                     }"
                 />
-
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'País de expedición',
                         value: 'Colombia'
                     }"
                 />
-
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Departamento de expedición',
-                        value: 'Atlántico'
+                        value: _businessForm['legalRepresentativeExpeditionDepartment'][0].label
                     }"
                 />
-                
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Ciudad de expedición',
-                        value: 'Barranquilla'
+                        value: _businessForm['legalRepresentativeExpeditionCity'][0].label
                     }"
                 />
-    
-                <ng-container
-                    *ngTemplateOutlet="detail; context: {
-                        title: 'Correo electrónico',
-                        value: 'tiendasara@hotmail.com'
-                    }"
-                />
-
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Número celular',
-                        value: '+57 3204904362'
+                        value:
+                            '+57' + ' ' +
+                            _businessForm['legalRepresentativePrefix']+ ' ' +
+                            _businessForm['legalRepresentativePhoneNumber']
                     }"
                 />
             </ul>
@@ -220,41 +198,33 @@
     </section>
     <section class="relative flex-1 space-y-4">
         <h2 class="text-xl font-semibold py-1 rounded-md bg-secondary/50">Información de bancaria</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 pb-1">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5 pb-1">
             <ul class="flex flex-col gap-2.5">
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Banco',
-                        value: 'Banco de Bogotá'
+                        value: _documentsForm['bank'][0].label
                     }"
                 />
-                
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Tipo de cuenta',
-                        value: 'Ahorros'
+                        value: _documentsForm['accountType'][0].label
                     }"
                 />
-    
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Número de cuenta',
-                        value: '12345678900'
-                    }"
-                />
-                
-                <ng-container
-                    *ngTemplateOutlet="detail; context: {
-                        title: 'Nit',
-                        value: '123456789-6'
+                        value: _documentsForm['accountNumber']
                     }"
                 />
             </ul>
             <ul class="flex flex-col gap-2.5">
                 <ng-container
-                    *ngTemplateOutlet="detail; context: {
+                    *ngTemplateOutlet="detailFile; context: {
                         title: 'Certificado bancario',
-                        value: 'certificadoBancario.pdf'
+                        value: _documentsForm['bankCertificationFile'][0].fileName,
+                        fileName: 'bankCertificationFile'
                     }"
                 />
             </ul>
@@ -263,69 +233,74 @@
     </section>
     <section class="relative flex-1 space-y-4">
         <h2 class="text-xl font-semibold py-1 rounded-md bg-secondary/50">Documentación de la empresa</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 pb-1">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5 pb-1">
             <ul class="flex flex-col gap-2.5">
                 <ng-container
-                    *ngTemplateOutlet="detail; context: {
+                    *ngTemplateOutlet="detailFile; context: {
                         title: 'Cámara de comercio',
-                        value: 'camaraDeComercio.pdf'
+                        value: _documentsForm['rutFile'][0].fileName,
+                        fileName: 'rutFile'
                     }"
                 />
-                
                 <ng-container
-                    *ngTemplateOutlet="detail; context: {
+                    *ngTemplateOutlet="detailFile; context: {
                         title: 'Registro único tributario',
-                        value: 'rut.pdf'
+                        value: _documentsForm['chamberOfCommerceFile'][0].fileName,
+                        fileName: 'chamberOfCommerceFile'
                     }"
                 />
             </ul>
             <ul class="flex flex-col gap-2.5">
                 <ng-container
-                    *ngTemplateOutlet="detail; context: {
+                    *ngTemplateOutlet="detailFile; context: {
                         title: 'Cédula del representante legal',
-                        value: 'cedulaDelRepresentante.pdf'
+                        value: _documentsForm['legalRepresentativeDniFile'][0].fileName,
+                        fileName: 'legalRepresentativeDniFile'
                     }"
                 />
 
-                <ng-container
-                    *ngTemplateOutlet="detail; context: {
-                        title: 'Estados financieros',
-                        value: 'estadosFinancieros.pdf'
-                    }"
-                />
+                @if(_roleForm['option'] !== '2') {
+                    <ng-container
+                        *ngTemplateOutlet="detailFile; context: {
+                            title: 'Estados financieros',
+                            value: _documentsForm['financialStatementsFile'][0].fileName,
+                            fileName: 'financialStatementsFile'
+                        }"
+                    />
+                }
             </ul>
         </div>
         <hr>
     </section>
     <section class="relative flex-1 space-y-4">
         <h2 class="text-xl font-semibold py-1 rounded-md bg-secondary/50">Configuración de la cuenta</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 pb-1">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5 pb-1">
             <ul class="flex flex-col gap-2.5">
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Primer nombre',
-                        value: 'Anderson'
+                        value: _accountForm['firsName']
                     }"
                 />
             
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Segundo nombre',
-                        value: 'No aplica'
+                        value: _accountForm['surName'] || 'No aplica'
                     }"
                 />
 
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Primer apellido',
-                        value: 'Marimon'
+                        value: _accountForm['lastName']
                     }"
                 />
                 
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Segundo apellido',
-                        value: 'Cavadia'
+                        value: _accountForm['surLastName']
                     }"
                 />
             </ul>
@@ -333,24 +308,23 @@
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Número de cédula',
-                        value: '1234567890'
+                        value: _accountForm['dniNumber']
                     }"
                 />
             
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Correo electrónico',
-                        value: 'tiendasara@hotmail.com'
+                        value: _accountForm['email'].toLowerCase()
                     }"
                 />
 
                 <ng-container
-                    *ngTemplateOutlet="detail; context: {
+                    *ngTemplateOutlet="detailPassword; context: {
                         title: 'Contraseña',
-                        value: '**********'
+                        value: _accountForm['password']
                     }"
                 />
-                
             </ul>
         </div>
         <hr>
@@ -360,5 +334,19 @@
 <ng-template #detail let-title="title" let-value="value">
     <li class="flex items-start gap-2.5">
         <p><span class="text-nowrap font-semibold mr-2">{{title}}:</span> <span class="text-foreground/60">{{value}}</span></p>
+    </li>
+</ng-template>
+
+<ng-template #detailPassword let-title="title" let-value="value">
+    <li class="flex items-start flex-wrap select-none">
+        <span class="text-nowrap font-semibold mr-2">{{title}}:</span>
+        <span (click)="_onClickPassword()" class="text-primary underline underline-offset-4 cursor-pointer">{{_showPassword() ? value : '**********' }}</span>
+    </li>
+</ng-template>
+
+<ng-template #detailFile let-title="title" let-value="value" let-fileName="fileName">
+    <li class="flex items-start flex-wrap select-none">
+        <span class="text-nowrap font-semibold mr-2">{{title}}:</span>
+        <span (click)="_onClickFile(fileName)" class="text-primary underline underline-offset-4 cursor-pointer">{{value}}</span>
     </li>
 </ng-template>
