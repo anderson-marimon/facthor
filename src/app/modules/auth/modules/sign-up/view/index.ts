@@ -41,7 +41,7 @@ export default class SignUpPage {
 	protected readonly _selectedRole = signal<string>('1');
 
 	constructor() {
-		this._setStep(4);
+		this._setStep(3);
 
 		this._signUpFormStore
 			.select((state) => state.roleForm)
