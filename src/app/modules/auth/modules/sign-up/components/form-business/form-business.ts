@@ -90,6 +90,7 @@ export class SignUpBusinessForm {
 	protected readonly _legalRepresentativeExpeditionCountry = this._formBuilder.control('', [Validators.required]);
 	protected readonly _legalRepresentativeExpeditionDepartment = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
 	protected readonly _legalRepresentativeExpeditionCity = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
+	protected readonly _legalRepresentativeEmail = this._formBuilder.control('', [Validators.required, Validators.email]);
 	protected readonly _legalRepresentativePrefix = this._formBuilder.control('', [Validators.required]);
 	protected readonly _legalRepresentativePhoneNumber = this._formBuilder.control('', [Validators.required, this._validator.phoneNumber()]);
 
@@ -127,6 +128,7 @@ export class SignUpBusinessForm {
 		legalRepresentativeExpeditionCountry: this._legalRepresentativeExpeditionCountry,
 		legalRepresentativeExpeditionDepartment: this._legalRepresentativeExpeditionDepartment,
 		legalRepresentativeExpeditionCity: this._legalRepresentativeExpeditionCity,
+		legalRepresentativeEmail: this._legalRepresentativeEmail,
 		legalRepresentativePrefix: this._legalRepresentativePrefix,
 		legalRepresentativePhoneNumber: this._legalRepresentativePhoneNumber,
 	});
@@ -238,6 +240,7 @@ export class SignUpBusinessForm {
 				this._legalRepresentativeExpeditionCountry.setValue(form['legalRepresentativeExpeditionCountry']);
 				this._legalRepresentativeExpeditionDepartment.setValue(form['legalRepresentativeExpeditionDepartment']);
 				this._legalRepresentativeExpeditionCity.setValue(form['legalRepresentativeExpeditionCity']);
+				this._legalRepresentativeEmail.setValue(form['legalRepresentativeEmail']);
 				this._legalRepresentativePrefix.setValue(form['legalRepresentativePrefix']);
 				this._legalRepresentativePhoneNumber.setValue(form['legalRepresentativePhoneNumber']);
 			});

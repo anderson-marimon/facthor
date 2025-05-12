@@ -183,6 +183,12 @@
                         value: _businessForm['legalRepresentativeExpeditionCity'][0].label
                     }"
                 />
+                 <ng-container
+                    *ngTemplateOutlet="detail; context: {
+                        title: 'Correo electrónico',
+                        value: _businessForm['legalRepresentativeEmail'].toLowerCase()
+                    }"
+                />
                 <ng-container
                     *ngTemplateOutlet="detail; context: {
                         title: 'Número celular',

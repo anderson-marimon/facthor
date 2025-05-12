@@ -327,6 +327,14 @@
             </frs-select>
         </frs-field>
 
+         <frs-field [label]="'Correo electrónico'">
+            <frs-input
+                #field
+                [control]="_legalRepresentativeEmail"
+                [placeholder]="'Ingrese el correo electrónico'"
+            />
+        </frs-field>
+
         <div class="flex items-start flex-wrap gap-5">
             <frs-field
                 [label]="'Prefijo'"

@@ -56,7 +56,7 @@ export class FormCitiesApi {
 				signal: params.abortSignal,
 			});
 
-			if (!response.ok) throw new Error('Error al cargar los departamentos');
+			if (!response.ok) throw new Error('error al cargar los departamentos');
 
 			const result: TApiCities = await response.json();
 			return result.data ?? [];
