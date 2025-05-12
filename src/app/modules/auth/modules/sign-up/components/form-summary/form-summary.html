@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-semibold">Resumen del registro</h1>
         <p class="w-full lg:w-[50%] lx:w-[40%] text-foreground/60">
             A continuación se visualiza toda la información ingresada en los pasos anteriores. <br>
-            Por favor, verifique bien la información antes de enviar
+            Por favor, verifique bien la información antes de enviar.
         </p>
     </section>
     <section class="relative flex-1 space-y-4">
@@ -327,13 +327,12 @@
                 />
             </ul>
         </div>
-        <hr>
     </section>
 </section>
 
 <ng-template #detail let-title="title" let-value="value">
     <li class="flex items-start gap-2.5">
-        <p><span class="text-nowrap font-semibold mr-2">{{title}}:</span> <span class="text-foreground/60">{{value}}</span></p>
+        <p><span class="text-nowrap font-semibold mr-2">{{title}}:</span> <span class="text-foreground/60">{{value | titlecase}}</span></p>
     </li>
 </ng-template>
 
@@ -347,6 +346,6 @@
 <ng-template #detailFile let-title="title" let-value="value" let-fileName="fileName">
     <li class="flex items-start flex-wrap select-none">
         <span class="text-nowrap font-semibold mr-2">{{title}}:</span>
-        <span (click)="_onClickFile(fileName)" class="text-primary underline underline-offset-4 cursor-pointer">{{value}}</span>
+        <span (click)="_onClickFile(fileName)" class="text-primary underline underline-offset-4 cursor-pointer">{{value | titlecase}}</span>
     </li>
 </ng-template>

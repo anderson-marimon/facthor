@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
-import { PreviewPdf } from '@shared/components/preview-pdf/preview-pdf';
+import { PdfViewer } from '@shared/components/pdf-viewer/pdf-viewer';
 
 type TRecord = Record<string, any>;
 
@@ -41,7 +41,7 @@ export class SignUpFormSummary {
 
 		this._dialogRef.openDialog({
 			title: 'modal para visualizar pdf del pdf',
-			content: PreviewPdf,
+			content: PdfViewer,
 			data: file.base64,
 		});
 	}

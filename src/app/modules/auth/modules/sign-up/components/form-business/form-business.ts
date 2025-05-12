@@ -27,10 +27,11 @@ export class SignUpBusinessForm {
 	private readonly _signUpFormStore = inject(SignUpFormStore);
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _formBuilder = inject(FormBuilder);
-	private readonly _formValidator = inject(FormValidator);
+	private readonly _validator = inject(FormValidator);
 	private readonly _formDepartmentApi = inject(FormDepartmentApi);
 	private readonly _formCiuuCodesApi = inject(FormCiuuCodesApi);
 	private readonly _formCitiesApi = inject(FormCitiesApi);
+	private readonly _birthDate = signal<Date | null>(null);
 
 	public readonly formChange = output<boolean>();
 
@@ -50,9 +51,9 @@ export class SignUpBusinessForm {
 
 	// Business controls
 	protected readonly _businessPersonType = this._formBuilder.control('');
-	protected readonly _businessName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-	protected readonly _businessTradeName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-	protected readonly _businessNit = this._formBuilder.control('', [Validators.required, this._formValidator.nit()]);
+	protected readonly _businessName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
+	protected readonly _businessTradeName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
+	protected readonly _businessNit = this._formBuilder.control('', [Validators.required, this._validator.nit()]);
 	protected readonly _businessEconomicActivity = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
 	protected readonly _businessCountry = this._formBuilder.control('');
 	protected readonly _businessDepartment = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
@@ -64,30 +65,33 @@ export class SignUpBusinessForm {
 	protected readonly _businessAddressStreetComplement = this._formBuilder.control('');
 	protected readonly _businessEmail = this._formBuilder.control('', [Validators.required, Validators.email]);
 	protected readonly _businessPrefix = this._formBuilder.control('', [Validators.required]);
-	protected readonly _businessPhoneNumber = this._formBuilder.control('', [Validators.required, this._formValidator.phoneNumber()]);
+	protected readonly _businessPhoneNumber = this._formBuilder.control('', [Validators.required, this._validator.phoneNumber()]);
 
 	// Legal representative controls
-	protected readonly _legalRepresentativeName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-	protected readonly _legalRepresentativeSurName = this._formBuilder.control('', [this._formValidator.name()]);
-	protected readonly _legalRepresentativeLastName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-	protected readonly _legalRepresentativeSurLastName = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-	protected readonly _legalRepresentativeCharge = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-	protected readonly _legalRepresentativeArea = this._formBuilder.control('', [Validators.required, this._formValidator.name()]);
-	protected readonly _legalRepresentativeDocumentNumber = this._formBuilder.control('', [Validators.required, this._formValidator.dni()]);
+	protected readonly _legalRepresentativeName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
+	protected readonly _legalRepresentativeSurName = this._formBuilder.control('', [this._validator.name(true)]);
+	protected readonly _legalRepresentativeLastName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
+	protected readonly _legalRepresentativeSurLastName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
+	protected readonly _legalRepresentativeCharge = this._formBuilder.control('', [Validators.required, this._validator.name()]);
+	protected readonly _legalRepresentativeArea = this._formBuilder.control('', [Validators.required, this._validator.name()]);
+	protected readonly _legalRepresentativeDocumentNumber = this._formBuilder.control('', [Validators.required, this._validator.dni()]);
 	protected readonly _legalRepresentativeBirthdate = this._formBuilder.control<TCalendarDate>(null, [
 		Validators.required,
-		this._formValidator.atLeast18Years(),
-		this._formValidator.atMost80Years(),
+		this._validator.atLeast18Years(),
+		this._validator.atMost80Years(),
 	]);
 	protected readonly _legalRepresentativeBirthCountry = this._formBuilder.control('', [Validators.required]);
 	protected readonly _legalRepresentativeBirthDepartment = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
 	protected readonly _legalRepresentativeBirthCity = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
-	protected readonly _legalRepresentativeExpeditionDate = this._formBuilder.control<TCalendarDate>(null, [Validators.required]);
+	protected readonly _legalRepresentativeExpeditionDate = this._formBuilder.control<TCalendarDate>(null, [
+		Validators.required,
+		this._validator.expeditionDate(this._birthDate),
+	]);
 	protected readonly _legalRepresentativeExpeditionCountry = this._formBuilder.control('', [Validators.required]);
 	protected readonly _legalRepresentativeExpeditionDepartment = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
 	protected readonly _legalRepresentativeExpeditionCity = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
 	protected readonly _legalRepresentativePrefix = this._formBuilder.control('', [Validators.required]);
-	protected readonly _legalRepresentativePhoneNumber = this._formBuilder.control('', [Validators.required, this._formValidator.phoneNumber()]);
+	protected readonly _legalRepresentativePhoneNumber = this._formBuilder.control('', [Validators.required, this._validator.phoneNumber()]);
 
 	// Form group
 	protected readonly _form = this._formBuilder.group({
@@ -134,6 +138,7 @@ export class SignUpBusinessForm {
 
 		this._syncForm();
 		this._syncDepartments();
+		this._syncBirthDate();
 	}
 
 	private _syncForm(): void {
@@ -186,6 +191,12 @@ export class SignUpBusinessForm {
 			this._formCitiesApi.updateLegalRepresentativeExpeditionDepartment.bind(this._formCitiesApi),
 			this._legalRepresentativeExpeditionCityDisabled
 		);
+	}
+
+	private _syncBirthDate(): void {
+		this._legalRepresentativeBirthdate.valueChanges.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged()).subscribe((date) => {
+			this._birthDate.set(date);
+		});
 	}
 
 	private _fillForm(): void {

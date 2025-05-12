@@ -9,10 +9,12 @@ import { verificationNumberCalculator } from '@shared/utils/verification-number-
 	providedIn: 'root',
 })
 export class FormValidator {
-	public name(): ValidatorFn {
+	public name(optional = false): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors | null => {
 			const { value = '' } = control;
 			const regex = /^(?!.*[&.]$)(?!^[&.])[A-Za-zÁáÉéÍíÓóÚúÜüÑñ' &.]+$/;
+
+			if (optional && value === '') return null;
 
 			if (!regex.test(value) || value.startsWith(' ') || value.endsWith(' ')) return { invalidName: true };
 			return null;
@@ -100,6 +102,33 @@ export class FormValidator {
 			const age = calculateAge(birthDate, today);
 
 			if (age > 80) return { over80: true };
+			return null;
+		};
+	}
+
+	public expeditionDate(date: WritableSignal<Date | null>): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const value = control.value;
+			if (!value) return { expectedBirthDate: true };
+
+			const expeditionDate = new Date(value);
+			const birthDate = new Date(date() || new Date());
+			const today = new Date();
+
+			expeditionDate.setHours(0, 0, 0, 0);
+			birthDate.setHours(0, 0, 0, 0);
+			today.setHours(0, 0, 0, 0);
+
+			const minExpeditionDate = new Date(birthDate.getFullYear() + 18, birthDate.getMonth(), birthDate.getDate());
+
+			if (expeditionDate < minExpeditionDate) {
+				return { expeditionTooEarly: true };
+			}
+
+			if (expeditionDate > today) {
+				return { expeditionInFuture: true };
+			}
+
 			return null;
 		};
 	}

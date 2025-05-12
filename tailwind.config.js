@@ -70,6 +70,7 @@ module.exports = {
                 '*': {
                     '&::-webkit-scrollbar': {
                         width: '0.5vh',
+                        height: '0.5vh'
                     },
                     '&::-webkit-scrollbar-thumb': {
                         backgroundColor: 'hsl(var(--primary))',
