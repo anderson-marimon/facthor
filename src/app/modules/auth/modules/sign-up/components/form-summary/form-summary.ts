@@ -12,7 +12,6 @@ type TRecord = Record<string, any>;
 @Component({
 	selector: 'sign-up-form-summary',
 	imports: [CommonModule],
-	viewProviders: [ApiFormPostRegister],
 	templateUrl: 'form-summary.html',
 })
 export class SignUpFormSummary {
@@ -26,6 +25,8 @@ export class SignUpFormSummary {
 	protected _documentsForm: TRecord = {};
 	protected _accountForm: TRecord = {};
 	protected _showPassword = signal(false);
+
+	public readonly loading = this._formPostRegisterApi.loading;
 
 	constructor() {
 		this._signUpFormStore

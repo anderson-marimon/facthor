@@ -5,6 +5,7 @@ import { SignUpRoleCard } from '@auth/modules/sign-up/components/role-card/role-
 import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FacthorLogo } from '@shared/logos/facthor-logo/facthor-logo';
+import { toast } from 'ngx-sonner';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({

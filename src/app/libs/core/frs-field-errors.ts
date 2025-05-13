@@ -22,6 +22,7 @@ export const INPUT_ERRORS = {
 	invalidFileSizeTwoMb: 'El tamaño máximo permitido es de 2 MB',
 	invalidPasswordMinMax: 'Mínimo 8 - máximo 20 caracteres',
 	missingUpperCase: 'Debe contener al menos una letra mayúscula',
+	missingLowerCase: 'Debe contener al menos una letra minúscula',
 	missingNumber: 'Debe contener al menos un número',
 	missingSpecialChar: 'Debe contener al menos un carácter especial',
 	passwordNotMatch: 'La contraseña no coincide',

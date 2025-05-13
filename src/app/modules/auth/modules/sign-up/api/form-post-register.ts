@@ -1,6 +1,7 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
 import { TApi } from '@shared/types/api-response';
+import { toast } from 'ngx-sonner';
 
 export class ApiFormPostRegister {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
@@ -19,8 +20,11 @@ export class ApiFormPostRegister {
 		try {
 			const response = await fetch(path, {
 				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body.request),
 				signal: body.abortSignal,
-				body: JSON.stringify(body),
 			});
 
 			if (!response.ok) {
@@ -30,9 +34,16 @@ export class ApiFormPostRegister {
 			const result: TApi<boolean> = await response.json();
 			console.log(result);
 
+			toast.message('Registro exitoso', {
+				description: 'Recibirás un correo de confirmación.',
+			});
+
 			return result.data;
 		} catch (err) {
 			console.log(err);
+			toast.message('Registro fallido', {
+				description: 'Por favor, intenta nuevamente.',
+			});
 			return null;
 		}
 	}
@@ -42,13 +53,13 @@ export class ApiFormPostRegister {
 		const [nit, digit] = business['businessNit'].split('-');
 
 		const _form = {
-			roleExecution: role['option'],
+			roleExecution: Number(role['option']),
 			idPersonType: 1,
 			businessLegalName: business['businessName'],
 			tradename: business['businessTradeName'],
 			idIdentificationType: 2,
-			identificationNumber: nit,
-			identificationCheckDigit: digit,
+			identificationNumber: Number(nit),
+			identificationCheckDigit: Number(digit),
 			idCodeCiiu: business['businessEconomicActivity'][0].value,
 			idCountry: 82,
 			idDepartment: business['businessProvince'][0].value,
@@ -65,7 +76,7 @@ export class ApiFormPostRegister {
 				business['businessAddressStreetComplement'],
 
 			email: business['businessEmail'],
-			cellCellsing: '57',
+			cellCallsign: '57',
 			cellPhone: business['businessPhoneNumber'],
 			legalRepFirstName: business['legalRepresentativeName'],
 			legalRepSecondName: business['legalRepresentativeSurName'] || undefined,
@@ -74,25 +85,25 @@ export class ApiFormPostRegister {
 			legalRepJobTitle: business['legalRepresentativeCharge'],
 			legalRepArea: business['legalRepresentativeArea'],
 			legalRepIdType: 1,
-			legalRepIdNumber: business['legalRepresentativeDocumentNumber'],
-			legalRepBirthdate: business['legalRepresentativeBirthdate'].toLocaleDateString('en-CA'),
-			legalRepBirthCountry: 82,
-			legalRepBirthDepartment: business['legalRepresentativeBirthDepartment'][0].value,
-			legalRepBirthTown: business['legalRepresentativeBirthCity'][0].value,
-			legalRepIssuance: business['legalRepresentativeExpeditionDate'].toLocaleDateString('en-CA'),
-			legalRepIssuanceCountry: 82,
-			legalRepIssuanceDepartment: business['legalRepresentativeExpeditionDepartment'][0].value,
-			legalRepIssuanceTown: business['legalRepresentativeExpeditionCity'][0].value,
+			legalRepIdNumber: Number(business['legalRepresentativeDocumentNumber']),
+			legalRepIdBirthdate: business['legalRepresentativeBirthdate'].toLocaleDateString('en-CA'),
+			legalRepIdBirthCountry: 82,
+			legalRepIdBirthDepartment: business['legalRepresentativeBirthDepartment'][0].value,
+			legalRepIdBirthTown: business['legalRepresentativeBirthCity'][0].value,
+			legalRepIdDateIssuance: business['legalRepresentativeExpeditionDate'].toLocaleDateString('en-CA'),
+			legalRepIdCountryIssuance: 82,
+			legalRepIdDepartmentIssuance: business['legalRepresentativeExpeditionDepartment'][0].value,
+			legalRepIdTownIssuance: business['legalRepresentativeExpeditionCity'][0].value,
 			legalRepEmail: business['legalRepresentativeEmail'],
-			legalRepCellsing: business['legalRepresentativePrefix'],
+			legalRepCellCallsign: business['legalRepresentativePrefix'],
 			legalRepCellPhone: business['legalRepresentativePhoneNumber'],
 			user: {
 				firstName: account['firsName'],
 				secondName: account['surName'] || undefined,
 				firstSurname: account['lastName'],
 				secondSurname: account['surLastName'],
-				email: account['email'],
 				username: account['dniNumber'],
+				email: account['email'],
 				password: account['password'],
 			},
 			businessLegalDocuments: [
@@ -115,8 +126,8 @@ export class ApiFormPostRegister {
 			],
 			bankAccount: {
 				idBank: documents['bank'][0].value,
-				idAccountType: documents['accountType'][0].value,
 				accountNumber: documents['accountNumber'],
+				idAccountType: documents['accountType'][0].value,
 			},
 		};
 
@@ -129,7 +140,6 @@ export class ApiFormPostRegister {
 		}
 
 		console.log(_form);
-
-		// this._form.set(_form);
+		this._form.set(_form);
 	}
 }

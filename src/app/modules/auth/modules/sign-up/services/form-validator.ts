@@ -191,12 +191,12 @@ export class FormValidator {
 			}
 
 			const hasUpperCase = /[A-Z]/.test(value);
+			const hasLowerCase = /[a-z]/.test(value);
 			const hasNumber = /\d/.test(value);
-			const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
 
 			if (!hasUpperCase) return { missingUpperCase: true };
+			if (!hasLowerCase) return { missingLowerCase: true };
 			if (!hasNumber) return { missingNumber: true };
-			if (!hasSpecialChar) return { missingSpecialChar: true };
 
 			return null;
 		};

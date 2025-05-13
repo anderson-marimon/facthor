@@ -1,4 +1,4 @@
-import { ApplicationRef, type ComponentRef, createComponent, EnvironmentInjector, inject, Injectable } from '@angular/core';
+import { ApplicationRef, type ComponentRef, createComponent, EnvironmentInjector, inject, Injectable, Signal, WritableSignal } from '@angular/core';
 import { FrsAlertDialog } from '@fresco-ui/frs-alert-dialog/frs-alert-dialog';
 import { FrsDialog } from '@fresco-ui/frs-dialog/frs-dialog';
 @Injectable({
@@ -83,5 +83,6 @@ export type TFrsAlertDialogArgs = {
 	description?: string;
 	cancelButtonText?: string;
 	actionButtonText?: string;
+	loading: Signal<boolean> | WritableSignal<boolean>;
 	action: () => void;
 };

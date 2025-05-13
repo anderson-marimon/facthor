@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import { ApiFormPostRegister } from '@auth/modules/sign-up/api/form-post-register';
 import { SignUpAccountForm } from '@auth/modules/sign-up/components/form-account/form-account';
 import { SignUpBusinessForm } from '@auth/modules/sign-up/components/form-business/form-business';
 import { SignUpDocumentsForm } from '@auth/modules/sign-up/components/form-documents/form-documents';
@@ -10,12 +11,12 @@ import { SignUpRoleStep } from '@auth/modules/sign-up/components/role-step/role-
 import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
-import { distinctUntilChanged } from 'rxjs';
 
 @Component({
 	selector: 'sign-up-page',
 	templateUrl: 'index.html',
 	providers: [SignUpFormStore],
+	viewProviders: [ApiFormPostRegister],
 	imports: [
 		FrsButtonModule,
 		RouterLink,
@@ -30,6 +31,7 @@ import { distinctUntilChanged } from 'rxjs';
 })
 export default class SignUpPage {
 	private readonly _destroyRef = inject(DestroyRef);
+	private readonly _formPostRegisterApi = inject(ApiFormPostRegister);
 	private readonly _roleForm = viewChild.required<SignUpRoleForm>(SignUpRoleForm);
 	private readonly _businessForm = viewChild.required<SignUpBusinessForm>(SignUpBusinessForm);
 	private readonly _documentsForm = viewChild.required<SignUpDocumentsForm>(SignUpDocumentsForm);
@@ -45,14 +47,7 @@ export default class SignUpPage {
 
 	constructor() {
 		this._setStep(0);
-
-		this._signUpFormStore
-			.select((state) => state.roleForm)
-			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
-			.subscribe(({ option }) => {
-				if (!option) return;
-				this._selectedRole.set(option);
-			});
+		this._syncCloseRegisterDialog();
 	}
 
 	private _setStep(index: number): void {
@@ -67,6 +62,15 @@ export default class SignUpPage {
 			return false;
 		}
 		return true;
+	}
+
+	private _syncCloseRegisterDialog(): void {
+		toObservable(this._formPostRegisterApi.data)
+			.pipe(takeUntilDestroyed(this._destroyRef))
+			.subscribe((value) => {
+				if (!value) return;
+				this._dialogRef.closeDialog();
+			});
 	}
 
 	protected _nextStep(): void {
@@ -102,6 +106,7 @@ export default class SignUpPage {
 					description:
 						'Por favor, revisa bien toda la información antes de enviarla, una vez enviado el registro, no puede ser modificado.',
 					action: () => this._summary().sendForm(),
+					loading: this._formPostRegisterApi.loading,
 				});
 			},
 		];

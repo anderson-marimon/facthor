@@ -6,7 +6,7 @@
                 Este es el inicio en el mundo del factoring, por favor, sigue
                 toda la información siguiendo las instrucciones.
             </p>
-            <div class="flex justify-start lg:justify-end flex-wrap lg:flex-nowrap gap-4">
+            <div class="flex justify-start lg:justify-end flex-wrap lg:flex-nowrap gap-4 pl-0.5 md:pl-0">
                 <sign-up-role-step [active]="_formSteps()[0]" [label]="'Selección de rol'" />
                 <sign-up-role-step [active]="_formSteps()[1]" [label]="'Empresa'" />
                 <sign-up-role-step [active]="_formSteps()[2]" [label]="'Documentación'" />
@@ -32,9 +32,15 @@
                 Inicia sesión aquí
             </a>
         </span>
-        <div class="flex gap-5">
+        <div class="flex gap-5 [&_button]:w-24 p-1">
             <button frs-button [disabled]="_isAvailablePreviousStep()" (click)="_previousStep()">Anterior</button>
-            <button frs-button [disabled]="_isAvailableNextStep()" (click)="_nextStep()">Siguiente</button>
+            <button frs-button [disabled]="_isAvailableNextStep()" (click)="_nextStep()">
+                @if(_currentStep() === 4) {
+                    Enviar
+                } @else {
+                    Siguiente
+                }
+            </button>
         </div>
     </section>
 </article>

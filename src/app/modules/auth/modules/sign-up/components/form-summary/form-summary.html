@@ -337,8 +337,9 @@
 </section>
 
 <ng-template #detail let-title="title" let-value="value">
-    <li class="flex items-start gap-2.5">
-        <p><span class="text-nowrap font-semibold mr-2">{{title}}:</span> <span class="text-foreground/60">{{value | titlecase}}</span></p>
+    <li class="flex items-start flex-wrap">
+        <span class="text-nowrap font-semibold mr-2">{{title}}:</span>
+        <span class="text-foreground/60">{{value | titlecase}}</span>
     </li>
 </ng-template>
 
