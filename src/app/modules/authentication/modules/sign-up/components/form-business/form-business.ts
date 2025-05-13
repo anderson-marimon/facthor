@@ -41,7 +41,7 @@ export class SignUpBusinessForm {
 	protected readonly _businessCitiesOptions = this._formCitiesApi.businessCities;
 	protected readonly _economicActivitiesOptions = this._formCiuuCodesApi.ciuuCodes;
 	protected readonly _legalRepresentativeBirthCitiesOptions = this._formCitiesApi.legalRepresentativeBirthCities;
-	protected readonly _legaRepresentativeExpeditionCitiesOptions = this._formCitiesApi.legalRepresentativeBirthCities;
+	protected readonly _legaRepresentativeExpeditionCitiesOptions = this._formCitiesApi.legalRepresentativeExpeditionCities;
 
 	// Disable controls
 	protected readonly _disabled = signal(true);
@@ -62,7 +62,7 @@ export class SignUpBusinessForm {
 	protected readonly _businessAddressStreetNumber = this._formBuilder.control('', [Validators.required]);
 	protected readonly _businessAddressStreetSecondaryNumber = this._formBuilder.control('', [Validators.required]);
 	protected readonly _businessAddressStreetBuildNumber = this._formBuilder.control('', [Validators.required]);
-	protected readonly _businessAddressStreetComplement = this._formBuilder.control('');
+	// protected readonly _businessAddressStreetComplement = this._formBuilder.control('');
 	protected readonly _businessEmail = this._formBuilder.control('', [Validators.required, Validators.email]);
 	protected readonly _businessPrefix = this._formBuilder.control('', [Validators.required]);
 	protected readonly _businessPhoneNumber = this._formBuilder.control('', [Validators.required, this._validator.phoneNumber()]);
@@ -108,7 +108,7 @@ export class SignUpBusinessForm {
 		businessAddressStreetNumber: this._businessAddressStreetNumber,
 		businessAddressStreetSecondaryNumber: this._businessAddressStreetSecondaryNumber,
 		businessAddressStreetBuildNumber: this._businessAddressStreetBuildNumber,
-		businessAddressStreetComplement: this._businessAddressStreetComplement,
+		// businessAddressStreetComplement: this._businessAddressStreetComplement,
 		businessEmail: this._businessEmail,
 		businessPrefix: this._businessPrefix,
 		businessPhoneNumber: this._businessPhoneNumber,
@@ -220,7 +220,7 @@ export class SignUpBusinessForm {
 				this._businessAddressStreetNumber.setValue(form['businessAddressStreetNumber']);
 				this._businessAddressStreetSecondaryNumber.setValue(form['businessAddressStreetSecondaryNumber']);
 				this._businessAddressStreetBuildNumber.setValue(form['businessAddressStreetBuildNumber']);
-				this._businessAddressStreetComplement.setValue(form['businessAddressStreetComplement']);
+				// this._businessAddressStreetComplement.setValue(form['businessAddressStreetComplement']);
 				this._businessEmail.setValue(form['businessEmail']);
 				this._businessPrefix.setValue(form['businessPrefix']);
 				this._businessPhoneNumber.setValue(form['businessPhoneNumber']);

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ApiFormPostRegister } from '@authentication/modules/sign-up/api/form-post-register';
 import { SignUpAccountForm } from '@authentication/modules/sign-up/components/form-account/form-account';
 import { SignUpBusinessForm } from '@authentication/modules/sign-up/components/form-business/form-business';
@@ -11,9 +11,10 @@ import { SignUpRoleStep } from '@authentication/modules/sign-up/components/role-
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
+import { distinctUntilChanged, timer } from 'rxjs';
 
 @Component({
-	selector: 'sign-up-page',
+	selector: 'authentication-sign-up-page',
 	templateUrl: 'index.html',
 	providers: [SignUpFormStore],
 	viewProviders: [ApiFormPostRegister],
@@ -31,6 +32,7 @@ import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 })
 export default class SignUpPage {
 	private readonly _destroyRef = inject(DestroyRef);
+	private readonly _router = inject(Router);
 	private readonly _formPostRegisterApi = inject(ApiFormPostRegister);
 	private readonly _roleForm = viewChild.required<SignUpRoleForm>(SignUpRoleForm);
 	private readonly _businessForm = viewChild.required<SignUpBusinessForm>(SignUpBusinessForm);
@@ -47,6 +49,7 @@ export default class SignUpPage {
 
 	constructor() {
 		this._setStep(0);
+		this._synRole();
 		this._syncCloseRegisterDialog();
 	}
 
@@ -64,12 +67,23 @@ export default class SignUpPage {
 		return true;
 	}
 
+	private _synRole(): void {
+		this._signUpFormStore
+			.select((state) => state.roleForm)
+			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
+			.subscribe(({ option }) => {
+				if (!option) return;
+				this._selectedRole.set(option);
+			});
+	}
+
 	private _syncCloseRegisterDialog(): void {
 		toObservable(this._formPostRegisterApi.data)
 			.pipe(takeUntilDestroyed(this._destroyRef))
 			.subscribe((value) => {
 				if (!value) return;
 				this._dialogRef.closeDialog();
+				this._router.navigate(['authentication/sign-in']);
 			});
 	}
 

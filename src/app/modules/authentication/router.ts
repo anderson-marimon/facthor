@@ -7,8 +7,12 @@ export const authRoutes: Routes = [
 		children: [
 			{
 				path: '',
-				redirectTo: 'sign-up',
+				redirectTo: 'sign-in',
 				pathMatch: 'full',
+			},
+			{
+				path: 'sign-in',
+				loadComponent: () => import('./modules/sign-in/view').then((m) => m.default),
 			},
 			{
 				path: 'sign-up',

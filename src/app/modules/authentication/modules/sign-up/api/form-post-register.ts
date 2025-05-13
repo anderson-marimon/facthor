@@ -71,9 +71,7 @@ export class ApiFormPostRegister {
 				' # ' +
 				business['businessAddressStreetSecondaryNumber'] +
 				' - ' +
-				business['businessAddressStreetBuildNumber'] +
-				' ' +
-				business['businessAddressStreetComplement'],
+				business['businessAddressStreetBuildNumber'],
 
 			email: business['businessEmail'],
 			cellCallsign: '57',
@@ -109,19 +107,19 @@ export class ApiFormPostRegister {
 			businessLegalDocuments: [
 				{
 					idLegalDocumentType: 1,
-					legalDocumentBase64: documents['chamberOfCommerceFile'][0].base64,
+					legalDocumentBase64: documents['chamberOfCommerceFile'][0].base64.split(',')[1],
 				},
 				{
 					idLegalDocumentType: 2,
-					legalDocumentBase64: documents['rutFile'][0].base64,
+					legalDocumentBase64: documents['rutFile'][0].base64.split(',')[1],
 				},
 				{
 					idLegalDocumentType: 3,
-					legalDocumentBase64: documents['bankCertificationFile'][0].base64,
+					legalDocumentBase64: documents['bankCertificationFile'][0].base64.split(',')[1],
 				},
 				{
 					idLegalDocumentType: 4,
-					legalDocumentBase64: documents['legalRepresentativeDniFile'][0].base64,
+					legalDocumentBase64: documents['legalRepresentativeDniFile'][0].base64.split(',')[1],
 				},
 			],
 			bankAccount: {
@@ -135,7 +133,7 @@ export class ApiFormPostRegister {
 		if (role['option'] !== '2') {
 			_form.businessLegalDocuments.push({
 				idLegalDocumentType: 5,
-				legalDocumentBase64: documents['financialStatementsFile'][0].base64,
+				legalDocumentBase64: documents['financialStatementsFile'][0].base64.split(',')[1],
 			});
 		}
 

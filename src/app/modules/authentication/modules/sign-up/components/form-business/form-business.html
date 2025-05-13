@@ -77,6 +77,45 @@
             </frs-select>
         </frs-field>
 
+        <frs-field [label]="'Correo electrónico'">
+            <frs-input
+                #field
+                [control]="_businessEmail"
+                [placeholder]="'Ingrese el correo electrónico'"
+            />
+        </frs-field>
+
+        <div class="flex items-start flex-wrap gap-5">
+            <frs-field
+                [label]="'Prefijo'"
+                    [showAsterisk]="false"
+                [class]="'[&_input::placeholder]:text-center [&_input]:text-center'">
+                <frs-input
+                    #field
+                    [control]="_businessPrefix"
+                    [placeholder]="'+57'"
+                    [type]="'custom'"
+                    [decorator]="'+'"
+                    [mask]="'xxx'"
+                    [regex]="'[^\\d]'"
+                    [disabled]="true"
+                    [class]="'w-16'"
+                />
+            </frs-field>
+    
+            <frs-field [label]="'Número de celular'" [class]="'flex-1'">
+                <frs-input
+                    #field
+                    [control]="_businessPhoneNumber"
+                    [placeholder]="'Ingrese el número de celular'"
+                    [type]="'custom'"
+                    [mask]="'xxx-xxx-xxxx'"
+                    [fill]="' '"
+                    [regex]="'[^\\d]'"
+                />
+            </frs-field>
+        </div>
+
         <div class="flex flex-col col-span-1 md:col-span-2">
             <span class="text-sm">Dirección <span class="text-red-400">*</span></span>
             <div class="flex items-baseline flex-wrap gap-5 ">
@@ -127,56 +166,7 @@
                         [class]="'w-20'"
                     />
                 </frs-field>
-        
-                <frs-field
-                    [showAsterisk]="false"
-                    [class]="'flex-1'">
-                    <frs-input
-                        #field
-                        [control]="_businessAddressStreetComplement"
-                        [placeholder]="'Complemento'"
-                    />
-                </frs-field>
             </div>
-        </div>
-
-        <frs-field [label]="'Correo electrónico'">
-            <frs-input
-                #field
-                [control]="_businessEmail"
-                [placeholder]="'Ingrese el correo electrónico'"
-            />
-        </frs-field>
-
-        <div class="flex items-start flex-wrap gap-5">
-            <frs-field
-                [label]="'Prefijo'"
-                    [showAsterisk]="false"
-                [class]="'[&_input::placeholder]:text-center [&_input]:text-center'">
-                <frs-input
-                    #field
-                    [control]="_businessPrefix"
-                    [placeholder]="'+57'"
-                    [type]="'custom'"
-                    [decorator]="'+'"
-                    [mask]="'xxx'"
-                    [regex]="'[^\\d]'"
-                    [disabled]="true"
-                    [class]="'w-16'"
-                />
-            </frs-field>
-    
-            <frs-field [label]="'Número de celular'" [class]="'flex-1'">
-                <frs-input
-                    #field
-                    [control]="_businessPhoneNumber"
-                    [placeholder]="'Ingrese el número de celular'"
-                    [type]="'custom'"
-                    [mask]="'xxx-xxx-xxxx'"
-                    [fill]="' '"
-                    [regex]="'[^\\d]'"
-                />
-            </frs-field>
         </div>
     </section>
     <section class="mt-5">

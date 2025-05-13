@@ -41,12 +41,13 @@ export class FrsDialogOverlay implements AfterViewInit {
 	@HostListener('window:keyup.esc', ['$event'])
 	protected _closeDialog(event: Event): void {
 		event.stopPropagation();
+
 		this._dialogContent()?.close();
 	}
 
 	public ngAfterViewInit(): void {}
 
 	protected readonly _frsClass = computed(() =>
-		frs('absolute top-0 left-0 w-screen h-svh grid place-content-center bg-background/50 backdrop-blur-sm'),
+		frs('absolute top-0 left-0 w-screen h-svh grid place-content-center bg-background/50 backdrop-blur-sm')
 	);
 }

@@ -22,7 +22,9 @@ import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
 			</p>
 		</section>
 		<section>
-			<button frs-button [variant]="'outline'" (click)="_closeDialog()">{{ data()?.cancelButtonText || 'Cancelar' }}</button>
+			<button frs-button [variant]="'outline'" (click)="_closeDialog()" [disabled]="data()?.loading()">
+				{{ data()?.cancelButtonText || 'Cancelar' }}
+			</button>
 			<button frs-button (click)="_acceptAction()" [disabled]="data()?.loading()">
 				@if(data()?.loading()) {
 				<loading-icon [color]="'#FFFFFF'" class="size-6" />
@@ -38,6 +40,7 @@ export class FrsAlertDialog {
 	public readonly closeDialog = input(() => {});
 
 	protected _closeDialog(): void {
+		if (this.data()?.loading()) return;
 		this.closeDialog()();
 	}
 
@@ -48,7 +51,7 @@ export class FrsAlertDialog {
 
 	protected readonly _frsClass = computed(() =>
 		frs(
-			`min-w-full max-w-[450px] flex flex-col gap-5 [&>section>h2]:text-md [&>section>h2]:font-semibold [&>section>p]:text-wrap
+			`min-w-full max-w-[450px] flex flex-col gap-5 [&>section>h2]:text-md [&>section>h2]:font-semibold [&>section>p]:text-sm [&>section>p]:text-wrap
 			[&>section>p]:text-muted-foreground [&>section>p]:mt-1 [&>section>h2]:mt-2 [&>section:last-child]:flex [&>section:last-child]:justify-end
 			[&>section:last-child]:gap-4 [&>section>button]:min-w-24 `
 		)

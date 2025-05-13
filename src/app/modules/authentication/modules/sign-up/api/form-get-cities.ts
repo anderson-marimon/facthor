@@ -38,9 +38,9 @@ export class FormCitiesApi {
 	public readonly legarRepresentativeBirthIsLoading = this._legalRepresentativeBirthCitiesResource.isLoading;
 	public readonly legalRepresentativeBirthError = this._legalRepresentativeBirthCitiesResource.error;
 
-	public readonly expeditionCities = this._legalRepresentativeExpeditionCitiesResource.value;
-	public readonly expeditionIsLoading = this._legalRepresentativeExpeditionCitiesResource.isLoading;
-	public readonly expeditionError = this._legalRepresentativeExpeditionCitiesResource.error;
+	public readonly legalRepresentativeExpeditionCities = this._legalRepresentativeExpeditionCitiesResource.value;
+	public readonly legarRepresentativeExpeditionIsLoading = this._legalRepresentativeExpeditionCitiesResource.isLoading;
+	public readonly legalRepresentativeExpeditionError = this._legalRepresentativeExpeditionCitiesResource.error;
 
 	private async _fetchCities(params: ResourceLoaderParams<number>) {
 		if (params.request === 0) return [];
