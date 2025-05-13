@@ -48,7 +48,7 @@ export default class SignUpPage {
 	protected readonly _selectedRole = signal<string>('1');
 
 	constructor() {
-		this._setStep(0);
+		this._setStep(3);
 		this._synRole();
 		this._syncCloseRegisterDialog();
 	}

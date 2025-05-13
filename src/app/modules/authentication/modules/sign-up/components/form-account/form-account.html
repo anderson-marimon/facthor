@@ -7,6 +7,12 @@
             Configura el usuario con el que administraras tu empresa.
         </p>
     </section>
+     <frs-alert [class]="'text-primary border-primary'">
+        <frs-alert-title>Importante</frs-alert-title>
+        <frs-alert-description>
+            El documento ingresado en esta sección será para el inicio de sesión en la plataforma.
+        </frs-alert-description>
+    </frs-alert>
     <section class="relative grid place-content-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         <frs-field [label]="'Primer nombre'">
             <frs-input
