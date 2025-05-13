@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { ApiFormPostRegister } from '@auth/modules/sign-up/api/form-post-register';
-import { SignUpAccountForm } from '@auth/modules/sign-up/components/form-account/form-account';
-import { SignUpBusinessForm } from '@auth/modules/sign-up/components/form-business/form-business';
-import { SignUpDocumentsForm } from '@auth/modules/sign-up/components/form-documents/form-documents';
-import { SignUpRoleForm } from '@auth/modules/sign-up/components/form-role/form-role';
-import { SignUpFormSummary } from '@auth/modules/sign-up/components/form-summary/form-summary';
-import { SignUpRoleStep } from '@auth/modules/sign-up/components/role-step/role-step';
-import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
+import { ApiFormPostRegister } from '@authentication/modules/sign-up/api/form-post-register';
+import { SignUpAccountForm } from '@authentication/modules/sign-up/components/form-account/form-account';
+import { SignUpBusinessForm } from '@authentication/modules/sign-up/components/form-business/form-business';
+import { SignUpDocumentsForm } from '@authentication/modules/sign-up/components/form-documents/form-documents';
+import { SignUpRoleForm } from '@authentication/modules/sign-up/components/form-role/form-role';
+import { SignUpFormSummary } from '@authentication/modules/sign-up/components/form-summary/form-summary';
+import { SignUpRoleStep } from '@authentication/modules/sign-up/components/role-step/role-step';
+import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 

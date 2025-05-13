@@ -1,8 +1,8 @@
 import { afterNextRender, Component, DestroyRef, inject, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormValidator } from '@auth/modules/sign-up/services/form-validator';
-import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
+import { FormValidator } from '@authentication/modules/sign-up/services/form-validator';
+import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
 import { FrsInputModule } from '@fresco-ui/frs-input';
 import { debounceTime, distinctUntilChanged, take } from 'rxjs';

@@ -1,10 +1,10 @@
 import { afterNextRender, Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiFormGetBanks } from '@auth/modules/sign-up/api/form-get-banks';
-import { BANK_TYPE_OPTIONS } from '@auth/modules/sign-up/common/bank-select-options';
-import { FormValidator } from '@auth/modules/sign-up/services/form-validator';
-import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
+import { ApiFormGetBanks } from '@authentication/modules/sign-up/api/form-get-banks';
+import { BANK_TYPE_OPTIONS } from '@authentication/modules/sign-up/common/bank-select-options';
+import { FormValidator } from '@authentication/modules/sign-up/services/form-validator';
+import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
 import { FrsFileInputModule } from '@fresco-ui/frs-file-input';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';

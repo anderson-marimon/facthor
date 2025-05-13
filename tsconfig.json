@@ -16,17 +16,17 @@
     "target": "ES2022",
     "module": "ES2022",
     "paths": {
-      "@auth/*": [
-        "./src/app/modules/auth/*"
+      "@authentication/*": [
+        "./src/app/modules/authentication/*"
       ],
       "@shared/*": [
         "./src/app/shared/*"
       ],
       "@fresco-core/*": [
-        "./src/app/libs/core/*"
+        "./src/app/libraries/core/*"
       ],
       "@fresco-ui/*": [
-        "./src/app/libs/ui/*"
+        "./src/app/libraries/ui/*"
       ],
       "@app/*": [
         "./src/*"

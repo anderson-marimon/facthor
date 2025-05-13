@@ -1,12 +1,12 @@
 import { afterNextRender, Component, DestroyRef, inject, output, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormCitiesApi } from '@auth/modules/sign-up/api/form-get-cities';
-import { FormCiuuCodesApi } from '@auth/modules/sign-up/api/form-get-ciuu-codes';
-import { FormDepartmentApi } from '@auth/modules/sign-up/api/form-get-departments';
-import { ADDRESS_STREETS } from '@auth/modules/sign-up/common/address-streets';
-import { FormValidator } from '@auth/modules/sign-up/services/form-validator';
-import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
+import { FormCitiesApi } from '@authentication/modules/sign-up/api/form-get-cities';
+import { FormCiuuCodesApi } from '@authentication/modules/sign-up/api/form-get-ciuu-codes';
+import { FormDepartmentApi } from '@authentication/modules/sign-up/api/form-get-departments';
+import { ADDRESS_STREETS } from '@authentication/modules/sign-up/common/address-streets';
+import { FormValidator } from '@authentication/modules/sign-up/services/form-validator';
+import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { TCalendarDate } from '@fresco-ui/frs-calendar/frs-calendar';
 import { FrsComboboxModule } from '@fresco-ui/frs-combobox';

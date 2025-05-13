@@ -139,7 +139,6 @@ export class ApiFormPostRegister {
 			});
 		}
 
-		console.log(_form);
 		this._form.set(_form);
 	}
 }

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ApiFormPostRegister } from '@auth/modules/sign-up/api/form-post-register';
-import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
+import { ApiFormPostRegister } from '@authentication/modules/sign-up/api/form-post-register';
+import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
 import { PdfViewer } from '@shared/components/pdf-viewer/pdf-viewer';

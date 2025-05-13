@@ -1,8 +1,8 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, inject, output, viewChildren } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SignUpRoleCard } from '@auth/modules/sign-up/components/role-card/role-card';
-import { SignUpFormStore } from '@auth/modules/sign-up/stores/sign-up.store';
+import { SignUpRoleCard } from '@authentication/modules/sign-up/components/role-card/role-card';
+import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FacthorLogo } from '@shared/logos/facthor-logo/facthor-logo';
 import { toast } from 'ngx-sonner';
