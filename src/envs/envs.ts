@@ -1,5 +1,8 @@
 export const envs = {
 	PRODUCTION: false,
+
+	FT_AUTHENTICATION_TOKEN_PATH: import.meta.env.FT_AUTHENTICATION_TOKEN_PATH,
+
 	FT_URL_LOGIN: import.meta.env.FT_URL_LOGIN,
 	FT_URL_REGISTER: import.meta.env.FT_URL_REGISTER,
 	FT_URL_CLIENT_UPLOAD: import.meta.env.FT_URL_CLIENT_UPLOAD,

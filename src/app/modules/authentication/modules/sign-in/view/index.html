@@ -1,3 +1,55 @@
-<article class="h-full flex flex-col">
-    Inicio de sesion
+<article class="h-full grid place-content-center">
+    <section class="w-[300px] flex flex-col items-center gap-5">
+        <div class="flex flex-col items-center">
+            <facthor-logo [withText]="false" class="w-16" />
+            <h1 class="text-2xl text-center font-medium mt-3">Ingresa tu cuenta</h1>
+            <h2 class="text-md text-center text-foreground/60">Por favor, ingresa las credenciales de forma segura</h2>
+        </div>
+        <form (ngSubmit)="_onClickSingIn()" [formGroup]="_form" class="w-full flex flex-col gap-4">
+            <frs-field [showAsterisk]='false' [label]="'Usuario'">
+                <frs-input
+                    #field
+                    [control]="_username"
+                    [type]="'custom'"
+                    [mask]="'xxxxxxxxxx'"
+                    [regex]="'[^\\d]'"
+                    [placeholder]="'Ingrese el usuario'"
+                />
+            </frs-field>
+            <frs-field [showAsterisk]='false' [label]="'Contraseña'">
+                <frs-input
+                    #field
+                    [showEye]="true"
+                    [control]="_password"
+                    [placeholder]="'Ingrese la contraseña'"
+                />
+                <a 
+                    [routerLink]="['/authentication/forgot-password']"
+                    aria-label="Olvidé la contraseña"
+                    class="inline-block w-fit text-xs text-primary hover:underline underline-offset-4"
+                >
+                    ¿Olvidaste la contraseña?
+                </a>
+            </frs-field>
+            <button [disabled]="_loader()" type="submit" class="mt-2.5" frs-button>
+                @if(_loader()) {
+                    <loading-icon [color]="'#FFFFFF'" class="size-6" />
+                } @else {
+                    Iniciar sesión
+                }
+            </button>
+        </form>
+        <div class="w-full flex items-center gap-2.5 [&_span]:text-foreground/15">
+            <span class="flex-1 block h-[1px] w-full bg-black/15"></span>
+            <span>O</span>
+            <span class="flex-1 block h-[1px] w-full bg-black/15"></span>
+        </div>
+        <a 
+            [routerLink]="['/authentication/sign-up']"
+            aria-label="Olvidé la contraseña"
+            class="inline-block w-fit text-sm text-primary hover:underline underline-offset-4"
+        >
+            Ingresa el formulario de registro
+        </a>
+    </section>
 </article>

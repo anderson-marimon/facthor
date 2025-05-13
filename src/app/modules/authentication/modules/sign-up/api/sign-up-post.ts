@@ -1,19 +1,18 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
-import { TApi } from '@shared/types/api-response';
 import { toast } from 'ngx-sonner';
 
-export class ApiFormPostRegister {
+export class ApiSignUpPost {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
-	private readonly _form = signal<Record<string, any>>({});
-	private readonly _resource = resource({ request: this._form, loader: (body) => this._postForm(body) });
+	private readonly _signUpForm = signal<Record<string, any>>({});
+	private readonly _resource = resource({ request: this._signUpForm, loader: (body) => this._signUp(body) });
 
 	public readonly data = this._resource.value;
 	public readonly loading = this._resource.isLoading;
 	public readonly errors = this._resource.error;
 
-	private async _postForm(body: ResourceLoaderParams<Record<string, any>>): Promise<any> {
-		if (Object.keys(this._form()).length === 0) return;
+	private async _signUp(body: ResourceLoaderParams<Record<string, any>>): Promise<boolean> {
+		if (Object.keys(this._signUpForm()).length === 0) return false;
 
 		const path = `${this._url}${envs.FT_AUTH_REGISTER}`;
 
@@ -32,7 +31,6 @@ export class ApiFormPostRegister {
 			}
 
 			const result: TApi<boolean> = await response.json();
-			console.log(result);
 
 			toast.message('Registro exitoso', {
 				description: 'Recibirás un correo de confirmación.',
@@ -44,11 +42,11 @@ export class ApiFormPostRegister {
 			toast.message('Registro fallido', {
 				description: 'Por favor, intenta nuevamente.',
 			});
-			return null;
+			return false;
 		}
 	}
 
-	public sendForm(form: Record<string, any>): void {
+	public signUp(form: Record<string, any>): void {
 		const { role, business, documents, account } = form;
 		const [nit, digit] = business['businessNit'].split('-');
 
@@ -137,6 +135,6 @@ export class ApiFormPostRegister {
 			});
 		}
 
-		this._form.set(_form);
+		this._signUpForm.set(_form);
 	}
 }

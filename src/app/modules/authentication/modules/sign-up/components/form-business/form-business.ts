@@ -5,7 +5,7 @@ import { FormCitiesApi } from '@authentication/modules/sign-up/api/form-get-citi
 import { FormCiuuCodesApi } from '@authentication/modules/sign-up/api/form-get-ciuu-codes';
 import { FormDepartmentApi } from '@authentication/modules/sign-up/api/form-get-departments';
 import { ADDRESS_STREETS } from '@authentication/modules/sign-up/common/address-streets';
-import { FormValidator } from '@authentication/modules/sign-up/services/form-validator';
+import { FormValidator } from '@authentication/services/form-validator';
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { TCalendarDate } from '@fresco-ui/frs-calendar/frs-calendar';

@@ -1,8 +1,9 @@
 import { afterNextRender, Component, DestroyRef, inject, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormValidator } from '@authentication/modules/sign-up/services/form-validator';
+import { FormValidator } from '@authentication/services/form-validator';
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
+import { FrsAlertModule } from '@fresco-ui/frs-alert';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
 import { FrsInputModule } from '@fresco-ui/frs-input';
 import { debounceTime, distinctUntilChanged, take } from 'rxjs';
@@ -10,7 +11,7 @@ import { debounceTime, distinctUntilChanged, take } from 'rxjs';
 @Component({
 	selector: 'sign-up-account-form',
 	templateUrl: 'form-account.html',
-	imports: [FrsFieldModule, FrsInputModule, ReactiveFormsModule],
+	imports: [FrsAlertModule, FrsFieldModule, FrsInputModule, ReactiveFormsModule],
 })
 export class SignUpAccountForm {
 	private readonly _signUpFormStore = inject(SignUpFormStore);

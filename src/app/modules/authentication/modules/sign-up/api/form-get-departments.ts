@@ -1,6 +1,5 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@envs/envs';
-import { TApi } from '@shared/types/api-response';
 
 type TDepartmentOption = {
 	label: string;

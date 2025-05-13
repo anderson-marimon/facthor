@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
-import { ApiFormPostRegister } from '@authentication/modules/sign-up/api/form-post-register';
+import { ApiSignUpPost } from '@authentication/modules/sign-up/api/sign-up-post';
 import { SignUpAccountForm } from '@authentication/modules/sign-up/components/form-account/form-account';
 import { SignUpBusinessForm } from '@authentication/modules/sign-up/components/form-business/form-business';
 import { SignUpDocumentsForm } from '@authentication/modules/sign-up/components/form-documents/form-documents';
@@ -11,13 +11,13 @@ import { SignUpRoleStep } from '@authentication/modules/sign-up/components/role-
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
-import { distinctUntilChanged, timer } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
 	selector: 'authentication-sign-up-page',
 	templateUrl: 'index.html',
 	providers: [SignUpFormStore],
-	viewProviders: [ApiFormPostRegister],
+	viewProviders: [ApiSignUpPost],
 	imports: [
 		FrsButtonModule,
 		RouterLink,
@@ -33,7 +33,7 @@ import { distinctUntilChanged, timer } from 'rxjs';
 export default class SignUpPage {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _router = inject(Router);
-	private readonly _formPostRegisterApi = inject(ApiFormPostRegister);
+	private readonly _apiSignUp = inject(ApiSignUpPost);
 	private readonly _roleForm = viewChild.required<SignUpRoleForm>(SignUpRoleForm);
 	private readonly _businessForm = viewChild.required<SignUpBusinessForm>(SignUpBusinessForm);
 	private readonly _documentsForm = viewChild.required<SignUpDocumentsForm>(SignUpDocumentsForm);
@@ -78,7 +78,7 @@ export default class SignUpPage {
 	}
 
 	private _syncCloseRegisterDialog(): void {
-		toObservable(this._formPostRegisterApi.data)
+		toObservable(this._apiSignUp.data)
 			.pipe(takeUntilDestroyed(this._destroyRef))
 			.subscribe((value) => {
 				if (!value) return;
@@ -120,7 +120,7 @@ export default class SignUpPage {
 					description:
 						'Por favor, revisa bien toda la información antes de enviarla, una vez enviado el registro, no puede ser modificado.',
 					action: () => this._summary().sendForm(),
-					loading: this._formPostRegisterApi.loading,
+					loading: this._apiSignUp.loading,
 				});
 			},
 		];

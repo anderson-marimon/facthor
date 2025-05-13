@@ -11,5 +11,5 @@ import { NgxSonnerToaster } from 'ngx-sonner';
 	`,
 })
 export class AppComponent {
-	protected readonly _class = '[&_li]:!rounded-md [&_li]:!shadow-sm !select-none';
+	protected readonly _class = '[&_li]:!p-3 [&_li]:!rounded-md [&_li]:!shadow-sm !select-none';
 }

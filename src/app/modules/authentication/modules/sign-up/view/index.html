@@ -25,10 +25,13 @@
         }
     </section>
     <section class="flex flex-col lg:flex-row items-center justify-between gap-5">
-        <span class="text-foreground/60 ">
+        <span class="text-sm font-medium text-foreground/60">
             ¿Ya tienes una cuenta?
-            <a [routerLink]="['/']"
-                class="text-primary font-medium ml-1 hover:underline underline-offset-4">
+            <a
+                [routerLink]="['/']"
+                aria-label="Ir al inicio de sesión"
+                class="tinline-block w-fit text-primary hover:underline underline-offset-4"
+            >
                 Inicia sesión aquí
             </a>
         </span>

@@ -57,7 +57,7 @@ export class FormValidator {
 			const value = control.value ?? '';
 			const regex = /^\d+$/;
 
-			if (!regex.test(value)) return { invalidNit: true };
+			if (!regex.test(value)) return { invalidDni: true };
 			if (value.length < 7 || value.length > 10) return { invalidDniMinMax: true };
 
 			return null;

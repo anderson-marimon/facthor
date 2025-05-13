@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiFormGetBanks } from '@authentication/modules/sign-up/api/form-get-banks';
 import { BANK_TYPE_OPTIONS } from '@authentication/modules/sign-up/common/bank-select-options';
-import { FormValidator } from '@authentication/modules/sign-up/services/form-validator';
+import { FormValidator } from '@authentication/services/form-validator';
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
 import { FrsFileInputModule } from '@fresco-ui/frs-file-input';

@@ -5,6 +5,8 @@ interface ImportMeta {
 interface ImportMetaEnv {
 	PRODUCTION: string;
 
+	FT_AUTHENTICATION_TOKEN_PATH: string;
+
 	FT_URL_LOGIN: string;
 	FT_URL_REGISTER: string;
 	FT_URL_CLIENT_UPLOAD: string;

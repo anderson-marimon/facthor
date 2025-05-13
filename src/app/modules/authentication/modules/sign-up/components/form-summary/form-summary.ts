@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ApiFormPostRegister } from '@authentication/modules/sign-up/api/form-post-register';
+import { ApiSignUpPost } from '@authentication/modules/sign-up/api/sign-up-post';
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
@@ -16,7 +16,7 @@ type TRecord = Record<string, any>;
 })
 export class SignUpFormSummary {
 	private readonly _destroyRef = inject(DestroyRef);
-	private readonly _formPostRegisterApi = inject(ApiFormPostRegister);
+	private readonly _formPostRegisterApi = inject(ApiSignUpPost);
 	private readonly _signUpFormStore = inject(SignUpFormStore);
 	private readonly _dialogRef = inject(FrsDialogRef);
 
@@ -55,7 +55,7 @@ export class SignUpFormSummary {
 	}
 
 	public sendForm(): void {
-		this._formPostRegisterApi.sendForm({
+		this._formPostRegisterApi.signUp({
 			role: this._roleForm,
 			business: this._businessForm,
 			documents: this._documentsForm,
