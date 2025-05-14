@@ -1,0 +1,37 @@
+<article class="h-full grid place-content-center">
+    <section class="w-[300px] flex flex-col items-center gap-5">
+        <div class="flex flex-col items-center">
+            <facthor-logo [withText]="false" class="w-16" />
+            <h1 class="text-2xl text-center font-medium mt-3">Recupera tu contraseña</h1>
+            <h2 class="text-md text-center text-foreground/60">Introduce el correo electrónico asociado a la cuenta para recuperar tu contraseña.</h2>
+        </div>
+        <form (ngSubmit)="_onClickSingIn()" [formGroup]="_form" class="w-full flex flex-col gap-4">
+            <frs-field [showAsterisk]='false' [label]="'Correo electrónico'">
+                <frs-input
+                    #field
+                    [control]="_email"
+                    [placeholder]="'Ingrese el correo electrónico'"
+                />
+            </frs-field>
+            <button [disabled]="_loader()" type="submit" class="mt-2.5" frs-button>
+                @if(_loader()) {
+                    <loading-icon [color]="'#FFFFFF'" class="size-6" />
+                } @else {
+                    Enviar correo de recuperación
+                }
+            </button>
+        </form>
+        <div class="w-full flex items-center gap-2.5 [&_span]:text-foreground/15">
+            <span class="flex-1 block h-[1px] w-full bg-black/15"></span>
+            <span>O</span>
+            <span class="flex-1 block h-[1px] w-full bg-black/15"></span>
+        </div>
+        <a 
+            [routerLink]="['/authentication/sign-in']"
+            aria-label="Olvidé la contraseña"
+            class="inline-block w-fit text-sm text-primary hover:underline underline-offset-4"
+        >
+            Volver el inicio de sesión
+        </a>
+    </section>
+</article>

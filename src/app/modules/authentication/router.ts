@@ -18,6 +18,10 @@ export const authRoutes: Routes = [
 				path: 'sign-up',
 				loadComponent: () => import('./modules/sign-up/view').then((m) => m.default),
 			},
+			{
+				path: 'forgot-password',
+				loadComponent: () => import('./modules/forgot-password/view').then((m) => m.default),
+			},
 		],
 	},
 ];

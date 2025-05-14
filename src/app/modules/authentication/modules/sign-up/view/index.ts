@@ -81,7 +81,7 @@ export default class SignUpPage {
 		toObservable(this._apiSignUp.data)
 			.pipe(takeUntilDestroyed(this._destroyRef))
 			.subscribe((value) => {
-				if (!value) return;
+				if (value !== true) return;
 				this._dialogRef.closeDialog();
 				this._router.navigate(['authentication/sign-in']);
 			});
