@@ -23,7 +23,7 @@ export default class ForgotPasswordPage {
 	private readonly _formBuilder = inject(FormBuilder);
 
 	protected readonly _loader = this._apiForgotPassword.loader;
-	protected readonly _wasSended = this._apiForgotPassword.wasSended;
+	protected readonly _wasSent = this._apiForgotPassword.wasSent;
 	protected readonly _email = this._formBuilder.control('', [Validators.required, Validators.email]);
 
 	protected readonly _form = this._formBuilder.group({
@@ -31,14 +31,14 @@ export default class ForgotPasswordPage {
 	});
 
 	constructor() {
-		this._syncForgotPassword();
+		this._syncWasSent();
 	}
 
-	private _syncForgotPassword(): void {
-		toObservable(this._wasSended)
+	private _syncWasSent(): void {
+		toObservable(this._wasSent)
 			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
-			.subscribe((value) => {
-				if (value !== true) return;
+			.subscribe((wasSent) => {
+				if (wasSent !== true) return;
 				this._router.navigate(['authentication/sign-in']);
 			});
 	}

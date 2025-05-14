@@ -10,4 +10,9 @@ export const routes: Routes = [
 		path: 'authentication',
 		loadChildren: () => import('@authentication/router').then((m) => m.authRoutes),
 	},
+	{
+		path: '**',
+		redirectTo: 'authentication',
+		pathMatch: 'full',
+	},
 ];

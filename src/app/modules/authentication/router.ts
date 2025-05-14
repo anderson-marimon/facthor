@@ -1,4 +1,5 @@
 import type { Routes } from '@angular/router';
+import { changePasswordToken } from '@authentication/guards/change-password-token';
 
 export const authRoutes: Routes = [
 	{
@@ -21,6 +22,11 @@ export const authRoutes: Routes = [
 			{
 				path: 'forgot-password',
 				loadComponent: () => import('./modules/forgot-password/view').then((m) => m.default),
+			},
+			{
+				path: 'change-password',
+				canActivate: [changePasswordToken],
+				loadComponent: () => import('./modules/change-password/view').then((m) => m.default),
 			},
 		],
 	},

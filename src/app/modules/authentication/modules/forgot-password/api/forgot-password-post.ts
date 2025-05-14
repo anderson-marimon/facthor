@@ -8,7 +8,7 @@ export class ApiForgotPasswordPost {
 	private readonly _resource = resource({ request: this._forgotPasswordForm, loader: (body) => this._forgotPassword(body) });
 
 	public readonly loader = this._resource.isLoading;
-	public readonly wasSended = this._resource.value;
+	public readonly wasSent = this._resource.value;
 
 	private async _forgotPassword(body: ResourceLoaderParams<Record<string, string>>): Promise<boolean> {
 		if (Object.keys(this._forgotPasswordForm()).length === 0) return false;
