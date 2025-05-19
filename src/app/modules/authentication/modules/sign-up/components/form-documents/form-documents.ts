@@ -1,7 +1,7 @@
 import { afterNextRender, Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiFormGetBanks } from '@authentication/modules/sign-up/api/form-get-banks';
+import { ApiGetFormBanks } from '@authentication/modules/sign-up/api/form-get-banks';
 import { BANK_TYPE_OPTIONS } from '@authentication/modules/sign-up/common/bank-select-options';
 import { FormValidator } from '@authentication/services/form-validator';
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
@@ -18,7 +18,7 @@ type TFileControlKey = 'bankCertification' | 'rut' | 'chamberOfCommerce' | 'lega
 @Component({
 	selector: 'sign-up-documents-form',
 	templateUrl: 'form-documents.html',
-	viewProviders: [ApiFormGetBanks],
+	viewProviders: [ApiGetFormBanks],
 	imports: [FrsFieldModule, FrsFileInputModule, FrsInputModule, FrsSelectModule, ReactiveFormsModule],
 })
 export class SignUpDocumentsForm {
@@ -26,14 +26,14 @@ export class SignUpDocumentsForm {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _validator = inject(FormValidator);
-	private readonly _apiFormGetBanks = inject(ApiFormGetBanks);
+	private readonly _apiGetFormBanks = inject(ApiGetFormBanks);
 	private readonly _bankAc = signal<TSelectOption[]>([]);
 
 	public readonly formChange = output<boolean>();
 	public readonly selectedRole = input<string>('');
 
 	protected readonly _files = signal<Record<string, TFile[]>>({});
-	protected readonly _bankNameOptions = this._apiFormGetBanks.banks;
+	protected readonly _bankNameOptions = this._apiGetFormBanks.banks;
 	protected readonly _bankAccountTypeOptions = BANK_TYPE_OPTIONS;
 	protected readonly _disableBankAccountNumber = signal<boolean>(false);
 	protected readonly _bankName = this._formBuilder.control<TSelectOption[]>([], Validators.required);

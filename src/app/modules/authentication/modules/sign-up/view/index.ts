@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
-import { ApiSignUpPost } from '@authentication/modules/sign-up/api/sign-up-post';
+import { ApiPostSignUp } from '@authentication/modules/sign-up/api/sign-up-post';
 import { SignUpAccountForm } from '@authentication/modules/sign-up/components/form-account/form-account';
 import { SignUpBusinessForm } from '@authentication/modules/sign-up/components/form-business/form-business';
 import { SignUpDocumentsForm } from '@authentication/modules/sign-up/components/form-documents/form-documents';
@@ -17,7 +17,7 @@ import { distinctUntilChanged } from 'rxjs';
 	selector: 'authentication-sign-up-page',
 	templateUrl: 'index.html',
 	providers: [SignUpFormStore],
-	viewProviders: [ApiSignUpPost],
+	viewProviders: [ApiPostSignUp],
 	imports: [
 		FrsButtonModule,
 		RouterLink,
@@ -33,7 +33,7 @@ import { distinctUntilChanged } from 'rxjs';
 export default class SignUpPage {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _router = inject(Router);
-	private readonly _apiSignUp = inject(ApiSignUpPost);
+	private readonly _apiSignUp = inject(ApiPostSignUp);
 	private readonly _roleForm = viewChild.required<SignUpRoleForm>(SignUpRoleForm);
 	private readonly _businessForm = viewChild.required<SignUpBusinessForm>(SignUpBusinessForm);
 	private readonly _documentsForm = viewChild.required<SignUpDocumentsForm>(SignUpDocumentsForm);

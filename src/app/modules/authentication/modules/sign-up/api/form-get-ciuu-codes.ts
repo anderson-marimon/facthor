@@ -8,7 +8,7 @@ type TCiuuOption = {
 
 interface TApiCiuuCodes extends TApi<TCiuuOption[]> {}
 
-export class FormCiuuCodesApi {
+export class ApiGetFormCiuuCodes {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _ciuuResource = resource({ loader: () => this._fetchCiuuCodes() });
 

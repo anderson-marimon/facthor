@@ -2,9 +2,9 @@ import { afterNextRender, Component, DestroyRef, inject, signal } from '@angular
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiRenewUpdateFilesTokenPut } from '@authentication/modules/resend-documents/api/renew-update-files-token-put';
-import { ApiResendDocumentsPost } from '@authentication/modules/resend-documents/api/resend-documents-post';
-import { ApiVerifyUpdateFilesTokenGet } from '@authentication/modules/resend-documents/api/verify-update-files-token-get';
+import { ApiPutRenewUpdateFilesToken } from '@authentication/modules/resend-documents/api/renew-update-files-token-put';
+import { ApiPostResendDocuments } from '@authentication/modules/resend-documents/api/resend-documents-post';
+import { ApiGetVerifyUpdateFilesToken } from '@authentication/modules/resend-documents/api/verify-update-files-token-get';
 import { FormValidator } from '@authentication/services/form-validator';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
@@ -21,34 +21,34 @@ type TFileControlKey = 'bankCertification' | 'rut' | 'chamberOfCommerce' | 'lega
 @Component({
 	selector: 'authentication-change-password-page',
 	templateUrl: 'index.html',
-	viewProviders: [ApiGetFailedLegalDocumentsGet, ApiResendDocumentsPost, ApiRenewUpdateFilesTokenPut, ApiVerifyUpdateFilesTokenGet],
+	viewProviders: [ApiGetFailedLegalDocumentsGet, ApiPostResendDocuments, ApiPutRenewUpdateFilesToken, ApiGetVerifyUpdateFilesToken],
 	imports: [FacthorLogoAnimated, FrsFieldModule, FrsFileInputModule, FrsButtonModule, LoadingIcon, ReactiveFormsModule],
 })
 export default class ChangePasswordPage {
 	private readonly _router = inject(Router);
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _dialogRef = inject(FrsDialogRef);
-	private readonly _apiVerifyUpdateFilesToken = inject(ApiVerifyUpdateFilesTokenGet);
+	private readonly _apiGetVerifyUpdateFilesToken = inject(ApiGetVerifyUpdateFilesToken);
 	private readonly _apiGetFailedLegalDocuments = inject(ApiGetFailedLegalDocumentsGet);
-	private readonly _apiResendDocuments = inject(ApiResendDocumentsPost);
-	private readonly _apiRenewUpdateFilesToken = inject(ApiRenewUpdateFilesTokenPut);
+	private readonly _apiPutResendDocuments = inject(ApiPostResendDocuments);
+	private readonly _apiPutRenewUpdateFilesToken = inject(ApiPutRenewUpdateFilesToken);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _activatedRoute = inject(ActivatedRoute);
 	private readonly _validator = inject(FormValidator);
 	private readonly _token = signal<string>('');
 
 	protected readonly _initialLoader = signal(true);
-	protected readonly _isValidToken = this._apiVerifyUpdateFilesToken.isValidToken;
-	protected readonly _loaderVerifyToken = this._apiVerifyUpdateFilesToken.loader;
+	protected readonly _isValidToken = this._apiGetVerifyUpdateFilesToken.isValidToken;
+	protected readonly _loaderVerifyToken = this._apiGetVerifyUpdateFilesToken.loader;
 
 	protected readonly _failedDocuments = this._apiGetFailedLegalDocuments.failedDocuments;
 	protected readonly _loaderFailedDocuments = this._apiGetFailedLegalDocuments.loader;
 
-	protected readonly _wasRenewTokenSend = this._apiRenewUpdateFilesToken.wasSent;
-	protected readonly _loaderRenewToken = this._apiRenewUpdateFilesToken.loader;
+	protected readonly _wasRenewTokenSend = this._apiPutRenewUpdateFilesToken.wasSent;
+	protected readonly _loaderRenewToken = this._apiPutRenewUpdateFilesToken.loader;
 
-	protected readonly _loader = this._apiResendDocuments.loader;
-	protected readonly _wasDocumentsSent = this._apiResendDocuments.wasSent;
+	protected readonly _loader = this._apiPutResendDocuments.loader;
+	protected readonly _wasDocumentsSent = this._apiPutResendDocuments.wasSent;
 
 	protected readonly _files = signal<Record<string, TFile[]>>({});
 	protected readonly _fileControls: Record<TFileControlKey, FormControl<Nullable<TFile[]>>> = {
@@ -76,7 +76,7 @@ export default class ChangePasswordPage {
 	}
 
 	private _verifyToken(): void {
-		this._apiVerifyUpdateFilesToken.verifyUpdateFileToken(this._token());
+		this._apiGetVerifyUpdateFilesToken.verifyUpdateFileToken(this._token());
 		this._initialLoader.set(false);
 	}
 
@@ -150,7 +150,7 @@ export default class ChangePasswordPage {
 				actionButtonText: 'Renovar',
 				loading: this._loaderRenewToken,
 				action: () => {
-					this._apiRenewUpdateFilesToken.renewUpdateFileToken(this._token());
+					this._apiPutRenewUpdateFilesToken.renewUpdateFileToken(this._token());
 				},
 			});
 			return;
@@ -169,7 +169,7 @@ export default class ChangePasswordPage {
 			return;
 		}
 
-		this._apiResendDocuments.resendDocuments({
+		this._apiPutResendDocuments.resendDocuments({
 			token: this._token(),
 			documents: Object.values(this._files()),
 		});

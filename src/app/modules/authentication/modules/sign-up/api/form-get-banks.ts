@@ -8,7 +8,7 @@ type TBankOption = {
 
 interface TApiBanks extends TApi<TBankOption[]> {}
 
-export class ApiFormGetBanks {
+export class ApiGetFormBanks {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _apiResource = resource({ loader: () => this._fetchBanks() });
 
@@ -26,7 +26,7 @@ export class ApiFormGetBanks {
 
 			const result: TApiBanks = await response.json();
 			return result.data ?? [];
-		} catch (e) {
+		} catch {
 			return [];
 		}
 	}

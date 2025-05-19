@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ApiSignUpPost } from '@authentication/modules/sign-up/api/sign-up-post';
+import { ApiPostSignUp } from '@authentication/modules/sign-up/api/sign-up-post';
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
@@ -16,7 +16,7 @@ type TRecord = Record<string, any>;
 })
 export class SignUpFormSummary {
 	private readonly _destroyRef = inject(DestroyRef);
-	private readonly _formPostRegisterApi = inject(ApiSignUpPost);
+	private readonly _apiPostSignUp = inject(ApiPostSignUp);
 	private readonly _signUpFormStore = inject(SignUpFormStore);
 	private readonly _dialogRef = inject(FrsDialogRef);
 
@@ -26,7 +26,7 @@ export class SignUpFormSummary {
 	protected _accountForm: TRecord = {};
 	protected _showPassword = signal(false);
 
-	public readonly loading = this._formPostRegisterApi.loading;
+	public readonly loading = this._apiPostSignUp.loading;
 
 	constructor() {
 		this._signUpFormStore
@@ -55,7 +55,7 @@ export class SignUpFormSummary {
 	}
 
 	public sendForm(): void {
-		this._formPostRegisterApi.signUp({
+		this._apiPostSignUp.signUp({
 			role: this._roleForm,
 			business: this._businessForm,
 			documents: this._documentsForm,

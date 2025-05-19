@@ -2,7 +2,7 @@ import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
 import { toast } from 'ngx-sonner';
 
-export class ApiRenewUpdateFilesTokenPut {
+export class ApiPutRenewUpdateFilesToken {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _token = signal('');
 	private readonly _resource = resource({ request: this._token, loader: (token) => this._renewUpdateFilesToken(token) });

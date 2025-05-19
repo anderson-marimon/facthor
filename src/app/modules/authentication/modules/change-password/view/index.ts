@@ -1,8 +1,8 @@
-import { afterNextRender, Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiChangePasswordPost } from '@authentication/modules/change-password/api/change-password-post';
+import { ApiPostChangePassword } from '@authentication/modules/change-password/api/change-password-post';
 import { FormValidator } from '@authentication/services/form-validator';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
@@ -14,21 +14,21 @@ import { distinctUntilChanged } from 'rxjs';
 @Component({
 	selector: 'authentication-change-password-page',
 	templateUrl: 'index.html',
-	viewProviders: [ApiChangePasswordPost],
+	viewProviders: [ApiPostChangePassword],
 	imports: [FacthorLogo, FrsFieldModule, FrsInputModule, FrsButtonModule, LoadingIcon, ReactiveFormsModule],
 })
 export default class ChangePasswordPage {
 	private readonly _router = inject(Router);
 	private readonly _destroyRef = inject(DestroyRef);
-	private readonly _apiChangePassword = inject(ApiChangePasswordPost);
+	private readonly _apiPostChangePassword = inject(ApiPostChangePassword);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _validator = inject(FormValidator);
 	private readonly _activatedRoute = inject(ActivatedRoute);
 	private readonly _password = signal('');
 	private readonly _token = signal<string>('');
 
-	protected readonly _loader = this._apiChangePassword.loader;
-	protected readonly _wasSent = this._apiChangePassword.wasSent;
+	protected readonly _loader = this._apiPostChangePassword.loader;
+	protected readonly _wasSent = this._apiPostChangePassword.wasSent;
 	protected readonly _newPassword = this._formBuilder.control('', [Validators.required, this._validator.password()]);
 	protected readonly _confirmNewPassword = this._formBuilder.control('', [Validators.required, this._validator.confirmPassword(this._password)]);
 
@@ -69,7 +69,7 @@ export default class ChangePasswordPage {
 		const form = this._form;
 		if (form.invalid) return form.markAllAsTouched();
 
-		this._apiChangePassword.changePassword({
+		this._apiPostChangePassword.changePassword({
 			newPassword: form.value.newPassword!,
 			token: this._token(),
 		});

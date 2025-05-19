@@ -1,7 +1,7 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
 
-export class ApiVerifyUpdateFilesTokenGet {
+export class ApiGetVerifyUpdateFilesToken {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _token = signal('');
 	private readonly _resource = resource({ request: this._token, loader: (token) => this._verifyUpdateFilesToken(token) });
@@ -33,7 +33,7 @@ export class ApiVerifyUpdateFilesTokenGet {
 			}
 
 			return ok;
-		} catch (err) {
+		} catch {
 			return false;
 		}
 	}

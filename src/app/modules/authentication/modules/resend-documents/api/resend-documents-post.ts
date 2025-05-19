@@ -3,7 +3,7 @@ import { envs } from '@app/envs/envs';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
 import { toast } from 'ngx-sonner';
 
-export class ApiResendDocumentsPost {
+export class ApiPostResendDocuments {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _resendDocumentsForm = signal<Record<string, any>>({});
 	private readonly _resource = resource({ request: this._resendDocumentsForm, loader: (body) => this._resendDocuments(body) });

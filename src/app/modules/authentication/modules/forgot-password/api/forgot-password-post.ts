@@ -2,7 +2,7 @@ import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
 import { toast } from 'ngx-sonner';
 
-export class ApiForgotPasswordPost {
+export class ApiPostForgotPassword {
 	private readonly _url = `${envs.FT_URL_LOGIN}${envs.FT_URN}`;
 	private readonly _forgotPasswordForm = signal<Record<string, string>>({});
 	private readonly _resource = resource({ request: this._forgotPasswordForm, loader: (body) => this._forgotPassword(body) });

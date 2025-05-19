@@ -8,7 +8,7 @@ type TCityOption = {
 
 interface TApiCities extends TApi<TCityOption[]> {}
 
-export class FormCitiesApi {
+export class ApiGetFormCities {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _businessDepartmentId = signal(0);
 	private readonly _legalRepresentativeBirthDepartmentId = signal(0);

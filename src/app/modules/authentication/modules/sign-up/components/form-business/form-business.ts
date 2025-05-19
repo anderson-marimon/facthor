@@ -1,9 +1,9 @@
 import { afterNextRender, Component, DestroyRef, inject, output, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormCitiesApi } from '@authentication/modules/sign-up/api/form-get-cities';
-import { FormCiuuCodesApi } from '@authentication/modules/sign-up/api/form-get-ciuu-codes';
-import { FormDepartmentApi } from '@authentication/modules/sign-up/api/form-get-departments';
+import { ApiGetFormCities } from '@authentication/modules/sign-up/api/form-get-cities';
+import { ApiGetFormCiuuCodes } from '@authentication/modules/sign-up/api/form-get-ciuu-codes';
+import { ApiGetFormDepartment } from '@authentication/modules/sign-up/api/form-get-departments';
 import { ADDRESS_STREETS } from '@authentication/modules/sign-up/common/address-streets';
 import { FormValidator } from '@authentication/services/form-validator';
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
@@ -20,7 +20,7 @@ import { debounceTime, distinctUntilChanged, take } from 'rxjs';
 @Component({
 	selector: 'sign-up-business-form',
 	templateUrl: 'form-business.html',
-	viewProviders: [FormCitiesApi, FormCiuuCodesApi, FormDepartmentApi],
+	viewProviders: [ApiGetFormCities, ApiGetFormCiuuCodes, ApiGetFormDepartment],
 	imports: [FrsButtonModule, FrsComboboxModule, FrsDatePickerModule, FrsFieldModule, FrsInputModule, FrsSelectModule, ReactiveFormsModule],
 })
 export class SignUpBusinessForm {
@@ -28,20 +28,20 @@ export class SignUpBusinessForm {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _validator = inject(FormValidator);
-	private readonly _formDepartmentApi = inject(FormDepartmentApi);
-	private readonly _formCiuuCodesApi = inject(FormCiuuCodesApi);
-	private readonly _formCitiesApi = inject(FormCitiesApi);
+	private readonly _apiGetFormDepartment = inject(ApiGetFormDepartment);
+	private readonly _apiGetFormCiuuCodes = inject(ApiGetFormCiuuCodes);
+	private readonly _apiGetFormCities = inject(ApiGetFormCities);
 	private readonly _birthDate = signal<Date | null>(null);
 
 	public readonly formChange = output<boolean>();
 
 	// Inputs data
 	protected readonly _addressStreetsOptions = ADDRESS_STREETS;
-	protected readonly _departmentsOptions = this._formDepartmentApi.departments;
-	protected readonly _businessCitiesOptions = this._formCitiesApi.businessCities;
-	protected readonly _economicActivitiesOptions = this._formCiuuCodesApi.ciuuCodes;
-	protected readonly _legalRepresentativeBirthCitiesOptions = this._formCitiesApi.legalRepresentativeBirthCities;
-	protected readonly _legaRepresentativeExpeditionCitiesOptions = this._formCitiesApi.legalRepresentativeExpeditionCities;
+	protected readonly _departmentsOptions = this._apiGetFormDepartment.departments;
+	protected readonly _businessCitiesOptions = this._apiGetFormCities.businessCities;
+	protected readonly _economicActivitiesOptions = this._apiGetFormCiuuCodes.ciuuCodes;
+	protected readonly _legalRepresentativeBirthCitiesOptions = this._apiGetFormCities.legalRepresentativeBirthCities;
+	protected readonly _legaRepresentativeExpeditionCitiesOptions = this._apiGetFormCities.legalRepresentativeExpeditionCities;
 
 	// Disable controls
 	protected readonly _disabled = signal(true);
@@ -176,21 +176,21 @@ export class SignUpBusinessForm {
 		setupDepartmentSync(
 			this._businessDepartment,
 			this._businessCity,
-			this._formCitiesApi.updateBusinessDepartment.bind(this._formCitiesApi),
+			this._apiGetFormCities.updateBusinessDepartment.bind(this._apiGetFormCities),
 			this._businessCityDisabled
 		);
 
 		setupDepartmentSync(
 			this._legalRepresentativeBirthDepartment,
 			this._legalRepresentativeBirthCity,
-			this._formCitiesApi.updateLegalRepresentativeBirthDepartment.bind(this._formCitiesApi),
+			this._apiGetFormCities.updateLegalRepresentativeBirthDepartment.bind(this._apiGetFormCities),
 			this._legalRepresentativeBirthCityDisabled
 		);
 
 		setupDepartmentSync(
 			this._legalRepresentativeExpeditionDepartment,
 			this._legalRepresentativeExpeditionCity,
-			this._formCitiesApi.updateLegalRepresentativeExpeditionDepartment.bind(this._formCitiesApi),
+			this._apiGetFormCities.updateLegalRepresentativeExpeditionDepartment.bind(this._apiGetFormCities),
 			this._legalRepresentativeExpeditionCityDisabled
 		);
 	}

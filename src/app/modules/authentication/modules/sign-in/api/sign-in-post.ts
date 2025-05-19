@@ -10,7 +10,7 @@ type SingIn = Nullable<{
 	username: string;
 }>;
 
-export class ApiSignInPost {
+export class ApiPostSignIn {
 	private readonly _url = `${envs.FT_URL_LOGIN}${envs.FT_URN}`;
 	private readonly _signInForm = signal<Record<string, string>>({});
 	private readonly _resource = resource({ request: this._signInForm, loader: (body) => this._signIn(body) });

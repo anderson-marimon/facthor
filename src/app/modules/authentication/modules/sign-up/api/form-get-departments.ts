@@ -8,7 +8,7 @@ type TDepartmentOption = {
 
 interface TApiDepartment extends TApi<TDepartmentOption[]> {}
 
-export class FormDepartmentApi {
+export class ApiGetFormDepartment {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _countryId = signal(82);
 

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ApiSignInPost } from '@authentication/modules/sign-in/api/sign-in-post';
+import { ApiPostSignIn } from '@authentication/modules/sign-in/api/sign-in-post';
 import { FormValidator } from '@authentication/services/form-validator';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
@@ -12,15 +12,15 @@ import { FacthorLogo } from '@shared/logos/facthor-logo/facthor-logo';
 @Component({
 	selector: 'authentication-sign-in-page',
 	templateUrl: 'index.html',
-	viewProviders: [ApiSignInPost],
+	viewProviders: [ApiPostSignIn],
 	imports: [FacthorLogo, FrsFieldModule, FrsInputModule, FrsButtonModule, LoadingIcon, ReactiveFormsModule, RouterLink],
 })
 export default class SignInPage {
-	private readonly _apiSingIn = inject(ApiSignInPost);
+	private readonly _apiPostSingIn = inject(ApiPostSignIn);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _validator = inject(FormValidator);
 
-	protected readonly _loader = this._apiSingIn.loader;
+	protected readonly _loader = this._apiPostSingIn.loader;
 	protected readonly _username = this._formBuilder.control('', [Validators.required, this._validator.dni()]);
 	protected readonly _password = this._formBuilder.control('', [Validators.required]);
 
@@ -35,7 +35,7 @@ export default class SignInPage {
 		const form = this._form;
 		if (form.invalid) return form.markAllAsTouched();
 
-		this._apiSingIn.signIn({
+		this._apiPostSingIn.signIn({
 			username: form.value.username!,
 			password: form.value.password!,
 		});

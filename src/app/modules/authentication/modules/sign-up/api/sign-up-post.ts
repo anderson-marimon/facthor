@@ -2,7 +2,7 @@ import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
 import { toast } from 'ngx-sonner';
 
-export class ApiSignUpPost {
+export class ApiPostSignUp {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _signUpForm = signal<Record<string, any>>({});
 	private readonly _resource = resource({ request: this._signUpForm, loader: (body) => this._signUp(body) });
@@ -38,9 +38,10 @@ export class ApiSignUpPost {
 
 			return result.data;
 		} catch (err) {
-			console.log(err);
+			const error = err instanceof Error ? err : new Error(String(err));
+
 			toast.message('Registro fallido', {
-				description: 'Por favor, intenta nuevamente.',
+				description: error.message || 'Por favor, intenta nuevamente.',
 			});
 			return false;
 		}
