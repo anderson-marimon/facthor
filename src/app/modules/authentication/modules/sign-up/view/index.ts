@@ -83,7 +83,7 @@ export default class SignUpPage {
 			.subscribe((value) => {
 				if (value !== true) return;
 				this._dialogRef.closeDialog();
-				this._router.navigate(['authentication/sign-in']);
+				this._router.navigate(['authentication/sign-in'], { replaceUrl: true });
 			});
 	}
 

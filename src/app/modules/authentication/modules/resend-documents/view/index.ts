@@ -99,7 +99,7 @@ export default class ChangePasswordPage {
 			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
 			.subscribe(([wasDocumentSent, wasRenewSent]) => {
 				if (wasDocumentSent === true || wasRenewSent === true) {
-					this._router.navigate(['authentication/sign-in']);
+					this._router.navigate(['authentication/sign-in'], { replaceUrl: true });
 					this._dialogRef.closeDialog();
 				}
 			});

@@ -25,7 +25,7 @@ export class ApiPostForgotPassword {
 				body: JSON.stringify(body.request),
 			});
 
-			const { ok, data, message }: TApi<boolean> = await response.json();
+			const { ok, message }: TApi<boolean> = await response.json();
 
 			if (!ok) {
 				throw new Error(message);
@@ -35,7 +35,7 @@ export class ApiPostForgotPassword {
 				description: 'Por favor, revisar la bandeja de spam.',
 			});
 
-			return data;
+			return ok;
 		} catch (err) {
 			const error = err instanceof Error ? err : new Error(String(err));
 

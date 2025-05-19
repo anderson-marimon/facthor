@@ -55,10 +55,11 @@ export class ApiGetFormCities {
 				signal: params.abortSignal,
 			});
 
-			if (!response.ok) throw new Error('error al cargar los departamentos');
+			const { ok, data }: TApiCities = await response.json();
 
-			const result: TApiCities = await response.json();
-			return result.data ?? [];
+			if (!ok) throw new Error('Error al cargar los departamentos');
+
+			return data ?? [];
 		} catch {
 			return [];
 		}

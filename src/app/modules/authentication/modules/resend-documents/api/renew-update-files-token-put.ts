@@ -24,7 +24,7 @@ export class ApiPutRenewUpdateFilesToken {
 				},
 				signal: token.abortSignal,
 			});
-			const { ok, data, message }: TApi<boolean> = await response.json();
+			const { ok, message }: TApi<boolean> = await response.json();
 
 			if (!ok) {
 				throw new Error(message);
@@ -34,7 +34,7 @@ export class ApiPutRenewUpdateFilesToken {
 				description: 'Correo enviado, por favor revisar la bandeja de spam.',
 			});
 
-			return data;
+			return ok;
 		} catch (err) {
 			const error = err instanceof Error ? err : new Error(String(err));
 

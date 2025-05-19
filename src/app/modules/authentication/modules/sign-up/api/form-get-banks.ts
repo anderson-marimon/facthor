@@ -22,10 +22,11 @@ export class ApiGetFormBanks {
 		try {
 			const response = await fetch(path, { method: 'GET' });
 
-			if (!response.ok) throw new Error('Error al cargar los bancos');
+			const { ok, data }: TApiBanks = await response.json();
 
-			const result: TApiBanks = await response.json();
-			return result.data ?? [];
+			if (!ok) throw new Error('Error al cargar los departamentos');
+
+			return data ?? [];
 		} catch {
 			return [];
 		}

@@ -9,10 +9,92 @@ import { verificationNumberCalculator } from '@shared/utils/verification-number-
 	providedIn: 'root',
 })
 export class FormValidator {
-	public name(optional = false): ValidatorFn {
+	public text(optional = false): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors | null => {
 			const { value = '' } = control;
-			const regex = /^(?!.*[&.]$)(?!^[&.])[A-Za-zÁáÉéÍíÓóÚúÜüÑñ' &.]+$/;
+			const regex = /^[a-zA-ZñÑ]+( [a-zA-ZñÑ]+)?( [a-zA-ZñÑ]+)?$/;
+
+			if (optional && value === '') return null;
+
+			if (!regex.test(value) || value.startsWith(' ') || value.endsWith(' ')) return { invalidName: true };
+			return null;
+		};
+	}
+
+	public firstName(optional = false): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const value = control.value;
+
+			if (optional && value === '') return null;
+
+			if (value == null || value.trim() === '') {
+				return { invalidName: true };
+			}
+
+			if (value.length > 60) {
+				return { invalidName: true };
+			}
+
+			const regex = /^[a-zA-Z]+( [a-zA-Z]+)?$/;
+			if (!regex.test(value)) {
+				return { invalidName: true };
+			}
+
+			return null;
+		};
+	}
+
+	public lastName(): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const value = control.value;
+
+			if (value == null || value.trim() === '') {
+				return { invalidLegalRepFirstSurname: true };
+			}
+
+			if (value.length > 60) {
+				return { invalidLegalRepFirstSurname: true };
+			}
+
+			const regex = /^[a-zA-ZñÑ]+( [a-zA-ZñÑ]+)?( [a-zA-ZñÑ]+)?$/;
+			if (!regex.test(value)) {
+				return { invalidLegalRepFirstSurname: true };
+			}
+
+			return null;
+		};
+	}
+
+	public businessLegalName(optional = false): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const { value = '' } = control;
+
+			const basicRegex = /^[a-zA-Z0-9ñÑ.&]+( [a-zA-Z0-9ñÑ.&]+)*$/;
+			const complexRegex =
+				/^[a-zA-Z0-9ñÑ]+( [a-zA-Z0-9ñÑ]+)*( & [a-zA-Z0-9ñÑ]+( [a-zA-Z0-9ñÑ]+)*)*( [a-zA-Z0-9ñÑ]+\.[a-zA-Z0-9ñÑ]+(?:\.[a-zA-Z0-9ñÑ]+)*\.?)?$/;
+
+			if (optional && value === '') return null;
+
+			if (!basicRegex.test(value)) {
+				return { invalidName: true };
+			}
+
+			if (!complexRegex.test(value)) {
+				return { invalidName: true };
+			}
+
+			if (value.startsWith(' ') || value.endsWith(' ')) {
+				return { invalidName: true };
+			}
+
+			return null;
+		};
+	}
+
+	public businessTradeName(optional = false): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const { value = '' } = control;
+			const regex = /^[a-zA-Z0-9ñÑ]+( [a-zA-Z0-9ñÑ]+)*( & [a-zA-Z0-9ñÑ]+( [a-zA-Z0-9ñÑ]+)*)*$/;
 
 			if (optional && value === '') return null;
 
@@ -60,6 +142,16 @@ export class FormValidator {
 			if (!regex.test(value)) return { invalidDni: true };
 			if (value.length < 7 || value.length > 10) return { invalidDniMinMax: true };
 
+			return null;
+		};
+	}
+
+	public email(): ValidatorFn {
+		return (control: AbstractControl): ValidationErrors | null => {
+			const { value = '' } = control;
+			const regex = /^[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}$/;
+
+			if (!regex.test(value) || value.startsWith(' ') || value.endsWith(' ')) return { email: true };
 			return null;
 		};
 	}

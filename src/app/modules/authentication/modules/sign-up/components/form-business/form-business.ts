@@ -51,8 +51,8 @@ export class SignUpBusinessForm {
 
 	// Business controls
 	protected readonly _businessPersonType = this._formBuilder.control('');
-	protected readonly _businessName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
-	protected readonly _businessTradeName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
+	protected readonly _businessName = this._formBuilder.control('', [Validators.required, this._validator.businessLegalName()]);
+	protected readonly _businessTradeName = this._formBuilder.control('', [Validators.required, this._validator.businessTradeName()]);
 	protected readonly _businessNit = this._formBuilder.control('', [Validators.required, this._validator.nit()]);
 	protected readonly _businessEconomicActivity = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
 	protected readonly _businessCountry = this._formBuilder.control('');
@@ -63,17 +63,17 @@ export class SignUpBusinessForm {
 	protected readonly _businessAddressStreetSecondaryNumber = this._formBuilder.control('', [Validators.required]);
 	protected readonly _businessAddressStreetBuildNumber = this._formBuilder.control('', [Validators.required]);
 	// protected readonly _businessAddressStreetComplement = this._formBuilder.control('');
-	protected readonly _businessEmail = this._formBuilder.control('', [Validators.required, Validators.email]);
+	protected readonly _businessEmail = this._formBuilder.control('', [Validators.required, this._validator.email()]);
 	protected readonly _businessPrefix = this._formBuilder.control('', [Validators.required]);
 	protected readonly _businessPhoneNumber = this._formBuilder.control('', [Validators.required, this._validator.phoneNumber()]);
 
 	// Legal representative controls
-	protected readonly _legalRepresentativeName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
-	protected readonly _legalRepresentativeSurName = this._formBuilder.control('', [this._validator.name(true)]);
-	protected readonly _legalRepresentativeLastName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
-	protected readonly _legalRepresentativeSurLastName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
-	protected readonly _legalRepresentativeCharge = this._formBuilder.control('', [Validators.required, this._validator.name()]);
-	protected readonly _legalRepresentativeArea = this._formBuilder.control('', [Validators.required, this._validator.name()]);
+	protected readonly _legalRepresentativeName = this._formBuilder.control('', [Validators.required, this._validator.firstName()]);
+	protected readonly _legalRepresentativeSurName = this._formBuilder.control('', [this._validator.firstName(true)]);
+	protected readonly _legalRepresentativeLastName = this._formBuilder.control('', [Validators.required, this._validator.lastName()]);
+	protected readonly _legalRepresentativeSurLastName = this._formBuilder.control('', [Validators.required, this._validator.lastName()]);
+	protected readonly _legalRepresentativeCharge = this._formBuilder.control('', [Validators.required, this._validator.text()]);
+	protected readonly _legalRepresentativeArea = this._formBuilder.control('', [Validators.required, this._validator.text()]);
 	protected readonly _legalRepresentativeDocumentNumber = this._formBuilder.control('', [Validators.required, this._validator.dni()]);
 	protected readonly _legalRepresentativeBirthdate = this._formBuilder.control<TCalendarDate>(null, [
 		Validators.required,
@@ -90,7 +90,7 @@ export class SignUpBusinessForm {
 	protected readonly _legalRepresentativeExpeditionCountry = this._formBuilder.control('', [Validators.required]);
 	protected readonly _legalRepresentativeExpeditionDepartment = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
 	protected readonly _legalRepresentativeExpeditionCity = this._formBuilder.control<TSelectOption[]>([], [Validators.required]);
-	protected readonly _legalRepresentativeEmail = this._formBuilder.control('', [Validators.required, Validators.email]);
+	protected readonly _legalRepresentativeEmail = this._formBuilder.control('', [Validators.required, this._validator.email()]);
 	protected readonly _legalRepresentativePrefix = this._formBuilder.control('', [Validators.required]);
 	protected readonly _legalRepresentativePhoneNumber = this._formBuilder.control('', [Validators.required, this._validator.phoneNumber()]);
 

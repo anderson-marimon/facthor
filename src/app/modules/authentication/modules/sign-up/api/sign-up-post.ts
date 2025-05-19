@@ -26,22 +26,22 @@ export class ApiPostSignUp {
 				signal: body.abortSignal,
 			});
 
-			if (!response.ok) {
-				throw new Error('error al enviar el formulario de registro, por favor intente nuevamente');
-			}
+			const { ok, message }: TApi<boolean> = await response.json();
 
-			const result: TApi<boolean> = await response.json();
+			if (!ok) {
+				throw new Error(message);
+			}
 
 			toast.message('Registro exitoso', {
 				description: 'Recibirás un correo de confirmación.',
 			});
 
-			return result.data;
+			return ok;
 		} catch (err) {
 			const error = err instanceof Error ? err : new Error(String(err));
 
 			toast.message('Registro fallido', {
-				description: error.message || 'Por favor, intenta nuevamente.',
+				description: error.message || 'error al enviar el formulario de registro, por favor intente nuevamente',
 			});
 			return false;
 		}

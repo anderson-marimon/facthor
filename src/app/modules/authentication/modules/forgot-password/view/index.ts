@@ -39,7 +39,7 @@ export default class ForgotPasswordPage {
 			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
 			.subscribe((wasSent) => {
 				if (wasSent !== true) return;
-				this._router.navigate(['authentication/sign-in']);
+				this._router.navigate(['authentication/sign-in'], { replaceUrl: true });
 			});
 	}
 

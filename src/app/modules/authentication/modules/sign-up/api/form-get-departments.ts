@@ -35,10 +35,11 @@ export class ApiGetFormDepartment {
 				signal: params.abortSignal,
 			});
 
-			if (!response.ok) throw new Error('Error al cargar los departamentos');
+			const { ok, data }: TApiDepartment = await response.json();
 
-			const result: TApiDepartment = await response.json();
-			return result.data ?? [];
+			if (!ok) throw new Error('Error al cargar los departamentos');
+
+			return data ?? [];
 		} catch {
 			return [];
 		}

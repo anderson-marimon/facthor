@@ -27,7 +27,7 @@ export class ApiPostChangePassword {
 				body: JSON.stringify(body),
 			});
 
-			const { ok, data, message }: TApi<boolean> = await response.json();
+			const { ok, message }: TApi<boolean> = await response.json();
 
 			if (!ok) {
 				throw new Error(message);
@@ -37,7 +37,7 @@ export class ApiPostChangePassword {
 				description: 'Operación exitosa, contraseña actualizada.',
 			});
 
-			return data;
+			return ok;
 		} catch (err) {
 			const error = err instanceof Error ? err : new Error(String(err));
 

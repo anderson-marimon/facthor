@@ -28,7 +28,7 @@ export class ApiPostResendDocuments {
 				body: JSON.stringify(body),
 			});
 
-			const { ok, data, message }: TApi<boolean> = await response.json();
+			const { ok, message }: TApi<boolean> = await response.json();
 
 			if (!ok) {
 				throw new Error(message);

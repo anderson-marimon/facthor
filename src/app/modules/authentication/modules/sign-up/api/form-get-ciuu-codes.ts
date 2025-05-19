@@ -22,10 +22,11 @@ export class ApiGetFormCiuuCodes {
 		try {
 			const response = await fetch(url, { method: 'GET' });
 
-			if (!response.ok) throw new Error('Error al cargar los códigos CIUU');
+			const { ok, data }: TApiCiuuCodes = await response.json();
 
-			const result: TApiCiuuCodes = await response.json();
-			return result.data ?? [];
+			if (!ok) throw new Error('Error al cargar los departamentos');
+
+			return data ?? [];
 		} catch {
 			return [];
 		}

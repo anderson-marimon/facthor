@@ -22,12 +22,12 @@ export class SignUpAccountForm {
 
 	public readonly formChange = output<boolean>();
 
-	protected readonly _firstName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
-	protected readonly _surName = this._formBuilder.control('', [this._validator.name(true)]);
-	protected readonly _lastName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
-	protected readonly _surLastName = this._formBuilder.control('', [Validators.required, this._validator.name()]);
+	protected readonly _firstName = this._formBuilder.control('', [Validators.required, this._validator.firstName()]);
+	protected readonly _surName = this._formBuilder.control('', [this._validator.firstName(true)]);
+	protected readonly _lastName = this._formBuilder.control('', [Validators.required, this._validator.lastName()]);
+	protected readonly _surLastName = this._formBuilder.control('', [Validators.required, this._validator.lastName()]);
 	protected readonly _dniNumber = this._formBuilder.control('', [Validators.required, this._validator.dni()]);
-	protected readonly _email = this._formBuilder.control('', [Validators.required, Validators.email]);
+	protected readonly _email = this._formBuilder.control('', [Validators.required, this._validator.email()]);
 	protected readonly _password = this._formBuilder.control('', [Validators.required, this._validator.password()]);
 	protected readonly _confirmPassword = this._formBuilder.control('', [Validators.required, this._validator.confirmPassword(this._passwordC)]);
 
