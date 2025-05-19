@@ -1,7 +1,7 @@
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { inject } from '@angular/core';
 
-export const changePasswordToken: CanActivateFn = (route): boolean | UrlTree => {
+export const queryToken: CanActivateFn = (route): boolean | UrlTree => {
 	const router: Router = inject(Router);
 	const { token } = route.queryParams as { token: string };
 

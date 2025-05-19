@@ -8,4 +8,5 @@ export const serverRoutes: ServerRoute[] = [
 	{ path: 'authentication/sign-up', renderMode: RenderMode.Server },
 	{ path: 'authentication/forgot-password', renderMode: RenderMode.Server },
 	{ path: 'authentication/change-password', renderMode: RenderMode.Server },
+	{ path: 'authentication/resend-documents', renderMode: RenderMode.Server },
 ];

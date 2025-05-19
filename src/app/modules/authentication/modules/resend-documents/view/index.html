@@ -1,0 +1,134 @@
+<form (ngSubmit)="_onClick()" [formGroup]="_form" class="h-full flex flex-col gap-5 animate-opacity-in">
+	<section>
+		<h1 class="text-2xl font-semibold">Documentación de la empresa</h1>
+		<p class="w-full lg:w-[60%] lx:w-[70%] text-foreground/60">
+			A continuación, ingrese los documentos pendientes por validación.<br />
+			Por favor, tenga en cuenta que estos serán revisados para su aprobación o rechazo, si no cumplen con los requisitos.
+		</p>
+	</section>
+	<section class="relative flex-1 overflow-hidden">
+		@if (_initialLoader() || _loaderVerifyToken() || _loaderFailedDocuments()) {
+			<div class="w-full h-full grid place-content-center select-none animate-opacity-in">
+				<div class="flex flex-col items-center justify-center gap-2.5">
+					<facthor-logo-animated [textColor]="'#041C2C'" class="w-16" />
+					<span class="font-light text-center text-foreground/60 animate-pulse">
+						@if (_isValidToken()) {
+							Obteniendo documentos..
+						} @else {
+							Verificando información...
+						}
+					</span>
+				</div>
+			</div>
+		}
+
+		@else if (!_isValidToken()) {
+			<div class="w-full h-full grid place-content-center animate-opacity-in">
+				<div class="flex flex-col items-center justify-center">
+					<h2 class="font-light text-foreground/60">La solicitud ha expirado.</h2>
+				</div>
+			</div>
+		}
+
+		@else {
+			<div class="grid place-content-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 animate-opacity-in">
+				@for (file of _failedDocuments(); track $index) {
+					@switch (file.id) {
+						@case (1) {
+							<frs-field [forceShowAsterisk]="true" label="Cámara de comercio">
+								<frs-file-input
+									#field
+									[fileId]="1"
+									[accept]="'application/pdf'"
+									[control]="_getFileControl('chamberOfCommerce')"
+									[currentFiles]="_files()['chamberOfCommerceFile'] || []"
+									(files)="_onUploadFile($event, 'chamberOfCommerce')"
+								/>
+							</frs-field>
+						}
+
+						@case (2) {
+							<frs-field [forceShowAsterisk]="true" label="RUT">
+								<frs-file-input
+									#field
+									[fileId]="2"
+									[accept]="'application/pdf'"
+									[control]="_getFileControl('rut')"
+									[currentFiles]="_files()['rutFile'] || []"
+									(files)="_onUploadFile($event, 'rut')"
+								/>
+							</frs-field>
+						}
+
+						@case (3) {
+							<frs-field [forceShowAsterisk]="true" label="Certificado bancario">
+								<frs-file-input
+									#field
+									[fileId]="3"
+									[accept]="'application/pdf'"
+									[control]="_getFileControl('bankCertification')"
+									[currentFiles]="_files()['bankCertificationFile'] || []"
+									(files)="_onUploadFile($event, 'bankCertification')"
+								/>
+							</frs-field>
+						}
+						
+						@case (4) {
+							<frs-field [forceShowAsterisk]="true" label="Documento de identidad del representante">
+								<frs-file-input
+									#field
+									[fileId]="4"
+									[accept]="'application/pdf'"
+									[control]="_getFileControl('legalRepresentativeDni')"
+									[currentFiles]="_files()['legalRepresentativeDniFile'] || []"
+									(files)="_onUploadFile($event, 'legalRepresentativeDni')"
+								/>
+							</frs-field>
+						}
+
+						@case (5) {
+							<frs-field [forceShowAsterisk]="true" label="Estados financieros">
+								<frs-file-input
+									#field
+									[fileId]="5"
+									[accept]="'application/pdf'"
+									[control]="_getFileControl('financialStatements')"
+									[currentFiles]="_files()['financialStatementsFile'] || []"
+									(files)="_onUploadFile($event, 'financialStatements')"
+								/>
+							</frs-field>
+						}
+					}
+				}
+			</div>
+		}
+	</section>
+
+	<section class="flex items-center justify-center md:justify-end">
+		@if(!_isValidToken()) {
+			<button
+				frs-button
+				type="button"
+				(click)="_onClickRefreshToken()"
+				[disabled]="(_initialLoader() || _loaderVerifyToken() || _loaderFailedDocuments())"
+				class="w-40 mt-2.5"
+				>
+				Renovar solicitud
+			</button>
+		} @else {
+			<button
+				frs-button
+				type="submit"
+				(click)="_onClickRefreshToken()"
+				[disabled]="_loader() || _form.invalid"
+				class="w-40 mt-2.5"
+			>
+				@if (_loader()) {
+					<loading-icon [color]="'#FFFFFF'" class="size-6" />
+				} @else {
+					Enviar documentos
+				}
+			</button>
+		}
+	</section>
+</form>

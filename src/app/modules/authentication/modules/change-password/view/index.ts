@@ -40,10 +40,7 @@ export default class ChangePasswordPage {
 	constructor() {
 		this._syncWasSent();
 		this._syncPasswordInput();
-
-		afterNextRender(() => {
-			this._getTokenFromQueryParams();
-		});
+		this._getTokenFromQueryParams();
 	}
 
 	private _syncPasswordInput(): void {

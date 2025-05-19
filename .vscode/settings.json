@@ -6,5 +6,6 @@
     },
     "cSpell.words": [
         "ciuu"
-    ]
+    ],
+    "postman.settings.dotenv-detection-notification-visibility": false
 }

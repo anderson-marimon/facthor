@@ -1,5 +1,5 @@
 import type { Routes } from '@angular/router';
-import { changePasswordToken } from '@authentication/guards/change-password-token';
+import { queryToken } from '@authentication/guards/query-token';
 
 export const authRoutes: Routes = [
 	{
@@ -25,8 +25,13 @@ export const authRoutes: Routes = [
 			},
 			{
 				path: 'change-password',
-				canActivate: [changePasswordToken],
+				canActivate: [queryToken],
 				loadComponent: () => import('./modules/change-password/view').then((m) => m.default),
+			},
+			{
+				path: 'resend-documents',
+				canActivate: [queryToken],
+				loadComponent: () => import('./modules/resend-documents/view').then((m) => m.default),
 			},
 		],
 	},

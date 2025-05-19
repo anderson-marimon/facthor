@@ -40,7 +40,6 @@ export class FrsAlertDialog {
 	public readonly closeDialog = input(() => {});
 
 	protected _closeDialog(): void {
-		if (this.data()?.loading()) return;
 		this.closeDialog()();
 	}
 

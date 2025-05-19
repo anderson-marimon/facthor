@@ -65,7 +65,7 @@
         },
         "serve": {
           "options": {
-            "port": 4100
+            "port": 4200
           },
           "builder": "@ngx-env/builder:dev-server",
           "configurations": {
