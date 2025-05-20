@@ -10,7 +10,7 @@ export class FacthorLogoAnimated implements AfterViewInit {
 
 	public readonly duration = input(1000);
 	public readonly withText = input(false);
-	public readonly textColor = input('#FFFFFF');
+	public readonly textColor = input('#041C2C');
 	public readonly shadowColor = input('#24A185');
 	public readonly color = input('#00CC87');
 
@@ -30,7 +30,7 @@ export class FacthorLogoAnimated implements AfterViewInit {
 
 		paths.forEach((path: SVGPathElement | SVGPolygonElement) => {
 			this.unDrawPath(path);
-			path.style.transition = `fill ${this.duration() * 0.3}ms ease-in-out`;
+			path.style.transition = `fill 250ms ease-in-out`;
 		});
 
 		paths.forEach((path: SVGPathElement | SVGPolygonElement, index: number) => {
@@ -48,7 +48,7 @@ export class FacthorLogoAnimated implements AfterViewInit {
 
 	private drawPath(path: SVGPathElement | SVGPolygonElement): Promise<void> {
 		if (typeof window === 'undefined') return new Promise(() => {});
-		
+
 		return new Promise((resolve) => {
 			if (!path.getAttribute('data-original-fill')) {
 				path.setAttribute('data-original-fill', path.getAttribute('fill') || 'currentColor');

@@ -19,7 +19,7 @@ import { ApiGetFailedLegalDocumentsGet, TFiledDocuments } from '../api/get-faile
 type TFileControlKey = 'bankCertification' | 'rut' | 'chamberOfCommerce' | 'legalRepresentativeDni' | 'financialStatements';
 
 @Component({
-	selector: 'authentication-change-password-page',
+	selector: 'authentication-resend-documents-page',
 	templateUrl: 'index.html',
 	viewProviders: [ApiGetFailedLegalDocumentsGet, ApiPostResendDocuments, ApiPutRenewUpdateFilesToken, ApiGetVerifyUpdateFilesToken],
 	imports: [FacthorLogoAnimated, FrsFieldModule, FrsFileInputModule, FrsButtonModule, LoadingIcon, ReactiveFormsModule],

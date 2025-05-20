@@ -56,11 +56,15 @@ module.exports = {
                 'opacity-in': {
                     '0%': { opacity: 0 },
                     '100%': { opacity: 1 }
+                },
+                'opacity-out': {
+                    '0%': { opacity: 1 },
+                    '100%': { opacity: 0 }
                 }
             },
             animation: {
                 'opacity-in': 'opacity-in 0.5s ease',
-                'rotate3dx': 'rotate3d(0, 1, 0, 360deg);'
+                'opacity-out': 'opacity-out 0.5s ease',
             }
         },
     },

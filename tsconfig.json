@@ -19,6 +19,9 @@
       "@authentication/*": [
         "./src/app/modules/authentication/*"
       ],
+      "@dashboard/*": [
+        "./src/app/modules/dashboard/*"
+      ],
       "@shared/*": [
         "./src/app/shared/*"
       ],

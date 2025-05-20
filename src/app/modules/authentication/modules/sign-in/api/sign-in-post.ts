@@ -16,6 +16,7 @@ export class ApiPostSignIn {
 	private readonly _resource = resource({ request: this._signInForm, loader: (body) => this._signIn(body) });
 
 	public readonly loader = this._resource.isLoading;
+	public readonly userData = this._resource.value;
 
 	private async _signIn(body: ResourceLoaderParams<Record<string, string>>): Promise<SingIn> {
 		if (Object.keys(this._signInForm()).length === 0) return null;
