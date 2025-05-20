@@ -3,6 +3,7 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiPostForgotPassword } from '@authentication/modules/forgot-password/api/forgot-password-post';
+import { FormValidator } from '@authentication/services/form-validator';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
 import { FrsInputModule } from '@fresco-ui/frs-input';
@@ -21,10 +22,11 @@ export default class ForgotPasswordPage {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _apiPutForgotPassword = inject(ApiPostForgotPassword);
 	private readonly _formBuilder = inject(FormBuilder);
+	private readonly _validator = inject(FormValidator);
 
 	protected readonly _loader = this._apiPutForgotPassword.loader;
 	protected readonly _wasSent = this._apiPutForgotPassword.wasSent;
-	protected readonly _email = this._formBuilder.control('', [Validators.required, Validators.email]);
+	protected readonly _email = this._formBuilder.control('', [Validators.required, this._validator.email()]);
 
 	protected readonly _form = this._formBuilder.group({
 		email: this._email,
