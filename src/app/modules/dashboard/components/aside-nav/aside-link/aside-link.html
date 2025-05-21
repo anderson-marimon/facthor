@@ -1,0 +1,25 @@
+<div (click)="_onClickOpenSubRoutes()" class="flex items-center gap-2 p-2.5 rounded-md hover:bg-secondary cursor-pointer select-none transition-colors">
+    <i-lucide
+        [img]="icon()"
+        [strokeWidth]="1.5"
+        [size]="18"
+        [class.-rotate-90]="!_openSubRoutes()"
+        class="mb-[2px] transition-transform duration-300"
+    />
+    <span
+        class="font-semibold text-foreground uppercase"
+    >{{ label() }}</span>
+</div>
+@if(_openSubRoutes()) {
+    <ul [@subRoutes] class="flex flex-col gap-2 overflow-hidden">
+        @for (subRoute of subRoutes(); track $index) {
+            <li>
+                <aside-sub-link
+                    [label]="subRoute.label"
+                    [href]="subRoute.href"
+                    [type]="subRoute.type"
+                />
+            </li>
+        }
+    </ul>    
+}

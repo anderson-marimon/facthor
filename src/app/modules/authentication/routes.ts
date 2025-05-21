@@ -1,10 +1,12 @@
 import type { Routes } from '@angular/router';
+import { alreadyStarted } from '@authentication/guards/already-started';
 import { queryToken } from '@authentication/guards/query-token';
 
 export const authRoutes: Routes = [
 	{
 		path: '',
 		loadComponent: () => import('@authentication/layout'),
+		canActivate: [alreadyStarted],
 		children: [
 			{
 				path: '',

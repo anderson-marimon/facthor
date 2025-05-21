@@ -6,7 +6,7 @@ import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor
 	selector: 'transition-view',
 	standalone: true,
 	imports: [FacthorLogoAnimated],
-	templateUrl: 'transition-view.html',
+	templateUrl: 'index.html',
 	animations: [
 		trigger('fade', [
 			transition(':enter', [style({ opacity: 0 }), animate('0ms ease-out', style({ opacity: 1 }))]),

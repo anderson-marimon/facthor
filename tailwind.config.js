@@ -13,10 +13,12 @@ module.exports = {
                 foreground: "hsl(var(--foreground))",
                 primary: {
                     DEFAULT: "hsl(var(--primary))",
+                    facthor: "hsl(var(--primary-facthor))",
                     foreground: "hsl(var(--primary-foreground))",
                 },
                 secondary: {
                     DEFAULT: "hsl(var(--secondary))",
+                    facthor: "hsl(var(--secondary-facthor))",
                     foreground: "hsl(var(--secondary-foreground))",
                 },
                 destructive: {
@@ -25,6 +27,7 @@ module.exports = {
                 },
                 muted: {
                     DEFAULT: "hsl(var(--muted))",
+                    facthor: "hsl(var(--muted-facthor))",
                     foreground: "hsl(var(--muted-foreground))",
                 },
                 accent: {

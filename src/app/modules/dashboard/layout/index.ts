@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TransitionView } from '@dashboard/components/transition-view/transition-view';
+import { AsideNav } from '@dashboard/components/aside-nav/aside-nav';
+import { TransitionView } from '@dashboard/transition';
 
 @Component({
 	selector: 'dashboard-layout',
-	imports: [RouterOutlet, TransitionView],
+	imports: [RouterOutlet, AsideNav, TransitionView],
 	templateUrl: 'index.html',
 })
 export default class DashboardLayout {}
