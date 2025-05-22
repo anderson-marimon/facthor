@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
-import { envs } from '@app/envs/envs';
+import { envs } from '@envs/envs';
 import Cookies from 'js-cookie';
 
-export const accessToken: CanActivateFn = (): boolean | UrlTree => {
+export const guardAccessToken: CanActivateFn = (): boolean | UrlTree => {
 	const router: Router = inject(Router);
 	const tokenPath = envs.FT_AUTHENTICATION_TOKEN_PATH;
 	const tokenExists = !!Cookies.get(tokenPath);

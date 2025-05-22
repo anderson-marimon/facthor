@@ -5,6 +5,7 @@ export const serverRoutes: ServerRoute[] = [
 
 	{ path: 'dashboard/', renderMode: RenderMode.Client },
 	{ path: 'dashboard/home', renderMode: RenderMode.Client },
+	{ path: 'dashboard/invoice-management/upload-invoice', renderMode: RenderMode.Client },
 
 	{ path: 'authentication/', renderMode: RenderMode.Server },
 	{ path: 'authentication/sign-in', renderMode: RenderMode.Server },

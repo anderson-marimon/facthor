@@ -1,9 +1,15 @@
 import { Routes } from '@angular/router';
-import { accessToken } from '@dashboard/guards/access-token';
+import { ApiGetUserConfiguration } from '@dashboard/api/user-configuration';
+import { guardAccessToken } from '@dashboard/guards/access-token';
+import { resolverLoadUserConfig } from '@dashboard/resolver/load-user-config';
+import { guardModulePermissions } from '@dashboard/guards/module-permissions';
+import { StoreUserConfig } from '@dashboard/stores/user-config';
 
 export const dashboardRoutes: Routes = [
 	{
 		path: '',
+		providers: [StoreUserConfig, ApiGetUserConfiguration],
+		canActivate: [guardAccessToken, resolverLoadUserConfig],
 		loadComponent: () => import('@dashboard/layout').then((page) => page.default),
 		children: [
 			{
@@ -13,8 +19,12 @@ export const dashboardRoutes: Routes = [
 			},
 			{
 				path: 'home',
-				canActivate: [accessToken],
 				loadComponent: () => import('@dashboard/modules/home/view').then((page) => page.default),
+			},
+			{
+				path: 'invoice-management/upload-invoice',
+				canActivate: [guardModulePermissions],
+				loadComponent: () => import('@dashboard/modules/invoice-management/view').then((page) => page.default),
 			},
 		],
 	},

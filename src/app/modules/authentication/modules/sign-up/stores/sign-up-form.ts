@@ -11,11 +11,6 @@ export interface TSignUpFormState {
 
 @Injectable()
 export class SignUpFormStore extends ComponentStore<TSignUpFormState> {
-	public readonly roleForm = this.select((store) => store.roleForm);
-	public readonly businessForm = this.select((store) => store.businessForm);
-	public readonly documentsForm = this.select((store) => store.documentsForm);
-	public readonly accountForm = this.select((store) => store.roleForm);
-
 	constructor() {
 		super({
 			roleForm: {},
@@ -26,6 +21,11 @@ export class SignUpFormStore extends ComponentStore<TSignUpFormState> {
 
 		devReduxTool(this, 'SIGN_UP_FORM_STORE');
 	}
+
+	public readonly roleForm = this.select((store) => store.roleForm);
+	public readonly businessForm = this.select((store) => store.businessForm);
+	public readonly documentsForm = this.select((store) => store.documentsForm);
+	public readonly accountForm = this.select((store) => store.roleForm);
 
 	public setRoleForm = this.updater((store, roleForm: Record<string, any>) => ({
 		...store,

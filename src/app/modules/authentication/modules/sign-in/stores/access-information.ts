@@ -8,15 +8,15 @@ export type TUserState = {
 
 @Injectable()
 export class AccessInformationStore extends ComponentStore<TUserState> {
-	private readonly _storageKey = 'ACCESS_INFORMATION_STORE';
-	public readonly user = this.select((store) => store.user);
-
 	constructor() {
 		super(AccessInformationStore._getInitialState());
 		this._persistence();
 
 		devReduxTool(this, 'ACCESS_INFORMATION_STORE');
 	}
+
+	private readonly _storageKey = 'ACCESS_INFORMATION_STORE';
+	public readonly user = this.select((store) => store.user);
 
 	public setUser = this.updater((store, user: Record<string, any>) => ({
 		...store,

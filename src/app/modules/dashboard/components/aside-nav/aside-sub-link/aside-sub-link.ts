@@ -11,9 +11,4 @@ export class AsideSubLink {
 	public readonly label = input('');
 	public readonly href = input('');
 	public readonly type = input<'link' | 'separator'>('link');
-
-	protected _onClickSubLink(): void {
-		console.log('click');
-		console.log(this.href());
-	}
 }
