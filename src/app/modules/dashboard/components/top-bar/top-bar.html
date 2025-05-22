@@ -2,11 +2,13 @@
     <section class="flex-1"></section>
     <section class="flex-1 flex items-center justify-end gap-2.5">
         <frs-avatar [size]="'sm'">
-            <frs-avatar-fallback [name]="_user()['businessLegalName']" />
+            <frs-avatar-fallback [name]="identify()?.tradeName || ''" />
         </frs-avatar>
         <div class="flex flex-col text-sm">
-            <span class="font-semibold">{{ _user()['businessLegalName'] | titlecase}}</span>
-            <span class="text-xs">Proveedor</span>
+            <span class="font-semibold">{{ identify()?.tradeName | titlecase}}</span>
+            @if(roleExecution() !== null ) {
+                <span class="text-xs">{{ roleExecution()![0].name || '' | titlecase }}</span>
+            }
         </div>
     </section>
 </nav>
