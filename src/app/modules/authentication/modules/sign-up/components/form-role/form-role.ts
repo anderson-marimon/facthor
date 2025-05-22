@@ -2,7 +2,7 @@ import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, inject
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SignUpRoleCard } from '@authentication/modules/sign-up/components/role-card/role-card';
-import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
+import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up-form';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FacthorLogo } from '@shared/logos/facthor-logo/facthor-logo';
 import { toast } from 'ngx-sonner';

@@ -8,7 +8,7 @@ import { SignUpDocumentsForm } from '@authentication/modules/sign-up/components/
 import { SignUpRoleForm } from '@authentication/modules/sign-up/components/form-role/form-role';
 import { SignUpFormSummary } from '@authentication/modules/sign-up/components/form-summary/form-summary';
 import { SignUpRoleStep } from '@authentication/modules/sign-up/components/role-step/role-step';
-import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
+import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up-form';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 import { distinctUntilChanged } from 'rxjs';

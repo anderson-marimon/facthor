@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { ApiGetFormBanks } from '@authentication/modules/sign-up/api/form-get-banks';
 import { BANK_TYPE_OPTIONS } from '@authentication/modules/sign-up/common/bank-select-options';
 import { FormValidator } from '@authentication/services/form-validator';
-import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
+import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up-form';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
 import { FrsFileInputModule } from '@fresco-ui/frs-file-input';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';

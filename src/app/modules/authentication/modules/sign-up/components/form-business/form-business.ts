@@ -6,7 +6,7 @@ import { ApiGetFormCiuuCodes } from '@authentication/modules/sign-up/api/form-ge
 import { ApiGetFormDepartment } from '@authentication/modules/sign-up/api/form-get-departments';
 import { ADDRESS_STREETS } from '@authentication/modules/sign-up/common/address-streets';
 import { FormValidator } from '@authentication/services/form-validator';
-import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up.store';
+import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up-form';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { TCalendarDate } from '@fresco-ui/frs-calendar/frs-calendar';
 import { FrsComboboxModule } from '@fresco-ui/frs-combobox';

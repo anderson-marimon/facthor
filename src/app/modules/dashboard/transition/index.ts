@@ -4,8 +4,6 @@ import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor
 
 @Component({
 	selector: 'transition-view',
-	standalone: true,
-	imports: [FacthorLogoAnimated],
 	templateUrl: 'index.html',
 	animations: [
 		trigger('fade', [
@@ -13,6 +11,7 @@ import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor
 			transition(':leave', [animate('200ms ease-in', style({ opacity: 0 }))]),
 		]),
 	],
+	imports: [FacthorLogoAnimated],
 })
 export class TransitionView implements OnInit {
 	protected show = true;

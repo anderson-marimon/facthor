@@ -18,7 +18,7 @@ export class ApiPostSignIn {
 	public readonly loader = this._resource.isLoading;
 	public readonly userData = this._resource.value;
 
-	private async _signIn(body: ResourceLoaderParams<Record<string, string>>): Promise<SingIn> {
+	private async _signIn(body: ResourceLoaderParams<Record<string, string>>): Promise<Nullable<Omit<SingIn, 'authToken'>>> {
 		if (Object.keys(this._signInForm()).length === 0) return null;
 
 		const path = `${this._url}${envs.FT_AUTH_LOGIN}`;
@@ -39,10 +39,12 @@ export class ApiPostSignIn {
 				throw new Error(message);
 			}
 
+			const { authToken, ...user } = data!;
+
 			const expirationDate = new Date();
 			expirationDate.setHours(expirationDate.getHours() + 1);
 
-			Cookies.set(envs.FT_AUTHENTICATION_TOKEN_PATH, data?.authToken ?? '', {
+			Cookies.set(envs.FT_AUTHENTICATION_TOKEN_PATH, authToken ?? '', {
 				expires: expirationDate,
 				secure: true,
 				sameSite: 'strict',
@@ -62,7 +64,7 @@ export class ApiPostSignIn {
 				description: `Inicio de sesión: ${formatted}`,
 			});
 
-			return data;
+			return user;
 		} catch (err) {
 			const error = err instanceof Error ? err : new Error(String(err));
 

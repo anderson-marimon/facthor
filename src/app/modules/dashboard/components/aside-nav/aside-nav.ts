@@ -57,8 +57,8 @@ const ASIDE_ROUTES: TAsideRoutes[] = [
 
 @Component({
 	selector: 'aside-nav',
-	imports: [FacthorLogo, AsideLink],
 	templateUrl: 'aside-nav.html',
+	imports: [FacthorLogo, AsideLink],
 })
 export class AsideNav {
 	protected readonly _asideRoutes = ASIDE_ROUTES;

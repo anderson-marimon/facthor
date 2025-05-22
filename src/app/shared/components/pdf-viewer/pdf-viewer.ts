@@ -3,8 +3,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @Component({
 	selector: 'preview-pdf',
-	imports: [PdfViewerModule],
 	templateUrl: 'pdf-viewer.html',
+	imports: [PdfViewerModule],
 })
 export class PdfViewer {
 	public readonly data = input<string>('');

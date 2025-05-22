@@ -5,7 +5,6 @@ import { ChevronDown, LucideAngularModule } from 'lucide-angular';
 
 @Component({
 	selector: 'aside-link',
-	imports: [AsideSubLink, LucideAngularModule],
 	templateUrl: 'aside-link.html',
 	animations: [
 		trigger('subRoutes', [
@@ -13,6 +12,7 @@ import { ChevronDown, LucideAngularModule } from 'lucide-angular';
 			transition(':leave', [style({ overflow: 'hidden' }), animate('300ms ease-out', style({ height: '0', overflow: 'hidden' }))]),
 		]),
 	],
+	imports: [AsideSubLink, LucideAngularModule],
 })
 export class AsideLink {
 	public readonly label = input('label');
