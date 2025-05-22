@@ -4,22 +4,40 @@
         [strokeWidth]="1.5"
         [size]="18"
         [class.-rotate-90]="!_openSubRoutes()"
-        class="mb-[2px] transition-transform duration-300"
+        class="transition-transform duration-300"
     />
     <span
-        class="font-semibold text-foreground uppercase"
+        class="font-semibold text-foreground uppercase mt-[2px]"
     >{{ label() }}</span>
 </div>
 @if(_openSubRoutes()) {
     <ul [@subRoutes] class="flex flex-col gap-2 overflow-hidden">
-        @for (subRoute of subRoutes(); track $index) {
-            <li>
-                <aside-sub-link
-                    [label]="subRoute.label"
-                    [href]="subRoute.href"
-                    [type]="subRoute.type"
-                />
-            </li>
+        @for (module of subModules(); track $index) {
+            @if(module.submodules && module.submodules.length > 1) {
+                <li class="py-2">
+                    <aside-sub-link
+                        [label]="module.name || 'nombre pendiente'"
+                        [href]="module.route"
+                        [type]="'separator'"
+                    />
+                </li>
+
+                @for (subModule of module.submodules; track $index) {
+                    <li>
+                        <aside-sub-link
+                            [label]="subModule.name || 'nombre pendiente'"
+                            [href]="module.route"
+                        />
+                    </li>
+                }
+            } @else {
+                <li>
+                    <aside-sub-link
+                        [label]="module.name || 'nombre pendiente'"
+                        [href]="module.route"
+                    />
+                </li>
+            }
         }
     </ul>    
 }

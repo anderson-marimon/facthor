@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { devReduxTool } from '@app/tools/dev-redux.tool';
+import { devReduxTool } from '@tools/dev-redux.tool';
 import { ComponentStore } from '@ngrx/component-store';
 
 export type TUserState = {

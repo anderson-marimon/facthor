@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, input, signal } from '@angular/core';
+import { TSubmodulePermission } from '@dashboard/api/user-configuration';
 import { AsideSubLink } from '@dashboard/components/aside-nav/aside-sub-link/aside-sub-link';
 import { ChevronDown, LucideAngularModule } from 'lucide-angular';
 
@@ -18,7 +19,7 @@ export class AsideLink {
 	public readonly label = input('label');
 	public readonly href = input('');
 	public readonly icon = input(ChevronDown);
-	public readonly subRoutes = input<{ type: 'link' | 'separator'; label: string; href: string }[]>([]);
+	public readonly subModules = input<TSubmodulePermission[]>([]);
 
 	protected readonly _openSubRoutes = signal(true);
 

@@ -4,12 +4,16 @@
 </span> -->
 
 @if (type() === 'link') {
-    <div class="flex items-baseline gap-2.5 pl-7 pr-2.5 py-1.5 rounded-md hover:bg-secondary transition-colors">
-        <span class="relative w-1.5 h-1.5">
+    <a
+        [routerLink]="href()"
+        [ariaLabel]="'Ir a ' + label()"
+        class="flex items-baseline gap-2.5 pl-7 pr-2.5 py-1.5 rounded-md hover:bg-secondary transition-colors"
+    >
+        <span class="relative w-1.5 h-1.5 flex-shrink-0">
             <div class="w-full h-full bg-foreground/20"></div>
         </span>
         <span class="font-light text-sm text-foreground capitalize">{{ label() }}</span>
-    </div>
+    </a>
 } @else {
     <div class="pl-7 pr-5.5">
         <p class="font-semibold uppercase text-foreground/40">{{ label() }}</p>

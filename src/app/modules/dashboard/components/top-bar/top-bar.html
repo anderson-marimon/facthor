@@ -4,10 +4,10 @@
         <frs-avatar [size]="'sm'">
             <frs-avatar-fallback [name]="identify()?.tradeName || ''" />
         </frs-avatar>
-        <div class="flex flex-col text-sm">
+        <div class="flex flex-col text-xs md:text-sm">
             <span class="font-semibold">{{ identify()?.tradeName | titlecase}}</span>
             @if(roleExecution() !== null ) {
-                <span class="text-xs">{{ roleExecution()![0].name || '' | titlecase }}</span>
+                <span class="text-[0.70rem] md:text-xs">{{ roleExecution()![0].name || '' | titlecase }}</span>
             }
         </div>
     </section>

@@ -1,19 +1,20 @@
 <section class="flex justify-center">
     <facthor-logo class="w-40" [textColor]="'#041C2C'" />
 </section>
-<section class="pt-6 pb-2.5">
+<section class="pt-5 pb-2.5">
     <p class="text-[11px] uppercase text-foreground/40">Módulos</p>
     <hr>
 </section>
 <section class="flex-1 flex flex-col overflow-y-auto">
     <ul class="flex-1 flex flex-col gap-2.5 text-[11px]">
-        @for (item of _asideRoutes; track $index; let last = $last) {
+        @for (permission of permissions(); track $index; let last = $last) {
             <li>
                 <aside-link
-                    [label]="item.label"
-                    [href]="item.href"
-                    [subRoutes]="item.subRoutes || []"
+                    [label]="permission.name"
+                    [href]="permission.route"
+                    [subModules]="permission.submodules"
                 />
+                
                 @if(!last) {
                     <hr class="mt-2.5">
                 }
