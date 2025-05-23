@@ -4,12 +4,14 @@
         [roleExecution]="_configuration()?.roleExecutions || null"
         class="min-h-16"    
     />
-    <article class="flex-1 h-full fle flex-col">
+    <article class="flex-1 h-full flex">
         <aside-nav
             [permissions]="_configuration()?.permissions || []"
             class="w-[350px] h-[calc(100dvh-64px)] hidden lg:flex lg:flex-col p-2.5 border-r"
         />
-        <router-outlet />
+        <section class="flex-1 p-2.5">
+            <router-outlet/>
+        </section>
     </article>
     <transition-view />
 </main>

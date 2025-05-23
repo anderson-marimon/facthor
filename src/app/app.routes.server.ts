@@ -14,5 +14,5 @@ export const serverRoutes: ServerRoute[] = [
 	{ path: 'authentication/change-password', renderMode: RenderMode.Server },
 	{ path: 'authentication/resend-documents', renderMode: RenderMode.Server },
 
-	{ path: '**', renderMode: RenderMode.Client },
+	{ path: '**', renderMode: RenderMode.Server },
 ];

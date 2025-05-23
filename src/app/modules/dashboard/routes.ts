@@ -24,7 +24,7 @@ export const dashboardRoutes: Routes = [
 			{
 				path: 'invoice-management/upload-invoice',
 				canActivate: [guardModulePermissions],
-				loadComponent: () => import('@dashboard/modules/invoice-management/view').then((page) => page.default),
+				loadComponent: () => import('@dashboard/modules/invoice-management/upload-invoice/view').then((page) => page.default),
 			},
 		],
 	},
