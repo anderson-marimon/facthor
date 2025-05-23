@@ -15,8 +15,7 @@ import { distinctUntilChanged } from 'rxjs';
 @Component({
 	selector: 'authentication-sign-in-page',
 	templateUrl: 'index.html',
-	providers: [AccessInformationStore],
-	viewProviders: [ApiPostSignIn],
+	viewProviders: [AccessInformationStore, ApiPostSignIn],
 	imports: [FacthorLogo, FrsFieldModule, FrsInputModule, FrsButtonModule, LoadingIcon, ReactiveFormsModule, RouterLink],
 })
 export default class SignInPage {

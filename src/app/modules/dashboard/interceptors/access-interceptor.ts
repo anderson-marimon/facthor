@@ -8,15 +8,26 @@ export abstract class AccessInterceptor {
 	private readonly _router = inject(Router);
 	private readonly _tokenPath = envs.FT_AUTHENTICATION_TOKEN_PATH;
 
-	protected async interceptInternalCodes<T>(promise: Promise<Nullable<TApi<T>>>, callback?: Function): Promise<Nullable<T>> {
+	protected async interceptInternalCodes<T>(promise: Promise<Nullable<TApi<T>>>, callback?: () => Nullable<T>): Promise<Nullable<T>> {
 		const response = await promise;
 		if (response === null) return null;
 
 		try {
 			const { ok, internalCode, message, data } = response;
 
-			if (internalCode === 1005) {
-				return this.handleInternalCode1005();
+			switch (internalCode) {
+				case 1005:
+					return this._handleInternalCode({
+						title: 'Acceso Denegado',
+						description: 'Sesión errada, inicie sesión nuevamente.',
+					});
+
+				case 1004:
+					callback && callback();
+					return this._handleInternalCode({
+						title: 'Acceso Denegado',
+						description: 'La sesión ha expirado, inicie sesión nuevamente.',
+					});
 			}
 
 			if (!ok) {
@@ -39,13 +50,16 @@ export abstract class AccessInterceptor {
 		}
 	}
 
-	protected handleInternalCode1005(): null {
-		toast.message('Acceso denegado', {
-			description: 'La sesión ha expirado, inicie sesión nuevamente.',
-		});
+	private _handleInternalCode(options: { title: string; description: string; redirect?: string }): null {
+		const { title, description, redirect = 'authentication/sign-in' } = options;
 
 		Cookies.remove(this._tokenPath);
-		this._router.navigate(['authentication/sign-in'], { replaceUrl: true });
+
+		this._router.navigate([redirect], { replaceUrl: true }).then(() => {
+			toast.message(title, {
+				description: description,
+			});
+		});
 		return null;
 	}
 }

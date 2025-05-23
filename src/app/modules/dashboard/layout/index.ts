@@ -4,7 +4,7 @@ import { TUserConfig } from '@dashboard/api/user-configuration';
 import { AsideNav } from '@dashboard/components/aside-nav/aside-nav';
 import { TopBar } from '@dashboard/components/top-bar/top-bar';
 import { StoreUserConfig } from '@dashboard/stores/user-config';
-import { TransitionView } from '@dashboard/transition';
+import { TransitionView } from '@shared/transition';
 
 @Component({
 	selector: 'dashboard-layout',

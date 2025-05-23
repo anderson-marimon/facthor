@@ -1,7 +1,8 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
-import { AccessInterceptor } from '@dashboard/common/access-interceptor';
+import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
 import Cookies from 'js-cookie';
+import { toast } from 'ngx-sonner';
 
 export type TUserConfig = Nullable<{
 	colors: any | null;

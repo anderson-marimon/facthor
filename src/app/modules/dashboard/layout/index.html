@@ -1,12 +1,13 @@
-<main class="relative w-full h-dvh flex">
-    <aside-nav
-        [permissions]="_configuration()?.permissions || []"
-        class="w-[350px] h-dvh hidden lg:flex lg:flex-col p-2.5 border-r"
+<main class="relative w-full h-dvh flex flex-col">
+    <top-bar
+        [identify]="_configuration()?.identity || null"
+        [roleExecution]="_configuration()?.roleExecutions || null"
+        class="min-h-16"    
     />
     <article class="flex-1 h-full fle flex-col">
-        <top-bar
-            [identify]="_configuration()?.identity || null"
-            [roleExecution]="_configuration()?.roleExecutions || null"    
+        <aside-nav
+            [permissions]="_configuration()?.permissions || []"
+            class="w-[350px] h-[calc(100dvh-64px)] hidden lg:flex lg:flex-col p-2.5 border-r"
         />
         <router-outlet />
     </article>
