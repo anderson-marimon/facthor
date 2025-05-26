@@ -3,6 +3,7 @@
         @for (permission of permissions(); track $index; let last = $last) {
             <li>
                 <aside-link
+                    [activeRoute]="_active()"
                     [label]="permission.name"
                     [href]="permission.route"
                     [subModules]="permission.submodules"

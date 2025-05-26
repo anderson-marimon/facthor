@@ -3,8 +3,9 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 export const serverRoutes: ServerRoute[] = [
 	{ path: '', renderMode: RenderMode.Server },
 
-	{ path: 'dashboard/', renderMode: RenderMode.Server },
+	{ path: 'dashboard/', renderMode: RenderMode.Client },
 	{ path: 'dashboard/home', renderMode: RenderMode.Server },
+	{ path: 'dashboard/invoice-management', renderMode: RenderMode.Client },
 	{ path: 'dashboard/invoice-management/upload-invoice', renderMode: RenderMode.Server },
 
 	{ path: 'authentication/', renderMode: RenderMode.Server },

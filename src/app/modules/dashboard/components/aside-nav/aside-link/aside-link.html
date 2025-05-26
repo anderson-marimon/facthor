@@ -25,6 +25,7 @@
                 @for (subModule of module.submodules; track $index) {
                     <li>
                         <aside-sub-link
+                            [activeRoute]="activeRoute()"
                             [label]="subModule.name || 'nombre pendiente'"
                             [href]="module.route"
                         />
@@ -33,6 +34,7 @@
             } @else {
                 <li>
                     <aside-sub-link
+                        [activeRoute]="activeRoute()"
                         [label]="module.name || 'nombre pendiente'"
                         [href]="module.route"
                     />

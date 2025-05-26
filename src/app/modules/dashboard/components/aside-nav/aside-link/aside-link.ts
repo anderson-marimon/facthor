@@ -20,6 +20,7 @@ export class AsideLink {
 	public readonly href = input('');
 	public readonly icon = input(ChevronDown);
 	public readonly subModules = input<TSubmodulePermission[]>([]);
+	public readonly activeRoute = input('');
 
 	protected readonly _openSubRoutes = signal(true);
 

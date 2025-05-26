@@ -1,5 +1,5 @@
-import { Component, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject, input, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
@@ -11,4 +11,5 @@ export class AsideSubLink {
 	public readonly label = input('');
 	public readonly href = input('');
 	public readonly type = input<'link' | 'separator'>('link');
+	public readonly activeRoute = input('');
 }
