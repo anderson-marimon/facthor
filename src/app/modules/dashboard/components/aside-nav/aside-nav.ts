@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { TModulePermission } from '@dashboard/api/user-configuration';
 import { AsideLink } from '@dashboard/components/aside-nav/aside-link/aside-link';
@@ -8,13 +8,12 @@ import { AsideLink } from '@dashboard/components/aside-nav/aside-link/aside-link
 	templateUrl: 'aside-nav.html',
 	imports: [AsideLink],
 })
-export class AsideNav {
+export class AsideNav implements AfterViewInit {
 	public readonly permissions = input<TModulePermission[]>([]);
-
 	private readonly _router = inject(Router);
 	protected readonly _active = signal('');
 
-	constructor() {
+	public ngAfterViewInit(): void {
 		this.addSubscription();
 	}
 

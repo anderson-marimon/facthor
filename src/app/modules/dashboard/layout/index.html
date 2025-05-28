@@ -4,14 +4,14 @@
         [roleExecution]="_configuration()?.roleExecutions || null"
         class="min-h-16"    
     />
-    <article class="flex-1 h-full flex">
+    <article class="flex-1 flex h-full overflow-hidden">
         <aside-nav
             [permissions]="_configuration()?.permissions || []"
-            class="w-[350px] h-[calc(100dvh-64px)] hidden lg:flex lg:flex-col p-2.5 border-r"
+            class="flex-shrink-0 w-[350px] hidden xl:flex lg:flex-col py-2.5 border-r"
         />
-        <section class="flex-1 p-2.5">
-            <router-outlet/>
-        </section>
+        <div class="flex-1 p-2.5 pr-0 xl:pr-2.5">
+            <router-outlet class="h-full"/>
+        </div>
     </article>
     <transition-view />
 </main>

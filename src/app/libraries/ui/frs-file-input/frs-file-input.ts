@@ -57,9 +57,13 @@ export class FrsFileInput {
 	public readonly disabled = input<boolean>(false);
 	public readonly control = input.required<FormControl<any>>();
 	public readonly accept = input<string>('');
+	public readonly allowedTypes = input<string[]>([]);
+	public readonly maxFiles = input(3);
 	public readonly multiple = input<boolean>(false);
 	public readonly currentFiles = input<TFile[]>([]);
+	public readonly cleanAfterEmit = input(false);
 	public readonly files = output<TFile[]>();
+	public readonly errorAllowedTypes = output<string>();
 
 	protected readonly _inputId = frsGenerateId();
 
@@ -87,17 +91,36 @@ export class FrsFileInput {
 
 		if (files) {
 			for (const file of files) {
+				if (this.allowedTypes().length > 0 && !this.allowedTypes().includes(file.type)) {
+					this.errorAllowedTypes.emit(file.name);
+					return;
+				}
+
 				const fileName = file.name;
 				const base64 = await this._toBase64(file);
 				const blobUrl = URL.createObjectURL(file);
 				const type = file.type;
 				const size = file.size;
 
-				fileList.push({ fileId: this.fileId(), fileName, base64, blobUrl, type, size });
+				fileList.push({
+					fileId: this.fileId(),
+					fileName,
+					base64,
+					blobUrl,
+					type,
+					size,
+				});
 			}
 		}
 
+		if (this.multiple()) {
+			this.files.emit(fileList.slice(0, this.maxFiles()));
+			if (this.cleanAfterEmit()) inputElement.value = '';
+			return;
+		}
+
 		this.files.emit(fileList);
+		if (this.cleanAfterEmit()) inputElement.value = '';
 	}
 
 	public setHasError(value: boolean): void {

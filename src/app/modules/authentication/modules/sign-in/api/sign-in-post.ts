@@ -46,7 +46,7 @@ export class ApiPostSignIn {
 
 			Cookies.set(envs.FT_AUTHENTICATION_TOKEN_PATH, authToken ?? '', {
 				expires: expirationDate,
-				secure: true,
+				secure: false,
 				sameSite: 'strict',
 			});
 

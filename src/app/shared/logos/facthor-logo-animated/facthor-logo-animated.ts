@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, input, NgZone } from '@angular/core';
 
 @Component({
 	selector: 'facthor-logo-animated',
@@ -7,6 +7,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, 
 })
 export class FacthorLogoAnimated implements AfterViewInit {
 	private readonly _elementRef = inject(ElementRef);
+	private readonly _ngZone = inject(NgZone);
 
 	public readonly duration = input(1000);
 	public readonly withText = input(false);
@@ -16,7 +17,8 @@ export class FacthorLogoAnimated implements AfterViewInit {
 
 	public ngAfterViewInit(): void {
 		this._hiddenSvg();
-		this.startAnimation();
+
+		this._ngZone.runOutsideAngular(() => this.startAnimation());
 	}
 
 	private _hiddenSvg(): void {

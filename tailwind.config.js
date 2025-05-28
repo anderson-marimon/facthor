@@ -44,6 +44,9 @@ module.exports = {
                 },
                 pantone: '#041C2C'
             },
+            fontSize: {
+                xxs: '11px'
+            },
             borderRadius: {
                 lg: "var(--radius)",
                 md: "calc(var(--radius) - 0.1vh)",
