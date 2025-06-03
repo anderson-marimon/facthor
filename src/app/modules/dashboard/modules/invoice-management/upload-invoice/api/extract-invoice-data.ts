@@ -16,14 +16,35 @@ type TAccessInfo = {
 	accessService: string;
 };
 
-type TZipFileErrors = {
+export type TZipErrorFiles = {
 	id: string;
 	errors: string[];
 };
 
+export type TZipProcessedFiles = {
+	id: string;
+	invoice: {
+		cufe: string;
+		currencyCode: string;
+		expeditionDate: string;
+		expeditionTime: string;
+		expirationDate: string;
+		id: string;
+		ownerIdentification: number;
+		ownerIdentificationCode: number;
+		ownerName: string;
+		payableAmount: number;
+		payerIdentification: number;
+		payerIdentificationCode: number;
+		payerName: string;
+		paymentMethodCode: number;
+		paymentTypeCode: number;
+	};
+};
+
 type TExtractedInvoiceData = Nullable<{
-	zipFilesProcessed: Record<string, any>[];
-	zipFileError: TZipFileErrors[];
+	zipFilesProcessed: TZipProcessedFiles[];
+	zipFileErrors: TZipErrorFiles[];
 }>;
 
 type TApiExtractedInvoiceData = TApi<TExtractedInvoiceData>;
@@ -73,14 +94,14 @@ export class ApiPostExtractInvoiceData extends AccessInterceptor {
 		}
 	}
 
-	public revisionData = this._resource.value;
+	public extractedInvoiceData = this._resource.value;
 	public isLoading = this._resource.isLoading;
 
 	public extractInvoiceData(args: TAccessInfo & { files: TFile[] }): void {
 		const { accessToken, accessModule, accessService, files } = args!;
 
 		const filesToSend = files.map((file) => ({
-			id: crypto.randomUUID(),
+			id: file.fileId,
 			fileContent: getBase64FromTFile(file),
 		}));
 

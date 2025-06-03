@@ -111,7 +111,7 @@ export class ApiPostSignUp {
 				},
 				{
 					idLegalDocumentType: 2,
-					legalDocumentBase64: getBase64FromTFile(documents['rutFile']),
+					legalDocumentBase64: getBase64FromTFile(documents['rutFile'][0]),
 				},
 				{
 					idLegalDocumentType: 3,

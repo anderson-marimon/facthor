@@ -65,7 +65,6 @@ export class ApiGetUserConfiguration extends AccessInterceptor {
 			headers: { Authorization: `Bearer ${token.request}` },
 		});
 
-		console.log(result);
 		return result.data;
 	}
 

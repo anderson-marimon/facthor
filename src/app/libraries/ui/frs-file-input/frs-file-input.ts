@@ -3,7 +3,7 @@ import { ReactiveFormsModule, type FormControl } from '@angular/forms';
 import { frs, frsGenerateId } from '@fresco-core/frs-core';
 
 export type TFile = {
-	fileId: number;
+	fileId: string;
 	fileName: string;
 	base64: string;
 	blobUrl: string;
@@ -52,7 +52,7 @@ export class FrsFileInput {
 	private readonly _hasError = signal<boolean>(false);
 
 	public readonly class = input<string>('');
-	public readonly fileId = input(0);
+	public readonly fileId = input('');
 	public readonly placeholder = input<string>('Input placeholder');
 	public readonly disabled = input<boolean>(false);
 	public readonly control = input.required<FormControl<any>>();

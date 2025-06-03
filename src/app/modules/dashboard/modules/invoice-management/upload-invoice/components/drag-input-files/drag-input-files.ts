@@ -56,7 +56,7 @@ export class UploadInvoiceDragInputFiles {
 		}
 
 		const combinedFiles = currentFiles.concat(newFiles);
-		const finalFiles = combinedFiles.slice(0, 5);
+		const finalFiles = combinedFiles.slice(0, 5).map((file) => ({ ...file, fileId: crypto.randomUUID() }));
 		this._loading.set(true);
 
 		timer(2500).subscribe(() => {

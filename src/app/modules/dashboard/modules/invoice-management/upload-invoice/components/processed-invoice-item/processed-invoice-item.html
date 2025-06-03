@@ -1,0 +1,67 @@
+<div (click)="_onClickOpenErrors()" class="flex items-center gap-2 p-2.5 rounded-md hover:bg-secondary cursor-pointer select-none transition-colors">
+    <i-lucide
+        [img]="icon()"
+        [strokeWidth]="1.5"
+        [size]="18"
+        [class.-rotate-90]="!_openErrors()"
+        class="transition-transform duration-300"
+    />
+    <span
+        class="font-semibold text-foreground uppercase mt-[2px]"
+    >{{ fileName() }}</span>
+</div>
+@if(_openErrors()) {
+    @if(fileErrors().length === 0) {
+        <section [@showErrors] class="w-full text-xxs uppercase rounded-md px-6 pt-0.5 space-y-2.5">
+            <div class="w-full flex flex-col ">
+                <div class="flex flex-col gap-2.5">
+                    <div>
+                        <h2 class="text-xxs font-semibold uppercase">Factura: <span class="font-light">{{ fileDetails()?.invoice?.id }}</span></h2>
+                        <p class="flex items-center font-semibold gap-1 text-xs uppercase">
+                            Cufe:
+                            <span
+                            [title]="fileDetails()?.invoice?.cufe"
+                            class="inline-block max-w-[180px] md:max-w-[300px] xl:max-w-[800px] font-light normal-case truncate overflow-hidden"
+                            >{{ fileDetails()?.invoice?.cufe }}</span>
+                        </p>
+                    </div>
+                    <hr>
+                    <div>
+                        <p class="text-xxs uppercase font-semibold">Fecha de expedición:
+                            <span class="font-light text-[0.75rem]">{{ fileDetails()?.invoice?.expeditionDate }}</span></p>
+                        <p class="text-xxs uppercase font-semibold">Fecha de vencimiento:
+                            <span class="font-light text-[0.75rem]">{{ fileDetails()?.invoice?.expirationDate }}</span></p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="w-full text-gray-700">
+                <section class="w-full flex pb-2.5">
+                    <div class="flex-1">
+                        <h3 class="text-gray-900 font-semibold">Proveedor</h3>
+                        <p class="flex items-baseline gap-1"><span class="block font-semibold">Nombre:</span>{{ fileDetails()?.invoice?.ownerName }}</p>
+                        <p class="flex items-baseline gap-1"><span class="font-semibold">Identificación:</span>{{ fileDetails()?.invoice?.ownerIdentification }}</p>
+                    </div>
+    
+                    <div class="flex-1">
+                        <h3 class="text-gray-900 font-semibold">Pagador</h3>
+                        <p class="flex items-baseline gap-1"><span class="block font-semibold">Nombre:</span>{{ fileDetails()?.invoice?.payerName }}</p>
+                        <p class="flex items-baseline gap-1"><span class="font-semibold">Identificación:</span>{{ fileDetails()?.invoice?.payerIdentification }}</p>
+                    </div>
+                </section>
+                <hr>
+                <div class="w-full pt-2.5">
+                    <p class="flex gap-1 text-nowrap"><span class="font-semibold">Valor total:</span>{{ fileDetails()?.invoice?.payableAmount | currency }}</p>
+                </div>
+            </div>
+        </section>
+    } @else {
+        <ul [@showErrors] class="flex flex-col gap-2 overflow-hidden">
+            @for (error of fileErrors(); track $index) {
+                <li class="flex gap-1 items-center pl-7 py-0.5">
+                    <span class="before:content-['-_'] text-destructive">{{ error }}</span>
+                </li>
+            }  
+        </ul>
+    }
+}

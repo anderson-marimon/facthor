@@ -56,7 +56,7 @@ export class ApiPostResendDocuments {
 			token: _form['token'],
 			providerLegalDocuments: [
 				..._form['documents'].map((file: TFile[]) => ({
-					idLegalDocumentType: file[0].fileId,
+					idLegalDocumentType: parseInt(file[0].fileId),
 					legalDocumentBase64: getBase64FromTFile(file[0]),
 				})),
 			],

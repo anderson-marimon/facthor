@@ -65,7 +65,7 @@ export class FrsDatePicker {
 		this.disabled() ? control.disable() : control.enable();
 
 		(control as FormControl).valueChanges.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((value: Date) => {
-			if (value.getTime() === 0) return;
+			if (value && value.getTime() === 0) return;
 			this._formatValue(value);
 		});
 	}

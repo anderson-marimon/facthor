@@ -7,12 +7,17 @@
         </div>
         <form (ngSubmit)="_onClickSingIn()" [formGroup]="_form" class="w-full flex flex-col gap-4">
             <frs-field [showAsterisk]='false' [label]="'Usuario'">
-                <frs-input
+                <!-- <frs-input
                     #field
                     [control]="_username"
                     [type]="'custom'"
                     [mask]="'xxxxxxxxxx'"
                     [regex]="'[^\\d]'"
+                    [placeholder]="'Ingrese el usuario'"
+                /> -->
+                <frs-input
+                    #field
+                    [control]="_username"
                     [placeholder]="'Ingrese el usuario'"
                 />
             </frs-field>

@@ -1,5 +1,5 @@
 <upload-invoice-view-card [title]="'subir facturas'">
-    <div class="min-h-[280px] h-full grid place-content-center gap-2.5 group-hover:bg-gray-50 transition-colors duration-500 cursor-pointer">
+    <div class="min-h-[282px] h-full grid place-content-center gap-2.5 group-hover:bg-gray-50 transition-colors duration-500 cursor-pointer">
         <i-lucide [img]="_uploadIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
         <span class="max-w-[210px] text-center">Arrastra y suelta tus facturas aquí
             <span class="font-semibold text-secondary-facthor">o selecciona desde tu dispositivo</span>
@@ -16,14 +16,14 @@
             [cleanAfterEmit]="true"
             (files)="_onUploadFiles($event)"
             (errorAllowedTypes)="_onErrorTypes($event)"
-            class="inline-block w-full min-h-[280px] h-full [&_input]:h-full !opacity-0 !cursor-pointer"
+            class="inline-block w-full min-h-[282px] h-full [&_input]:h-full !opacity-0 !cursor-pointer"
         />
     </div>
 </upload-invoice-view-card>
 
 <upload-invoice-view-card [title]="'facturas subidas'" >
     @if (_loading()) {
-        <div class="h-full grid place-content-center gap-2.5">
+        <div class="min-h-[282px] h-full grid place-content-center gap-2.5">
             <facthor-logo-animated  class="size-10 mx-auto" />
             <span class="font-light text-center text-foreground/60 animate-pulse">
                 Subiendo facturas...
@@ -37,14 +37,14 @@
                 <span class="text-end">control</span>
             </div>
 
-            <div class="w-full min-h-[280px] overflow-y-auto">
+            <div class="w-full min-h-[282px] overflow-y-auto">
                 @for (file of _files(); track file.fileName) {
                     <div [@listItemAnimation]
                         class="grid grid-cols-[5fr_1fr_1fr] gap-2.5 items-center h-14 px-2.5 hover:bg-secondary transition-colors overflow-hidden">
                         <span class="text-start truncate">{{ file.fileName }}</span>
                         <span class="text-center">{{ (file.size / 1024).toFixed(2) }}KB</span>
                         <span class="text-end pr-3">
-                            <button frs-button [size]="'icon'" [variant]="'ghost'" (click)="_onClickRemoveFile(file.fileName)">
+                            <button frs-button [size]="'icon'" title="Eliminar factura" [variant]="'ghost'" (click)="_onClickRemoveFile(file.fileName)">
                                 <i-lucide [img]="_trashIcon" class="stroke-destructive" />
                             </button>
                         </span>
@@ -52,7 +52,7 @@
                 }
             </div>
         } @else {
-            <div class="min-h-[280px] h-full grid place-content-center gap-2.5">
+            <div class="min-h-[282px] h-full grid place-content-center gap-2.5">
                 <i-lucide [img]="_fileIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
                 <span class="max-w-[210px] text-center">No hay facturas subidas, máximo 5 archivos</span>
             </div>
