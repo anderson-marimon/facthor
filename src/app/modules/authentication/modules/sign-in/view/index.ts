@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -25,8 +25,9 @@ export default class SignInPage {
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _validator = inject(FormValidator);
 	private readonly _router = inject(Router);
+	private readonly _tryAgain = signal(true);
 
-	protected readonly _loader = this._apiPostSingIn.loader;
+	protected readonly _isLoadingApiPostSignIn = this._apiPostSingIn.isLoading;
 	protected readonly _userData = this._apiPostSingIn.userData;
 	protected readonly _username = this._formBuilder.control('', [Validators.required, this._validator.dni()]);
 	protected readonly _password = this._formBuilder.control('', [Validators.required]);
@@ -44,13 +45,17 @@ export default class SignInPage {
 		toObservable(this._userData)
 			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
 			.subscribe((user) => {
-				this._accessInformation.setUser(user!);
-				this._router.navigate(['dashboard'], { replaceUrl: true });
+				if (user) {
+					this._tryAgain.set(false);
+					this._accessInformation.setUser(user!);
+					this._router.navigate(['dashboard'], { replaceUrl: true });
+				}
 			});
 	}
 
 	protected _onClickSingIn(): void {
-		if (this._loader()) return;
+		if (this._isLoadingApiPostSignIn()) return;
+		if (!this._tryAgain()) return;
 
 		const form = this._form;
 		if (form.invalid) return form.markAllAsTouched();

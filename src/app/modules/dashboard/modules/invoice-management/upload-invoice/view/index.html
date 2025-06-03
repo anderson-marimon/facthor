@@ -1,7 +1,7 @@
 <section class="w-full h-full flex flex-col gap-2.5 font-light text-sm overflow-y-hidden">
-    <article class="flex-1 w-full grid grid-flow-row md:grid-flow-col gap-2.5 pr-2.5 xl:pr-0 overflow-auto">
+    <article class="flex-1 w-full grid grid-cols-2 gap-2.5 pr-2.5 xl:pr-0 overflow-auto">
         <upload-invoice-drag-input-files
-            class="flex-1 flex flex-col gap-2.5"    
+            class="flex flex-col gap-2.5"    
         />
         <upload-invoice-view-card
             [title]="'verificación de facturas'"
@@ -13,6 +13,17 @@
                        Las facturas se han cargado correctamente. Para continuar, haga clic en el botón.
                        <span class="font-semibold text-secondary-facthor">Verificar.</span>
                     </span>
+                    <button
+                        frs-button
+                        (click)="_onClickExtractInvoiceData()"
+                        [disabled]="!_activeVerificationFiles() || _isLoadingApiPostExtractInvoiceData()"
+                        class="mx-auto mt-1 w-28"
+                        > @if(_isLoadingApiPostExtractInvoiceData()) {
+                            <loading-icon [color]="'#FFFFFF'" class="size-6" />
+                        } @else {
+                            Verificar
+                        }
+                    </button>
                 } @else {
                     <span class="max-w-[300px] text-center">
                         No se han encontrado facturas para verificar. Por favor
@@ -25,6 +36,9 @@
     </article>
     <footer class="flex items-center justify-between pr-2.5 xl:pr-0">
         <p class="text-xs">Subir documentos en formato ZIP, con un tamaño inferior a 3MB. Solo se pueden subir 5 por operación.</p>
-        <button frs-button [disabled]="!_activeVerificationFiles()">Verificar</button>
+        <button
+            frs-button
+            [disabled]="true"
+        >Subir facturas</button>
     </footer>
 </section>

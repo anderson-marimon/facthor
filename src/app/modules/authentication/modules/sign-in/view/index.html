@@ -31,8 +31,8 @@
                     ¿Olvidaste la contraseña?
                 </a>
             </frs-field>
-            <button [disabled]="_loader()" type="submit" class="mt-2.5" frs-button>
-                @if(_loader()) {
+            <button [disabled]="_isLoadingApiPostSignIn()" type="submit" class="mt-2.5" frs-button>
+                @if(_isLoadingApiPostSignIn()) {
                     <loading-icon [color]="'#FFFFFF'" class="size-6" />
                 } @else {
                     Iniciar sesión

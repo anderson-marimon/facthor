@@ -1,65 +1,59 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { envs } from '@envs/envs';
+import { envs } from '@app/envs/envs';
 import Cookies from 'js-cookie';
 import { toast } from 'ngx-sonner';
 
+export type THttpRequest = {
+	path: string;
+	method: 'GET' | 'POST' | 'PUT';
+	headers: Record<string, string>;
+	signal: AbortSignal | null | undefined;
+	body?: any;
+};
+
 export abstract class AccessInterceptor {
 	private readonly _router = inject(Router);
-	private readonly _tokenPath = envs.FT_AUTHENTICATION_TOKEN_PATH;
 
-	protected async interceptInternalCodes<T>(promise: Promise<Nullable<TApi<T>>>, callback?: () => Nullable<T>): Promise<Nullable<T>> {
-		const response = await promise;
-		if (response === null) return null;
+	protected async _HttpRequest<T>(args: THttpRequest) {
+		const { path, ...options } = args;
 
 		try {
-			const { ok, internalCode, message, data } = response;
+			const response = await fetch(path, options);
+			const result = (await response.json()) as TApi<unknown>;
 
-			switch (internalCode) {
+			switch (result.internalCode) {
 				case 1005:
-					return this._handleInternalCode({
+					this._handleInternalCode({
 						title: 'Acceso Denegado',
 						description: 'Sesión errada, inicie sesión nuevamente.',
 					});
+					break;
 
 				case 1004:
-					callback && callback();
-					return this._handleInternalCode({
+					this._handleInternalCode({
 						title: 'Acceso Denegado',
 						description: 'La sesión ha expirado, inicie sesión nuevamente.',
 					});
+					break;
 			}
 
-			if (!ok) {
-				throw new Error(message);
-			}
-
-			if (callback) {
-				return callback();
-			}
-
-			return data;
-		} catch (err) {
-			const error = err instanceof Error ? err : new Error(String(err));
-
-			toast.message('', {
-				description: error.message || 'Error al enviar el formulario de registro, por favor intente nuevamente.',
-			});
-
-			return null;
+			return result as T;
+		} catch (error) {
+			throw error;
 		}
 	}
 
-	private _handleInternalCode(options: { title: string; description: string; redirect?: string }): null {
+	private _handleInternalCode(options: { title: string; description: string; redirect?: string }) {
 		const { title, description, redirect = 'authentication/sign-in' } = options;
-
-		Cookies.remove(this._tokenPath);
+		Cookies.remove(envs.FT_AUTHENTICATION_TOKEN_PATH);
 
 		this._router.navigate([redirect], { replaceUrl: true }).then(() => {
 			toast.message(title, {
 				description: description,
 			});
 		});
-		return null;
+
+		throw new Error(description);
 	}
 }

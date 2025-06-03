@@ -38,12 +38,12 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 
 	public getServicesByRoute(targetRoute: string): Record<string, string> {
 		const permissions = this.get().userConfig?.permissions ?? [];
-		let result: Record<string, string> = {};
+		let accessServices: Record<string, string> = {};
 
 		const recurse = (submodules: TSubmodulePermission[]) => {
 			for (const submodule of submodules) {
 				if (submodule.route === targetRoute && submodule.services?.length) {
-					result = submodule.services.reduce((acc, service) => {
+					accessServices = submodule.services.reduce((acc, service) => {
 						acc[service.code] = service.urn;
 						return acc;
 					}, {} as Record<string, string>);
@@ -56,7 +56,22 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 		};
 
 		recurse(permissions);
-		return result;
+		return accessServices;
+	}
+
+	public getModuleByRoute(targetRoute: string): string {
+		const permissions = this.get().userConfig?.permissions ?? [];
+		let accessModule = '';
+
+		for (const module of permissions) {
+			for (const subModule of module.submodules) {
+				if (subModule.route === targetRoute) {
+					accessModule = subModule.code;
+				}
+			}
+		}
+
+		return accessModule;
 	}
 
 	public readonly loadUserConfig = (config: TUserConfig): Promise<boolean> => {

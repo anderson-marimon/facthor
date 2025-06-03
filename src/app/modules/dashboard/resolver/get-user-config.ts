@@ -7,7 +7,7 @@ import { envs } from '@envs/envs';
 import Cookies from 'js-cookie';
 import { filter, firstValueFrom } from 'rxjs';
 
-export const resolverLoadUserConfig: CanActivateFn = async () => {
+export const resolverGetUserConfig: CanActivateFn = async () => {
 	const router = inject(Router);
 	const pathToken = envs.FT_AUTHENTICATION_TOKEN_PATH;
 	const storeUserConfig = inject(StoreUserConfig);
@@ -18,7 +18,7 @@ export const resolverLoadUserConfig: CanActivateFn = async () => {
 	const userConfig = await firstValueFrom(userConfigObservable.pipe(filter(Boolean)));
 
 	if (userConfig) {
-		await storeUserConfig.loadUserConfig(userConfig);
+		await storeUserConfig.loadUserConfig(userConfig as any);
 		return true;
 	}
 

@@ -1,6 +1,6 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
-import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
+import { NewAccessInterceptor } from '@dashboard/interceptors/access-interceptor';
 
 type TInvoiceListParams = Nullable<{
 	page: number;
@@ -10,7 +10,7 @@ type TInvoiceListParams = Nullable<{
 
 type TApiInvoiceList = Nullable<TApi<any>>;
 
-export class ApiGelInvoiceList extends AccessInterceptor {
+export class ApiGelInvoiceList extends NewAccessInterceptor {
 	private readonly _url = `${envs.FT_URL_CLIENT_UPLOAD}${envs.FT_URN}`;
 	private readonly _params = signal<TInvoiceListParams>(null);
 

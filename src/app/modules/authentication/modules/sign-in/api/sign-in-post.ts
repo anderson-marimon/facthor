@@ -15,7 +15,7 @@ export class ApiPostSignIn {
 	private readonly _signInForm = signal<Record<string, string>>({});
 	private readonly _resource = resource({ request: this._signInForm, loader: (body) => this._signIn(body) });
 
-	public readonly loader = this._resource.isLoading;
+	public readonly isLoading = this._resource.isLoading;
 	public readonly userData = this._resource.value;
 
 	private async _signIn(body: ResourceLoaderParams<Record<string, string>>): Promise<Nullable<Omit<SingIn, 'authToken'>>> {

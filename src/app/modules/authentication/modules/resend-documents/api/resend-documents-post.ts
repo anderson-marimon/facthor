@@ -1,6 +1,7 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
+import { getBase64FromTFile } from '@shared/utils/get-base64-from-t-file';
 import { toast } from 'ngx-sonner';
 
 export class ApiPostResendDocuments {
@@ -56,7 +57,7 @@ export class ApiPostResendDocuments {
 			providerLegalDocuments: [
 				..._form['documents'].map((file: TFile[]) => ({
 					idLegalDocumentType: file[0].fileId,
-					legalDocumentBase64: file[0].base64.split(',')[1],
+					legalDocumentBase64: getBase64FromTFile(file[0]),
 				})),
 			],
 		};

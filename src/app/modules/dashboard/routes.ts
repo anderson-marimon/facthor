@@ -1,16 +1,18 @@
 import { Routes } from '@angular/router';
 import { ApiGetUserConfiguration } from '@dashboard/api/user-configuration';
 import { guardAccessToken } from '@dashboard/guards/access-token';
-import { resolverLoadUserConfig } from '@dashboard/resolver/load-user-config';
 import { guardModulePermissions } from '@dashboard/guards/module-permissions';
+import { resolverGetAccessServices } from '@dashboard/resolver/get-access-services';
+import { resolverGetAccessToken } from '@dashboard/resolver/get-access-token';
+import { resolverGetUserConfig } from '@dashboard/resolver/get-user-config';
 import { StoreUserConfig } from '@dashboard/stores/user-config';
-import { resolverLoadRouteServices } from './resolver/load-route-services';
+import { resolverGetAccessModule } from './resolver/get-access-module';
 
 export const dashboardRoutes: Routes = [
 	{
 		path: '',
 		providers: [StoreUserConfig, ApiGetUserConfiguration],
-		canActivate: [guardAccessToken, resolverLoadUserConfig],
+		canActivate: [guardAccessToken, resolverGetUserConfig],
 		loadComponent: () => import('@dashboard/layout').then((page) => page.default),
 		children: [
 			{
@@ -24,7 +26,6 @@ export const dashboardRoutes: Routes = [
 			},
 			{
 				path: 'invoice-management',
-
 				children: [
 					{
 						path: '',
@@ -35,7 +36,9 @@ export const dashboardRoutes: Routes = [
 						path: 'upload-invoice',
 						canActivate: [guardModulePermissions],
 						resolve: {
-							services: resolverLoadRouteServices,
+							accessToken: resolverGetAccessToken,
+							accessModule: resolverGetAccessModule,
+							accessServices: resolverGetAccessServices,
 						},
 						loadComponent: () => import('@dashboard/modules/invoice-management/upload-invoice/view').then((page) => page.default),
 					},

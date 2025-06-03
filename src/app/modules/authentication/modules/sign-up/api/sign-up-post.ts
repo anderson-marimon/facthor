@@ -1,5 +1,6 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
+import { getBase64FromTFile } from '@shared/utils/get-base64-from-t-file';
 import { toast } from 'ngx-sonner';
 
 export class ApiPostSignUp {
@@ -106,19 +107,19 @@ export class ApiPostSignUp {
 			businessLegalDocuments: [
 				{
 					idLegalDocumentType: 1,
-					legalDocumentBase64: documents['chamberOfCommerceFile'][0].base64.split(',')[1],
+					legalDocumentBase64: getBase64FromTFile(documents['chamberOfCommerceFile'][0]),
 				},
 				{
 					idLegalDocumentType: 2,
-					legalDocumentBase64: documents['rutFile'][0].base64.split(',')[1],
+					legalDocumentBase64: getBase64FromTFile(documents['rutFile']),
 				},
 				{
 					idLegalDocumentType: 3,
-					legalDocumentBase64: documents['bankCertificationFile'][0].base64.split(',')[1],
+					legalDocumentBase64: getBase64FromTFile(documents['bankCertificationFile'][0]),
 				},
 				{
 					idLegalDocumentType: 4,
-					legalDocumentBase64: documents['legalRepresentativeDniFile'][0].base64.split(',')[1],
+					legalDocumentBase64: getBase64FromTFile(documents['legalRepresentativeDniFile'][0]),
 				},
 			],
 			bankAccount: {
@@ -132,7 +133,7 @@ export class ApiPostSignUp {
 		if (role['option'] !== '2') {
 			_form.businessLegalDocuments.push({
 				idLegalDocumentType: 5,
-				legalDocumentBase64: documents['financialStatementsFile'][0].base64.split(',')[1],
+				legalDocumentBase64: getBase64FromTFile(documents['financialStatementsFile'][0]),
 			});
 		}
 

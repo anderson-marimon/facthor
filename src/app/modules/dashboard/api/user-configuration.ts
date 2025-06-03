@@ -43,28 +43,30 @@ export type TService = {
 	microservice: string;
 };
 
-type TApiUserConfig = Nullable<TApi<TUserConfig>>;
+type TApiUserConfig = TApi<TUserConfig>;
 
 export class ApiGetUserConfiguration extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_LOGIN}${envs.FT_URN}`;
 	private readonly _token = signal('');
 	private readonly _resource = resource({
 		request: this._token,
-		loader: (token) => this.interceptInternalCodes(this._fetchUserInformation(token)),
+		loader: (token) => this._fetchUserInformation(token),
 	});
 
-	private async _fetchUserInformation(token: ResourceLoaderParams<string>): Promise<TApiUserConfig> {
+	private async _fetchUserInformation(token: ResourceLoaderParams<string>) {
 		if (token.request.length === 0) return null;
 
 		const path = `${this._url}${envs.FT_AUTH_CONFIG_USER}`;
 
-		const response = await fetch(path, {
+		const result = await this._HttpRequest<TApiUserConfig>({
+			path,
 			method: 'GET',
 			signal: token.abortSignal,
 			headers: { Authorization: `Bearer ${token.request}` },
 		});
 
-		return await response.json();
+		console.log(result);
+		return result.data;
 	}
 
 	public readonly configuration = this._resource.value;
