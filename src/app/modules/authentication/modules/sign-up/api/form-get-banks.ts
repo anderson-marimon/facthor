@@ -12,10 +12,6 @@ export class ApiGetFormBanks {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _apiResource = resource({ loader: () => this._fetchBanks() });
 
-	public readonly banks = this._apiResource.value;
-	public readonly loader = this._apiResource.isLoading;
-	public readonly error = this._apiResource.error;
-
 	private async _fetchBanks() {
 		const path = `${this._url}/MasterData/GetBanks`;
 
@@ -31,4 +27,8 @@ export class ApiGetFormBanks {
 			return [];
 		}
 	}
+
+	public readonly isLoading = this._apiResource.isLoading;
+	public readonly response = this._apiResource.value;
+	public readonly error = this._apiResource.error;
 }

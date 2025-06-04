@@ -7,9 +7,6 @@ export class ApiPutRenewUpdateFilesToken {
 	private readonly _token = signal('');
 	private readonly _resource = resource({ request: this._token, loader: (token) => this._renewUpdateFilesToken(token) });
 
-	public readonly loader = this._resource.isLoading;
-	public readonly wasSent = this._resource.value;
-
 	private async _renewUpdateFilesToken(token: ResourceLoaderParams<string>): Promise<boolean> {
 		if (this._token().length === 0) return false;
 
@@ -46,6 +43,9 @@ export class ApiPutRenewUpdateFilesToken {
 			return false;
 		}
 	}
+
+	public readonly isLoading = this._resource.isLoading;
+	public readonly response = this._resource.value;
 
 	public renewUpdateFileToken(form: string): void {
 		this._token.set(form);

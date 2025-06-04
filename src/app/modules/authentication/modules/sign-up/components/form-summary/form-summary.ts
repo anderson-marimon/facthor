@@ -26,8 +26,6 @@ export class SignUpFormSummary {
 	protected _accountForm: TRecord = {};
 	protected _showPassword = signal(false);
 
-	public readonly loading = this._apiPostSignUp.loading;
-
 	constructor() {
 		this._signUpFormStore
 			.select((store) => store)

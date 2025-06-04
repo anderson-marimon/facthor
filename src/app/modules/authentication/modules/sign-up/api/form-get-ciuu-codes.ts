@@ -12,10 +12,6 @@ export class ApiGetFormCiuuCodes {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _ciuuResource = resource({ loader: () => this._fetchCiuuCodes() });
 
-	public readonly ciuuCodes = this._ciuuResource.value;
-	public readonly isLoading = this._ciuuResource.isLoading;
-	public readonly errors = this._ciuuResource.error;
-
 	private async _fetchCiuuCodes() {
 		const url = `${this._url}/MasterData/GetCodeCiuu`;
 
@@ -31,4 +27,8 @@ export class ApiGetFormCiuuCodes {
 			return [];
 		}
 	}
+
+	public readonly isLoading = this._ciuuResource.isLoading;
+	public readonly response = this._ciuuResource.value;
+	public readonly errors = this._ciuuResource.error;
 }

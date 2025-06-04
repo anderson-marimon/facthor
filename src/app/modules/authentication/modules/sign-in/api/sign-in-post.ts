@@ -15,9 +15,6 @@ export class ApiPostSignIn {
 	private readonly _signInForm = signal<Record<string, string>>({});
 	private readonly _resource = resource({ request: this._signInForm, loader: (body) => this._signIn(body) });
 
-	public readonly isLoading = this._resource.isLoading;
-	public readonly userData = this._resource.value;
-
 	private async _signIn(body: ResourceLoaderParams<Record<string, string>>): Promise<Nullable<Omit<SingIn, 'authToken'>>> {
 		if (Object.keys(this._signInForm()).length === 0) return null;
 
@@ -75,6 +72,9 @@ export class ApiPostSignIn {
 			return null;
 		}
 	}
+
+	public readonly isLoading = this._resource.isLoading;
+	public readonly response = this._resource.value;
 
 	public signIn(form: { username: string; password: string }): void {
 		this._signInForm.set(form);

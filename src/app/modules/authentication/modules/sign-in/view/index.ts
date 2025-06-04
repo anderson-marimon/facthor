@@ -28,7 +28,7 @@ export default class SignInPage {
 	private readonly _tryAgain = signal(true);
 
 	protected readonly _isLoadingApiPostSignIn = this._apiPostSingIn.isLoading;
-	protected readonly _userData = this._apiPostSingIn.userData;
+	protected readonly _userData = this._apiPostSingIn.response;
 	// protected readonly _username = this._formBuilder.control('', [Validators.required, this._validator.dni()]);
 	protected readonly _username = this._formBuilder.control('', [Validators.required]);
 	protected readonly _password = this._formBuilder.control('', [Validators.required]);

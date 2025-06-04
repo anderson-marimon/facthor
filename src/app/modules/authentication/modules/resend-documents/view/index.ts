@@ -38,17 +38,17 @@ export default class ChangePasswordPage {
 	private readonly _token = signal<string>('');
 
 	protected readonly _initialLoader = signal(true);
-	protected readonly _isValidToken = this._apiGetVerifyUpdateFilesToken.isValidToken;
-	protected readonly _loaderVerifyToken = this._apiGetVerifyUpdateFilesToken.loader;
+	protected readonly _isValidToken = this._apiGetVerifyUpdateFilesToken.response;
+	protected readonly _isLoadingVerifyToken = this._apiGetVerifyUpdateFilesToken.isLoading;
 
-	protected readonly _failedDocuments = this._apiGetFailedLegalDocuments.failedDocuments;
-	protected readonly _loaderFailedDocuments = this._apiGetFailedLegalDocuments.loader;
+	protected readonly _failedDocuments = this._apiGetFailedLegalDocuments.response;
+	protected readonly _isLoadingFailedDocuments = this._apiGetFailedLegalDocuments.isLoading;
 
-	protected readonly _wasRenewTokenSend = this._apiPutRenewUpdateFilesToken.wasSent;
-	protected readonly _loaderRenewToken = this._apiPutRenewUpdateFilesToken.loader;
+	protected readonly _wasRenewTokenSend = this._apiPutRenewUpdateFilesToken.response;
+	protected readonly _isLoadingRenewToken = this._apiPutRenewUpdateFilesToken.isLoading;
 
-	protected readonly _loader = this._apiPutResendDocuments.loader;
-	protected readonly _wasDocumentsSent = this._apiPutResendDocuments.wasSent;
+	protected readonly _isLoadingApiPutResendDocuments = this._apiPutResendDocuments.isLoading;
+	protected readonly _wasSentApiPutResendDocuments = this._apiPutResendDocuments.response;
 
 	protected readonly _files = signal<Record<string, TFile[]>>({});
 	protected readonly _fileControls: Record<TFileControlKey, FormControl<Nullable<TFile[]>>> = {
@@ -95,7 +95,7 @@ export default class ChangePasswordPage {
 	}
 
 	private _addObservables(): void {
-		combineLatest([toObservable(this._wasDocumentsSent), toObservable(this._wasRenewTokenSend)])
+		combineLatest([toObservable(this._wasSentApiPutResendDocuments), toObservable(this._wasRenewTokenSend)])
 			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
 			.subscribe(([wasDocumentSent, wasRenewSent]) => {
 				if (wasDocumentSent === true || wasRenewSent === true) {
@@ -141,14 +141,14 @@ export default class ChangePasswordPage {
 	}
 
 	protected _onClickRefreshToken(): void {
-		if (this._loaderVerifyToken()) return;
+		if (this._isLoadingVerifyToken()) return;
 
 		if (!this._isValidToken()) {
 			this._dialogRef.openAlertDialog({
 				title: `¿Estás seguro de renovar la solicitud?`,
 				description: 'Te enviaremos un nuevo enlace por correo electrónico.',
 				actionButtonText: 'Renovar',
-				loading: this._loaderRenewToken,
+				loading: this._isLoadingRenewToken,
 				action: () => {
 					this._apiPutRenewUpdateFilesToken.renewUpdateFileToken(this._token());
 				},

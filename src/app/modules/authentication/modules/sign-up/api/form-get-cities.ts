@@ -29,18 +29,6 @@ export class ApiGetFormCities {
 		loader: (params) => this._fetchCities(params),
 	});
 
-	public readonly businessCities = this._businessCitiesResource.value;
-	public readonly businessIsLoading = this._businessCitiesResource.isLoading;
-	public readonly businessError = this._businessCitiesResource.error;
-
-	public readonly legalRepresentativeBirthCities = this._legalRepresentativeBirthCitiesResource.value;
-	public readonly legarRepresentativeBirthIsLoading = this._legalRepresentativeBirthCitiesResource.isLoading;
-	public readonly legalRepresentativeBirthError = this._legalRepresentativeBirthCitiesResource.error;
-
-	public readonly legalRepresentativeExpeditionCities = this._legalRepresentativeExpeditionCitiesResource.value;
-	public readonly legarRepresentativeExpeditionIsLoading = this._legalRepresentativeExpeditionCitiesResource.isLoading;
-	public readonly legalRepresentativeExpeditionError = this._legalRepresentativeExpeditionCitiesResource.error;
-
 	private async _fetchCities(params: ResourceLoaderParams<number>) {
 		if (params.request === 0) return [];
 
@@ -64,6 +52,18 @@ export class ApiGetFormCities {
 			return [];
 		}
 	}
+
+	public readonly businessIsLoading = this._businessCitiesResource.isLoading;
+	public readonly businessCities = this._businessCitiesResource.value;
+	public readonly businessError = this._businessCitiesResource.error;
+
+	public readonly legarRepresentativeBirthIsLoading = this._legalRepresentativeBirthCitiesResource.isLoading;
+	public readonly legalRepresentativeBirthCities = this._legalRepresentativeBirthCitiesResource.value;
+	public readonly legalRepresentativeBirthError = this._legalRepresentativeBirthCitiesResource.error;
+
+	public readonly legarRepresentativeExpeditionIsLoading = this._legalRepresentativeExpeditionCitiesResource.isLoading;
+	public readonly legalRepresentativeExpeditionCities = this._legalRepresentativeExpeditionCitiesResource.value;
+	public readonly legalRepresentativeExpeditionError = this._legalRepresentativeExpeditionCitiesResource.error;
 
 	public updateBusinessDepartment(id: number): void {
 		this._businessDepartmentId.set(id);

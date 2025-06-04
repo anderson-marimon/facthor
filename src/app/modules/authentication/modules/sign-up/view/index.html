@@ -36,10 +36,14 @@
             </a>
         </span>
         <div class="flex gap-5 [&_button]:w-24 p-1">
-            <button frs-button [disabled]="_isAvailablePreviousStep()" (click)="_previousStep()">Anterior</button>
-            <button frs-button [disabled]="_isAvailableNextStep()" (click)="_nextStep()">
+            <button frs-button [disabled]="_isAvailablePreviousStep() || _isLoadingApiPostSignUp()" (click)="_previousStep()">Anterior</button>
+            <button frs-button [disabled]="_isAvailableNextStep() ||_isLoadingApiPostSignUp()" (click)="_nextStep()">
                 @if(_currentStep() === 4) {
-                    Enviar
+                    @if(_isLoadingApiPostSignUp()) {
+                        <loading-icon [color]="'#FFFFFF'" class="size-6" />
+                    } @else {
+                        Enviar
+                    }
                 } @else {
                     Siguiente
                 }

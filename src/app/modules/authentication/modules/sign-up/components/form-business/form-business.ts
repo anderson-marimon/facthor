@@ -37,9 +37,9 @@ export class SignUpBusinessForm {
 
 	// Inputs data
 	protected readonly _addressStreetsOptions = ADDRESS_STREETS;
-	protected readonly _departmentsOptions = this._apiGetFormDepartment.departments;
+	protected readonly _departmentsOptions = this._apiGetFormDepartment.response;
 	protected readonly _businessCitiesOptions = this._apiGetFormCities.businessCities;
-	protected readonly _economicActivitiesOptions = this._apiGetFormCiuuCodes.ciuuCodes;
+	protected readonly _economicActivitiesOptions = this._apiGetFormCiuuCodes.response;
 	protected readonly _legalRepresentativeBirthCitiesOptions = this._apiGetFormCities.legalRepresentativeBirthCities;
 	protected readonly _legaRepresentativeExpeditionCitiesOptions = this._apiGetFormCities.legalRepresentativeExpeditionCities;
 

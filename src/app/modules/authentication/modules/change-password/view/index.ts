@@ -27,8 +27,8 @@ export default class ChangePasswordPage {
 	private readonly _password = signal('');
 	private readonly _token = signal<string>('');
 
-	protected readonly _loader = this._apiPostChangePassword.loader;
-	protected readonly _wasSent = this._apiPostChangePassword.wasSent;
+	protected readonly _isLoadingApiPostChangePassword = this._apiPostChangePassword.isLoading;
+	protected readonly _wasSentApiPostChangePassword = this._apiPostChangePassword.response;
 	protected readonly _newPassword = this._formBuilder.control('', [Validators.required, this._validator.password()]);
 	protected readonly _confirmNewPassword = this._formBuilder.control('', [Validators.required, this._validator.confirmPassword(this._password)]);
 
@@ -50,7 +50,7 @@ export default class ChangePasswordPage {
 	}
 
 	private _syncWasSent(): void {
-		toObservable(this._wasSent)
+		toObservable(this._wasSentApiPostChangePassword)
 			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
 			.subscribe((wasSent) => {
 				if (wasSent !== true) return;
@@ -64,7 +64,7 @@ export default class ChangePasswordPage {
 	}
 
 	protected _onClickSingIn(): void {
-		if (this._loader()) return;
+		if (this._isLoadingApiPostChangePassword()) return;
 
 		const form = this._form;
 		if (form.invalid) return form.markAllAsTouched();

@@ -11,9 +11,6 @@ export class ApiGetFailedLegalDocumentsGet {
 	private readonly _token = signal('');
 	private readonly _resource = resource({ request: this._token, loader: (token) => this._getFailedLegalDocuments(token) });
 
-	public readonly failedDocuments = this._resource.value;
-	public readonly loader = this._resource.isLoading;
-
 	private async _getFailedLegalDocuments(token: ResourceLoaderParams<string>): Promise<TFiledDocuments> {
 		if (this._token().length === 0) return [];
 
@@ -42,6 +39,9 @@ export class ApiGetFailedLegalDocumentsGet {
 			return [];
 		}
 	}
+
+	public readonly response = this._resource.value;
+	public readonly isLoading = this._resource.isLoading;
 
 	public getFailedLegalDocuments(form: string): void {
 		this._token.set(form);

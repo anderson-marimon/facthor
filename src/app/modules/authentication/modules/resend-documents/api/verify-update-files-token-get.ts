@@ -6,9 +6,6 @@ export class ApiGetVerifyUpdateFilesToken {
 	private readonly _token = signal('');
 	private readonly _resource = resource({ request: this._token, loader: (token) => this._verifyUpdateFilesToken(token) });
 
-	public readonly isValidToken = this._resource.value;
-	public readonly loader = this._resource.isLoading;
-
 	private async _verifyUpdateFilesToken(token: ResourceLoaderParams<string>): Promise<boolean> {
 		if (this._token().length === 0) return false;
 
@@ -37,6 +34,9 @@ export class ApiGetVerifyUpdateFilesToken {
 			return false;
 		}
 	}
+
+	public readonly isLoading = this._resource.isLoading;
+	public readonly response = this._resource.value;
 
 	public verifyUpdateFileToken(form: string): void {
 		this._token.set(form);

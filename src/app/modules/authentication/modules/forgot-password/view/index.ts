@@ -24,8 +24,8 @@ export default class ForgotPasswordPage {
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _validator = inject(FormValidator);
 
-	protected readonly _loader = this._apiPutForgotPassword.loader;
-	protected readonly _wasSent = this._apiPutForgotPassword.wasSent;
+	protected readonly _isLoadingApiPostForgotPassword = this._apiPutForgotPassword.isLoading;
+	protected readonly _wasSentApiPostForgotPassword = this._apiPutForgotPassword.response;
 	protected readonly _email = this._formBuilder.control('', [Validators.required, this._validator.email()]);
 
 	protected readonly _form = this._formBuilder.group({
@@ -37,7 +37,7 @@ export default class ForgotPasswordPage {
 	}
 
 	private _syncWasSent(): void {
-		toObservable(this._wasSent)
+		toObservable(this._wasSentApiPostForgotPassword)
 			.pipe(takeUntilDestroyed(this._destroyRef), distinctUntilChanged())
 			.subscribe((wasSent) => {
 				if (wasSent !== true) return;
@@ -46,7 +46,7 @@ export default class ForgotPasswordPage {
 	}
 
 	protected _onClickSingIn(): void {
-		if (this._loader()) return;
+		if (this._isLoadingApiPostForgotPassword()) return;
 
 		const form = this._form;
 		if (form.invalid) return form.markAllAsTouched();

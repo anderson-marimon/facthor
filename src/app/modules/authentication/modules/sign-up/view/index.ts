@@ -11,6 +11,7 @@ import { SignUpRoleStep } from '@authentication/modules/sign-up/components/role-
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up-form';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
+import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
 import { distinctUntilChanged } from 'rxjs';
 
 @Component({
@@ -20,6 +21,7 @@ import { distinctUntilChanged } from 'rxjs';
 	viewProviders: [ApiPostSignUp],
 	imports: [
 		FrsButtonModule,
+		LoadingIcon,
 		RouterLink,
 		SignUpRoleStep,
 		SignUpRoleForm,
@@ -33,7 +35,7 @@ import { distinctUntilChanged } from 'rxjs';
 export default class SignUpPage {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _router = inject(Router);
-	private readonly _apiSignUp = inject(ApiPostSignUp);
+	private readonly _apiPostSignUp = inject(ApiPostSignUp);
 	private readonly _roleForm = viewChild.required<SignUpRoleForm>(SignUpRoleForm);
 	private readonly _businessForm = viewChild.required<SignUpBusinessForm>(SignUpBusinessForm);
 	private readonly _documentsForm = viewChild.required<SignUpDocumentsForm>(SignUpDocumentsForm);
@@ -42,6 +44,7 @@ export default class SignUpPage {
 	private readonly _signUpFormStore = inject(SignUpFormStore);
 	private readonly _dialogRef = inject(FrsDialogRef);
 
+	protected readonly _isLoadingApiPostSignUp = this._apiPostSignUp.isLoading;
 	protected readonly _isAvailableNextStep = signal(true);
 	protected readonly _currentStep = signal(0);
 	protected readonly _formSteps = signal(Array(5).fill(false));
@@ -78,7 +81,7 @@ export default class SignUpPage {
 	}
 
 	private _syncCloseRegisterDialog(): void {
-		toObservable(this._apiSignUp.data)
+		toObservable(this._apiPostSignUp.response)
 			.pipe(takeUntilDestroyed(this._destroyRef))
 			.subscribe((value) => {
 				if (value !== true) return;
@@ -120,7 +123,7 @@ export default class SignUpPage {
 					description:
 						'Por favor, revisa bien toda la información antes de enviarla, una vez enviado el registro, no puede ser modificado.',
 					action: () => this._summary().sendForm(),
-					loading: this._apiSignUp.loading,
+					loading: this._isLoadingApiPostSignUp,
 				});
 			},
 		];
@@ -129,7 +132,7 @@ export default class SignUpPage {
 	}
 
 	protected _previousStep(): void {
-		if (this._currentStep() > 0) {
+		if (this._currentStep() > 0 && !this._isLoadingApiPostSignUp()) {
 			this._setStep(this._currentStep() - 1);
 		}
 	}
@@ -139,6 +142,6 @@ export default class SignUpPage {
 	}
 
 	protected _isAvailablePreviousStep(): boolean {
-		return this._currentStep() === 0;
+		return this._currentStep() === 0 && !this._isLoadingApiPostSignUp();
 	}
 }

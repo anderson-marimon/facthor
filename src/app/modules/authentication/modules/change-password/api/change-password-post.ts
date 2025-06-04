@@ -7,9 +7,6 @@ export class ApiPostChangePassword {
 	private readonly _changePasswordForm = signal<Record<string, string>>({});
 	private readonly _resource = resource({ request: this._changePasswordForm, loader: (body) => this._changePassword(body) });
 
-	public readonly loader = this._resource.isLoading;
-	public readonly wasSent = this._resource.value;
-
 	private async _changePassword(_body: ResourceLoaderParams<Record<string, string>>): Promise<boolean> {
 		if (Object.keys(this._changePasswordForm()).length === 0) return false;
 
@@ -48,6 +45,9 @@ export class ApiPostChangePassword {
 			return false;
 		}
 	}
+
+	public readonly isLoading = this._resource.isLoading;
+	public readonly response = this._resource.value;
 
 	public changePassword(form: Record<string, string>): void {
 		this._changePasswordForm.set(form);

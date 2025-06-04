@@ -9,9 +9,6 @@ export class ApiPostResendDocuments {
 	private readonly _resendDocumentsForm = signal<Record<string, any>>({});
 	private readonly _resource = resource({ request: this._resendDocumentsForm, loader: (body) => this._resendDocuments(body) });
 
-	public readonly loader = this._resource.isLoading;
-	public readonly wasSent = this._resource.value;
-
 	private async _resendDocuments(_body: ResourceLoaderParams<Record<string, any>>): Promise<boolean> {
 		if (Object.keys(this._resendDocumentsForm()).length === 0) return false;
 
@@ -50,6 +47,9 @@ export class ApiPostResendDocuments {
 			return false;
 		}
 	}
+
+	public readonly isLoading = this._resource.isLoading;
+	public readonly response = this._resource.value;
 
 	public resendDocuments(_form: Record<string, any>): void {
 		const form = {

@@ -33,7 +33,7 @@ export class SignUpDocumentsForm {
 	public readonly selectedRole = input<string>('');
 
 	protected readonly _files = signal<Record<string, TFile[]>>({});
-	protected readonly _bankNameOptions = this._apiGetFormBanks.banks;
+	protected readonly _bankNameOptions = this._apiGetFormBanks.response;
 	protected readonly _bankAccountTypeOptions = BANK_TYPE_OPTIONS;
 	protected readonly _disableBankAccountNumber = signal<boolean>(false);
 	protected readonly _bankName = this._formBuilder.control<TSelectOption[]>([], Validators.required);

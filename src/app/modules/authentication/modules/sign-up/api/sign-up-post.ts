@@ -1,5 +1,6 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
+import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { getBase64FromTFile } from '@shared/utils/get-base64-from-t-file';
 import { toast } from 'ngx-sonner';
 
@@ -7,10 +8,6 @@ export class ApiPostSignUp {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
 	private readonly _signUpForm = signal<Record<string, any>>({});
 	private readonly _resource = resource({ request: this._signUpForm, loader: (body) => this._signUp(body) });
-
-	public readonly data = this._resource.value;
-	public readonly loading = this._resource.isLoading;
-	public readonly errors = this._resource.error;
 
 	private async _signUp(body: ResourceLoaderParams<Record<string, any>>): Promise<boolean> {
 		if (Object.keys(this._signUpForm()).length === 0) return false;
@@ -38,15 +35,19 @@ export class ApiPostSignUp {
 			});
 
 			return ok;
-		} catch (err) {
-			const error = err instanceof Error ? err : new Error(String(err));
-
-			toast.message('Registro fallido', {
-				description: error.message || 'error al enviar el formulario de registro, por favor intente nuevamente',
+		} catch (error) {
+			catchHandlerError({
+				error,
+				message: 'Registro fallido',
+				description: 'error al enviar el formulario de registro, por favor intente nuevamente',
 			});
 			return false;
 		}
 	}
+
+	public readonly isLoading = this._resource.isLoading;
+	public readonly response = this._resource.value;
+	public readonly errors = this._resource.error;
 
 	public signUp(form: Record<string, any>): void {
 		const { role, business, documents, account } = form;

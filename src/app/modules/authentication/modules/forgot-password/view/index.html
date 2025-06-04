@@ -13,8 +13,8 @@
                     [placeholder]="'Ingrese el correo electrónico'"
                 />
             </frs-field>
-            <button [disabled]="_loader()" type="submit" class="mt-2.5" frs-button>
-                @if(_loader()) {
+            <button [disabled]="_isLoadingApiPostForgotPassword()" type="submit" class="mt-2.5" frs-button>
+                @if(_isLoadingApiPostForgotPassword()) {
                     <loading-icon [color]="'#FFFFFF'" class="size-6" />
                 } @else {
                     Enviar correo de recuperación

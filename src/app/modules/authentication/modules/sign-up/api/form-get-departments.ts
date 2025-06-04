@@ -17,10 +17,6 @@ export class ApiGetFormDepartment {
 		loader: (params) => this._fetchDepartments(params),
 	});
 
-	public readonly departments = this._departmentsResource.value;
-	public readonly isLoading = this._departmentsResource.isLoading;
-	public readonly error = this._departmentsResource.error;
-
 	private async _fetchDepartments(params: ResourceLoaderParams<number>) {
 		if (params.request === 0) return [];
 
@@ -44,4 +40,8 @@ export class ApiGetFormDepartment {
 			return [];
 		}
 	}
+
+	public readonly isLoading = this._departmentsResource.isLoading;
+	public readonly response = this._departmentsResource.value;
+	public readonly error = this._departmentsResource.error;
 }
