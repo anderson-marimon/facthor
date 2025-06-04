@@ -1,6 +1,6 @@
-<article class="h-full flex flex-col gap-5 font-light">
-    <section class="flex flex-col pb-5 border-b">
-        <h1 class="text-4xl font-semibold">¡Bienvenido!</h1>
+<article class="h-full flex flex-col text-sm font-light">
+    <section class="flex flex-col pb-5 pr-5 border-b">
+        <h1 class="text-3xl font-semibold uppercase">¡Bienvenido!</h1>
         <div class="flex flex-col lg:flex-row justify-between items-baseline lg:items-center gap-5">
             <p class="text-foreground/60">
                 Este es el inicio en el mundo del factoring, por favor, sigue
@@ -15,17 +15,17 @@
             </div>
         </div>
     </section>
-    <section class="flex-1 flex flex-col gap-5 px-1.5 pb-2 md:overflow-y-auto">
+    <section class="flex-1 flex flex-col gap-5 pt-5 md:overflow-y-auto">
         @switch(_currentStep()) {
-            @case(0) {<sign-up-role-form (formChange)="_onFormChange($event)" />}
-            @case(1) {<sign-up-business-form (formChange)="_onFormChange($event)" />}
-            @case(2) {<sign-up-documents-form [selectedRole]="_selectedRole()" (formChange)="_onFormChange($event)" />}
-            @case(3) {<sign-up-account-form (formChange)="_onFormChange($event)"/>}
-            @case(4) {<sign-up-form-summary />}
+            @case(0) {<sign-up-role-form class="pr-5" (formChange)="_onFormChange($event)" />}
+            @case(1) {<sign-up-business-form class="pr-5" (formChange)="_onFormChange($event)" />}
+            @case(2) {<sign-up-documents-form class="pr-5" [selectedRole]="_selectedRole()" (formChange)="_onFormChange($event)" />}
+            @case(3) {<sign-up-account-form class="pr-5" (formChange)="_onFormChange($event)"/>}
+            @case(4) {<sign-up-form-summary class="pr-5" />}
         }
     </section>
-    <section class="flex flex-col lg:flex-row items-center justify-between gap-5">
-        <span class="text-sm font-medium text-foreground/60">
+    <section class="flex flex-col lg:flex-row items-center justify-between gap-2.5 pr-5">
+        <span class="text-sm font-light text-foreground/60">
             ¿Ya tienes una cuenta?
             <a
                 [routerLink]="['/']"
@@ -35,7 +35,7 @@
                 Inicia sesión aquí
             </a>
         </span>
-        <div class="flex gap-5 [&_button]:w-24 p-1">
+        <div class="flex gap-5 [&_button]:w-24 py-5 pr-1">
             <button frs-button [disabled]="_isAvailablePreviousStep() || _isLoadingApiPostSignUp()" (click)="_previousStep()">Anterior</button>
             <button frs-button [disabled]="_isAvailableNextStep() ||_isLoadingApiPostSignUp()" (click)="_nextStep()">
                 @if(_currentStep() === 4) {
