@@ -2,7 +2,7 @@
     <div class="min-h-[282px] h-full grid place-content-center gap-2.5 group-hover:bg-gray-50 transition-colors duration-500 cursor-pointer">
         <i-lucide [img]="_uploadIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
         <span class="max-w-[210px] text-center">Arrastra y suelta tus facturas aquí
-            <span class="font-semibold text-secondary-facthor">o selecciona desde tu dispositivo</span>
+            <span class="font-semibold text-secondary-facthor">o selecciona desde tu dispositivo.</span>
         </span>
     </div>
     <div class="absolute top-0 left-0 z-10 w-full h-full">
@@ -31,7 +31,7 @@
         </div>
     } @else {
         @if (_files().length > 0) {
-            <div class="h-12 grid grid-cols-[5fr_1fr_1fr] gap-2.5 text-xxs uppercase font-semibold px-2.5 pb-2 items-center">
+            <div class="h-12 grid grid-cols-[5fr_1fr_1fr] gap-2.5 text-xxs uppercase font-semibold px-2.5 items-center">
                 <span class="text-start">nombre del archivo</span>
                 <span class="text-center">tamaño</span>
                 <span class="text-end">control</span>
@@ -54,7 +54,7 @@
         } @else {
             <div class="min-h-[282px] h-full grid place-content-center gap-2.5">
                 <i-lucide [img]="_fileIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
-                <span class="max-w-[210px] text-center">No hay facturas subidas, máximo 5 archivos</span>
+                <span class="max-w-[210px] text-center">No hay facturas subidas, máximo 5 archivos.</span>
             </div>
         }
     }

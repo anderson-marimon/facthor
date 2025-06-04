@@ -85,4 +85,8 @@ export class UploadInvoiceDragInputFiles {
 	public getFiles(): WritableSignal<TFile[]> {
 		return this._files;
 	}
+
+	public clearFiles(): void {
+		this._files.set([]);
+	}
 }

@@ -9,21 +9,29 @@
             <div class="min-h-[280px] h-full gap-2.5">
                 @if (_activeVerificationFiles()) {
                     @if(_errorFiles().length > 0 || _processedFiles().length > 0) {
-                        <section class="h-full flex flex-col gap-2.5 animate-opacity-in">
-                            @for (errorFile of _errorFiles(); track $index) {
-                                <upload-invoice-processed-invoice-item
-                                    [fileName]="_getFileNameById(errorFile.id)"
-                                    [fileErrors]="errorFile.errors"
-                                />
-                            }
+                        <section class="h-full md:h-[calc(100dvh-192px)] flex flex-col animate-opacity-in md:overflow-hidden">
+                            <div class="flex-1 flex flex-col gap-2 overflow-y-auto">
+                                @for (errorFile of _errorFiles(); track $index) {
+                                    <upload-invoice-processed-invoice-item
+                                        [fileName]="_getFileNameById(errorFile.id)"
+                                        [fileErrors]="errorFile.errors"
+                                    />
+                                }
+    
+                                @for (processedFile of _processedFiles(); track $index) {
+                                    <upload-invoice-processed-invoice-item
+                                        [fileName]="_getFileNameById(processedFile.id)"
+                                        [fileDetails]="processedFile"
+                                    />
+                                }
+                            </div>
 
-                            @for (processedFile of _processedFiles(); track $index) {
-                                <upload-invoice-processed-invoice-item
-                                    [fileName]="_getFileNameById(processedFile.id)"
-                                    [fileDetails]="processedFile"
-                                />
+                            @if(_errorFiles().length > 0) {
+                                <div class="flex items-center justify-start gap-1 pt-2.5">
+                                    <i-lucide [img]="_warningIcon" [strokeWidth]="1" class="size-5 stroke-yellow-600" />
+                                    <span class="pt-1 text-yellow-600">Únicamente se subirán las facturas que no presenten novedades o inconsistencias.</span>
+                                </div>
                             }
-
                         </section>
                     } @else {
                         <section class="h-full grid place-content-center gap-2.5 animate-opacity-in">
@@ -37,7 +45,8 @@
                                 (click)="_onClickExtractInvoiceData()"
                                 [disabled]="!_activeVerificationFiles() || _isLoadingApiPostExtractInvoiceData()"
                                 class="mx-auto mt-1 w-28"
-                                > @if(_isLoadingApiPostExtractInvoiceData()) {
+                            > 
+                                @if(_isLoadingApiPostExtractInvoiceData()) {
                                     <loading-icon [color]="'#FFFFFF'" class="size-6" />
                                 } @else {
                                     Verificar
@@ -59,11 +68,18 @@
         </upload-invoice-view-card>
     </article>
     <footer class="flex items-center justify-between gap-2.5 pr-2.5 xl:pr-0">
-        <p class="text-xs">Subir documentos en formato ZIP, con un tamaño inferior a 3MB. Solo se pueden subir 5 por operación.</p>
+        <p class="text-xs">Subir documentos en formato .zip o .rar, con un tamaño inferior a 3MB. Solo se pueden subir 5 por operación.</p>
         <button
             frs-button
-            [disabled]="true"
-            class="min-w-fit"
-        >Subir facturas</button>
+            [disabled]="_processedFiles().length === 0 || _isLoadingApiPostUploadInvoice()"
+            (click)="_onClickUploadInvoices()"
+            class="w-32"
+        >
+            @if(_isLoadingApiPostUploadInvoice()) {
+                <loading-icon [color]="'#FFFFFF'" class="size-6" />
+            } @else {
+                Subir facturas
+            }
+        </button>
     </footer>
 </section>

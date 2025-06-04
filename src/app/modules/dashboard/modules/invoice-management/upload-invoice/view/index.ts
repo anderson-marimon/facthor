@@ -7,17 +7,21 @@ import {
 	TZipErrorFiles,
 	TZipProcessedFiles,
 } from '@dashboard/modules/invoice-management/upload-invoice/api/extract-invoice-data';
+import { ApiPostUploadInvoices } from '@dashboard/modules/invoice-management/upload-invoice/api/upload-invoices';
 import { UploadInvoiceDragInputFiles } from '@dashboard/modules/invoice-management/upload-invoice/components/drag-input-files/drag-input-files';
 import { UploadInvoicesProcessedInvoiceItem } from '@dashboard/modules/invoice-management/upload-invoice/components/processed-invoice-item/processed-invoice-item';
 import { UploadInvoiceViewCard } from '@dashboard/modules/invoice-management/upload-invoice/components/view-card/view-card';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
 import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
-import { LucideAngularModule, SearchCheck } from 'lucide-angular';
+import { LucideAngularModule, SearchCheck, TriangleAlert } from 'lucide-angular';
+import { toast } from 'ngx-sonner';
+import { timer } from 'rxjs';
 
 @Component({
 	selector: 'dashboard-invoice-management',
 	templateUrl: 'index.html',
-	viewProviders: [ApiPostExtractInvoiceData],
+	viewProviders: [ApiPostExtractInvoiceData, ApiPostUploadInvoices],
 	imports: [
 		FrsButtonModule,
 		LoadingIcon,
@@ -31,21 +35,26 @@ export default class DashboardInvoiceManagement {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _apiPostExtractInvoiceData = inject(ApiPostExtractInvoiceData);
+	private readonly _apiPostUploadInvoices = inject(ApiPostUploadInvoices);
 	private readonly _dragFilesComponent = viewChild(UploadInvoiceDragInputFiles);
 	private readonly _accessToken = signal('');
 	private readonly _accessModule = signal('');
 	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
-	private readonly _extractedInvoiceData = this._apiPostExtractInvoiceData.extractedInvoiceData;
+	private readonly _dragFiles = signal<TFile[]>([]);
+	private readonly _extractedInvoiceData = this._apiPostExtractInvoiceData.response;
+	private readonly _uploadInvoiceResult = this._apiPostUploadInvoices.response;
 
 	protected readonly _searchIcon = SearchCheck;
+	protected readonly _warningIcon = TriangleAlert;
 	protected readonly _activeVerificationFiles = signal(false);
 	protected readonly _isLoadingApiPostExtractInvoiceData = this._apiPostExtractInvoiceData.isLoading;
+	protected readonly _isLoadingApiPostUploadInvoice = this._apiPostUploadInvoices.isLoading;
 	protected readonly _errorFiles = signal<TZipErrorFiles[]>([]);
 	protected readonly _processedFiles = signal<TZipProcessedFiles[]>([]);
 
 	constructor() {
 		this._addSubscription();
-		this._addObservable();
+		this._addObservables();
 
 		afterRenderEffect(() => {
 			this._watchFileChanges();
@@ -60,7 +69,7 @@ export default class DashboardInvoiceManagement {
 		});
 	}
 
-	private _addObservable(): void {
+	private _addObservables(): void {
 		toObservable(this._extractedInvoiceData)
 			.pipe(takeUntilDestroyed(this._destroyRef))
 			.subscribe((extractedData) => {
@@ -69,22 +78,52 @@ export default class DashboardInvoiceManagement {
 					this._processedFiles.set(extractedData.zipFilesProcessed);
 				}
 			});
+
+		toObservable(this._uploadInvoiceResult)
+			.pipe(takeUntilDestroyed(this._destroyRef))
+			.subscribe((result) => {
+				if (!result) return;
+
+				if (result.ok) {
+					this._errorFiles.set([]);
+					this._processedFiles.set([]);
+					this._dragFilesComponent()?.clearFiles();
+
+					toast.message('Carga completada', {
+						position: 'top-center',
+						description: 'Las facturas se han subido con éxito. Revíselas en la sección de visualización.',
+					});
+				}
+
+				const { error = [] } = result;
+				if (!result.ok && (error?.length || 0) > 0) {
+					error.forEach((errorItem: { id: string; errors: string[] }, index: number) => {
+						timer(index * 500)
+							.pipe(takeUntilDestroyed(this._destroyRef))
+							.subscribe(() => {
+								toast.message(this._getFileNameById(errorItem.id), {
+									position: 'top-center',
+									description: errorItem.errors[0],
+								});
+							});
+					});
+				}
+			});
 	}
 
 	private _watchFileChanges(): void {
 		const dragFiles = this._dragFilesComponent();
 		if (dragFiles === undefined) return;
-		this._activeVerificationFiles.set(dragFiles.getFiles()().length > 0);
+		const files = dragFiles.getFiles()();
+
+		this._activeVerificationFiles.set(files.length > 0);
+		this._dragFiles.set(files);
 		this._errorFiles.set([]);
 		this._processedFiles.set([]);
 	}
 
 	protected _getFileNameById(fileId: string): string {
-		const fileName =
-			this._dragFilesComponent()
-				?.getFiles()()
-				.find((file) => file.fileId === fileId)?.fileName || '';
-
+		const fileName = this._dragFiles().find((file) => file.fileId === fileId)?.fileName || '';
 		return fileName;
 	}
 
@@ -95,7 +134,32 @@ export default class DashboardInvoiceManagement {
 			accessToken: this._accessToken(),
 			accessModule: this._accessModule(),
 			accessService: this._accessServices()?.EXTRACT_INVOICE_DATA_SERVICE || '',
-			files: this._dragFilesComponent()!.getFiles()(),
+			files: this._dragFiles(),
+		});
+	}
+
+	protected _onClickUploadInvoices(): void {
+		if (this._processedFiles().length === 0) return;
+
+		const filesToUpload = this._dragFiles().filter((file) => {
+			const isOkFile = this._processedFiles().some((processedFile) => processedFile.id === file.fileId);
+			return isOkFile;
+		});
+
+		if (filesToUpload.length === 0) {
+			toast.message('No hay facturas validas para enviar', {
+				position: 'top-center',
+				description: 'Solo se pueden enviar las facturas que no presentan novedades.',
+			});
+
+			return;
+		}
+
+		this._apiPostUploadInvoices.uploadInvoice({
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.UPLOAD_INVOICE_SERVICE || '',
+			files: filesToUpload,
 		});
 	}
 }

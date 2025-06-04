@@ -8,11 +8,11 @@ export const routes: Routes = [
 	},
 	{
 		path: 'dashboard',
-		loadChildren: () => import('@dashboard/routes').then((module) => module.dashboardRoutes),
+		loadChildren: () => import('@dashboard/routes').then((router) => router.dashboardRoutes),
 	},
 	{
 		path: 'authentication',
-		loadChildren: () => import('@authentication/routes').then((module) => module.authRoutes),
+		loadChildren: () => import('@authentication/routes').then((router) => router.authRoutes),
 	},
 	{
 		path: '**',

@@ -10,12 +10,6 @@ type TUploadInvoiceFile = {
 	fileContent: string;
 };
 
-type TAccessInfo = {
-	accessToken: string;
-	accessModule: string;
-	accessService: string;
-};
-
 export type TZipErrorFiles = {
 	id: string;
 	errors: string[];
@@ -94,8 +88,8 @@ export class ApiPostExtractInvoiceData extends AccessInterceptor {
 		}
 	}
 
-	public extractedInvoiceData = this._resource.value;
 	public isLoading = this._resource.isLoading;
+	public response = this._resource.value;
 
 	public extractInvoiceData(args: TAccessInfo & { files: TFile[] }): void {
 		const { accessToken, accessModule, accessService, files } = args!;
