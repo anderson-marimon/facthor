@@ -22,7 +22,7 @@ export const dashboardRoutes: Routes = [
 			},
 			{
 				path: 'home',
-				loadComponent: () => import('@dashboard/modules/home/view').then((page) => page.default),
+				loadComponent: () => import('@dashboard/modules/home/template').then((page) => page.default),
 			},
 			{
 				path: 'invoice-management',
@@ -40,7 +40,7 @@ export const dashboardRoutes: Routes = [
 							accessModule: resolverGetAccessModule,
 							accessServices: resolverGetAccessServices,
 						},
-						loadComponent: () => import('@dashboard/modules/invoice-management/upload-invoice/view').then((page) => page.default),
+						loadComponent: () => import('@dashboard/modules/invoice-management/upload-invoice/template').then((page) => page.default),
 					},
 				],
 			},
