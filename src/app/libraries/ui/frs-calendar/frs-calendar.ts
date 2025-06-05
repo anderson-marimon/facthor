@@ -92,6 +92,7 @@ export class FrsCalendar {
 	public readonly endDate = input<TCalendarDate>(null);
 	public readonly minDate = input<TCalendarDate>(null);
 	public readonly maxDate = input<TCalendarDate>(null);
+	public readonly class = input<string>('');
 
 	public readonly dateSelected = output<TCalendarDate>();
 	public readonly rangeSelected = output<TCalendarRange>();
@@ -412,17 +413,17 @@ export class FrsCalendar {
 		const time = date.getTime();
 		return time > this._selectedStartDate()!.getTime() && time < this._selectedEndDate()!.getTime();
 	}
-	protected readonly _frsClass = computed(() => frs(variants()));
-	protected readonly _inputClass = computed(() => inputVariants());
+	protected readonly _frsClass = computed(() => frs(variants(), this.class()));
+	protected readonly _inputClass = computed(() => frs(inputVariants(), this.class()));
 }
 
 const variants = cva(
-	`w-full max-w-56 flex flex-col gap-2 text-sm p-2.5 rounded [&_*]:text-center
+	`w-full max-w-56 flex flex-col gap-2 p-2.5 rounded [&_*]:text-center
 	[&>div]:flex [&>div]:items-center [&>div]:gap-2.5 [&>section]:text-center [&>div:last-of-type>span]:flex-1
 	[&>section:first-of-type]:grid [&>section:first-of-type]:grid-cols-7 [&>section:first-of-type]:font-medium
 	[&>section:last-of-type]:grid [&>section:last-of-type]:grid-cols-7 [&>section:last-of-type]:gap-1
 	[&>section:last-of-type>button]:grid [&>section:last-of-type>button]:place-content-center [&>section:last-of-type>button]:aspect-square
-	[&>section:last-of-type>button]:rounded [&>section:last-of-type>button]:transition-colors
+	[&>section:last-of-type>button]:rounded-md [&>section:last-of-type>button]:pt-[1px] [&>section:last-of-type>button]:transition-colors
 	`
 );
 

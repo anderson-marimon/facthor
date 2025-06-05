@@ -153,7 +153,11 @@ export class FrsSelectOptions {
 				this._selectedOptions.set([...selectedOptions, selectedOption]);
 			}
 		} else {
-			this._selectedOptions.set([selectedOption]);
+			if (this._selectedOptions().length === 1 && this._selectedOptions()[0].value === selectedOption.value) {
+				this._selectedOptions.set([]);
+			} else {
+				this._selectedOptions.set([selectedOption]);
+			}
 		}
 
 		this.selectedOptionsEmitter.emit(this._selectedOptions());
@@ -173,7 +177,7 @@ const variants = cva(
 	`block w-full flex flex-col p-2 overflow-hidden [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0
   	[&_svg]:opacity-50 [&>_div]:flex-1 [&>_div]:flex [&>_div]:flex-col [&>_div]:gap-1 [&>_div]:overflow-y-auto
   	[&>_div]:scrollbar [&_p]:w-full [&_p]:h-6 [&_p]:grid [&_p]:place-content-center [&_p]:opacity-40 [&_span]:flex 
-	[&_span]:justify-between [&_span]:items-center [&_span]:px-2 [&_span]:py-1 [&_span]:rounded [&_span:hover]:bg-muted
+	[&_span]:justify-between [&_span]:items-center [&_span]:px-2 [&_span]:py-1 [&_span]:rounded-md [&_span:hover]:bg-muted
 	[&_span]:cursor-pointer
   	`,
 	{

@@ -10,9 +10,13 @@ import { tap } from 'rxjs';
 	standalone: true,
 	imports: [FrsButtonModule, LucideAngularModule, ReactiveFormsModule],
 	host: {
-		class: 'relative flex-1 w-full max-h-fit',
+		'[class]': '_frsContainerClass()',
 	},
 	template: `
+		@if(beforeIcon()) {
+		<i-lucide [img]="beforeIcon()!" [strokeWidth]="1.5" />
+		}
+
 		<input
 			#input
 			[type]="_isEyeOpen() && showEye() ? 'password' : 'text'"
@@ -43,6 +47,7 @@ export class FrsInput {
 	private readonly _isOnLimit = signal(false);
 
 	public readonly class = input<string>('');
+	public readonly containerClass = input<string>('');
 	public readonly placeholder = input<string>('Input placeholder');
 	public readonly disabled = input<boolean>(false);
 	public readonly control = input.required<FormControl<string | null>>();
@@ -54,6 +59,7 @@ export class FrsInput {
 	public readonly mask = input<string>('');
 	public readonly formatStyle = input<'American' | 'European'>('American');
 	public readonly showEye = input(false);
+	public readonly beforeIcon = input<any>();
 
 	protected readonly _inputId = frsGenerateId();
 	protected readonly _inputValue = signal<string>('');
@@ -251,16 +257,29 @@ export class FrsInput {
 		this._hasError.set(value);
 	}
 
-	protected readonly _frsClass = computed(() =>
-		frs(
-			`flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base 
-			file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground
+	protected readonly _frsClass = computed(() => {
+		const paddingLeft = this.beforeIcon() ? 'pl-7' : 'pl-3';
+		const paddingRight = this.showEye() ? 'pr-8' : 'pr-3';
+
+		return frs(
+			`flex h-9 w-full rounded-md border border-input bg-transparent ${paddingLeft} ${paddingRight} py-1 text-base
+			file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground
+			placeholder:text-muted-foreground
 			focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-background
 			focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 text-sm placeholder:text-sm
 			[&~button]:absolute [&~button]:right-1 [&~button]:top-1/2 [&~button]:-translate-y-1/2`,
 			this.disabled() ? 'opacity-50 cursor-not-allowed pointer-events-none select-none' : '',
 			this._hasError() ? 'border-red-400 focus-visible:ring-red-400 text-red-400' : '',
 			this.class()
+		);
+	});
+
+	protected readonly _frsContainerClass = computed(() =>
+		frs(
+			`relative flex-1 w-full max-h-fit flex gap-1 [&>i-lucide]:absolute [&>i-lucide]:left-2 [&>i-lucide]:top-1/2
+			[&>i-lucide]:-translate-y-1/2 [&>i-lucide_svg]:stroke-foreground/60 [&>i-lucide_svg]:size-4`,
+			this.disabled() ? '[&>i-lucide_svg]:opacity-50' : '',
+			this.containerClass()
 		)
 	);
 }

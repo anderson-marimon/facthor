@@ -19,7 +19,7 @@ import { toast } from 'ngx-sonner';
 import { timer } from 'rxjs';
 
 @Component({
-	selector: 'dashboard-invoice-management',
+	selector: 'dashboard-invoice-management-upload-invoices',
 	templateUrl: 'index.html',
 	viewProviders: [ApiPostExtractInvoiceData, ApiPostUploadInvoices],
 	imports: [
@@ -31,7 +31,7 @@ import { timer } from 'rxjs';
 		UploadInvoiceViewCard,
 	],
 })
-export default class DashboardInvoiceManagement {
+export default class DashboardInvoiceManagementUploadInvoices {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _apiPostExtractInvoiceData = inject(ApiPostExtractInvoiceData);
@@ -53,7 +53,7 @@ export default class DashboardInvoiceManagement {
 	protected readonly _processedFiles = signal<TZipProcessedFiles[]>([]);
 
 	constructor() {
-		this._addSubscription();
+		this._getAccessInformation();
 		this._addObservables();
 
 		afterRenderEffect(() => {
@@ -61,7 +61,7 @@ export default class DashboardInvoiceManagement {
 		});
 	}
 
-	private _addSubscription(): void {
+	private _getAccessInformation(): void {
 		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
 			this._accessToken.set(data['accessToken']);
 			this._accessModule.set(data['accessModule']);

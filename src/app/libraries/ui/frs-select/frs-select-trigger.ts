@@ -54,7 +54,6 @@ export class FrsSelectTrigger {
 	}
 
 	public setSelectedOptions(options: { label: string; value: any }[]): void {
-		if (!options || options.length === 0) return;
 		this._selectedOptions.set(options);
 	}
 
@@ -66,11 +65,16 @@ export class FrsSelectTrigger {
 		this._isExpanded.set(value);
 	}
 
-	public selectedText = computed(() =>
-		this._selectedOptions()
-			.map((opt) => opt?.label)
-			.join(', ')
-	);
+	public selectedText = computed(() => {
+		console.log(this._selectedOptions());
+		if (this._selectedOptions().length === 0) return '';
+		const options =
+			this._selectedOptions()
+				.map((opt) => opt?.label)
+				.join(', ') || '';
+
+		return options;
+	});
 
 	@HostListener('blur')
 	protected _touched(): void {

@@ -1,7 +1,3 @@
-declare type HtmlAttributes = {
-	[key: string]: string | number;
-};
-
 declare global {
 	type TAccessInfo = {
 		accessToken: string;
@@ -19,6 +15,10 @@ declare global {
 	};
 
 	type Nullable<T> = T | null;
+
+	type HtmlAttributes = {
+		[key: string]: string | number;
+	};
 
 	type LucideIconData = readonly [string, HtmlAttributes][];
 }

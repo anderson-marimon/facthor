@@ -42,6 +42,17 @@ export const dashboardRoutes: Routes = [
 						},
 						loadComponent: () => import('@dashboard/modules/invoice-management/upload-invoice/template').then((page) => page.default),
 					},
+					{
+						path: 'view-upload-invoice',
+						canActivate: [guardModulePermissions],
+						resolve: {
+							accessToken: resolverGetAccessToken,
+							accessModule: resolverGetAccessModule,
+							accessServices: resolverGetAccessServices,
+						},
+						loadComponent: () =>
+							import('@dashboard/modules/invoice-management/view-upload-invoice/template').then((page) => page.default),
+					},
 				],
 			},
 		],

@@ -25,6 +25,7 @@ import { timer } from 'rxjs';
 			</frs-popover-trigger>
 			<frs-popover-content [position]="position()" [class]="'w-fit min-w-fit'">
 				<frs-calendar
+					[class]="calendarClass()"
 					[rangeMode]="rangeMode()"
 					[control]="control()"
 					[rangeControl]="rangeControl()"
@@ -52,6 +53,7 @@ export class FrsDatePicker {
 	public readonly maxDate = input<TCalendarDate>(null);
 	public readonly disabled = input(false);
 	public readonly calendarIcon = input(Calendar);
+	public readonly calendarClass = input('');
 	public readonly position = input<'top' | 'bottom' | 'left' | 'right'>('bottom');
 
 	constructor() {
@@ -186,9 +188,9 @@ export class FrsDatePicker {
 	protected readonly _frsClass = computed(() => frs('block w-full [&_frs-popover]:w-full'));
 	protected readonly _frsPClass = computed(() =>
 		frs(
-			`block w-full h-9 flex items-center rounded-md border bg-transparent px-3 py-1 text-nowrap 
-      focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-ring
-      [&>i-lucide>svg]:size-4 [&>i-lucide>svg]:shrink-0 [&>i-lucide>svg]:mr-2 
+			`block w-full h-9 flex items-center rounded-md border bg-transparent px-3 py-1 pt-1.5 text-nowrap 
+			focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-ring
+			[&>i-lucide>svg]:size-4 [&>i-lucide>svg]:shrink-0 [&>i-lucide>svg]:mr-2 
       `,
 			this._hasError() ? 'border-red-400 text-red-400 focus-visible:ring-red-400' : ''
 		)

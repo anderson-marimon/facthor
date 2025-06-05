@@ -1,11 +1,11 @@
 <upload-invoice-view-card [title]="'subir facturas'">
-    <div class="min-h-[282px] h-full grid place-content-center gap-2.5 group-hover:bg-gray-50 transition-colors duration-500 cursor-pointer">
+    <div class="h-[305px] grid place-content-center gap-2.5 group-hover:bg-gray-50 transition-colors duration-500 cursor-pointer">
         <i-lucide [img]="_uploadIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
         <span class="max-w-[210px] text-center">Arrastra y suelta tus facturas aquí
             <span class="font-semibold text-secondary-facthor">o selecciona desde tu dispositivo.</span>
         </span>
     </div>
-    <div class="absolute top-0 left-0 z-10 w-full h-full">
+    <div class="absolute top-0 left-0 z-10 w-full h-[305px]">
         <frs-file-input
             [control]="_fileControl"
             [multiple]="true"
@@ -16,12 +16,12 @@
             [cleanAfterEmit]="true"
             (files)="_onUploadFiles($event)"
             (errorAllowedTypes)="_onErrorTypes($event)"
-            class="inline-block w-full min-h-[282px] h-full [&_input]:h-full !opacity-0 !cursor-pointer"
+            class="inline-block w-full h-full [&_input]:h-full !opacity-0 !cursor-pointer"
         />
     </div>
 </upload-invoice-view-card>
 
-<upload-invoice-view-card [title]="'facturas subidas'" >
+<upload-invoice-view-card [title]="'facturas subidas'" [class]="'flex-1'" >
     @if (_loading()) {
         <div class="min-h-[282px] h-full grid place-content-center gap-2.5">
             <facthor-logo-animated  class="size-10 mx-auto" />
