@@ -1,6 +1,7 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, DestroyRef, inject, input, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { ApiGetInvoiceStatuses } from '@dashboard/modules/invoice-management/view-upload-invoice/api/invoice-state';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDatePickerModule } from '@fresco-ui/frs-date-picker';
 import { FrsInputModule } from '@fresco-ui/frs-input';
@@ -21,17 +22,22 @@ const SEARCH_SELECT_OPTIONS = [
 	imports: [FrsButtonModule, FrsDatePickerModule, FrsInputModule, FrsSelectModule, LucideAngularModule, ReactiveFormsModule],
 })
 export class ViewUploadInvoiceTableFilters {
+	public readonly callback = input<() => void>();
+
+	private readonly _apiGetInvoiceStatuses = inject(ApiGetInvoiceStatuses);
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _formBuilder = inject(FormBuilder);
 
-	protected readonly _searchSelectOptions = SEARCH_SELECT_OPTIONS;
-	protected readonly _resetFilterIcon = RefreshCcw;
 	protected readonly _searchIcon = Search;
+	protected readonly _resetFilterIcon = RefreshCcw;
+	protected readonly _searchSelectOptions = SEARCH_SELECT_OPTIONS;
 
+	protected readonly _invoiceStatuses = this._apiGetInvoiceStatuses.response;
 	protected readonly _currentSelection = signal<TSelectOption[]>([]);
 	protected readonly _searchInputControl = this._formBuilder.control('');
 	protected readonly _searchSelectControl = this._formBuilder.control<TSelectOption[]>([]);
 	protected readonly _searchPerDate = this._formBuilder.control(null);
+	protected readonly _searchInvoiceStatusesControl = this._formBuilder.control<TSelectOption[]>([]);
 
 	protected readonly _currentSelectionPlaceholder = computed(() =>
 		this._currentSelection().length > 0 ? `Buscar por ${this._currentSelection()[0].label.toLocaleLowerCase()}` : 'Buscar por...'

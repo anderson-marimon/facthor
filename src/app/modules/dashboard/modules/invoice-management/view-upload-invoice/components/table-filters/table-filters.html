@@ -1,12 +1,21 @@
 <frs-date-picker
     #field
     [control]="_searchPerDate"
-    [class]="'w-48 text-sm'"
+    [class]="'max-w-44 text-sm'"
     [calendarClass]="'placeholder:text-[0.8rem] text-[0.8rem]'"
     [formatType]="'isoShort'"
     [disabled]="false"
     [placeholder]="'Seleccionar fecha'"
 />
+
+<frs-select
+    #field
+    [control]="_searchInvoiceStatusesControl"
+    [class]="'w-44'"
+>
+    <frs-select-trigger [placeholder]="'Estado de factura'" />
+    <frs-select-options [options]="_invoiceStatuses() || []" />
+</frs-select>
 
 <frs-select
     #field

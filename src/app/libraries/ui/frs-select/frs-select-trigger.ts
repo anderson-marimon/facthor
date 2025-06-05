@@ -66,7 +66,6 @@ export class FrsSelectTrigger {
 	}
 
 	public selectedText = computed(() => {
-		console.log(this._selectedOptions());
 		if (this._selectedOptions().length === 0) return '';
 		const options =
 			this._selectedOptions()
