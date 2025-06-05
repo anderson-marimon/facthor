@@ -1,9 +1,9 @@
 import { afterNextRender, Component, DestroyRef, inject, output, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, type FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiGetFormCities } from '@authentication/modules/sign-up/api/form-get-cities';
-import { ApiGetFormCiuuCodes } from '@authentication/modules/sign-up/api/form-get-ciuu-codes';
-import { ApiGetFormDepartment } from '@authentication/modules/sign-up/api/form-get-departments';
+import { ApiGetFormCities } from '@authentication/modules/sign-up/api/get-form-cities';
+import { ApiGetFormCiuuCodes } from '@authentication/modules/sign-up/api/get-form-ciuu-codes';
+import { ApiGetFormDepartment } from '@authentication/modules/sign-up/api/get-form-departments';
 import { ADDRESS_STREETS } from '@authentication/modules/sign-up/common/address-streets';
 import { FormValidator } from '@authentication/services/form-validator';
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up-form';

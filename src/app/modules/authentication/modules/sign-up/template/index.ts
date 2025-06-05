@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
-import { ApiPostSignUp } from '@authentication/modules/sign-up/api/sign-up-post';
+import { ApiPostSignUp } from '@authentication/modules/sign-up/api/post-sign-up';
 import { SignUpAccountForm } from '@authentication/modules/sign-up/components/form-account/form-account';
 import { SignUpBusinessForm } from '@authentication/modules/sign-up/components/form-business/form-business';
 import { SignUpDocumentsForm } from '@authentication/modules/sign-up/components/form-documents/form-documents';

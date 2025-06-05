@@ -2,9 +2,9 @@ import { afterNextRender, Component, DestroyRef, inject, signal } from '@angular
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiPutRenewUpdateFilesToken } from '@authentication/modules/resend-documents/api/renew-update-files-token-put';
-import { ApiPostResendDocuments } from '@authentication/modules/resend-documents/api/resend-documents-post';
-import { ApiGetVerifyUpdateFilesToken } from '@authentication/modules/resend-documents/api/verify-update-files-token-get';
+import { ApiPutRenewUpdateFilesToken } from '@authentication/modules/resend-documents/api/put-renew-update-files-token';
+import { ApiPostResendDocuments } from '@authentication/modules/resend-documents/api/post-resend-documents';
+import { ApiGetVerifyUpdateFilesToken } from '@authentication/modules/resend-documents/api/get-verify-update-files-token';
 import { FormValidator } from '@authentication/services/form-validator';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';

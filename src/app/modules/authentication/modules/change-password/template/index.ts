@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiPostChangePassword } from '@authentication/modules/change-password/api/change-password-post';
+import { ApiPostChangePassword } from '@authentication/modules/change-password/api/post-change-password';
 import { FormValidator } from '@authentication/services/form-validator';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsFieldModule } from '@fresco-ui/frs-field';

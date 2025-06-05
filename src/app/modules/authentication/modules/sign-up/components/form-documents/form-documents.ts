@@ -1,7 +1,7 @@
 import { afterNextRender, Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiGetFormBanks } from '@authentication/modules/sign-up/api/form-get-banks';
+import { ApiGetFormBanks } from '@authentication/modules/sign-up/api/get-form-banks';
 import { BANK_TYPE_OPTIONS } from '@authentication/modules/sign-up/common/bank-select-options';
 import { FormValidator } from '@authentication/services/form-validator';
 import { SignUpFormStore } from '@authentication/modules/sign-up/stores/sign-up-form';
