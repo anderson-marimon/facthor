@@ -32,7 +32,12 @@
                                         {{ column.billerLegalName }}
                                     </span>
                                 </td>
-                                <td [title]="column.stateName">{{ column.stateName }}</td>
+                                <td>
+                                    <invoice-status
+                                        [statusId]="column.idState"
+                                        [statusName]="column.stateName"    
+                                    />
+                                </td>
                                 <td>{{ column.expeditionDate }}</td>
                                 <td>{{ column.expirationDate }}</td>
                                 <td>{{ column.payableAmount | currency }}</td>

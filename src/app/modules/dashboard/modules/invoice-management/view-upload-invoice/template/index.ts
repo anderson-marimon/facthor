@@ -1,4 +1,4 @@
-import { trigger, transition, style, animate } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TAccessServices } from '@dashboard/common/enums/enum-services';
 import { ApiGetInvoiceList, TInvoice, TRadianEvent } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-list';
 import { ApiGetInvoiceStatuses } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-state';
+import { InvoiceStatus } from '@dashboard/modules/invoice-management/view-upload-invoice/components/invoice-status/invoice-status';
 import { ViewUploadInvoiceRadianEventsDrawer } from '@dashboard/modules/invoice-management/view-upload-invoice/components/radian-events-drawer/radian-events-drawer';
 import { ViewUploadInvoiceTableFilters } from '@dashboard/modules/invoice-management/view-upload-invoice/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
@@ -33,6 +34,7 @@ const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'ven
 		FacthorLogoAnimated,
 		FrsButtonModule,
 		InheritTable,
+		InvoiceStatus,
 		LucideAngularModule,
 		ViewUploadInvoiceTableFilters,
 		ViewUploadInvoiceRadianEventsDrawer,
