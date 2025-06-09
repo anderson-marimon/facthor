@@ -1,73 +1,101 @@
 <section class="w-full h-full flex flex-col gap-2.5 font-light text-sm overflow-y-hidden">
-    <article class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-2.5 pr-2.5 xl:pr-0 overflow-auto">
+    <article class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-2.5 pr-2.5 overflow-y-auto">
         <upload-invoice-drag-input-files
             class="flex flex-col gap-2.5"    
         />
-        <upload-invoice-view-card
-            [title]="'verificación de facturas'"
-        >
-            <div class="min-h-[280px] h-full gap-2.5">
-                @if (_activeVerificationFiles()) {
-                    @if(_errorFiles().length > 0 || _processedFiles().length > 0) {
-                        <section class="h-full md:h-[calc(100dvh-198px)] flex flex-col animate-opacity-in md:overflow-hidden">
-                            <div class="flex-1 flex flex-col gap-2 overflow-y-auto">
-                                @for (errorFile of _errorFiles(); track $index) {
-                                    <upload-invoice-processed-invoice-item
-                                        [fileName]="_getFileNameById(errorFile.id)"
-                                        [fileErrors]="errorFile.errors"
-                                    />
-                                }
-    
-                                @for (processedFile of _processedFiles(); track $index) {
-                                    <upload-invoice-processed-invoice-item
-                                        [fileName]="_getFileNameById(processedFile.id)"
-                                        [fileDetails]="processedFile"
-                                    />
-                                }
-                            </div>
 
-                            @if(_errorFiles().length > 0) {
-                                <div class="flex items-center justify-start gap-1 pt-2.5">
-                                    <i-lucide [img]="_warningIcon" [strokeWidth]="1" class="size-5 stroke-yellow-600" />
-                                    <span class="pt-1 text-yellow-600">Únicamente se subirán las facturas que no presenten novedades o inconsistencias.</span>
+        <section class="flex-1 md:overflow-hidden">
+            <upload-invoice-view-card
+                [title]="'verificación de facturas'"
+                class="h-full"
+            >
+                <div class="min-h-[280px] h-full gap-2.5">
+                    @if (_activeVerificationFiles()) {
+                        @if(_errorFiles().length > 0 || _processedFiles().length > 0) {
+                            <section class="h-full flex flex-col pb-2.5 md:overflow-hidden">
+                                <div class="flex-1 flex flex-col gap-2 md:overflow-y-auto">
+                                    @for (errorFile of _errorFiles(); track $index) {
+                                        <upload-invoice-processed-invoice-item
+                                            [fileName]="_getFileNameById(errorFile.id)"
+                                            [fileErrors]="errorFile.errors"
+                                        />
+                                    }
+        
+                                    @for (processedFile of _processedFiles(); track $index) {
+                                        <upload-invoice-processed-invoice-item
+                                            [fileName]="_getFileNameById(processedFile.id)"
+                                            [fileDetails]="processedFile"
+                                        />
+                                    }
                                 </div>
-                            }
-                        </section>
+
+                                @if(_errorFiles().length > 0) {
+                                    <div class="flex items-center justify-start gap-1 pt-2.5">
+                                        <i-lucide [img]="_warningIcon" [strokeWidth]="1" class="size-5 stroke-yellow-600" />
+                                        <span class="pt-1 text-yellow-600">Únicamente se subirán las facturas que no presenten novedades o inconsistencias.</span>
+                                    </div>
+                                }
+                            </section>
+                        } @else {
+                            <section class="h-full grid place-content-center gap-2.5 animate-opacity-in">
+                                <i-lucide [img]="_searchIcon" [strokeWidth]="1" class="mx-auto size-14 stroke-gray-300" />
+                                <span class="max-w-[300px] text-center">
+                                    Las facturas se han cargado correctamente. Para continuar, haga clic en el botón.
+                                    <span class="font-semibold text-secondary-facthor">Verificar.</span>
+                                </span>
+                                <button
+                                    frs-button
+                                    (click)="_onClickExtractInvoiceData()"
+                                    [disabled]="!_activeVerificationFiles() || _isLoadingApiPostExtractInvoiceData()"
+                                    class="mx-auto mt-1 w-28"
+                                > 
+                                    @if(_isLoadingApiPostExtractInvoiceData()) {
+                                        <loading-icon [color]="'#FFFFFF'" class="size-6" />
+                                    } @else {
+                                        Verificar
+                                    }
+                                </button>
+                            </section>
+                        }
                     } @else {
                         <section class="h-full grid place-content-center gap-2.5 animate-opacity-in">
                             <i-lucide [img]="_searchIcon" [strokeWidth]="1" class="mx-auto size-14 stroke-gray-300" />
                             <span class="max-w-[300px] text-center">
-                                Las facturas se han cargado correctamente. Para continuar, haga clic en el botón.
-                                <span class="font-semibold text-secondary-facthor">Verificar.</span>
+                                No se han encontrado facturas para verificar. Por favor
+                                <span class="font-semibold text-secondary-facthor">cargue al menos una</span>
+                                antes de continuar.
                             </span>
-                            <button
-                                frs-button
-                                (click)="_onClickExtractInvoiceData()"
-                                [disabled]="!_activeVerificationFiles() || _isLoadingApiPostExtractInvoiceData()"
-                                class="mx-auto mt-1 w-28"
-                            > 
-                                @if(_isLoadingApiPostExtractInvoiceData()) {
-                                    <loading-icon [color]="'#FFFFFF'" class="size-6" />
-                                } @else {
-                                    Verificar
-                                }
-                            </button>
                         </section>
                     }
-                } @else {
-                    <section class="h-full grid place-content-center gap-2.5 animate-opacity-in">
-                        <i-lucide [img]="_searchIcon" [strokeWidth]="1" class="mx-auto size-14 stroke-gray-300" />
-                        <span class="max-w-[300px] text-center">
-                            No se han encontrado facturas para verificar. Por favor
-                            <span class="font-semibold text-secondary-facthor">cargue al menos una</span>
-                            antes de continuar.
-                        </span>
-                    </section>
-                }
-            </div>
-        </upload-invoice-view-card>
+                </div>
+            </upload-invoice-view-card>
+        </section>
     </article>
-    <footer class="flex items-center justify-between gap-2.5 pr-2.5 xl:pr-0">
+    <footer class="flex items-center justify-between gap-2.5 pr-2.5">
+        <p class="text-xs">Subir documentos en formato .zip o .rar, con un tamaño inferior a 3MB. Solo se pueden subir 5 por operación.</p>
+        <button
+            frs-button
+            [disabled]="_processedFiles().length === 0 || _isLoadingApiPostUploadInvoice()"
+            (click)="_onClickUploadInvoices()"
+            class="min-w-32"
+        >
+            @if(_isLoadingApiPostUploadInvoice()) {
+                <loading-icon [color]="'#FFFFFF'" class="size-6" />
+            } @else {
+                Subir facturas
+            }
+        </button>
+    </footer>
+</section>
+
+<!-- <section class="w-full h-full flex flex-col gap-2.5 font-light text-sm overflow-y-hidden">
+    <article class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-2.5 pr-2.5 overflow-auto">
+        <upload-invoice-drag-input-files
+            class="flex flex-col gap-2.5"    
+        />
+        
+    </article>
+    <footer class="flex items-center justify-between gap-2.5 pr-2.5">
         <p class="text-xs">Subir documentos en formato .zip o .rar, con un tamaño inferior a 3MB. Solo se pueden subir 5 por operación.</p>
         <button
             frs-button
@@ -82,4 +110,4 @@
             }
         </button>
     </footer>
-</section>
+</section> -->

@@ -1,7 +1,7 @@
 import { Component, computed, DestroyRef, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ApiGetInvoiceStatuses } from '@dashboard/modules/invoice-management/view-upload-invoice/api/invoice-state';
+import { ApiGetInvoiceStatuses } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-state';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDatePickerModule } from '@fresco-ui/frs-date-picker';
 import { FrsInputModule } from '@fresco-ui/frs-input';
@@ -23,6 +23,7 @@ const SEARCH_SELECT_OPTIONS = [
 })
 export class ViewUploadInvoiceTableFilters {
 	public readonly callback = input<() => void>();
+	public readonly goBackToSideBar = input(false);
 
 	private readonly _apiGetInvoiceStatuses = inject(ApiGetInvoiceStatuses);
 	private readonly _destroyRef = inject(DestroyRef);

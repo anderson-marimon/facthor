@@ -1,8 +1,8 @@
 declare global {
 	type TAccessInfo = {
-		accessToken: string;
-		accessModule: string;
-		accessService: string;
+		accessToken?: string;
+		accessModule?: string;
+		accessService?: string;
 	};
 
 	type TApi<T> = {
@@ -12,6 +12,11 @@ declare global {
 		message: string;
 		error?: any;
 		data: T;
+	};
+
+	type TPaginator = {
+		Page: number;
+		Size: number;
 	};
 
 	type Nullable<T> = T | null;

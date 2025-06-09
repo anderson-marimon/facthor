@@ -1,32 +1,63 @@
+import { trigger, transition, style, animate } from '@angular/animations';
+import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { TAccessServices } from '@dashboard/common/enums/enum-services';
-import { ApiGetInvoiceStatuses } from '@dashboard/modules/invoice-management/view-upload-invoice/api/invoice-state';
+import { ApiGetInvoiceList, TInvoice, TRadianEvent } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-list';
+import { ApiGetInvoiceStatuses } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-state';
+import { ViewUploadInvoiceRadianEventsDrawer } from '@dashboard/modules/invoice-management/view-upload-invoice/components/radian-events-drawer/radian-events-drawer';
 import { ViewUploadInvoiceTableFilters } from '@dashboard/modules/invoice-management/view-upload-invoice/components/table-filters/table-filters';
+import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
+import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
+import { Eye, LucideAngularModule } from 'lucide-angular';
 
-const HEADERS = ['n.factura', 'negociación', 'emisor', 'pagador', 'estado', 'expedición', 'vencimiento', 'valor', 'observación'];
+const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'vencimiento', 'valor', 'acciones'];
 
 @Component({
 	selector: 'dashboard-invoice-management-view-upload-invoice',
 	templateUrl: 'index.html',
-	providers: [ApiGetInvoiceStatuses],
-	imports: [InheritTable, ViewUploadInvoiceTableFilters],
+	animations: [
+		trigger('slideEffect', [
+			transition(':enter', [
+				style({ transform: 'translateX(-100%)' }),
+				animate('600ms cubic-bezier(0.25, 1, 0.5, 1)', style({ transform: 'translateX(0)' })),
+			]),
+			transition(':leave', [animate('600ms cubic-bezier(0.25, 1, 0.5, 1)', style({ transform: 'translateX(-100%)' }))]),
+		]),
+	],
+	providers: [ApiGetInvoiceList, ApiGetInvoiceStatuses],
+	imports: [
+		CommonModule,
+		FacthorLogoAnimated,
+		FrsButtonModule,
+		InheritTable,
+		LucideAngularModule,
+		ViewUploadInvoiceTableFilters,
+		ViewUploadInvoiceRadianEventsDrawer,
+	],
 })
 export default class DashboardInvoiceManagementViewUploadInvoice {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _apiGetInvoiceStatuses = inject(ApiGetInvoiceStatuses);
+	private readonly _apiGetInvoiceList = inject(ApiGetInvoiceList);
 	private readonly _accessToken = signal('');
 	private readonly _accessModule = signal('');
 	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
 
+	protected readonly _eyeIcon = Eye;
 	protected readonly _headers = HEADERS;
+	protected readonly _invoices = this._apiGetInvoiceList.response;
+	protected readonly _isLoadingApiGetInvoiceList = this._apiGetInvoiceList.isLoading;
+	protected readonly _radianEventsSelected = signal<TRadianEvent[]>([]);
+	protected readonly _invoiceNumberSelected = signal('');
 
 	constructor() {
 		this._getAccessInformation();
 		this._getInvoiceStatuses();
+		this._getInvoiceList();
 	}
 
 	private _getAccessInformation(): void {
@@ -37,7 +68,29 @@ export default class DashboardInvoiceManagementViewUploadInvoice {
 		});
 	}
 
-	protected _getInvoiceStatuses(): void {
+	private _getInvoiceStatuses(): void {
 		this._apiGetInvoiceStatuses.getInvoiceStatuses({ accessToken: this._accessToken() });
+	}
+
+	private _getInvoiceList(): void {
+		this._apiGetInvoiceList.getInvoiceList({
+			accessToken: this._accessToken(),
+			accessService: this._accessServices()?.GET_UPLOAD_INVOICES_SERVICE,
+			accessModule: this._accessModule(),
+			Page: 1,
+			Size: 15,
+			SortByMostRecent: true,
+		});
+	}
+
+	protected _onClickSelectRadianEvents(column: TInvoice): void {
+		if (column.radianEvents.length) {
+			this._invoiceNumberSelected.set(column.invoiceNumber);
+			this._radianEventsSelected.set([...column.radianEvents]);
+		}
+	}
+
+	protected _onEmitCloseRadianEventsDrawer(): void {
+		this._radianEventsSelected.set([]);
 	}
 }

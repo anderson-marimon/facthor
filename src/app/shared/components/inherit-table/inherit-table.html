@@ -1,10 +1,10 @@
-<table class="w-full">
-    <thead class="w-full h-10 font-regular text-[11px] uppercase rounded-md bg-secondary/80">
-        <tr>
+<table class="table-auto w-full">
+    <thead class="sticky top-0 z-10 h-10 rounded-md bg-secondary">
+        <tr class="[&_*]:font-semibold [&_*]:text-xs !uppercase">
             <ng-content select="th" />
         </tr>
     </thead>
-    <tbody class="w-full text-center [&>tr]:h-12 [&_tr]:border-b last:[&_tr]:border-none">
+    <tbody class="!text-[0.80rem] [&>tr]:h-12 [&_tr]:border-b [&_tr]:border-b-secondary last:[&_tr]:border-none hover:[&_tr]:bg-secondary/30">
         <ng-content select="tr" />
     </tbody>
 </table>

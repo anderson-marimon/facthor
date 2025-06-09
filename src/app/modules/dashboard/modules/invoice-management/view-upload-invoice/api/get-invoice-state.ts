@@ -8,7 +8,7 @@ export type TInvoiceStatus = {
 	value: number;
 };
 
-type TApiGetInvoiceStatuses = TApi<TInvoiceStatus[]>;
+type TApiGetInvoiceStatusesResponse = TApi<TInvoiceStatus[]>;
 
 export class ApiGetInvoiceStatuses extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_CLIENT_UPLOAD}${envs.FT_URN}`;
@@ -23,11 +23,10 @@ export class ApiGetInvoiceStatuses extends AccessInterceptor {
 		if (!args.request) return [];
 
 		const { accessToken } = args.request;
+		const path = `${this._url}/MasterData/GetInvoiceState`;
 
 		try {
-			const path = `${this._url}/MasterData/GetInvoiceState`;
-
-			const response = await this._HttpRequest<TApiGetInvoiceStatuses>({
+			const response = await this._HttpRequest<TApiGetInvoiceStatusesResponse>({
 				path,
 				method: 'GET',
 				headers: {
