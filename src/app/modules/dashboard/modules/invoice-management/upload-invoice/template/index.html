@@ -1,4 +1,4 @@
-<section class="w-full h-full flex flex-col gap-2.5 font-light text-sm overflow-y-hidden">
+<section class="w-full h-full flex flex-col gap-2.5 font-light text-sm overflow-y-hidden p-2.5 pr-0">
     <article class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-2.5 pr-2.5 overflow-y-auto">
         <upload-invoice-drag-input-files
             class="flex flex-col gap-2.5"    
@@ -87,27 +87,3 @@
         </button>
     </footer>
 </section>
-
-<!-- <section class="w-full h-full flex flex-col gap-2.5 font-light text-sm overflow-y-hidden">
-    <article class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-2.5 pr-2.5 overflow-auto">
-        <upload-invoice-drag-input-files
-            class="flex flex-col gap-2.5"    
-        />
-        
-    </article>
-    <footer class="flex items-center justify-between gap-2.5 pr-2.5">
-        <p class="text-xs">Subir documentos en formato .zip o .rar, con un tamaño inferior a 3MB. Solo se pueden subir 5 por operación.</p>
-        <button
-            frs-button
-            [disabled]="_processedFiles().length === 0 || _isLoadingApiPostUploadInvoice()"
-            (click)="_onClickUploadInvoices()"
-            class="w-32"
-        >
-            @if(_isLoadingApiPostUploadInvoice()) {
-                <loading-icon [color]="'#FFFFFF'" class="size-6" />
-            } @else {
-                Subir facturas
-            }
-        </button>
-    </footer>
-</section> -->

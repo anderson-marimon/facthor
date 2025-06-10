@@ -2,6 +2,7 @@ import { trigger, transition, style, stagger, animate, query } from '@angular/an
 import { Component, input, output } from '@angular/core';
 import { TRadianEvent } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-list';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { Calendar, Clock, LucideAngularModule } from 'lucide-angular';
 
 @Component({
 	selector: 'view-upload-invoice-radian-events-drawer',
@@ -17,12 +18,15 @@ import { FrsButtonModule } from '@fresco-ui/frs-button';
 			]),
 		]),
 	],
-	imports: [FrsButtonModule],
+	imports: [FrsButtonModule, LucideAngularModule],
 })
 export class ViewUploadInvoiceRadianEventsDrawer {
 	public readonly invoiceNumber = input('');
 	public readonly radianEvents = input<TRadianEvent[]>([]);
 	public readonly closeDrawerEmitter = output<void>();
+
+	protected readonly _clockIcon = Clock;
+	protected readonly _calendarIcon = Calendar;
 
 	protected _onClickCloseDrawer(): void {
 		this.closeDrawerEmitter.emit();

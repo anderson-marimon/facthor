@@ -174,8 +174,8 @@ export class FrsSelectOptions {
 }
 
 const variants = cva(
-	`block w-full flex flex-col p-2 overflow-hidden [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0
-  	[&_svg]:opacity-50 [&>_div]:flex-1 [&>_div]:flex [&>_div]:flex-col [&>_div]:gap-1 [&>_div]:overflow-y-auto
+	`block w-full flex flex-col p-2 pr-0 overflow-hidden [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0
+  	[&_svg]:opacity-50 [&>_div]:flex-1 [&>_div]:flex [&>_div]:flex-col [&>_div]:gap-1 [&>_div]:pr-2 [&>_div]:overflow-y-auto
   	[&>_div]:scrollbar [&_p]:w-full [&_p]:h-6 [&_p]:grid [&_p]:place-content-center [&_p]:opacity-40 [&_span]:flex 
 	[&_span]:justify-between [&_span]:items-center [&_span]:px-2 [&_span]:py-1 [&_span]:rounded-md [&_span:hover]:bg-muted
 	[&_span]:cursor-pointer

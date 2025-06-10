@@ -4,15 +4,15 @@ import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
 import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { cleanQuery } from '@shared/utils/clean-query';
 
-type TApiGetInvoiceListQueryParams = {
+export type TApiGetInvoiceListQueryParams = {
 	SortByMostRecent: boolean;
 	InvoiceNumber: string;
 	CUFE: string;
 	IdState: number;
 	ClientLegalName: string;
 	ClientIdentification: number;
-	ExpeditionDate: Date;
-	ExpirationDate: Date;
+	ExpeditionDate: string;
+	ExpirationDate: string;
 } & TPaginator;
 
 export type TRadianEvent = {

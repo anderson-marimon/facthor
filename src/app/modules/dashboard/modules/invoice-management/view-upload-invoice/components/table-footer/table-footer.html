@@ -1,0 +1,25 @@
+<button
+    frs-button
+    title="Página anterior"
+    aria-label="Página anterior"
+    (click)="_onClickPreviousPage()"
+    [size]="'icon'"
+    [variant]="'ghost'"
+    [disabled]="!_isActivePreviousPage()"
+>
+    <i-lucide [img]="_chevronIcon" />
+</button>
+
+<span>{{ _currentPage() }} de {{ _totalPages() }}</span>
+
+<button
+    frs-button
+    title="Siguiente página"
+    aria-label="Siguiente página"
+    (click)="_onClickNextPage()"
+    [size]="'icon'"
+    [variant]="'ghost'"
+    [disabled]="!_isActiveNextPage()"
+>
+    <i-lucide class="-rotate-90" [img]="_chevronIcon" />
+</button>

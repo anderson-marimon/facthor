@@ -1,7 +1,7 @@
 <frs-date-picker
     #field
-    [control]="_searchPerDate"
-    [class]="'max-w-44 text-sm'"
+    [control]="_searchPerDateControl"
+    [class]="'max-w-52 text-sm'"
     [calendarClass]="'placeholder:text-[0.8rem] text-[0.8rem]'"
     [formatType]="'isoShort'"
     [disabled]="false"
@@ -11,7 +11,7 @@
 <frs-select
     #field
     [control]="_searchInvoiceStatusesControl"
-    [class]="'w-44'"
+    [class]="'w-52'"
 >
     <frs-select-trigger [placeholder]="'Estado de factura'" />
     <frs-select-options [options]="_invoiceStatuses() || []" />
@@ -20,7 +20,7 @@
 <frs-select
     #field
     [control]="_searchSelectControl"
-    [class]="'w-44'"
+    [class]="'w-52'"
 >
     <frs-select-trigger [placeholder]="'Tipo de búsqueda'" />
     <frs-select-options [options]="_searchSelectOptions || []" />
@@ -36,6 +36,8 @@
 
 <button
     frs-button
+    (click)="_onClickResetFilters()"
+    [disabled]="isLoadingApiGetInvoiceList()"
     class="flex items-center flex-nowrap gap-1.5"
 >
     <i-lucide [img]="_resetFilterIcon" class="size-4" />

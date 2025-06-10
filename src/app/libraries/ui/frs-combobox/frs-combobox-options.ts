@@ -211,11 +211,11 @@ export class FrsComboboxOptions {
 }
 
 const variants = cva(
-	`w-full flex flex-col p-2 pt-0 overflow-hidden [&_svg]:pointer-events-none [&_svg]:shrink-0
+	`w-full flex flex-col p-2 pr-0 pt-0 overflow-hidden [&_svg]:pointer-events-none [&_svg]:shrink-0
 	[&_svg]:opacity-50 [&>_div:first-child]:flex [&>_div:first-child]:items-center [&>_div:first-child]:gap-2
 	[&_input]:flex-1 [&_input]:shrink-0 [&_input]:outline-none [&_input]:border-none [&_input]:w-full [&_input]:bg-background [&>_div:last-child]:flex-1
-	[&>_div:last-child]:flex [&>_div:last-child]:flex-col [&>_div:last-child]:gap-1 [&>_div:last-child]:pt-2 [&>_div:last-child]:overflow-y-auto
-	[&>_div:last-child]:scrollbar [&_p]:w-full [&_p]:h-full [&_p]:grid [&_p]:place-content-center
+	[&>_div:last-child]:flex [&>_div:last-child]:flex-col [&>_div:last-child]:gap-1 [&>_div:last-child]:pt-2 [&>_div:last-child]:pr-2
+	[&>_div:last-child]:overflow-y-auto [&>_div:last-child]:scrollbar [&_p]:w-full [&_p]:h-full [&_p]:grid [&_p]:place-content-center
 	[&_p]:opacity-40 [&_span]:flex [&_span]:justify-between [&_span]:items-center [&_span]:px-2 [&_span]:py-1 [&_span]:rounded-md
 	[&_span:hover]:bg-muted [&_span]:cursor-pointer
 	`,
