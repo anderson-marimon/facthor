@@ -36,17 +36,20 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 		return flat;
 	}
 
-	public getServicesByRoute(targetRoute: string): Record<string, string> {
+	public getServicesByRoute(targetRoute: string): Record<string, TUserServices> {
 		const permissions = this.get().userConfig?.permissions ?? [];
-		let accessServices: Record<string, string> = {};
+		let accessServices: Record<string, TUserServices> = {};
 
 		const recurse = (submodules: TSubmodulePermission[]) => {
 			for (const submodule of submodules) {
 				if (submodule.route === targetRoute && submodule.services?.length) {
 					accessServices = submodule.services.reduce((acc, service) => {
-						acc[service.code] = service.urn;
+						acc[service.code] = {
+							service: service.urn,
+							method: service.method,
+						};
 						return acc;
-					}, {} as Record<string, string>);
+					}, {} as Record<string, TUserServices>);
 					return;
 				}
 				if (submodule.submodules?.length) {

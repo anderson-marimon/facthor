@@ -51,31 +51,36 @@ type TApiGetInvoiceListResponse = TApi<{
 
 export class ApiGetInvoiceList extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_CLIENT_UPLOAD}`;
-	private readonly _queryParams = signal<Nullable<Partial<TApiGetInvoiceListQueryParams> & TAccessInfo>>(null);
+	private readonly _queryParams = signal<Nullable<TAccessInfo & Partial<TApiGetInvoiceListQueryParams>>>(null);
 
 	private readonly _resource = resource({
 		request: this._queryParams,
 		loader: (args) => this._fetchGetInvoiceList(args),
 	});
 
-	private async _fetchGetInvoiceList(args: ResourceLoaderParams<Nullable<Partial<TApiGetInvoiceListQueryParams> & TAccessInfo>>) {
+	private async _fetchGetInvoiceList(args: ResourceLoaderParams<Nullable<TAccessInfo & Partial<TApiGetInvoiceListQueryParams>>>) {
 		if (!args) return null;
 
-		const { accessToken = '', accessModule = '', accessService = '', ...queryParams } = args.request!;
+		const { accessToken = '', accessModule = '', accessService, ...queryParams } = args.request!;
 
-		if (!accessService) {
+		if (!accessService?.service) {
 			console.warn('No se esta proveyendo la ruta del servicio.');
 			return null;
 		}
 
+		if (!accessService.method) {
+			console.warn('No se esta proveyendo la método del servicio.');
+			return null;
+		}
+
 		const _queryParams = new URLSearchParams(cleanQuery(queryParams)).toString();
-		const path = `${this._url}${accessService}?${_queryParams}`;
+		const path = `${this._url}${accessService.service}?${_queryParams}`;
 
 		try {
 			await new Promise((resolve) => setTimeout(resolve, 1800));
 			const response = await this._HttpRequest<TApiGetInvoiceListResponse>({
 				path,
-				method: 'GET',
+				method: accessService.method,
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${accessToken}`,
@@ -101,7 +106,7 @@ export class ApiGetInvoiceList extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public getInvoiceList(args: Partial<TApiGetInvoiceListQueryParams> & TAccessInfo): void {
+	public getInvoiceList(args: TAccessInfo & Partial<TApiGetInvoiceListQueryParams>): void {
 		this._queryParams.set(args);
 	}
 }

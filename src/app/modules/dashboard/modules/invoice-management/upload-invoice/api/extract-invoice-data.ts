@@ -54,19 +54,24 @@ export class ApiPostExtractInvoiceData extends AccessInterceptor {
 
 	private async _fetchPostUploadFiles(params: ResourceLoaderParams<Nullable<TAccessInfo & { files: TUploadInvoiceFile[] }>>) {
 		if (params.request && params.request.files.length === null) return null;
-		const { accessModule = '', accessToken = '', accessService = '', files = [] } = params.request!;
+		const { accessModule = '', accessToken = '', accessService, files = [] } = params.request!;
 
-		if (!accessService) {
+		if (!accessService?.service) {
 			console.warn('No se esta proveyendo la ruta del servicio.');
 			return null;
 		}
 
+		if (!accessService?.method) {
+			console.warn('No se esta proveyendo la método del servicio.');
+			return null;
+		}
+
 		try {
-			const path = `${this._url}${accessService}`;
+			const path = `${this._url}${accessService.service}`;
 
 			const response = await this._HttpRequest<TApiExtractedInvoiceData>({
 				path,
-				method: 'POST',
+				method: accessService.method,
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${accessToken}`,

@@ -2,7 +2,12 @@ declare global {
 	type TAccessInfo = {
 		accessToken?: string;
 		accessModule?: string;
-		accessService?: string;
+		accessService?: TUserServices;
+	};
+
+	export type TUserServices = {
+		service: string;
+		method: TMethods;
 	};
 
 	type TApi<T> = {
@@ -18,6 +23,8 @@ declare global {
 		Page: number;
 		Size: number;
 	};
+
+	type TMethods = 'GET' | 'POST' | 'PUT';
 
 	type Nullable<T> = T | null;
 

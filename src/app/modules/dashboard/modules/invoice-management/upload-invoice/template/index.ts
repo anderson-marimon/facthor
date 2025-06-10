@@ -133,7 +133,7 @@ export default class DashboardInvoiceManagementUploadInvoices {
 		this._apiPostExtractInvoiceData.extractInvoiceData({
 			accessToken: this._accessToken(),
 			accessModule: this._accessModule(),
-			accessService: this._accessServices()?.EXTRACT_INVOICE_DATA_SERVICE || '',
+			accessService: this._accessServices()?.EXTRACT_INVOICE_DATA_SERVICE,
 			files: this._dragFiles(),
 		});
 	}
@@ -158,7 +158,7 @@ export default class DashboardInvoiceManagementUploadInvoices {
 		this._apiPostUploadInvoices.uploadInvoice({
 			accessToken: this._accessToken(),
 			accessModule: this._accessModule(),
-			accessService: this._accessServices()?.UPLOAD_INVOICE_SERVICE || '',
+			accessService: this._accessServices()?.UPLOAD_INVOICE_SERVICE,
 			files: filesToUpload,
 		});
 	}

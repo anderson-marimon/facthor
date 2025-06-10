@@ -39,7 +39,7 @@ export type TSubmodulePermission = {
 export type TService = {
 	code: string;
 	urn: string;
-	method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+	method: TMethods;
 	microservice: string;
 };
 

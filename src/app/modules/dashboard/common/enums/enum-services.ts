@@ -17,4 +17,4 @@ export enum EAccessServices {
 	GET_OPERATION_DETAIL_SERVICE = 'GET_OPERATION_DETAIL_SERVICE',
 	GET_OPERATION_STATE_TRACEABILITY_SERVICE = 'GET_OPERATION_STATE_TRACEABILITY_SERVICE',
 }
-export type TAccessServices = Record<keyof typeof EAccessServices, string>;
+export type TAccessServices = Record<keyof typeof EAccessServices, TUserServices>;
