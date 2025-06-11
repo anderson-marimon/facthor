@@ -2,6 +2,7 @@ import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
 import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
 import { catchHandlerError } from '@shared/handlers/catch-handler-error';
+import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { cleanQuery } from '@shared/utils/clean-query';
 
 export type TApiGetInvoiceListQueryParams = {
@@ -80,7 +81,7 @@ export class ApiGetInvoiceList extends AccessInterceptor {
 		const path = `${this._url}${accessService.service}?${_queryParams}`;
 
 		try {
-			await new Promise((resolve) => setTimeout(resolve, 1800));
+			await apiDeferTime();
 			const response = await this._HttpRequest<TApiGetInvoiceListResponse>({
 				path,
 				method: accessService.method,

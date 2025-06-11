@@ -1,5 +1,6 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
+import { apiDeferTime } from '@shared/utils/api-defer-time';
 
 export type TFiledDocuments = {
 	id: number;
@@ -13,12 +14,10 @@ export class ApiGetFailedLegalDocumentsGet {
 
 	private async _getFailedLegalDocuments(token: ResourceLoaderParams<string>): Promise<TFiledDocuments> {
 		if (this._token().length === 0) return [];
-
-		await new Promise((resolve) => setTimeout(resolve, 1800));
-
 		const path = `${this._url}${envs.FT_REGISTER_LIST_DOCUMENT}`;
 
 		try {
+			await apiDeferTime(1500);
 			const response = await fetch(path, {
 				method: 'GET',
 				headers: {
