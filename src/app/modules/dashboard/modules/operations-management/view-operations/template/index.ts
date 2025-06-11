@@ -9,6 +9,7 @@ import {
 	TApiGetActiveOperationsListQuerySignalParams,
 } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
 import { OrderStatus } from '@dashboard/modules/operations-management/view-operations/components/order-status/order-status';
+import { ViewActiveOperationsTableFilters } from '@dashboard/modules/operations-management/view-operations/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
@@ -21,7 +22,16 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 	selector: 'operation-management-view-operations',
 	templateUrl: 'index.html',
 	providers: [ApiGetActiveOperationList],
-	imports: [CommonModule, FacthorLogoAnimated, FrsButtonModule, InheritTable, InheritTableFooter, LucideAngularModule, OrderStatus],
+	imports: [
+		CommonModule,
+		FacthorLogoAnimated,
+		FrsButtonModule,
+		InheritTable,
+		InheritTableFooter,
+		LucideAngularModule,
+		OrderStatus,
+		ViewActiveOperationsTableFilters,
+	],
 })
 export default class OperationManagementViewOperations {
 	private readonly _destroyRef = inject(DestroyRef);
