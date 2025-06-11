@@ -5,8 +5,13 @@ export const serverRoutes: ServerRoute[] = [
 
 	{ path: 'dashboard/', renderMode: RenderMode.Client },
 	{ path: 'dashboard/home', renderMode: RenderMode.Server },
+
 	{ path: 'dashboard/invoice-management', renderMode: RenderMode.Client },
 	{ path: 'dashboard/invoice-management/upload-invoice', renderMode: RenderMode.Server },
+	{ path: 'dashboard/invoice-management/view-upload-invoice', renderMode: RenderMode.Server },
+
+	{ path: 'dashboard/operations-management', renderMode: RenderMode.Client },
+	{ path: 'dashboard/operations-management/view-operations', renderMode: RenderMode.Server },
 
 	{ path: 'authentication/', renderMode: RenderMode.Server },
 	{ path: 'authentication/sign-in', renderMode: RenderMode.Server },

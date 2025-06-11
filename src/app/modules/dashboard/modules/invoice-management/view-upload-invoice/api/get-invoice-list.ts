@@ -49,27 +49,30 @@ type TApiGetInvoiceListResponse = TApi<{
 	data: TInvoice[];
 }>;
 
+export type TApiGetInvoiceListQuerySignalParams = TAccessInfo & Partial<TApiGetInvoiceListQueryParams>;
+
 export class ApiGetInvoiceList extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_CLIENT_UPLOAD}`;
-	private readonly _queryParams = signal<Nullable<TAccessInfo & Partial<TApiGetInvoiceListQueryParams>>>(null);
+	private readonly _queryParams = signal<Nullable<TApiGetInvoiceListQuerySignalParams>>(null);
 
 	private readonly _resource = resource({
 		request: this._queryParams,
 		loader: (args) => this._fetchGetInvoiceList(args),
 	});
 
-	private async _fetchGetInvoiceList(args: ResourceLoaderParams<Nullable<TAccessInfo & Partial<TApiGetInvoiceListQueryParams>>>) {
-		if (!args) return null;
+	private async _fetchGetInvoiceList(params: ResourceLoaderParams<Nullable<TApiGetInvoiceListQuerySignalParams>>) {
+		const request = params.request;
+		if (!request) return null;
 
-		const { accessToken = '', accessModule = '', accessService, ...queryParams } = args.request!;
+		const { accessToken, accessModule, accessService, ...queryParams } = request;
 
 		if (!accessService?.service) {
-			console.warn('No se esta proveyendo la ruta del servicio.');
+			console.warn('No se esta proveyendo la ruta del servicio en gestión de facturas, ver facturas subidas.');
 			return null;
 		}
 
 		if (!accessService.method) {
-			console.warn('No se esta proveyendo la método del servicio.');
+			console.warn('No se esta proveyendo el método del servicio en gestión de facturas, ver facturas subidas.');
 			return null;
 		}
 
@@ -86,7 +89,7 @@ export class ApiGetInvoiceList extends AccessInterceptor {
 					Authorization: `Bearer ${accessToken}`,
 					'x-module': `${accessModule}`,
 				},
-				signal: args.abortSignal,
+				signal: params.abortSignal,
 			});
 
 			return response.data;
@@ -96,7 +99,7 @@ export class ApiGetInvoiceList extends AccessInterceptor {
 			catchHandlerError({
 				error,
 				message: 'Error al cagar las facturas',
-				description: 'Estamos teniendo problemas para obtener las facturas, por favor intenta nuevamente.',
+				description: 'Estamos teniendo problemas para obtener las facturas, por favor intente más tarde.',
 			});
 
 			return null;
@@ -106,7 +109,7 @@ export class ApiGetInvoiceList extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public getInvoiceList(args: TAccessInfo & Partial<TApiGetInvoiceListQueryParams>): void {
-		this._queryParams.set(args);
+	public getInvoiceList(params: TApiGetInvoiceListQuerySignalParams): void {
+		this._queryParams.set(params);
 	}
 }

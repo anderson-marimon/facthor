@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { TAccessServices } from '@dashboard/common/enums/enum-services';
+import { TAccessServices } from '@dashboard/common/enums/services';
 import {
 	ApiGetInvoiceList,
 	TApiGetInvoiceListQueryParams,
+	TApiGetInvoiceListQuerySignalParams,
 	TInvoice,
 	TRadianEvent,
 } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-list';
@@ -55,7 +56,7 @@ export default class DashboardInvoiceManagementViewUploadInvoice {
 	private readonly _accessToken = signal('');
 	private readonly _accessModule = signal('');
 	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
-	private readonly _getInvoiceListParams = signal<Partial<TApiGetInvoiceListQueryParams & TAccessInfo>>({});
+	private readonly _getInvoiceListParams = signal<Partial<TApiGetInvoiceListQuerySignalParams>>({});
 
 	protected readonly _eyeIcon = Eye;
 	protected readonly _headers = HEADERS;

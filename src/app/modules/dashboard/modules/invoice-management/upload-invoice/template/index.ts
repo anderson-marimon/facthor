@@ -1,7 +1,7 @@
 import { afterRenderEffect, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { TAccessServices } from '@dashboard/common/enums/enum-services';
+import { TAccessServices } from '@dashboard/common/enums/services';
 import {
 	ApiPostExtractInvoiceData,
 	TZipErrorFiles,

@@ -1,17 +1,17 @@
 <section class="w-full h-full flex flex-col !font-light">
     <main class="flex-1 h-full flex flex-col justify-center overflow-auto">
-        <view-upload-invoice-table-filters
+        <!-- <view-upload-invoice-table-filters
             [isLoadingApiGetInvoiceList]="_isLoadingApiGetInvoiceList()"
             [filterFunction]="getInvoiceListForFilter.bind(this)"
             [goBackToSideBar]="_radianEventsSelected().length === 0"
             class="w-full flex justify-end gap-2.5 p-2.5 overflow-visible" />
-        <hr>
+        <hr> -->
         <article class="flex-1 flex flex-col p-2.5">
             @if (_isLoadingApiGetInvoiceList()) {
                 <div class="flex-1 h-full grid place-content-center gap-2.5">
                     <facthor-logo-animated  class="size-10 mx-auto" />
                     <span class="font-light text-sm text-center text-foreground/60 animate-pulse">
-                        Cargando facturas...
+                        Cargando operaciones activas...
                     </span>
                 </div>
             } @else {
@@ -23,34 +23,32 @@
         
                         @for (column of _invoices()?.data; track $index) {
                             <tr>
-                                <td class="pl-2.5">{{ column.invoiceNumber }}</td>
-                                <td [title]="column.clientLegalName">
+                                <td class="pl-2.5">{{ column.orderNumber }}</td>
+                                <td class="pl-2.5">{{ column.financierIdentificationNumber }}</td>
+                                <td [title]="column.financierLegalName">
                                     <span class="block w-60 line-clamp-1 overflow-hidden truncate">
-                                        {{ column.clientLegalName }}
+                                        {{ column.financierLegalName }}
                                     </span>
                                 </td>
-                                <td [title]="column.billerLegalName">
+                                <td [title]="column.payerLegalName">
                                     <span class="block w-60 line-clamp-1 overflow-hidden truncate">
-                                        {{ column.billerLegalName }}
+                                        {{ column.payerLegalName }}
                                     </span>
                                 </td>
                                 <td>
-                                    <invoice-status
-                                        [statusId]="column.idState"
-                                        [statusName]="column.stateName"    
+                                    <order-status
+                                        [statusId]="column.idOperationState"
+                                        [statusName]="column.operationStateName"    
                                     />
                                 </td>
-                                <td>{{ column.expeditionDate }}</td>
-                                <td>{{ column.expirationDate }}</td>
-                                <td>{{ column.payableAmount | currency }}</td>
+                                <td>{{ column.totalAmountToFinance | currency }}</td>
+                                <td>{{ column.operationDate.split('T')[0] }}</td>
                                 <td>
                                     <button
-                                        [title]="'Ver eventos radian de la factura: ' + column.invoiceNumber"
+                                        [title]="'Ver detalles de la operación: ' + column.orderNumber"
                                         frs-button
                                         [size]="'icon'"
                                         [variant]="'ghost'"
-                                        [disabled]="!column.radianEvents.length"
-                                        (click)="_onClickSelectRadianEvents(column)"
                                     >
                                         <i-lucide [img]="_eyeIcon" />
                                     </button>
@@ -63,18 +61,9 @@
         </article>
     </main>
     <hr>
-    <view-upload-invoice-table-footer
+    <!-- <view-upload-invoice-table-footer
         [totalPages]="_invoices()?.countPages || 1"
         [paginatorFunction]="getInvoiceListForPaginator.bind(this)"
         class="h-12 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
-    />
+    /> -->
 </section>
-@if(_radianEventsSelected().length) {
-    <view-upload-invoice-radian-events-drawer
-        [@slideEffect]
-        [invoiceNumber]="_invoiceNumberSelected()"
-        [radianEvents]="_radianEventsSelected()"
-        (closeDrawerEmitter)="_onEmitCloseRadianEventsDrawer()"
-        class="absolute top-0 left-0 z-10 w-[350px] h-full p-2.5 pr-0 pt-5 border-r bg-background"
-    />
-}

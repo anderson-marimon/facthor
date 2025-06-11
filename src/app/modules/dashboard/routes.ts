@@ -40,7 +40,9 @@ export const dashboardRoutes: Routes = [
 							accessModule: resolverGetAccessModule,
 							accessServices: resolverGetAccessServices,
 						},
-						loadComponent: () => import('@dashboard/modules/invoice-management/upload-invoice/template').then((page) => page.default),
+						loadComponent() {
+							return import('@dashboard/modules/invoice-management/upload-invoice/template');
+						},
 					},
 					{
 						path: 'view-upload-invoice',
@@ -50,8 +52,31 @@ export const dashboardRoutes: Routes = [
 							accessModule: resolverGetAccessModule,
 							accessServices: resolverGetAccessServices,
 						},
-						loadComponent: () =>
-							import('@dashboard/modules/invoice-management/view-upload-invoice/template').then((page) => page.default),
+						loadComponent() {
+							return import('@dashboard/modules/invoice-management/view-upload-invoice/template');
+						},
+					},
+				],
+			},
+			{
+				path: 'operations-management',
+				children: [
+					{
+						path: '',
+						redirectTo: 'view-operations',
+						pathMatch: 'full',
+					},
+					{
+						path: 'view-operations',
+						canActivate: [guardModulePermissions],
+						resolve: {
+							accessToken: resolverGetAccessToken,
+							accessModule: resolverGetAccessModule,
+							accessServices: resolverGetAccessServices,
+						},
+						loadComponent() {
+							return import('@dashboard/modules/operations-management/view-operations/template');
+						},
 					},
 				],
 			},
