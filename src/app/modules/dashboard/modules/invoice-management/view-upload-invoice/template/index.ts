@@ -16,10 +16,10 @@ import { InvoiceStatus } from '@dashboard/modules/invoice-management/view-upload
 import { ViewUploadInvoiceRadianEventsDrawer } from '@dashboard/modules/invoice-management/view-upload-invoice/components/radian-events-drawer/radian-events-drawer';
 import { ViewUploadInvoiceTableFilters } from '@dashboard/modules/invoice-management/view-upload-invoice/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
 import { Eye, LucideAngularModule } from 'lucide-angular';
-import { ViewUploadInvoiceTableFooter } from '../components/table-footer/table-footer';
 
 const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'vencimiento', 'valor', 'acciones'];
 
@@ -41,10 +41,10 @@ const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'ven
 		FacthorLogoAnimated,
 		FrsButtonModule,
 		InheritTable,
+		InheritTableFooter,
 		InvoiceStatus,
 		LucideAngularModule,
 		ViewUploadInvoiceTableFilters,
-		ViewUploadInvoiceTableFooter,
 		ViewUploadInvoiceRadianEventsDrawer,
 	],
 })

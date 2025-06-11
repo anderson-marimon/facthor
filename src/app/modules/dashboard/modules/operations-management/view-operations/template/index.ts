@@ -8,11 +8,12 @@ import {
 	ApiGetActiveOperationList,
 	TApiGetActiveOperationsListQuerySignalParams,
 } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
+import { OrderStatus } from '@dashboard/modules/operations-management/view-operations/components/order-status/order-status';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
 import { Eye, LucideAngularModule } from 'lucide-angular';
-import { OrderStatus } from '../components/order-status/order-status';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
 
@@ -20,7 +21,7 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 	selector: 'operation-management-view-operations',
 	templateUrl: 'index.html',
 	providers: [ApiGetActiveOperationList],
-	imports: [CommonModule, FacthorLogoAnimated, FrsButtonModule, InheritTable, LucideAngularModule, OrderStatus],
+	imports: [CommonModule, FacthorLogoAnimated, FrsButtonModule, InheritTable, InheritTableFooter, LucideAngularModule, OrderStatus],
 })
 export default class OperationManagementViewOperations {
 	private readonly _destroyRef = inject(DestroyRef);

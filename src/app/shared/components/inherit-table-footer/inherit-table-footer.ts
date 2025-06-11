@@ -3,11 +3,11 @@ import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { ChevronLeft, LucideAngularModule } from 'lucide-angular';
 
 @Component({
-	selector: 'view-upload-invoice-table-footer',
-	templateUrl: 'table-footer.html',
+	selector: 'inherit-table-footer',
+	templateUrl: 'inherit-table-footer.html',
 	imports: [FrsButtonModule, LucideAngularModule],
 })
-export class ViewUploadInvoiceTableFooter {
+export class InheritTableFooter {
 	public readonly totalPages = input(1);
 	public readonly paginatorFunction = input<(page: number) => void>();
 
