@@ -5,7 +5,7 @@ declare global {
 		accessService?: TUserServices;
 	};
 
-	export type TUserServices = {
+	type TUserServices = {
 		service: string;
 		method: TMethods;
 	};

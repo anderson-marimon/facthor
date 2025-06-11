@@ -1,5 +1,6 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
+import { apiDeferTime } from '@shared/utils/api-defer-time';
 
 export class ApiGetVerifyUpdateFilesToken {
 	private readonly _url = `${envs.FT_URL_REGISTER}${envs.FT_URN}`;
@@ -8,12 +9,10 @@ export class ApiGetVerifyUpdateFilesToken {
 
 	private async _verifyUpdateFilesToken(token: ResourceLoaderParams<string>): Promise<boolean> {
 		if (this._token().length === 0) return false;
-
-		await new Promise((resolve) => setTimeout(resolve, 1800));
-
 		const path = `${this._url}${envs.FT_REGISTER_VERIFY_TOKEN}`;
 
 		try {
+			await apiDeferTime(1500);
 			const response = await fetch(path, {
 				method: 'GET',
 				headers: {
