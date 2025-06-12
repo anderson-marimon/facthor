@@ -57,12 +57,12 @@ export class ApiPostExtractInvoiceData extends AccessInterceptor {
 		const { accessModule = '', accessToken = '', accessService, files = [] } = params.request!;
 
 		if (!accessService?.service) {
-			console.warn('No se esta proveyendo la ruta del servicio.');
+			console.error('The service route is not being provided.');
 			return null;
 		}
 
 		if (!accessService?.method) {
-			console.warn('No se esta proveyendo la método del servicio.');
+			console.error('The service method is not being provided.');
 			return null;
 		}
 

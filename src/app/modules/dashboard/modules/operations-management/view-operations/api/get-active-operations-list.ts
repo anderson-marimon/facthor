@@ -11,10 +11,10 @@ export type TApiGetActiveOperationsListQueryParams = {
 	LegalName: string;
 	Tradename: string;
 	IdentitificationNumber: string; // Spelling
-	IdOperationState: string;
+	IdOperationState: number;
 	OrderNumber: string;
-	StartOperationDate: string;
-	EndOperationDate: string;
+	ExpeditionDateStart: string;
+	ExpeditionDateEnd: string;
 	Page: number;
 	Size: number;
 } & TPaginator;
@@ -89,12 +89,17 @@ export class ApiGetActiveOperationList extends AccessInterceptor {
 		const { accessToken, accessModule, accessService, ...queryParams } = request;
 
 		if (!accessService?.service) {
-			console.error('No se esta proveyendo la ruta del servicio en gestión de operaciones, listar operaciones activas.');
+			console.error('The service route is not being provided.');
 			return null;
 		}
 
-		if (!accessService.method) {
-			console.error('No se esta proveyendo el método del servicio en gestión de operaciones, listar operaciones activas.');
+		if (!accessService?.method) {
+			console.error('The service method is not being provided.');
+			return null;
+		}
+
+		if (!queryParams?.RoleToFind) {
+			console.error('The role execution is not being provided.');
 			return null;
 		}
 

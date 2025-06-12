@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { TAccessServices } from '@dashboard/common/enums/services';
 import {
 	ApiGetInvoiceList,
@@ -73,9 +74,9 @@ export default class DashboardInvoiceManagementViewUploadInvoice {
 
 	private _getAccessInformation(): void {
 		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken.set(data['accessToken']);
-			this._accessModule.set(data['accessModule']);
-			this._accessServices.set(data['accessServices']);
+			this._accessToken.set(data[EAccessInformation.TOKEN]);
+			this._accessModule.set(data[EAccessInformation.MODULE]);
+			this._accessServices.set(data[EAccessInformation.SERVICES]);
 		});
 	}
 

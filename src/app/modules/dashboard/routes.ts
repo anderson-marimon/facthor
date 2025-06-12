@@ -2,11 +2,12 @@ import { Routes } from '@angular/router';
 import { ApiGetUserConfiguration } from '@dashboard/api/user-configuration';
 import { guardAccessToken } from '@dashboard/guards/access-token';
 import { guardModulePermissions } from '@dashboard/guards/module-permissions';
+import { resolverGetAccessModule } from '@dashboard/resolver/get-access-module';
 import { resolverGetAccessServices } from '@dashboard/resolver/get-access-services';
 import { resolverGetAccessToken } from '@dashboard/resolver/get-access-token';
+import { resolverGetRoleExecution } from '@dashboard/resolver/get-role-execution';
 import { resolverGetUserConfig } from '@dashboard/resolver/get-user-config';
 import { StoreUserConfig } from '@dashboard/stores/user-config';
-import { resolverGetAccessModule } from './resolver/get-access-module';
 
 export const dashboardRoutes: Routes = [
 	{
@@ -73,6 +74,7 @@ export const dashboardRoutes: Routes = [
 							accessToken: resolverGetAccessToken,
 							accessModule: resolverGetAccessModule,
 							accessServices: resolverGetAccessServices,
+							roleExecution: resolverGetRoleExecution,
 						},
 						loadComponent() {
 							return import('@dashboard/modules/operations-management/view-operations/template');

@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { TRoleExecution } from '@dashboard/api/user-configuration';
+import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { TAccessServices } from '@dashboard/common/enums/services';
-import { TApiGetInvoiceListQueryParams } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-list';
 import {
 	ApiGetActiveOperationList,
+	TApiGetActiveOperationsListQueryParams,
 	TApiGetActiveOperationsListQuerySignalParams,
 } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
 import { OrderStatus } from '@dashboard/modules/operations-management/view-operations/components/order-status/order-status';
@@ -46,6 +48,7 @@ export default class OperationManagementViewOperations {
 	protected readonly _headers = HEADERS;
 	protected readonly _invoices = this._apiGetActiveOperationList.response;
 	protected readonly _isLoadingApiGetInvoiceList = this._apiGetActiveOperationList.isLoading;
+	protected readonly _roleExecution = signal<Nullable<TRoleExecution>>(null);
 
 	constructor() {
 		this._getAccessInformation();
@@ -54,17 +57,19 @@ export default class OperationManagementViewOperations {
 
 	private _getAccessInformation(): void {
 		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken.set(data['accessToken']);
-			this._accessModule.set(data['accessModule']);
-			this._accessServices.set(data['accessServices']);
+			this._accessToken.set(data[EAccessInformation.TOKEN]);
+			this._accessModule.set(data[EAccessInformation.MODULE]);
+			this._accessServices.set(data[EAccessInformation.SERVICES]);
+			this._roleExecution.set(data[EAccessInformation.ROLE_EXECUTION]);
 		});
 	}
 
 	private _getInitActiveOperationList(): void {
 		this._getActiveOperationListParams.set({
 			accessToken: this._accessToken(),
-			accessService: this._accessServices()?.GET_OPERATIONS_ACTIVE_SERVICE,
 			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.GET_OPERATIONS_ACTIVE_SERVICE,
+			RoleToFind: this._roleExecution()?.id,
 			Page: 1,
 			Size: 14,
 		});
@@ -79,7 +84,7 @@ export default class OperationManagementViewOperations {
 		});
 	}
 
-	public getActiveOperationListForFilter(queryFilters: Partial<Omit<TApiGetInvoiceListQueryParams, 'Size'>>): void {
+	public getActiveOperationListForFilter(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {
 		this._getActiveOperationListParams.set({
 			...this._getActiveOperationListParams(),
 			...queryFilters,

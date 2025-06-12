@@ -1,6 +1,7 @@
 import { afterRenderEffect, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { TAccessServices } from '@dashboard/common/enums/services';
 import {
 	ApiPostExtractInvoiceData,
@@ -63,9 +64,9 @@ export default class DashboardInvoiceManagementUploadInvoices {
 
 	private _getAccessInformation(): void {
 		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken.set(data['accessToken']);
-			this._accessModule.set(data['accessModule']);
-			this._accessServices.set(data['accessServices']);
+			this._accessToken.set(data[EAccessInformation.TOKEN]);
+			this._accessModule.set(data[EAccessInformation.MODULE]);
+			this._accessServices.set(data[EAccessInformation.SERVICES]);
 		});
 	}
 

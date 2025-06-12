@@ -68,12 +68,12 @@ export class ApiGetInvoiceList extends AccessInterceptor {
 		const { accessToken, accessModule, accessService, ...queryParams } = request;
 
 		if (!accessService?.service) {
-			console.warn('No se esta proveyendo la ruta del servicio en gestión de facturas, ver facturas subidas.');
+			console.error('The service route is not being provided.');
 			return null;
 		}
 
-		if (!accessService.method) {
-			console.warn('No se esta proveyendo el método del servicio en gestión de facturas, ver facturas subidas.');
+		if (!accessService?.method) {
+			console.error('The service method is not being provided.');
 			return null;
 		}
 

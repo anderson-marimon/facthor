@@ -1,8 +1,9 @@
 import { afterNextRender, Component, computed, DestroyRef, inject, input, NgZone, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { TApiGetInvoiceListQueryParams } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-list';
+import { TApiGetActiveOperationsListQueryParams } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { TCalendarRange } from '@fresco-ui/frs-calendar/frs-calendar';
 import { FrsDatePickerModule } from '@fresco-ui/frs-date-picker';
 import { FrsInputModule } from '@fresco-ui/frs-input';
 import { FrsSelectModule } from '@fresco-ui/frs-select';
@@ -11,13 +12,14 @@ import { LucideAngularModule, RefreshCcw, Search } from 'lucide-angular';
 import { debounceTime, distinctUntilChanged, filter, startWith, withLatestFrom } from 'rxjs';
 
 const SEARCH_SELECT_OPTIONS = [
-	{ label: 'Numero de factura', value: 0 },
-	{ label: 'Cufe', value: 1 },
-	{ label: 'Nombre legal', value: 2 },
+	{ label: 'Número de orden', value: 0 },
+	{ label: 'Nombre legal', value: 1 },
+	{ label: 'Nombre comercial', value: 2 },
 	{ label: 'Nit', value: 3 },
+	{ label: 'Cufe', value: 4 },
 ];
 
-const SEARCH_OPTIONS = ['InvoiceNumber', 'CUFE', 'ClientLegalName', 'ClientIdentification'];
+const SEARCH_OPTIONS = ['OrderNumber', 'LegalName', 'Tradename', 'IdentitificationNumber'];
 
 @Component({
 	selector: 'view-active-operations-table-filters',
@@ -25,10 +27,11 @@ const SEARCH_OPTIONS = ['InvoiceNumber', 'CUFE', 'ClientLegalName', 'ClientIdent
 	imports: [FrsButtonModule, FrsDatePickerModule, FrsInputModule, FrsSelectModule, LucideAngularModule, ReactiveFormsModule],
 })
 export class ViewActiveOperationsTableFilters {
+	public readonly roleExecution = input(0);
 	public readonly callback = input<() => void>();
 	public readonly goBackToSideBar = input(false);
 	public readonly isLoadingApiGetInvoiceList = input(false);
-	public readonly filterFunction = input<(queryFilters: Partial<Omit<TApiGetInvoiceListQueryParams, 'Size'>>) => void>();
+	public readonly filterFunction = input<(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>) => void>();
 
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _formBuilder = inject(FormBuilder);
@@ -41,10 +44,10 @@ export class ViewActiveOperationsTableFilters {
 
 	protected readonly _currentSelection = signal<TSelectOption[]>([]);
 
+	protected readonly _searchPerDateRange = this._formBuilder.control<TCalendarRange>(null);
+	protected readonly _searchOrderStatusesControl = this._formBuilder.control<TSelectOption[]>([]);
+	protected readonly _searchSelectSearchTypeControl = this._formBuilder.control<TSelectOption[]>([]);
 	protected readonly _searchInputControl = this._formBuilder.control('');
-	protected readonly _searchSelectControl = this._formBuilder.control<TSelectOption[]>([]);
-	protected readonly _searchPerDateControl = this._formBuilder.control(null);
-	protected readonly _searchInvoiceStatusesControl = this._formBuilder.control<TSelectOption[]>([]);
 
 	protected readonly _currentSelectionPlaceholder = computed(() =>
 		this._currentSelection().length > 0 ? `Buscar por ${this._currentSelection()[0].label.toLocaleLowerCase()}` : 'Buscar por...'
@@ -63,31 +66,33 @@ export class ViewActiveOperationsTableFilters {
 	}
 
 	private _addSubscriptions(): void {
-		this._searchInvoiceStatusesControl.valueChanges
+		this._searchOrderStatusesControl.valueChanges
 			.pipe(
 				takeUntilDestroyed(this._destroyRef),
 				filter(() => this._isFiltersActive)
 			)
 			.subscribe((status) => {
 				this._getInvoiceByFilters({
-					IdState: status?.[0]?.value || undefined,
+					IdOperationState: status?.[0]?.value || undefined,
 					Page: 1,
 				});
 			});
 
-		this._searchPerDateControl.valueChanges
+		this._searchPerDateRange.valueChanges
 			.pipe(
 				takeUntilDestroyed(this._destroyRef),
 				filter(() => this._isFiltersActive)
 			)
-			.subscribe((newDate: Date | null) => {
+			.subscribe((rangeDates) => {
 				this._getInvoiceByFilters({
-					ExpeditionDate: newDate?.toLocaleDateString('en-Ca') || undefined,
+					ExpeditionDateStart: rangeDates?.start.toLocaleDateString('en-Ca') || undefined,
+					ExpeditionDateEnd: rangeDates?.end.toLocaleDateString('en-Ca') || undefined,
+					RoleToFind: 3,
 					Page: 1,
 				});
 			});
 
-		this._searchSelectControl.valueChanges
+		this._searchSelectSearchTypeControl.valueChanges
 			.pipe(
 				takeUntilDestroyed(this._destroyRef),
 				distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
@@ -102,7 +107,7 @@ export class ViewActiveOperationsTableFilters {
 			.pipe(
 				takeUntilDestroyed(this._destroyRef),
 				debounceTime(1000),
-				withLatestFrom(this._searchSelectControl.valueChanges.pipe(startWith(this._searchSelectControl.value))),
+				withLatestFrom(this._searchSelectSearchTypeControl.valueChanges.pipe(startWith(this._searchSelectSearchTypeControl.value))),
 				distinctUntilChanged(([prev], [curr]) => JSON.stringify(prev) === JSON.stringify(curr)),
 				filter(() => this._isFiltersActive),
 				filter(([_, selectedOptions]) => !!selectedOptions?.length)
@@ -122,11 +127,11 @@ export class ViewActiveOperationsTableFilters {
 			});
 	}
 
-	private _getInvoiceByFilters(args: Partial<Omit<TApiGetInvoiceListQueryParams, 'Size'>>): void {
+	private _getInvoiceByFilters(args: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {
 		const searchByFilter = this.filterFunction();
 
 		if (!searchByFilter) {
-			console.warn('Pagination function not initialized');
+			console.warn('The pagination function is not being provided.');
 			return;
 		}
 
@@ -137,8 +142,8 @@ export class ViewActiveOperationsTableFilters {
 		if (this.isLoadingApiGetInvoiceList()) return;
 
 		this._searchInputControl.setValue('');
-		this._searchPerDateControl.setValue(null);
-		this._searchInvoiceStatusesControl.setValue([]);
-		this._searchSelectControl.setValue([]);
+		this._searchPerDateRange.setValue(null);
+		this._searchOrderStatusesControl.setValue([]);
+		this._searchSelectSearchTypeControl.setValue([]);
 	}
 }
