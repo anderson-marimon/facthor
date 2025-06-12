@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TRoleExecution } from '@dashboard/api/user-configuration';
 import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { TAccessServices } from '@dashboard/common/enums/services';
@@ -21,7 +21,7 @@ import { Eye, LucideAngularModule } from 'lucide-angular';
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
 
 @Component({
-	selector: 'operation-management-view-operations',
+	selector: 'operations-management-view-operations',
 	templateUrl: 'index.html',
 	providers: [ApiGetActiveOperationList],
 	imports: [
@@ -35,8 +35,9 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 		ViewActiveOperationsTableFilters,
 	],
 })
-export default class OperationManagementViewOperations {
+export default class OperationsManagementViewOperations {
 	private readonly _destroyRef = inject(DestroyRef);
+	private readonly _router = inject(Router);
 	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
 	private readonly _accessToken = signal('');
@@ -75,6 +76,10 @@ export default class OperationManagementViewOperations {
 		});
 
 		this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
+	}
+
+	protected _onClickNavigateToOperationDetails(operation: number): void {
+		this._router.navigate(['dashboard/operations-management/view-operations/details'], { queryParams: { operation } });
 	}
 
 	public getActiveOperationListForPaginator(page: number): void {

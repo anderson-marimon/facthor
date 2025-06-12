@@ -1,12 +1,13 @@
 <section class="w-full h-full flex flex-col !font-light">
     <main class="flex-1 h-full flex flex-col justify-center overflow-auto">
-        <view-active-operations-table-filters
+        detalles
+        <!-- <view-active-operations-table-filters
             [roleExecution]="_roleExecution()?.id || 0"
             [isLoadingApiGetInvoiceList]="_isLoadingApiGetInvoiceList()"
             [filterFunction]="getActiveOperationListForFilter.bind(this)"
-            class="w-full flex items-center justify-end gap-2.5 p-2.5 overflow-visible" />
+            class="w-full flex items-center justify-end gap-2.5 p-2.5 overflow-visible" /> -->
         <hr>
-        <article class="flex-1 flex flex-col p-2.5">
+        <!-- <article class="flex-1 flex flex-col p-2.5">
             @if (_isLoadingApiGetInvoiceList()) {
                 <div class="flex-1 h-full grid place-content-center gap-2.5">
                     <facthor-logo-animated  class="size-10 mx-auto" />
@@ -45,9 +46,8 @@
                                 <td>{{ column.operationDate.split('T')[0] }}</td>
                                 <td>
                                     <button
-                                        frs-button
-                                        (click)="_onClickNavigateToOperationDetails(column.id)"
                                         [title]="'Ver detalles de la operación: ' + column.orderNumber"
+                                        frs-button
                                         [size]="'icon'"
                                         [variant]="'ghost'"
                                     >
@@ -59,12 +59,12 @@
                     </inherit-table>
                 </div>
             }
-        </article>
+        </article> -->
     </main>
     <hr>
-    <inherit-table-footer
+    <!-- <inherit-table-footer
         [totalPages]="_invoices()?.countPages || 1"
         [paginatorFunction]="getActiveOperationListForPaginator.bind(this)"
         class="h-12 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
-    />
+    /> -->
 </section>
