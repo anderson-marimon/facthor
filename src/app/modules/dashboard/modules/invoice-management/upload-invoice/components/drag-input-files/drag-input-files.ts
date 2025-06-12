@@ -1,7 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { UploadInvoiceViewCard } from '@dashboard/modules/invoice-management/upload-invoice/components/view-card/view-card';
+import { ViewCard } from '@shared/components/view-card/view-card';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsFileInputModule } from '@fresco-ui/frs-file-input';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
@@ -23,7 +23,7 @@ import { timer } from 'rxjs';
 			]),
 		]),
 	],
-	imports: [FacthorLogoAnimated, FrsButtonModule, FrsFileInputModule, LucideAngularModule, UploadInvoiceViewCard],
+	imports: [FacthorLogoAnimated, FrsButtonModule, FrsFileInputModule, LucideAngularModule, ViewCard],
 })
 export class UploadInvoiceDragInputFiles {
 	private readonly _formBuilder = inject(FormBuilder);

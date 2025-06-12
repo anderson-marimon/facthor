@@ -11,7 +11,7 @@ import {
 import { ApiPostUploadInvoices } from '@dashboard/modules/invoice-management/upload-invoice/api/upload-invoices';
 import { UploadInvoiceDragInputFiles } from '@dashboard/modules/invoice-management/upload-invoice/components/drag-input-files/drag-input-files';
 import { UploadInvoicesProcessedInvoiceItem } from '@dashboard/modules/invoice-management/upload-invoice/components/processed-invoice-item/processed-invoice-item';
-import { UploadInvoiceViewCard } from '@dashboard/modules/invoice-management/upload-invoice/components/view-card/view-card';
+import { ViewCard } from '@shared/components/view-card/view-card';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
 import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
@@ -23,14 +23,7 @@ import { timer } from 'rxjs';
 	selector: 'dashboard-invoice-management-upload-invoices',
 	templateUrl: 'index.html',
 	viewProviders: [ApiPostExtractInvoiceData, ApiPostUploadInvoices],
-	imports: [
-		FrsButtonModule,
-		LoadingIcon,
-		LucideAngularModule,
-		UploadInvoiceDragInputFiles,
-		UploadInvoicesProcessedInvoiceItem,
-		UploadInvoiceViewCard,
-	],
+	imports: [FrsButtonModule, LoadingIcon, LucideAngularModule, UploadInvoiceDragInputFiles, UploadInvoicesProcessedInvoiceItem, ViewCard],
 })
 export default class DashboardInvoiceManagementUploadInvoices {
 	private readonly _destroyRef = inject(DestroyRef);

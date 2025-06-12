@@ -1,4 +1,4 @@
-<upload-invoice-view-card [title]="'subir facturas'">
+<view-card [title]="'subir facturas'">
     <div class="h-[305px] grid place-content-center gap-2.5 group-hover:bg-gray-50 transition-colors duration-500 cursor-pointer">
         <i-lucide [img]="_uploadIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
         <span class="max-w-[210px] text-center">Arrastra y suelta tus facturas aquí
@@ -19,9 +19,9 @@
             class="inline-block w-full h-full [&_input]:h-full !opacity-0 !cursor-pointer"
         />
     </div>
-</upload-invoice-view-card>
+</view-card>
 
-<upload-invoice-view-card [title]="'facturas subidas'" [class]="'flex-1'" >
+<view-card [title]="'facturas subidas'" [class]="'flex-1'" >
     @if (_loading()) {
         <div class="min-h-[282px] h-full grid place-content-center gap-2.5">
             <facthor-logo-animated  class="size-10 mx-auto" />
@@ -58,4 +58,4 @@
             </div>
         }
     }
-</upload-invoice-view-card>
+</view-card>

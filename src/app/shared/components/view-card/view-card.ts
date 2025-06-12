@@ -2,13 +2,13 @@ import { Component, computed, input } from '@angular/core';
 import { frs } from '@fresco-core/frs-core';
 
 @Component({
-	selector: 'upload-invoice-view-card',
+	selector: 'view-card',
 	templateUrl: 'view-card.html',
 	host: {
 		'[class]': '_frsClass()',
 	},
 })
-export class UploadInvoiceViewCard {
+export class ViewCard {
 	public readonly title = input('title');
 	public readonly class = input('');
 
