@@ -4,9 +4,15 @@ import { StoreUserConfig } from '@dashboard/stores/user-config';
 import { toast } from 'ngx-sonner';
 import { map } from 'rxjs/operators';
 
-export const guardModuleInheritPermissions: CanActivateFn = (_, state) => {
+export const guardInheritModulePermissions: CanActivateFn = (snapShot, state) => {
 	const router = inject(Router);
 	const storeUserConfig = inject(StoreUserConfig);
+	const { session = '' } = snapShot.queryParams as { session: string };
+	const sessionKey = storeUserConfig.getSessionKey();
+
+	if (session !== sessionKey) {
+		return router.createUrlTree(['/dashboard/home']);
+	}
 
 	let url = state.url.split('?')[0];
 	const segments = url.split('/').filter(Boolean);

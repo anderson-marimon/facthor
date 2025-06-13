@@ -6,22 +6,21 @@ import { devReduxTool } from '@tools/dev-redux.tool';
 type TStoreUserConfig = {
 	userConfig: TUserConfig | null;
 	permissions: string[];
+	sessionKey: string;
 };
 
 @Injectable()
 export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 	constructor() {
-		super({ userConfig: null, permissions: [] });
+		super({ userConfig: null, permissions: [], sessionKey: '' });
 		devReduxTool(this, 'USER_CONFIG_STORE');
 	}
 
-	public readonly userConfig = this.select((state) => state.userConfig);
-	public readonly permissions = this.select((state) => state.permissions);
-
 	private readonly setUserConfig = this.updater((state, userConfig: TUserConfig) => {
 		const permissions = this._extractPermissions(userConfig?.permissions);
+		const sessionKey = btoa(crypto.randomUUID());
 
-		return { ...state, userConfig, permissions };
+		return { ...state, userConfig, permissions, sessionKey };
 	});
 
 	private _extractPermissions(modules: TSubmodulePermission[] = []): string[] {
@@ -35,6 +34,10 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 		recurse(modules);
 		return flat;
 	}
+
+	public readonly userConfig = this.select((state) => state.userConfig);
+	public readonly permissions = this.select((state) => state.permissions);
+	public readonly sessionKey = this.select((state) => state.sessionKey);
 
 	public getServicesByRoute(targetRoute: string): Record<string, TUserServices> {
 		const permissions = this.get().userConfig?.permissions ?? [];
@@ -77,8 +80,12 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 		return accessModule;
 	}
 
-	public getRoleExecutionByRoute(targetRoutes: string): TRoleExecution {
+	public getRoleExecution(): TRoleExecution {
 		return this.get().userConfig?.roleExecutions[0]!;
+	}
+
+	public getSessionKey(): string {
+		return this.get().sessionKey;
 	}
 
 	public readonly loadUserConfig = (config: TUserConfig): Promise<boolean> => {

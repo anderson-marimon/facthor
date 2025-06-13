@@ -42,6 +42,7 @@ export default class OperationsManagementViewOperations {
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
 	private readonly _accessToken = signal('');
 	private readonly _accessModule = signal('');
+	private readonly _sessionKey = signal('');
 	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
 	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 
@@ -62,6 +63,7 @@ export default class OperationsManagementViewOperations {
 			this._accessModule.set(data[EAccessInformation.MODULE]);
 			this._accessServices.set(data[EAccessInformation.SERVICES]);
 			this._roleExecution.set(data[EAccessInformation.ROLE_EXECUTION]);
+			this._sessionKey.set(data[EAccessInformation.SESSION_KEY]);
 		});
 	}
 
@@ -79,7 +81,9 @@ export default class OperationsManagementViewOperations {
 	}
 
 	protected _onClickNavigateToOperationDetails(operation: number): void {
-		this._router.navigate(['dashboard/operations-management/view-operations/details'], { queryParams: { operation } });
+		this._router.navigate(['dashboard/operations-management/view-operations/details'], {
+			queryParams: { operation, session: this._sessionKey() },
+		});
 	}
 
 	public getActiveOperationListForPaginator(page: number): void {

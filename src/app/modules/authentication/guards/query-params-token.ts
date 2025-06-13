@@ -1,9 +1,9 @@
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { inject } from '@angular/core';
 
-export const queryToken: CanActivateFn = (route): boolean | UrlTree => {
+export const guardQueryParamsToken: CanActivateFn = (state): boolean | UrlTree => {
 	const router: Router = inject(Router);
-	const { token } = route.queryParams as { token: string };
+	const { token } = state.queryParams as { token: string };
 
 	const jwtRegex = /^[A-Za-z0-9\-_]+?\.[A-Za-z0-9\-_]+?\.[A-Za-z0-9\-_]+?$/;
 

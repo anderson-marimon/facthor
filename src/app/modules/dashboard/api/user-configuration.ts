@@ -8,6 +8,7 @@ export type TUserConfig = Nullable<{
 	identity: TIdentity;
 	roleExecutions: TRoleExecution[];
 	permissions: TModulePermission[];
+	sessionKey: string;
 }>;
 
 export type TIdentity = {

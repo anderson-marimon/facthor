@@ -1,44 +1,58 @@
 <section class="w-full h-full flex flex-col !font-light">
     <main class="flex-1 h-full flex flex-col gap-2.5 overflow-auto p-2.5">
         <view-card [title]="'Detalles de la orden'" class="h-fit">
-            <article class="flex gap-2.5">
+            <article class="flex gap-2.5
+                [&_ul]:space-y-2
+                [&_ul>li]:flex 
+                [&_ul>li]:items-center 
+                [&_ul>li]:gap-1 
+                [&_ul>li]:font-medium
+                [&_ul>li>span]:leading-6 
+                [&_ul>li>span:first-child]:font-medium 
+                [&_ul>li>span:last-child]:font-light 
+                [&_ul>li>span:last-child]:text-xs"
+            >
                 <div class="flex-1 flex flex-col gap-2.5 text-sm">
                     <section class="px-2.5 py-2 bg-secondary">
                         <h2 class="font-semibold text-xs uppercase">Información general</h2>
                     </section>
-                    <ul class="px-2.5 space-y-2.5 [&>li>span:last-child]:text-[0.80rem]">
+                    <ul class="px-2.5">
                         <li>
-                            <span class="font-semibold">Número de orden: </span>
+                            <span>Número de orden: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Estado de la orden: </span>
+                            <span>Estado de la orden: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Fecha de emisión: </span>
+                            <span>Fecha de emisión: </span>
                             <span>AA00000102</span>
                         </li>
+
                         <hr>
+
                         <li>
-                            <span class="font-semibold">Porcentaje a financiar: </span>
+                            <span>Porcentaje a financiar: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Porcentaje de interés mensual: </span>
+                            <span>Porcentaje de interés mensual: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Porcentaje de interés diario: </span>
+                            <span>Porcentaje de interés diario: </span>
                             <span>AA00000102</span>
                         </li>
+                        
                         <hr>
+                        
                         <li>
-                            <span class="font-semibold">Días mínimos de financiación: </span>
+                            <span>Días mínimos de financiación: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Días máximos de financiación: </span>
+                            <span>Días máximos de financiación: </span>
                             <span>AA00000102</span>
                         </li>
                     </ul>
@@ -48,30 +62,32 @@
                     <section class="px-2.5 py-2 bg-secondary">
                         <h2 class="font-semibold text-xs uppercase">Información de importes</h2>
                     </section>
-                    <ul class="px-2.5 space-y-2.5 [&>li>span:last-child]:text-[0.80rem]">
+                    <ul class="px-2.5">
                         <li>
-                            <span class="font-semibold">Monto total: </span>
+                            <span>Monto total: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Monto de reajuste: </span>
+                            <span>Monto de reajuste: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Monto de Intereses: </span>
+                            <span>Monto de Intereses: </span>
                             <span>AA00000102</span>
                         </li>
+                        
                         <hr>
+                        
                         <li>
-                            <span class="font-semibold">Monto a financiar: </span>
+                            <span>Monto a financiar: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Monto de reserva: </span>
+                            <span>Monto de reserva: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Monto a pagar: </span>
+                            <span>Monto a pagar: </span>
                             <span>AA00000102</span>
                         </li>
                     </ul>
@@ -81,17 +97,17 @@
                     <section class="px-2.5 py-2 bg-secondary">
                         <h2 class="font-semibold text-xs uppercase">Información del cliente</h2>
                     </section>
-                    <ul class="px-2.5 space-y-2.5 [&>li>span:last-child]:text-[0.80rem]">
+                    <ul class="px-2.5">
                         <li>
-                            <span class="font-semibold">Nombre legal: </span>
+                            <span>Nombre legal: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Tipo de documento: </span>
+                            <span>Tipo de documento: </span>
                             <span>AA00000102</span>
                         </li>
                         <li>
-                            <span class="font-semibold">Número de documento: </span>
+                            <span>Número de documento: </span>
                             <span>AA00000102</span>
                         </li>
                     </ul>

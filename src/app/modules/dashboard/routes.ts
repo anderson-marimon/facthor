@@ -8,7 +8,9 @@ import { resolverGetAccessToken } from '@dashboard/resolver/get-access-token';
 import { resolverGetRoleExecution } from '@dashboard/resolver/get-role-execution';
 import { resolverGetUserConfig } from '@dashboard/resolver/get-user-config';
 import { StoreUserConfig } from '@dashboard/stores/user-config';
-import { guardModuleInheritPermissions } from './guards/module-inherit-permissions';
+import { guardInheritModulePermissions } from './guards/inherit-module-permissions';
+import { guardQueryParamOperation } from './guards/query-params-operation';
+import { resolverGetSessionKey } from './resolver/get-session-key';
 
 export const dashboardRoutes: Routes = [
 	{
@@ -76,6 +78,7 @@ export const dashboardRoutes: Routes = [
 							accessModule: resolverGetAccessModule,
 							accessServices: resolverGetAccessServices,
 							roleExecution: resolverGetRoleExecution,
+							sessionKey: resolverGetSessionKey,
 						},
 						loadComponent() {
 							return import('@dashboard/modules/operations-management/view-operations/template');
@@ -83,7 +86,7 @@ export const dashboardRoutes: Routes = [
 					},
 					{
 						path: 'view-operations/details',
-						canActivate: [guardModuleInheritPermissions],
+						canActivate: [guardQueryParamOperation, guardInheritModulePermissions],
 						resolve: {
 							accessToken: resolverGetAccessToken,
 							accessModule: resolverGetAccessModule,

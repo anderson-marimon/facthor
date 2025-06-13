@@ -3,4 +3,5 @@ export enum EAccessInformation {
 	MODULE = 'accessModule',
 	SERVICES = 'accessServices',
 	ROLE_EXECUTION = 'roleExecution',
+	SESSION_KEY = 'sessionKey',
 }

@@ -1,12 +1,12 @@
 import type { Routes } from '@angular/router';
-import { alreadyStarted } from '@authentication/guards/already-started';
-import { queryToken } from '@authentication/guards/query-token';
+import { guardAlreadyStarted } from '@authentication/guards/already-started';
+import { guardQueryParamsToken } from '@authentication/guards/query-params-token';
 
 export const authRoutes: Routes = [
 	{
 		path: '',
 		loadComponent: () => import('@authentication/layout'),
-		canActivate: [alreadyStarted],
+		canActivate: [guardAlreadyStarted],
 		children: [
 			{
 				path: '',
@@ -27,12 +27,12 @@ export const authRoutes: Routes = [
 			},
 			{
 				path: 'change-password',
-				canActivate: [queryToken],
+				canActivate: [guardQueryParamsToken],
 				loadComponent: () => import('@authentication/modules/change-password/template').then((page) => page.default),
 			},
 			{
 				path: 'resend-documents',
-				canActivate: [queryToken],
+				canActivate: [guardQueryParamsToken],
 				loadComponent: () => import('@authentication/modules/resend-documents/template').then((page) => page.default),
 			},
 		],
