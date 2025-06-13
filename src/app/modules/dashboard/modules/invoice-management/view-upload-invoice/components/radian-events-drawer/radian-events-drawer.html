@@ -3,6 +3,7 @@
         <h3 class="text-xs font-semibold pb-5 uppercase">Eventos radian factura: {{ invoiceNumber() }}</h3>
         <hr>
     </div>
+    
     <ul [@listAnimation]="radianEvents().length" class="flex-1 flex flex-col gap-2.5 px-2.5 overflow-y-auto">
         @for (radianEvent of radianEvents(); track $index; let last = $last) {
             <li class="flex gap-2">

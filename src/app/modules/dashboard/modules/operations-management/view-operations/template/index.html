@@ -4,12 +4,15 @@
             [roleExecution]="_roleExecution()?.id || 0"
             [isLoadingApiGetInvoiceList]="_isLoadingApiGetInvoiceList()"
             [filterFunction]="getActiveOperationListForFilter.bind(this)"
-            class="w-full flex items-center justify-end gap-2.5 p-2.5 overflow-visible" />
-        <hr>
+            class="w-full flex items-center justify-end gap-2.5 p-2.5 overflow-visible"
+        />
+
+        <hr />
+
         <article class="flex-1 flex flex-col p-2.5">
             @if (_isLoadingApiGetInvoiceList()) {
                 <div class="flex-1 h-full grid place-content-center gap-2.5">
-                    <facthor-logo-animated  class="size-10 mx-auto" />
+                    <facthor-logo-animated class="size-10 mx-auto" />
                     <span class="font-light text-sm text-center text-foreground/60 animate-pulse">
                         Cargando operaciones activas...
                     </span>
@@ -18,31 +21,40 @@
                 <div class="min-w-[1364px] w-full h-[calc(100dvh-205px)] overflow-auto">
                     <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
                         @for (header of _headers; track $index; let first = $first) {
-                            <th class="w-72"><span [ngClass]="{'pl-2.5': first}" class="block text-start">{{ header }}</span></th>
+                            <th class="w-72">
+                                <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
+                                    {{ header }}
+                                </span>
+                            </th>
                         }
-        
+
                         @for (column of _invoices()?.data; track $index) {
                             <tr>
                                 <td class="pl-2.5">{{ column.orderNumber }}</td>
                                 <td class="pl-2.5">{{ column.financierIdentificationNumber }}</td>
+
                                 <td [title]="column.financierLegalName">
                                     <span class="block w-60 line-clamp-1 overflow-hidden truncate">
                                         {{ column.financierLegalName }}
                                     </span>
                                 </td>
+
                                 <td [title]="column.payerLegalName">
                                     <span class="block w-60 line-clamp-1 overflow-hidden truncate">
                                         {{ column.payerLegalName }}
                                     </span>
                                 </td>
+
                                 <td>
                                     <order-status
                                         [statusId]="column.idOperationState"
-                                        [statusName]="column.operationStateName"    
+                                        [statusName]="column.operationStateName"
                                     />
                                 </td>
+
                                 <td>{{ column.totalAmountToFinance | currency }}</td>
                                 <td>{{ column.operationDate.split('T')[0] }}</td>
+
                                 <td>
                                     <button
                                         frs-button
@@ -61,7 +73,9 @@
             }
         </article>
     </main>
-    <hr>
+
+    <hr />
+
     <inherit-table-footer
         [totalPages]="_invoices()?.countPages || 1"
         [paginatorFunction]="getActiveOperationListForPaginator.bind(this)"

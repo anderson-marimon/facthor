@@ -1,10 +1,12 @@
 <view-card [title]="'subir facturas'">
-    <div class="h-[305px] grid place-content-center gap-2.5 group-hover:bg-gray-50 transition-colors duration-500 cursor-pointer">
+    <div class="h-[305px] grid place-content-center gap-2.5 transition-colors duration-500 cursor-pointer group-hover:bg-gray-50">
         <i-lucide [img]="_uploadIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
-        <span class="max-w-[210px] text-center">Arrastra y suelta tus facturas aquí
+        <span class="max-w-[210px] text-center">
+            Arrastra y suelta tus facturas aquí
             <span class="font-semibold text-secondary-facthor">o selecciona desde tu dispositivo.</span>
         </span>
     </div>
+
     <div class="absolute top-0 left-0 z-10 w-full h-[305px]">
         <frs-file-input
             [control]="_fileControl"
@@ -16,22 +18,22 @@
             [cleanAfterEmit]="true"
             (files)="_onUploadFiles($event)"
             (errorAllowedTypes)="_onErrorTypes($event)"
-            class="inline-block w-full h-full [&_input]:h-full !opacity-0 !cursor-pointer"
+            class="w-full h-full !opacity-0 cursor-pointer [&_input]:h-full"
         />
     </div>
 </view-card>
 
-<view-card [title]="'facturas subidas'" [class]="'flex-1'" >
+<view-card [title]="'facturas subidas'" class="flex-1">
     @if (_loading()) {
         <div class="min-h-[282px] h-full grid place-content-center gap-2.5">
-            <facthor-logo-animated  class="size-10 mx-auto" />
-            <span class="font-light text-center text-foreground/60 animate-pulse">
+            <facthor-logo-animated class="mx-auto size-10" />
+            <span class="text-center font-light text-foreground/60 animate-pulse">
                 Subiendo facturas...
             </span>
         </div>
     } @else {
         @if (_files().length > 0) {
-            <div class="h-12 grid grid-cols-[5fr_1fr_1fr] gap-2.5 text-xxs uppercase font-semibold px-2.5 items-center">
+            <div class="h-12 grid grid-cols-[5fr_1fr_1fr] gap-2.5 px-2.5 items-center text-xxs font-semibold uppercase">
                 <span class="text-start">nombre del archivo</span>
                 <span class="text-center">tamaño</span>
                 <span class="text-end">control</span>
@@ -39,12 +41,20 @@
 
             <div class="w-full min-h-[282px] overflow-y-auto">
                 @for (file of _files(); track file.fileName) {
-                    <div [@listItemAnimation]
-                        class="grid grid-cols-[5fr_1fr_1fr] gap-2.5 items-center h-14 px-2.5 hover:bg-secondary transition-colors overflow-hidden">
-                        <span class="text-start truncate">{{ file.fileName }}</span>
+                    <div
+                        [@listItemAnimation]
+                        class="grid grid-cols-[5fr_1fr_1fr] items-center h-14 gap-2.5 px-2.5 overflow-hidden transition-colors hover:bg-secondary"
+                    >
+                        <span class="truncate text-start">{{ file.fileName }}</span>
                         <span class="text-center">{{ (file.size / 1024).toFixed(2) }}KB</span>
                         <span class="text-end pr-3">
-                            <button frs-button [size]="'icon'" title="Eliminar factura" [variant]="'ghost'" (click)="_onClickRemoveFile(file.fileName)">
+                            <button
+                                frs-button
+                                [size]="'icon'"
+                                title="Eliminar factura"
+                                [variant]="'ghost'"
+                                (click)="_onClickRemoveFile(file.fileName)"
+                            >
                                 <i-lucide [img]="_trashIcon" class="stroke-destructive" />
                             </button>
                         </span>
@@ -54,7 +64,9 @@
         } @else {
             <div class="min-h-[282px] h-full grid place-content-center gap-2.5">
                 <i-lucide [img]="_fileIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
-                <span class="max-w-[210px] text-center">No hay facturas subidas, máximo 5 archivos.</span>
+                <span class="max-w-[210px] text-center">
+                    No hay facturas subidas, máximo 5 archivos.
+                </span>
             </div>
         }
     }

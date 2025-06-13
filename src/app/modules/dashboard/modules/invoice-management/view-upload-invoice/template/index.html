@@ -3,12 +3,15 @@
         <view-upload-invoice-table-filters
             [isLoadingApiGetInvoiceList]="_isLoadingApiGetInvoiceList()"
             [filterFunction]="getInvoiceListForFilter.bind(this)"
-            class="w-full flex justify-end gap-2.5 p-2.5 overflow-visible" />
-        <hr>
+            class="w-full flex justify-end gap-2.5 p-2.5 overflow-visible"
+        />
+
+        <hr />
+
         <article class="flex-1 flex flex-col p-2.5">
             @if (_isLoadingApiGetInvoiceList()) {
                 <div class="flex-1 h-full grid place-content-center gap-2.5">
-                    <facthor-logo-animated  class="size-10 mx-auto" />
+                    <facthor-logo-animated class="size-10 mx-auto" />
                     <span class="font-light text-sm text-center text-foreground/60 animate-pulse">
                         Cargando facturas...
                     </span>
@@ -17,31 +20,40 @@
                 <div class="min-w-[1364px] w-full h-[calc(100dvh-205px)] overflow-auto">
                     <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
                         @for (header of _headers; track $index; let first = $first) {
-                            <th class="w-72"><span [ngClass]="{'pl-2.5': first}" class="block text-start">{{ header }}</span></th>
+                            <th class="w-72">
+                                <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
+                                    {{ header }}
+                                </span>
+                            </th>
                         }
-        
+
                         @for (column of _invoices()?.data; track $index) {
                             <tr>
                                 <td class="pl-2.5">{{ column.invoiceNumber }}</td>
+
                                 <td [title]="column.clientLegalName">
                                     <span class="block w-60 line-clamp-1 overflow-hidden truncate">
                                         {{ column.clientLegalName }}
                                     </span>
                                 </td>
+
                                 <td [title]="column.billerLegalName">
                                     <span class="block w-60 line-clamp-1 overflow-hidden truncate">
                                         {{ column.billerLegalName }}
                                     </span>
                                 </td>
+
                                 <td>
                                     <invoice-status
                                         [statusId]="column.idState"
-                                        [statusName]="column.stateName"    
+                                        [statusName]="column.stateName"
                                     />
                                 </td>
+
                                 <td>{{ column.expeditionDate }}</td>
                                 <td>{{ column.expirationDate }}</td>
                                 <td>{{ column.payableAmount | currency }}</td>
+
                                 <td>
                                     <button
                                         [title]="'Ver eventos radian de la factura: ' + column.invoiceNumber"
@@ -61,14 +73,17 @@
             }
         </article>
     </main>
-    <hr>
+
+    <hr />
+
     <inherit-table-footer
         [totalPages]="_invoices()?.countPages || 1"
         [paginatorFunction]="getInvoiceListForPaginator.bind(this)"
         class="h-12 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
     />
 </section>
-@if(_radianEventsSelected().length) {
+
+@if (_radianEventsSelected().length) {
     <view-upload-invoice-radian-events-drawer
         [@slideEffect]
         [invoiceNumber]="_invoiceNumberSelected()"
