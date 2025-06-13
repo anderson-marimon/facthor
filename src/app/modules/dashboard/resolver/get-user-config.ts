@@ -18,7 +18,7 @@ export const resolverGetUserConfig: CanActivateFn = async () => {
 	const userConfig = await firstValueFrom(userConfigObservable.pipe(filter(Boolean)));
 
 	if (userConfig) {
-		await storeUserConfig.loadUserConfig(userConfig as any);
+		await storeUserConfig.loadUserConfig(userConfig);
 		return true;
 	}
 

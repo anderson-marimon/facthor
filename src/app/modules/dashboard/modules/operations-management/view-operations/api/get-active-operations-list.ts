@@ -1,10 +1,11 @@
-import { resource, ResourceLoaderParams, signal } from '@angular/core';
+import { inject, resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
 import { EOrderStatus } from '@dashboard/common/enums/order-status';
 import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
 import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { cleanQuery } from '@shared/utils/clean-query';
+import { StoreActiveOperations } from '../stores/active-operations';
 
 export type TApiGetActiveOperationsListQueryParams = {
 	RoleToFind: number;
@@ -19,7 +20,7 @@ export type TApiGetActiveOperationsListQueryParams = {
 	Size: number;
 } & TPaginator;
 
-type TOperation = {
+export type TActiveOperation = {
 	id: number;
 	providerLegalName: string;
 	providerTradename: string;
@@ -68,12 +69,13 @@ type TOperation = {
 type TApiGetActiveOperationListResponse = TApi<{
 	countItems: number;
 	countPages: number;
-	data: TOperation[];
+	data: TActiveOperation[];
 }>;
 
 export type TApiGetActiveOperationsListQuerySignalParams = TAccessInfo & Partial<TApiGetActiveOperationsListQueryParams>;
 
 export class ApiGetActiveOperationList extends AccessInterceptor {
+	private readonly _storeActiveOperations = inject(StoreActiveOperations);
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
 	private readonly _queryParams = signal<Nullable<TApiGetActiveOperationsListQuerySignalParams>>(null);
 
@@ -119,6 +121,7 @@ export class ApiGetActiveOperationList extends AccessInterceptor {
 				signal: params.abortSignal,
 			});
 
+			this._storeActiveOperations.setActiveOperationList(response.data.data);
 			return response.data;
 		} catch (error) {
 			catchHandlerError({

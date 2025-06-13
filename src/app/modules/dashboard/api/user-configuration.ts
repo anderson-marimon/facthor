@@ -1,5 +1,6 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
+import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
 import Cookies from 'js-cookie';
 
@@ -18,7 +19,7 @@ export type TIdentity = {
 };
 
 export type TRoleExecution = {
-	id: number;
+	id: ERoleExecution;
 	name: string;
 };
 

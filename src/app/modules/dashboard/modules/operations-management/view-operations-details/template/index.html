@@ -1,118 +1,17 @@
 <section class="w-full h-full flex flex-col !font-light">
     <main class="flex-1 h-full flex flex-col gap-2.5 overflow-auto p-2.5">
         <view-card [title]="'Detalles de la orden'" class="h-fit">
-            <article class="flex gap-2.5
-                [&_ul]:space-y-2
-                [&_ul>li]:flex 
-                [&_ul>li]:items-center 
-                [&_ul>li]:gap-1 
-                [&_ul>li]:font-medium
-                [&_ul>li>span]:leading-6 
-                [&_ul>li>span:first-child]:font-medium 
-                [&_ul>li>span:last-child]:font-light 
-                [&_ul>li>span:last-child]:text-xs"
-            >
-                <div class="flex-1 flex flex-col gap-2.5 text-sm">
-                    <section class="px-2.5 py-2 bg-secondary">
-                        <h2 class="font-semibold text-xs uppercase">Información general</h2>
-                    </section>
-                    <ul class="px-2.5">
-                        <li>
-                            <span>Número de orden: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Estado de la orden: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Fecha de emisión: </span>
-                            <span>AA00000102</span>
-                        </li>
-
-                        <hr>
-
-                        <li>
-                            <span>Porcentaje a financiar: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Porcentaje de interés mensual: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Porcentaje de interés diario: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        
-                        <hr>
-                        
-                        <li>
-                            <span>Días mínimos de financiación: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Días máximos de financiación: </span>
-                            <span>AA00000102</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="flex-1 flex flex-col gap-2.5 text-sm">
-                    <section class="px-2.5 py-2 bg-secondary">
-                        <h2 class="font-semibold text-xs uppercase">Información de importes</h2>
-                    </section>
-                    <ul class="px-2.5">
-                        <li>
-                            <span>Monto total: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Monto de reajuste: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Monto de Intereses: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        
-                        <hr>
-                        
-                        <li>
-                            <span>Monto a financiar: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Monto de reserva: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Monto a pagar: </span>
-                            <span>AA00000102</span>
-                        </li>
-                    </ul>
-                </div>
-    
-                <div class="flex-1 flex flex-col gap-2.5 text-sm">
-                    <section class="px-2.5 py-2 bg-secondary">
-                        <h2 class="font-semibold text-xs uppercase">Información del cliente</h2>
-                    </section>
-                    <ul class="px-2.5">
-                        <li>
-                            <span>Nombre legal: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Tipo de documento: </span>
-                            <span>AA00000102</span>
-                        </li>
-                        <li>
-                            <span>Número de documento: </span>
-                            <span>AA00000102</span>
-                        </li>
-                    </ul>
-                </div>
-            </article>
+            @switch (_roleExecution()?.id) {
+                @case (_eRoleExecution.PAYER) {
+                    
+                }
+                @case (_eRoleExecution.FINANCIER) {
+                    
+                }
+                @case (_eRoleExecution.PROVIDER) {
+                    <active-operations-details-financier-details [activeOperation]="_activeCurrentOperation()" />
+                }
+            }
         </view-card>
         <view-card [title]="'Facturas de la orden'" class="flex-1">
 

@@ -3,7 +3,7 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiPostSignIn } from '@authentication/modules/sign-in/api/post-sign-in';
-import { AccessInformationStore } from '@authentication/modules/sign-in/stores/access-information';
+import { StoreSignInFormation } from '@authentication/modules/sign-in/stores/access-information';
 import { FormValidator } from '@authentication/services/form-validator';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsFieldModule } from '@fresco-ui/frs-field';
@@ -15,13 +15,13 @@ import { distinctUntilChanged } from 'rxjs';
 @Component({
 	selector: 'authentication-sign-in-page',
 	templateUrl: 'index.html',
-	viewProviders: [AccessInformationStore, ApiPostSignIn],
+	viewProviders: [StoreSignInFormation, ApiPostSignIn],
 	imports: [FacthorLogo, FrsFieldModule, FrsInputModule, FrsButtonModule, LoadingIcon, ReactiveFormsModule, RouterLink],
 })
 export default class SignInPage {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _apiPostSingIn = inject(ApiPostSignIn);
-	private readonly _accessInformation = inject(AccessInformationStore);
+	private readonly _accessInformation = inject(StoreSignInFormation);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _validator = inject(FormValidator);
 	private readonly _router = inject(Router);
@@ -48,7 +48,7 @@ export default class SignInPage {
 			.subscribe((user) => {
 				if (user) {
 					this._tryAgain.set(false);
-					this._accessInformation.setUser(user!);
+					this._accessInformation.setSignInInformation(user!);
 					this._router.navigate(['dashboard'], { replaceUrl: true });
 				}
 			});

@@ -1,16 +1,17 @@
 import { Routes } from '@angular/router';
 import { ApiGetUserConfiguration } from '@dashboard/api/user-configuration';
 import { guardAccessToken } from '@dashboard/guards/access-token';
+import { guardInheritModulePermissions } from '@dashboard/guards/inherit-module-permissions';
 import { guardModulePermissions } from '@dashboard/guards/module-permissions';
+import { guardQueryParamOperation } from '@dashboard/guards/query-params-operation';
+import { StoreActiveOperations } from '@dashboard/modules/operations-management/view-operations/stores/active-operations';
 import { resolverGetAccessModule } from '@dashboard/resolver/get-access-module';
 import { resolverGetAccessServices } from '@dashboard/resolver/get-access-services';
 import { resolverGetAccessToken } from '@dashboard/resolver/get-access-token';
 import { resolverGetRoleExecution } from '@dashboard/resolver/get-role-execution';
+import { resolverGetSessionKey } from '@dashboard/resolver/get-session-key';
 import { resolverGetUserConfig } from '@dashboard/resolver/get-user-config';
 import { StoreUserConfig } from '@dashboard/stores/user-config';
-import { guardInheritModulePermissions } from './guards/inherit-module-permissions';
-import { guardQueryParamOperation } from './guards/query-params-operation';
-import { resolverGetSessionKey } from './resolver/get-session-key';
 
 export const dashboardRoutes: Routes = [
 	{
@@ -64,6 +65,7 @@ export const dashboardRoutes: Routes = [
 			},
 			{
 				path: 'operations-management',
+				providers: [StoreActiveOperations],
 				children: [
 					{
 						path: '',

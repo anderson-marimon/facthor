@@ -16,14 +16,7 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 		devReduxTool(this, 'USER_CONFIG_STORE');
 	}
 
-	private readonly setUserConfig = this.updater((state, userConfig: TUserConfig) => {
-		const permissions = this._extractPermissions(userConfig?.permissions);
-		const sessionKey = btoa(crypto.randomUUID());
-
-		return { ...state, userConfig, permissions, sessionKey };
-	});
-
-	private _extractPermissions(modules: TSubmodulePermission[] = []): string[] {
+	private readonly _extractPermissions = (modules: TSubmodulePermission[] = []): string[] => {
 		const flat: string[] = [];
 		const recurse = (items: TSubmodulePermission[]) => {
 			for (const item of items) {
@@ -33,13 +26,16 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 		};
 		recurse(modules);
 		return flat;
-	}
+	};
 
-	public readonly userConfig = this.select((state) => state.userConfig);
-	public readonly permissions = this.select((state) => state.permissions);
-	public readonly sessionKey = this.select((state) => state.sessionKey);
+	private readonly _setUserConfig = this.updater((store, userConfig: TUserConfig) => {
+		const permissions = this._extractPermissions(userConfig?.permissions);
+		const sessionKey = btoa(crypto.randomUUID());
 
-	public getServicesByRoute(targetRoute: string): Record<string, TUserServices> {
+		return { ...store, userConfig, permissions, sessionKey };
+	});
+
+	public readonly getServicesByRoute = (targetRoute: string): Record<string, TUserServices> => {
 		const permissions = this.get().userConfig?.permissions ?? [];
 		let accessServices: Record<string, TUserServices> = {};
 
@@ -63,9 +59,9 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 
 		recurse(permissions);
 		return accessServices;
-	}
+	};
 
-	public getModuleByRoute(targetRoute: string): string {
+	public readonly getModuleByRoute = (targetRoute: string): string => {
 		const permissions = this.get().userConfig?.permissions ?? [];
 		let accessModule = '';
 
@@ -78,18 +74,20 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 		}
 
 		return accessModule;
-	}
+	};
 
-	public getRoleExecution(): TRoleExecution {
+	public readonly userConfig = this.select((state) => state.userConfig);
+
+	public readonly getRoleExecution = (): TRoleExecution => {
 		return this.get().userConfig?.roleExecutions[0]!;
-	}
+	};
 
-	public getSessionKey(): string {
+	public readonly getSessionKey = (): string => {
 		return this.get().sessionKey;
-	}
+	};
 
 	public readonly loadUserConfig = (config: TUserConfig): Promise<boolean> => {
-		this.setUserConfig(config);
+		this._setUserConfig(config);
 		return Promise.resolve(true);
 	};
 

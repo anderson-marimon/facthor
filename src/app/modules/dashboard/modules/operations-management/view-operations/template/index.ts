@@ -10,7 +10,7 @@ import {
 	TApiGetActiveOperationsListQueryParams,
 	TApiGetActiveOperationsListQuerySignalParams,
 } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
-import { OrderStatus } from '@dashboard/modules/operations-management/view-operations/components/order-status/order-status';
+import { OrderStatus } from '@shared/components/order-status/order-status';
 import { ViewActiveOperationsTableFilters } from '@dashboard/modules/operations-management/view-operations/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';

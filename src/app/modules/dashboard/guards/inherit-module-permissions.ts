@@ -11,7 +11,7 @@ export const guardInheritModulePermissions: CanActivateFn = (snapShot, state) =>
 	const sessionKey = storeUserConfig.getSessionKey();
 
 	if (session !== sessionKey) {
-		return router.createUrlTree(['/dashboard/home']);
+		return router.createUrlTree(['/dashboard/operations-management/view-operations']);
 	}
 
 	let url = state.url.split('?')[0];
