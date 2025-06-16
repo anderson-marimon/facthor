@@ -1,6 +1,5 @@
 import { inject, resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
-import { EOrderStatus } from '@dashboard/common/enums/order-status';
 import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
 import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
@@ -22,48 +21,58 @@ export type TApiGetActiveOperationsListQueryParams = {
 
 export type TActiveOperation = {
 	id: number;
+	orderNumber: string;
+	totalInvoiceReadjustmentAmount: number;
+	totalInvoiceAmount: number;
+	operationDate: string;
+
 	providerLegalName: string;
 	providerTradename: string;
 	providerIdentificationType: string;
 	providerIdentificationNumber: number;
+
 	financierLegalName: string;
 	financierTradename: string;
 	financierIdentificationType: string;
 	financierIdentificationNumber: number;
+
 	idPayer: number;
 	payerLegalName: string;
 	payerTradename: string;
 	payerIdentificationType: string;
 	payerIdentificationNumber: number;
-	idOperationState: EOrderStatus;
-	operationStateName: string;
-	idProviderOperationState: number;
-	providerOperationStateName: string;
-	idPayerOperationState: number;
-	payerOperationStateName: string;
-	orderNumber: string;
-	totalInvoiceAmountRequired: number;
-	totalInvoiceReadjustmentAmount: number;
-	totalInvoiceAmount: number;
+
 	totalAmountToFinance: number;
 	totalReserveAmount: number;
 	totalInterestAmount: number;
 	totalPlatformInterestAmount: number;
 	totalDeductionsAmount: number;
 	totalPayableAmount: number;
+
 	minDaysFinancing: number;
 	maxDaysFinancing: number;
+
 	operationPercentage: number;
 	interestPercentage: number;
 	monthlyInterestRate: number;
-	daillyInterestRate: number; // Spelling
+	daillyInterestRate: number;
+
 	platformInterestPercentage: number;
 	platformMonthlyInterestRate: number;
-	platformDaillyInterestRate: number; // Spelling
+	platformDaillyInterestRate: number;
+
 	totalInterestPercentage: number;
 	totalMonthlyInterestRate: number;
-	totalDaillyInterestRate: number; // Spelling
-	operationDate: string;
+	totalDaillyInterestRate: number;
+
+	idOperationState: number;
+	operationStateName: string;
+
+	idProviderOperationState: number;
+	providerOperationStateName: string;
+
+	idPayerOperationState: number;
+	payerOperationStateName: string;
 };
 
 type TApiGetActiveOperationListResponse = TApi<{

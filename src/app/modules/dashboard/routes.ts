@@ -12,6 +12,8 @@ import { resolverGetRoleExecution } from '@dashboard/resolver/get-role-execution
 import { resolverGetSessionKey } from '@dashboard/resolver/get-session-key';
 import { resolverGetUserConfig } from '@dashboard/resolver/get-user-config';
 import { StoreUserConfig } from '@dashboard/stores/user-config';
+import { identity } from 'rxjs';
+import { resolverGetIdentity } from './resolver/get-identity';
 
 export const dashboardRoutes: Routes = [
 	{
@@ -79,6 +81,7 @@ export const dashboardRoutes: Routes = [
 							accessToken: resolverGetAccessToken,
 							accessModule: resolverGetAccessModule,
 							accessServices: resolverGetAccessServices,
+							identity: resolverGetIdentity,
 							roleExecution: resolverGetRoleExecution,
 							sessionKey: resolverGetSessionKey,
 						},

@@ -31,19 +31,54 @@
                         @for (column of _invoices()?.data; track $index) {
                             <tr>
                                 <td class="pl-2.5">{{ column.orderNumber }}</td>
-                                <td class="pl-2.5">{{ column.financierIdentificationNumber }}</td>
 
-                                <td [title]="column.financierLegalName">
-                                    <span class="block w-60 line-clamp-1 overflow-hidden truncate">
-                                        {{ column.financierLegalName }}
-                                    </span>
-                                </td>
+                                @switch (_roleExecution()?.id) {
+                                    @case (_eRoleExecution.PAYER) {
+                                        <td class="pl-2.5">{{ column.providerIdentificationNumber }}</td>
 
-                                <td [title]="column.payerLegalName">
-                                    <span class="block w-60 line-clamp-1 overflow-hidden truncate">
-                                        {{ column.payerLegalName }}
-                                    </span>
-                                </td>
+                                        <td [title]="column.providerLegalName">
+                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
+                                                {{ column.providerLegalName }}
+                                            </span>
+                                        </td>
+
+                                        <td [title]="column.financierLegalName">
+                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate">
+                                                {{ column.financierLegalName }}
+                                            </span>
+                                        </td>
+                                    }
+                                    @case (_eRoleExecution.FINANCIER) {
+                                        <td class="pl-2.5">{{ column.providerIdentificationNumber }}</td>
+
+                                        <td [title]="column.providerLegalName">
+                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
+                                                {{ column.providerLegalName }}
+                                            </span>
+                                        </td>
+
+                                        <td [title]="column.payerLegalName">
+                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate">
+                                                {{ column.payerLegalName }}
+                                            </span>
+                                        </td>
+                                    }
+                                    @case (_eRoleExecution.PROVIDER ) {
+                                        <td class="pl-2.5">{{ _identity()?.companyIdentification }}</td>
+
+                                        <td [title]="_identity()?.legalName">
+                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
+                                                {{ _identity()?.legalName }}
+                                            </span>
+                                        </td>
+
+                                        <td [title]="column.financierLegalName">
+                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate">
+                                                {{ column.financierLegalName }}
+                                            </span>
+                                        </td>
+                                    }
+                                }
 
                                 <td>
                                     <order-status

@@ -1,0 +1,160 @@
+<article class="flex gap-2.5
+    [&_ul]:space-y-2
+    [&_ul>li]:flex 
+    [&_ul>li]:items-center 
+    [&_ul>li]:gap-1 
+    [&_ul>li]:font-medium
+    [&_ul>li>span]:leading-5 
+    [&_ul>li>span:first-child]:font-medium 
+    [&_ul>li>span:last-child]:font-light 
+    [&_ul>li>span:last-child]:text-xs"
+>
+    <div class="flex-1 flex flex-col gap-2.5 text-sm">
+        <section class="px-2.5 py-2 bg-secondary">
+            <h2 class="font-semibold text-xs uppercase">Información general</h2>
+        </section>
+        <ul class="px-2.5">
+            <li>
+                <span>Número de orden: </span>
+                <span>{{ activeOperation()?.orderNumber }}</span>
+            </li>
+            <li>
+                <span class="text-nowrap">Estado de la orden: </span>
+                <span>
+                    <order-status [statusId]="activeOperation()?.idOperationState!"
+                        [statusName]="activeOperation()?.operationStateName!" class="[&_>span]:max-w-[260px]" />
+                </span>
+            </li>
+            <li>
+                <span>Fecha de orden: </span>
+                <span>{{ activeOperation()?.operationDate?.split('T')![0]}}</span>
+            </li>
+
+            <hr>
+
+            <li>
+                <span>Porcentaje a financiar: </span>
+                <span>{{ activeOperation()?.operationPercentage?.toFixed(2) }}%</span>
+            </li>
+            <li>
+                <span>Porcentaje de interés mensual: </span>
+                <span>{{ activeOperation()?.totalMonthlyInterestRate?.toFixed(2) }}%</span>
+            </li>
+            <li>
+                <span>Porcentaje de interés diario: </span>
+                <span>{{ activeOperation()?.totalDaillyInterestRate?.toFixed(3) }}%</span>
+            </li>
+
+            <hr>
+
+            <li>
+                <span>Días mínimos de financiación: </span>
+                <span>{{ activeOperation()?.minDaysFinancing }}</span>
+            </li>
+            <li>
+                <span>Días máximos de financiación: </span>
+                <span>{{ activeOperation()?.maxDaysFinancing }}</span>
+            </li>
+        </ul>
+    </div>
+
+     <div class="flex-1 flex flex-col gap-2.5 text-sm">
+        <section class="px-2.5 py-2 bg-secondary">
+            <h2 class="font-semibold text-xs uppercase">Comisiones</h2>
+        </section>
+        <ul class="px-2.5">
+            <li>
+                <span>Porcentaje de interés: </span>
+                <span>{{ activeOperation()?.interestPercentage?.toFixed(2) }}%</span>
+            </li>
+            <li>
+                <span>Porcentaje de interés mensual: </span>
+                <span>{{ activeOperation()?.monthlyInterestRate?.toFixed(4) }}%</span>
+            </li>
+            <li>
+                <span>Porcentaje de interés diario: </span>
+                <span>{{ activeOperation()?.daillyInterestRate?.toFixed(5) }}%</span>
+            </li>
+
+            <hr>
+
+            <li>
+                <span>Comisión de la plataforma: </span>
+                <span>{{ activeOperation()?.platformInterestPercentage?.toFixed(2) }}%</span>
+            </li>
+            <li>
+                <span>Comisión mensual de la plataforma: </span>
+                <span>{{ activeOperation()?.platformMonthlyInterestRate?.toFixed(4) }}%</span>
+            </li>
+            <li>
+                <span>Comisión diario de la plataforma</span>
+                <span>{{ activeOperation()?.platformDaillyInterestRate?.toFixed(5) }}%</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex-1 flex flex-col gap-2.5 text-sm">
+        <section class="px-2.5 py-2 bg-secondary">
+            <h2 class="font-semibold text-xs uppercase">Información de importes</h2>
+        </section>
+        <ul class="px-2.5">
+            <li>
+                <span>Monto total: </span>
+                <span>{{ activeOperation()?.totalInvoiceAmount | currency }}</span>
+            </li>
+            <li>
+                <span>Monto de reajuste: </span>
+                <span>{{ activeOperation()?.totalInvoiceReadjustmentAmount | currency }}</span>
+            </li>
+            <li>
+                <span>Monto de Intereses: </span>
+                <span>{{ activeOperation()?.totalInterestAmount | currency }}</span>
+            </li>
+
+            <hr>
+
+            <li>
+                <span>Monto a financiar: </span>
+                <span>{{ activeOperation()?.totalAmountToFinance | currency }}</span>
+            </li>
+            <li>
+                <span>Monto de reserva: </span>
+                <span>{{ activeOperation()?.totalReserveAmount | currency }}</span>
+            </li>
+            <li>
+                <span>Monto a pagar: </span>
+                <span>{{ activeOperation()?.totalPayableAmount | currency }}</span>
+            </li>
+
+             <hr>
+
+            <li>
+                <span>Estado de pago: </span>
+               <span>
+                    <order-status [statusId]="activeOperation()?.idPayerOperationState!"
+                        [statusName]="activeOperation()?.payerOperationStateName!" class="[&_>span]:max-w-[300px]" />
+                </span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex-1 flex flex-col gap-2.5 text-sm">
+        <section class="px-2.5 py-2 bg-secondary">
+            <h2 class="font-semibold text-xs uppercase">Información del pagador</h2>
+        </section>
+        <ul class="px-2.5">
+            <li>
+                <span>Nombre legal: </span>
+                <span>{{ activeOperation()?.payerLegalName }}</span>
+            </li>
+            <li>
+                <span>Tipo de documento: </span>
+                <span>{{ activeOperation()?.payerIdentificationType }}</span>
+            </li>
+            <li>
+                <span>Número de documento: </span>
+                <span>{{ activeOperation()?.payerIdentificationNumber }}</span>
+            </li>
+        </ul>
+    </div>
+</article>

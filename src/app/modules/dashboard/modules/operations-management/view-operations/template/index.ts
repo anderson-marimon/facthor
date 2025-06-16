@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TRoleExecution } from '@dashboard/api/user-configuration';
+import { TIdentity, TRoleExecution } from '@dashboard/api/user-configuration';
 import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { TAccessServices } from '@dashboard/common/enums/services';
 import {
@@ -17,6 +17,7 @@ import { InheritTableFooter } from '@shared/components/inherit-table-footer/inhe
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
 import { Eye, LucideAngularModule } from 'lucide-angular';
+import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
 
@@ -50,7 +51,9 @@ export default class OperationsManagementViewOperations {
 	protected readonly _headers = HEADERS;
 	protected readonly _invoices = this._apiGetActiveOperationList.response;
 	protected readonly _isLoadingApiGetInvoiceList = this._apiGetActiveOperationList.isLoading;
+	protected readonly _eRoleExecution = ERoleExecution;
 	protected readonly _roleExecution = signal<Nullable<TRoleExecution>>(null);
+	protected readonly _identity = signal<Nullable<TIdentity>>(null);
 
 	constructor() {
 		this._getAccessInformation();
@@ -62,6 +65,7 @@ export default class OperationsManagementViewOperations {
 			this._accessToken.set(data[EAccessInformation.TOKEN]);
 			this._accessModule.set(data[EAccessInformation.MODULE]);
 			this._accessServices.set(data[EAccessInformation.SERVICES]);
+			this._identity.set(data[EAccessInformation.IDENTITY]);
 			this._roleExecution.set(data[EAccessInformation.ROLE_EXECUTION]);
 			this._sessionKey.set(data[EAccessInformation.SESSION_KEY]);
 		});

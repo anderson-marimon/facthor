@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TRoleExecution, TSubmodulePermission, TUserConfig } from '@dashboard/api/user-configuration';
+import { TIdentity, TRoleExecution, TSubmodulePermission, TUserConfig } from '@dashboard/api/user-configuration';
 import { ComponentStore } from '@ngrx/component-store';
 import { devReduxTool } from '@tools/dev-redux.tool';
 
@@ -84,6 +84,10 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 
 	public readonly getSessionKey = (): string => {
 		return this.get().sessionKey;
+	};
+
+	public readonly getIdentity = (): TIdentity => {
+		return this.get().userConfig?.identity!;
 	};
 
 	public readonly loadUserConfig = (config: TUserConfig): Promise<boolean> => {

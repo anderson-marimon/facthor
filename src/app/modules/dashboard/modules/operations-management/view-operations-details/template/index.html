@@ -3,10 +3,10 @@
         <view-card [title]="'Detalles de la orden'" class="h-fit">
             @switch (_roleExecution()?.id) {
                 @case (_eRoleExecution.PAYER) {
-                    
+                    <active-operations-details-operation-details [activeOperation]="_activeCurrentOperation()" />
                 }
                 @case (_eRoleExecution.FINANCIER) {
-                    
+                    <active-operations-details-provider-details [activeOperation]="_activeCurrentOperation()" />
                 }
                 @case (_eRoleExecution.PROVIDER) {
                     <active-operations-details-financier-details [activeOperation]="_activeCurrentOperation()" />
