@@ -1,12 +1,12 @@
 <main class="relative w-full h-dvh flex flex-col">
     <top-bar
-        [identify]="_configuration()?.identity || null"
-        [roleExecution]="_configuration()?.roleExecutions || null"
-        class="min-h-16"    
+        [identity]="_identity()"
+        [roleExecution]="_roleExecution()"
+        class="min-h-16 z-50"    
     />
-    <article class="relative flex-1 flex h-full overflow-hidden overflow-x-auto">
+    <article class="relative z-0 flex-1 flex h-full overflow-hidden overflow-x-auto">
         <aside-nav
-            [permissions]="_configuration()?.permissions || []"
+            [permissions]="_permissionList()"
             class="flex-shrink-0 w-[350px] hidden xl:flex lg:flex-col py-2.5 border-r"
         />
         <div class="flex-1">

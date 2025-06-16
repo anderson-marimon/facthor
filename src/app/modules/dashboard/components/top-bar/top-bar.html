@@ -3,13 +3,36 @@
         <facthor-logo class="md:ml-[15px] block w-32 md:w-40" [textColor]="'#041C2C'" />
     </section>
     <section class="flex-1 flex items-center justify-end gap-2.5">
-        <frs-avatar [size]="'sm'">
-            <frs-avatar-fallback [name]="identify()?.tradeName || ''" />
-        </frs-avatar>
-        <div class="flex flex-col text-xs md:text-sm">
-            <span class="font-semibold">{{ identify()?.tradeName | titlecase}}</span>
+        <frs-popover #popover [class]="'w-fit'">
+            <frs-popover-trigger>
+                <frs-avatar [size]="'sm'" [class]="'select-none cursor-pointer'">
+                    <frs-avatar-fallback [name]="identity()?.tradeName || ''" />
+                </frs-avatar>
+            </frs-popover-trigger>
+            <frs-popover-content [spacing]="'bottom-x1'" [class]="'min-w-fit min-h-fit'">
+                <ul class="flex flex-col gap-2 text-nowrap p-2
+                    [&>li]:flex
+                    [&>li]:items-center
+                    [&>li]:gap-1
+                    [&>li]:p-1
+                    [&>li]:hover:bg-secondary
+                ">
+                    <li
+                        aria-label="Cerrar sesión"
+                        title="Cerrar sesión"
+                        (click)="_onClickCloseSession(popover.close.bind(popover))"
+                        class="select-none cursor-pointer"
+                    >
+                        <i-lucide [img]="_closeIcon" [strokeWidth]="1.5" class="size-4" />
+                        <span>Cerrar sesión</span>
+                    </li>
+                </ul>
+            </frs-popover-content>
+        </frs-popover>
+        <div class="flex flex-col text-xs md:text-sm min-w-[78px]">
+            <span class="font-semibold">{{ identity()?.tradeName | titlecase}}</span>
             @if(roleExecution() !== null ) {
-                <span class="text-[0.70rem] md:text-xs">{{ roleExecution()![0].name || '' | titlecase }}</span>
+                <span class="text-[0.70rem] md:text-xs">{{ roleExecution()?.name || '' | titlecase }}</span>
             }
         </div>
     </section>

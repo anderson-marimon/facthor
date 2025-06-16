@@ -8,19 +8,26 @@ import { StoreActiveOperations } from '@dashboard/modules/operations-management/
 import { resolverGetAccessModule } from '@dashboard/resolver/get-access-module';
 import { resolverGetAccessServices } from '@dashboard/resolver/get-access-services';
 import { resolverGetAccessToken } from '@dashboard/resolver/get-access-token';
+import { resolverGetIdentity } from '@dashboard/resolver/get-identity';
+import { resolverGetPermissionList } from '@dashboard/resolver/get-permissions-list';
 import { resolverGetRoleExecution } from '@dashboard/resolver/get-role-execution';
 import { resolverGetSessionKey } from '@dashboard/resolver/get-session-key';
 import { resolverGetUserConfig } from '@dashboard/resolver/get-user-config';
 import { StoreUserConfig } from '@dashboard/stores/user-config';
-import { identity } from 'rxjs';
-import { resolverGetIdentity } from './resolver/get-identity';
 
 export const dashboardRoutes: Routes = [
 	{
 		path: '',
 		providers: [StoreUserConfig, ApiGetUserConfiguration],
 		canActivate: [guardAccessToken, resolverGetUserConfig],
-		loadComponent: () => import('@dashboard/layout').then((page) => page.default),
+		resolve: {
+			identity: resolverGetIdentity,
+			permissionList: resolverGetPermissionList,
+			roleExecution: resolverGetRoleExecution,
+		},
+		loadComponent() {
+			return import('@dashboard/layout');
+		},
 		children: [
 			{
 				path: '',
@@ -29,7 +36,9 @@ export const dashboardRoutes: Routes = [
 			},
 			{
 				path: 'home',
-				loadComponent: () => import('@dashboard/modules/home/template').then((page) => page.default),
+				loadComponent() {
+					return import('@dashboard/modules/home/template');
+				},
 			},
 			{
 				path: 'invoice-management',

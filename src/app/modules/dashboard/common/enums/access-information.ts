@@ -5,4 +5,5 @@ export enum EAccessInformation {
 	ROLE_EXECUTION = 'roleExecution',
 	SESSION_KEY = 'sessionKey',
 	IDENTITY = 'identity',
+	PERMISSION_LIST = 'permissionList',
 }

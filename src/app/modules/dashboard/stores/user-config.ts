@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TIdentity, TRoleExecution, TSubmodulePermission, TUserConfig } from '@dashboard/api/user-configuration';
+import { TIdentity, TModulePermission, TRoleExecution, TSubmodulePermission, TUserConfig } from '@dashboard/api/user-configuration';
 import { ComponentStore } from '@ngrx/component-store';
 import { devReduxTool } from '@tools/dev-redux.tool';
 
@@ -77,6 +77,10 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 	};
 
 	public readonly userConfig = this.select((state) => state.userConfig);
+
+	public readonly getPermissionList = (): TModulePermission[] => {
+		return this.get().userConfig?.permissions!;
+	};
 
 	public readonly getRoleExecution = (): TRoleExecution => {
 		return this.get().userConfig?.roleExecutions[0]!;
