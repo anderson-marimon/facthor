@@ -20,7 +20,7 @@ import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
-import { Eye, LucideAngularModule } from 'lucide-angular';
+import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
 
 const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'vencimiento', 'valor', 'acciones'];
 
@@ -60,6 +60,7 @@ export default class DashboardInvoiceManagementViewUploadInvoice {
 	private readonly _getInvoiceListParams = signal<Partial<TApiGetInvoiceListQuerySignalParams>>({});
 
 	protected readonly _eyeIcon = Eye;
+	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _invoices = this._apiGetInvoiceList.response;
 	protected readonly _isLoadingApiGetInvoiceList = this._apiGetInvoiceList.isLoading;

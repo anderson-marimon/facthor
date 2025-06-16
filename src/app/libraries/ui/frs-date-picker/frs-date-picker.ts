@@ -114,39 +114,72 @@ export class FrsDatePicker {
 
 	protected _formatValue(value: any): void {
 		if (this._updating() || !this._initialized()) return;
-
 		this._updating.set(true);
+
 		try {
-			if (value === null || value === undefined) {
+			// Handle explicit null/undefined or empty range
+			if (value === null || value === undefined || (this.rangeMode() && value === 'undefined - undefined')) {
 				this._pickedDate.set(null);
+
+				// Force calendar reset
+				if (this.rangeMode()) {
+					this.rangeControl()?.setValue(null, { emitEvent: false });
+				} else {
+					this.control()?.setValue(null, { emitEvent: false });
+				}
 				return;
 			}
 
+			// Range mode handling
 			if (this.rangeMode()) {
 				const range = this._parseRangeValue(value);
+
 				if (range) {
-					this._pickedDate.set(`${range.start.toISOString()} - ${range.end.toISOString()}`);
+					const formattedRange =
+						this.formatType() === 'isoShort'
+							? `${formatDateToISOShort(range.start)} - ${formatDateToISOShort(range.end)}`
+							: `${formatDateToMonthDayYear(range.start)} - ${formatDateToMonthDayYear(range.end)}`;
+
+					this._pickedDate.set(formattedRange);
+					this.rangeControl()?.setValue(
+						{
+							start: new Date(range.start),
+							end: new Date(range.end),
+						},
+						{ emitEvent: false }
+					);
 				} else {
 					this._pickedDate.set(null);
+					this.rangeControl()?.setValue(null, { emitEvent: false });
 				}
-			} else {
+			}
+			// Single date mode
+			else {
 				const date = this._parseDateValue(value);
+
 				if (date) {
-					this._pickedDate.set(date.toISOString());
+					this._pickedDate.set(this.formatType() === 'isoShort' ? formatDateToISOShort(date) : formatDateToMonthDayYear(date));
+					this.control()?.setValue(new Date(date), { emitEvent: false });
 				} else {
 					this._pickedDate.set(null);
+					this.control()?.setValue(null, { emitEvent: false });
 				}
 			}
 		} catch (e) {
 			console.error('Error formatting date:', e);
 			this._pickedDate.set(null);
+			if (this.rangeMode()) {
+				this.rangeControl()?.setValue(null, { emitEvent: false });
+			} else {
+				this.control()?.setValue(null, { emitEvent: false });
+			}
 		} finally {
 			timer(0).subscribe(() => this._updating.set(false));
 		}
 	}
 
 	private _parseRangeValue(value: any): { start: Date; end: Date } | null {
-		if (value === null || value === undefined) return null;
+		if (!value) return null;
 
 		let start: Date, end: Date;
 
@@ -165,11 +198,14 @@ export class FrsDatePicker {
 	}
 
 	private _parseDateValue(value: any): Date | null {
-		if (value === null || value === undefined) return null;
-		if (typeof value === 'string' && value.trim() === '') return null;
+		if (!value) return null;
 
-		const date = value instanceof Date ? value : new Date(value);
-		return !isNaN(date.getTime()) ? date : null;
+		try {
+			const date = value instanceof Date ? value : new Date(value);
+			return !isNaN(date.getTime()) ? date : null;
+		} catch {
+			return null;
+		}
 	}
 
 	protected _shouldShowPlaceholder = computed(() => {
@@ -227,12 +263,12 @@ export class FrsDatePicker {
 
 	private _updateControlValue(value: TCalendarDate): void {
 		if (!this.control()) return;
-		this.control()?.setValue(value, { emitEvent: false });
+		this.control()?.setValue(value);
 	}
 
 	private _updateRangeControlValue(value: TCalendarRange): void {
 		if (!this.rangeControl()) return;
-		this.rangeControl()?.setValue(value, { emitEvent: false });
+		this.rangeControl()?.setValue(value);
 	}
 
 	protected _touchedControl(): void {

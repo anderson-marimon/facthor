@@ -16,7 +16,7 @@ import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
-import { Eye, LucideAngularModule } from 'lucide-angular';
+import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
@@ -48,8 +48,9 @@ export default class OperationsManagementViewOperations {
 	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 
 	protected readonly _eyeIcon = Eye;
+	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
-	protected readonly _invoices = this._apiGetActiveOperationList.response;
+	protected readonly _operations = this._apiGetActiveOperationList.response;
 	protected readonly _isLoadingApiGetInvoiceList = this._apiGetActiveOperationList.isLoading;
 	protected readonly _eRoleExecution = ERoleExecution;
 	protected readonly _roleExecution = signal<Nullable<TRoleExecution>>(null);

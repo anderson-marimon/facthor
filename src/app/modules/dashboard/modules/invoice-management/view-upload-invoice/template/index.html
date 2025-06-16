@@ -18,57 +18,65 @@
                 </div>
             } @else {
                 <div class="min-w-[1364px] w-full h-[calc(100dvh-205px)] overflow-auto">
-                    <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
-                        @for (header of _headers; track $index; let first = $first) {
-                            <th class="w-72">
-                                <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
-                                    {{ header }}
-                                </span>
-                            </th>
-                        }
-
-                        @for (column of _invoices()?.data; track $index) {
-                            <tr>
-                                <td class="pl-2.5">{{ column.invoiceNumber }}</td>
-
-                                <td [title]="column.clientLegalName">
-                                    <span class="block w-60 line-clamp-1 overflow-hidden truncate">
-                                        {{ column.clientLegalName }}
+                    @if(_invoices()?.data?.length) {
+                        <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
+                            @for (header of _headers; track $index; let first = $first) {
+                                <th class="w-72">
+                                    <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
+                                        {{ header }}
                                     </span>
-                                </td>
-
-                                <td [title]="column.billerLegalName">
-                                    <span class="block w-60 line-clamp-1 overflow-hidden truncate">
-                                        {{ column.billerLegalName }}
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <invoice-status
-                                        [statusId]="column.idState"
-                                        [statusName]="column.stateName"
-                                    />
-                                </td>
-
-                                <td>{{ column.expeditionDate }}</td>
-                                <td>{{ column.expirationDate }}</td>
-                                <td>{{ column.payableAmount | currency }}</td>
-
-                                <td>
-                                    <button
-                                        [title]="'Ver eventos radian de la factura: ' + column.invoiceNumber"
-                                        frs-button
-                                        [size]="'icon'"
-                                        [variant]="'ghost'"
-                                        [disabled]="!column.radianEvents.length"
-                                        (click)="_onClickSelectRadianEvents(column)"
-                                    >
-                                        <i-lucide [img]="_eyeIcon" />
-                                    </button>
-                                </td>
-                            </tr>
-                        }
-                    </inherit-table>
+                                </th>
+                            }
+    
+                            @for (column of _invoices()?.data; track $index) {
+                                <tr>
+                                    <td class="pl-2.5">{{ column.invoiceNumber }}</td>
+    
+                                    <td [title]="column.clientLegalName">
+                                        <span class="block w-60 line-clamp-1 overflow-hidden truncate">
+                                            {{ column.clientLegalName }}
+                                        </span>
+                                    </td>
+    
+                                    <td [title]="column.billerLegalName">
+                                        <span class="block w-60 line-clamp-1 overflow-hidden truncate">
+                                            {{ column.billerLegalName }}
+                                        </span>
+                                    </td>
+    
+                                    <td>
+                                        <invoice-status
+                                            [statusId]="column.idState"
+                                            [statusName]="column.stateName"
+                                        />
+                                    </td>
+    
+                                    <td>{{ column.expeditionDate }}</td>
+                                    <td>{{ column.expirationDate }}</td>
+                                    <td>{{ column.payableAmount | currency }}</td>
+    
+                                    <td>
+                                        <button
+                                            [title]="'Ver eventos radian de la factura: ' + column.invoiceNumber"
+                                            frs-button
+                                            [size]="'icon'"
+                                            [variant]="'ghost'"
+                                            [disabled]="!column.radianEvents.length"
+                                            (click)="_onClickSelectRadianEvents(column)"
+                                        >
+                                            <i-lucide [img]="_eyeIcon" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </inherit-table>
+                        
+                    } @else {
+                        <section class="w-full h-full flex flex-col gap-1 items-center justify-center text-sm text-foreground/60 animate-opacity-in">
+                            <i-lucide [img]="_notResultIcon" [strokeWidth]="1.5" class="size-10 text-gray-300" />
+                            No se encontraron registros.
+                        </section>
+                    }
                 </div>
             }
         </article>

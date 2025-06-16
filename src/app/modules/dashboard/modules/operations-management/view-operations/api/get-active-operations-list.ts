@@ -13,8 +13,8 @@ export type TApiGetActiveOperationsListQueryParams = {
 	IdentitificationNumber: string; // Spelling
 	IdOperationState: number;
 	OrderNumber: string;
-	ExpeditionDateStart: string;
-	ExpeditionDateEnd: string;
+	StartOperationDate: string;
+	EndOperationDate: string;
 	Page: number;
 	Size: number;
 } & TPaginator;

@@ -19,91 +19,99 @@
                 </div>
             } @else {
                 <div class="min-w-[1364px] w-full h-[calc(100dvh-205px)] overflow-auto">
-                    <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
-                        @for (header of _headers; track $index; let first = $first) {
-                            <th class="w-72">
-                                <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
-                                    {{ header }}
-                                </span>
-                            </th>
-                        }
+                    @if(_operations()?.data?.length) {
 
-                        @for (column of _invoices()?.data; track $index) {
-                            <tr>
-                                <td class="pl-2.5">{{ column.orderNumber }}</td>
-
-                                @switch (_roleExecution()?.id) {
-                                    @case (_eRoleExecution.PAYER) {
-                                        <td class="pl-2.5">{{ column.providerIdentificationNumber }}</td>
-
-                                        <td [title]="column.providerLegalName">
-                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
-                                                {{ column.providerLegalName }}
-                                            </span>
-                                        </td>
-
-                                        <td [title]="column.financierLegalName">
-                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate">
-                                                {{ column.financierLegalName }}
-                                            </span>
-                                        </td>
+                        <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
+                            @for (header of _headers; track $index; let first = $first) {
+                                <th class="w-72">
+                                    <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
+                                        {{ header }}
+                                    </span>
+                                </th>
+                            }
+    
+                            @for (column of _operations()?.data; track $index) {
+                                <tr>
+                                    <td class="pl-2.5">{{ column.orderNumber }}</td>
+    
+                                    @switch (_roleExecution()?.id) {
+                                        @case (_eRoleExecution.PAYER) {
+                                            <td class="pl-2.5">{{ column.providerIdentificationNumber }}</td>
+    
+                                            <td [title]="column.providerLegalName">
+                                                <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
+                                                    {{ column.providerLegalName }}
+                                                </span>
+                                            </td>
+    
+                                            <td [title]="column.financierLegalName">
+                                                <span class="block w-60 line-clamp-1 overflow-hidden truncate">
+                                                    {{ column.financierLegalName }}
+                                                </span>
+                                            </td>
+                                        }
+                                        @case (_eRoleExecution.FINANCIER) {
+                                            <td class="pl-2.5">{{ column.providerIdentificationNumber }}</td>
+    
+                                            <td [title]="column.providerLegalName">
+                                                <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
+                                                    {{ column.providerLegalName }}
+                                                </span>
+                                            </td>
+    
+                                            <td [title]="column.payerLegalName">
+                                                <span class="block w-60 line-clamp-1 overflow-hidden truncate">
+                                                    {{ column.payerLegalName }}
+                                                </span>
+                                            </td>
+                                        }
+                                        @case (_eRoleExecution.PROVIDER ) {
+                                            <td class="pl-2.5">{{ _identity()?.companyIdentification }}</td>
+    
+                                            <td [title]="_identity()?.legalName">
+                                                <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
+                                                    {{ _identity()?.legalName }}
+                                                </span>
+                                            </td>
+    
+                                            <td [title]="column.financierLegalName">
+                                                <span class="block w-60 line-clamp-1 overflow-hidden truncate">
+                                                    {{ column.financierLegalName }}
+                                                </span>
+                                            </td>
+                                        }
                                     }
-                                    @case (_eRoleExecution.FINANCIER) {
-                                        <td class="pl-2.5">{{ column.providerIdentificationNumber }}</td>
-
-                                        <td [title]="column.providerLegalName">
-                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
-                                                {{ column.providerLegalName }}
-                                            </span>
-                                        </td>
-
-                                        <td [title]="column.payerLegalName">
-                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate">
-                                                {{ column.payerLegalName }}
-                                            </span>
-                                        </td>
-                                    }
-                                    @case (_eRoleExecution.PROVIDER ) {
-                                        <td class="pl-2.5">{{ _identity()?.companyIdentification }}</td>
-
-                                        <td [title]="_identity()?.legalName">
-                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
-                                                {{ _identity()?.legalName }}
-                                            </span>
-                                        </td>
-
-                                        <td [title]="column.financierLegalName">
-                                            <span class="block w-60 line-clamp-1 overflow-hidden truncate">
-                                                {{ column.financierLegalName }}
-                                            </span>
-                                        </td>
-                                    }
-                                }
-
-                                <td>
-                                    <order-status
-                                        [statusId]="column.idOperationState"
-                                        [statusName]="column.operationStateName"
-                                    />
-                                </td>
-
-                                <td>{{ column.totalAmountToFinance | currency }}</td>
-                                <td>{{ column.operationDate.split('T')[0] }}</td>
-
-                                <td>
-                                    <button
-                                        frs-button
-                                        (click)="_onClickNavigateToOperationDetails(column.id)"
-                                        [title]="'Ver detalles de la operación: ' + column.orderNumber"
-                                        [size]="'icon'"
-                                        [variant]="'ghost'"
-                                    >
-                                        <i-lucide [img]="_eyeIcon" />
-                                    </button>
-                                </td>
-                            </tr>
-                        }
-                    </inherit-table>
+    
+                                    <td>
+                                        <order-status
+                                            [statusId]="column.idOperationState"
+                                            [statusName]="column.operationStateName"
+                                        />
+                                    </td>
+    
+                                    <td>{{ column.totalAmountToFinance | currency }}</td>
+                                    <td>{{ column.operationDate.split('T')[0] }}</td>
+    
+                                    <td>
+                                        <button
+                                            frs-button
+                                            (click)="_onClickNavigateToOperationDetails(column.id)"
+                                            [title]="'Ver detalles de la operación: ' + column.orderNumber"
+                                            [size]="'icon'"
+                                            [variant]="'ghost'"
+                                        >
+                                            <i-lucide [img]="_eyeIcon" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </inherit-table>
+                    } @else {
+                        <section class="w-full h-full flex flex-col gap-1 items-center justify-center text-sm text-foreground/60 animate-opacity-in">
+                            <i-lucide [img]="_notResultIcon" [strokeWidth]="1.5" class="size-10 text-gray-300" />
+                            No se encontraron registros.
+                        </section>
+                    }
                 </div>
             }
         </article>
@@ -112,7 +120,7 @@
     <hr />
 
     <inherit-table-footer
-        [totalPages]="_invoices()?.countPages || 1"
+        [totalPages]="_operations()?.countPages || 1"
         [paginatorFunction]="getActiveOperationListForPaginator.bind(this)"
         class="h-12 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
     />

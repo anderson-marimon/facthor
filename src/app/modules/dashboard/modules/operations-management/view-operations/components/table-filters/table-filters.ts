@@ -44,7 +44,7 @@ export class ViewActiveOperationsTableFilters {
 
 	protected readonly _currentSelection = signal<TSelectOption[]>([]);
 
-	protected readonly _searchPerDateRange = this._formBuilder.control<TCalendarRange>(null);
+	protected readonly _searchPerDateRangeControl = this._formBuilder.control<TCalendarRange>(null);
 	protected readonly _searchOrderStatusesControl = this._formBuilder.control<TSelectOption[]>([]);
 	protected readonly _searchSelectSearchTypeControl = this._formBuilder.control<TSelectOption[]>([]);
 	protected readonly _searchInputControl = this._formBuilder.control('');
@@ -78,15 +78,15 @@ export class ViewActiveOperationsTableFilters {
 				});
 			});
 
-		this._searchPerDateRange.valueChanges
+		this._searchPerDateRangeControl.valueChanges
 			.pipe(
 				takeUntilDestroyed(this._destroyRef),
 				filter(() => this._isFiltersActive)
 			)
 			.subscribe((rangeDates) => {
 				this._getInvoiceByFilters({
-					ExpeditionDateStart: rangeDates?.start.toLocaleDateString('en-Ca') || undefined,
-					ExpeditionDateEnd: rangeDates?.end.toLocaleDateString('en-Ca') || undefined,
+					StartOperationDate: rangeDates?.start.toLocaleDateString('en-Ca') || undefined,
+					EndOperationDate: rangeDates?.end.toLocaleDateString('en-Ca') || undefined,
 					RoleToFind: 3,
 					Page: 1,
 				});
@@ -142,7 +142,7 @@ export class ViewActiveOperationsTableFilters {
 		if (this.isLoadingApiGetInvoiceList()) return;
 
 		this._searchInputControl.setValue('');
-		this._searchPerDateRange.setValue(null);
+		this._searchPerDateRangeControl.setValue(null);
 		this._searchOrderStatusesControl.setValue([]);
 		this._searchSelectSearchTypeControl.setValue([]);
 	}
