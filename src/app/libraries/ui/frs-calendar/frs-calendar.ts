@@ -176,32 +176,29 @@ export class FrsCalendar {
 	});
 
 	constructor() {
-		effect(
-			() => {
-				const rangeMode = this.rangeMode();
-				const controlValue = this.control()?.value;
-				const rangeControlValue = this.rangeControl()?.value;
+		effect(() => {
+			const rangeMode = this.rangeMode();
+			const controlValue = this.control()?.value;
+			const rangeControlValue = this.rangeControl()?.value;
 
-				if (rangeMode) {
-					if (rangeControlValue === null) {
-						this._selectedStartDate.set(null);
-						this._selectedEndDate.set(null);
-						this._inSelectionProcess.set(false);
-					} else if (rangeControlValue?.start && rangeControlValue?.end) {
-						this._selectedStartDate.set(new Date(rangeControlValue.start));
-						this._selectedEndDate.set(new Date(rangeControlValue.end));
-						this._inSelectionProcess.set(false);
-					}
-				} else {
-					if (controlValue === null) {
-						this._selectedStartDate.set(null);
-					} else if (controlValue) {
-						this._selectedStartDate.set(new Date(controlValue));
-					}
+			if (rangeMode) {
+				if (rangeControlValue === null) {
+					this._selectedStartDate.set(null);
+					this._selectedEndDate.set(null);
+					this._inSelectionProcess.set(false);
+				} else if (rangeControlValue?.start && rangeControlValue?.end) {
+					this._selectedStartDate.set(new Date(rangeControlValue.start));
+					this._selectedEndDate.set(new Date(rangeControlValue.end));
+					this._inSelectionProcess.set(false);
 				}
-			},
-			{ allowSignalWrites: true }
-		);
+			} else {
+				if (controlValue === null) {
+					this._selectedStartDate.set(null);
+				} else if (controlValue) {
+					this._selectedStartDate.set(new Date(controlValue));
+				}
+			}
+		});
 
 		this._syncInputs();
 		this._showCalendar.set(true);

@@ -1,0 +1,13 @@
+<span
+    [title]="statusName()"
+    class="block max-w-[190px] text-ellipsis text-[0.825rem] text-center px-1.5 py-0.5 pt-1 rounded-md whitespace-nowrap overflow-hidden"
+    [ngClass]="{
+        'bg-green-100 text-foreground': _successStatuses.includes(statusId()),
+        'bg-blue-100 text-foreground': _continuingStatuses.includes(statusId()),
+        'bg-orange-100 text-foreground': _externalStatuses.includes(statusId()),
+        'bg-red-100 text-foreground': _rejectStatuses.includes(statusId()),
+        'bg-secondary text-foreground': _pendingStatuses.includes(statusId())
+    }"
+>
+    {{ statusName()}}
+</span>

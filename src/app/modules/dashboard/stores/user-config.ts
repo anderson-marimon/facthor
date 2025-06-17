@@ -76,8 +76,6 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 		return accessModule;
 	};
 
-	public readonly userConfig = this.select((state) => state.userConfig);
-
 	public readonly getPermissionList = (): TModulePermission[] => {
 		return this.get().userConfig?.permissions!;
 	};

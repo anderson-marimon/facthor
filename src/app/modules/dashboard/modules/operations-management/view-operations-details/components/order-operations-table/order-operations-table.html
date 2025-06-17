@@ -1,0 +1,60 @@
+<article class="flex-1 h-full flex flex-col">
+    @if (_isLoadingApiGetOperationDetail()) {
+        <div class="flex-1 grid place-content-center gap-2.5">
+            <facthor-logo-animated class="size-10 mx-auto" />
+            <span class="font-light text-sm text-center text-foreground/60 animate-pulse">
+                Cargando facturas...
+            </span>
+        </div>
+    } @else {
+        <div class="flex-1 w-full min-w-[1364px] overflow-y-auto">
+            @if (_operations()?.data?.length) {
+                <inherit-table class="min-w-[960px] animate-opacity-in">
+                    @for (header of _headers; track $index; let first = $first) {
+                        <th class="w-72">
+                            <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
+                                {{ header }}
+                            </span>
+                        </th>
+                    }
+
+                    @for (column of _operations()?.data; track $index) {
+                        <tr>
+                            <td class="pl-2.5">{{ column.invoiceNumber }}</td>
+                            <td [title]="column.idInvoice">
+                                <span class="block w-60 truncate">{{ column.legitimateHolderLegalName }}</span>
+                            </td>
+                            <td [title]="column.legitimateHolderIdentificationNumber">
+                                <span class="block w-60 truncate">{{ column.legitimateHolderIdentificationNumber }}</span>
+                            </td>
+                            <td>
+                                <invoice-detail-status
+                                    [statusId]="column.idOperationDetailState"
+                                    [statusName]="column.operationDetailStateName"
+                                />
+                            </td>
+                            <td>{{ column.expeditionDate }}</td>
+                            <td>{{ column.payableAmount | currency }}</td>
+                            <td>
+                                <button
+                                    [title]="'Ver eventos radian de la factura: ' + column.invoiceNumber"
+                                    frs-button
+                                    [size]="'icon'"
+                                    [variant]="'ghost'"
+                                    (click)="_onClickSelectRadianEvents()"
+                                >
+                                    <i-lucide [img]="_eyeIcon" />
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </inherit-table>
+            } @else {
+                <section class="w-full h-full flex flex-col gap-1 items-center justify-center text-sm text-foreground/60 animate-opacity-in">
+                    <i-lucide [img]="_notResultIcon" [strokeWidth]="1.5" class="size-10 text-gray-300" />
+                    No se encontraron registros.
+                </section>
+            }
+        </div>
+    }
+</article>

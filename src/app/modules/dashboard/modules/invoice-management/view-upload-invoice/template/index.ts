@@ -13,7 +13,7 @@ import {
 	TRadianEvent,
 } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-list';
 import { ApiGetInvoiceStatuses } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-state';
-import { InvoiceStatus } from '@dashboard/modules/invoice-management/view-upload-invoice/components/invoice-status/invoice-status';
+import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
 import { ViewUploadInvoiceRadianEventsDrawer } from '@dashboard/modules/invoice-management/view-upload-invoice/components/radian-events-drawer/radian-events-drawer';
 import { ViewUploadInvoiceTableFilters } from '@dashboard/modules/invoice-management/view-upload-invoice/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';

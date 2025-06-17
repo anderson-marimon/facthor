@@ -11,7 +11,7 @@ import { EOrderStatus } from '@dashboard/common/enums/order-status';
 	imports: [CommonModule],
 })
 export class OrderStatus {
-	public readonly statusId = input(EOrderStatus.NEGOTIATION);
+	public readonly statusId = input(0);
 	public readonly statusName = input('');
 
 	protected _pendingStatuses = [

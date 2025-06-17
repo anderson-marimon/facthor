@@ -9,6 +9,7 @@ import { resolverGetAccessModule } from '@dashboard/resolver/get-access-module';
 import { resolverGetAccessServices } from '@dashboard/resolver/get-access-services';
 import { resolverGetAccessToken } from '@dashboard/resolver/get-access-token';
 import { resolverGetIdentity } from '@dashboard/resolver/get-identity';
+import { resolverGetInheritAccessServices } from '@dashboard/resolver/get-inherit-access-services';
 import { resolverGetPermissionList } from '@dashboard/resolver/get-permissions-list';
 import { resolverGetRoleExecution } from '@dashboard/resolver/get-role-execution';
 import { resolverGetSessionKey } from '@dashboard/resolver/get-session-key';
@@ -104,7 +105,7 @@ export const dashboardRoutes: Routes = [
 						resolve: {
 							accessToken: resolverGetAccessToken,
 							accessModule: resolverGetAccessModule,
-							accessServices: resolverGetAccessServices,
+							accessServices: resolverGetInheritAccessServices,
 							roleExecution: resolverGetRoleExecution,
 						},
 						loadComponent() {
