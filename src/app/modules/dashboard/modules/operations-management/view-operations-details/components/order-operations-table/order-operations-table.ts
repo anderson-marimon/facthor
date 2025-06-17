@@ -7,14 +7,14 @@ import { InvoiceDetailStatus } from '@shared/components/invoice-detail-status/in
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
 import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
 
-const HEADERS = ['n.factura', 'legitimo retenedor', 'nit legitimo retenedor', 'estado', 'fecha de emisión', 'monto de factura', 'acciones'];
+const HEADERS = ['n.factura', 'legitimo retenedor', 'nit legitimo retenedor', 'estado', 'fecha de emisión', 'monto de factura', 'detalles'];
 
 @Component({
-	selector: 'active-operations-order-operations-table',
+	selector: 'active-operations-details-order-operations-table',
 	templateUrl: 'order-operations-table.html',
 	imports: [CommonModule, FacthorLogoAnimated, FrsButtonModule, InheritTable, LucideAngularModule, InvoiceDetailStatus],
 })
-export class ActiveOperationsOrderOperationsTable {
+export class ActiveOperationsDetailsOrderOperationsTable {
 	private readonly _apiGetOperationDetail = inject(ApiGetOperationDetail);
 
 	protected readonly _eyeIcon = Eye;

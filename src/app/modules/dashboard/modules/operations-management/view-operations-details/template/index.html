@@ -1,6 +1,6 @@
 <section class="w-full h-full flex flex-col !font-light">
     <main class="flex-1 h-full flex flex-col gap-2.5 overflow-auto p-2.5">
-        <view-card [title]="'Detalles de la orden'" class="h-fit">
+        <view-card [title]="'Detalles de la orden'" class="h-fit relative">
             @switch (_roleExecution()?.id) {
                 @case (_eRoleExecution.PAYER) {
                     <active-operations-details-operation-details [activeOperation]="_activeCurrentOperation()" />
@@ -12,9 +12,32 @@
                     <active-operations-details-financier-details [activeOperation]="_activeCurrentOperation()" />
                 }
             }
+
+            <button
+                frs-button
+                [ariaLabel]="'Var el historial de estados de la orden: ' + _activeCurrentOperation()?.orderNumber"
+                [title]="'Var el historial de estados de la orden: ' + _activeCurrentOperation()?.orderNumber"
+                [size]="'sm'"
+                [disabled]="_isLoadingApiGetOperationTraceability()"
+                (click)="_getOperationStateTraceability()"
+                class="absolute bottom-2.5 right-2.5"
+            >
+                {{_isOpenTraceabilityDrawer() ? 'Actualizar el historial de estados' : 'Ver el historial de estados'}}
+            </button>
         </view-card>
         <view-card [title]="'Facturas de la orden'" class="flex-1">
-            <active-operations-order-operations-table />
+            <active-operations-details-order-operations-table />
         </view-card>
     </main>
 </section>
+
+@if (_isOpenTraceabilityDrawer()) {
+    <active-operations-details-order-traceability-drawer
+        [@slideEffect]
+        [isLoading]="_isLoadingApiGetOperationTraceability()"
+        [invoiceNumber]="_activeCurrentOperation()?.orderNumber || ''"
+        [traceabilityEvents]="_orderTraceability() || []"
+        (closeDrawerEmitter)="_onEmitCloseRadianEventsDrawer()"
+        class="absolute top-0 left-0 z-10 w-[350px] h-full p-2.5 pr-0 pt-5 border-r bg-background"
+    />
+}

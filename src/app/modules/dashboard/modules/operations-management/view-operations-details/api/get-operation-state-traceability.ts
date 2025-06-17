@@ -5,59 +5,25 @@ import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { cleanQuery } from '@shared/utils/clean-query';
 
-type TInvoiceDetail = {
-	id: number;
-	idInvoice: string;
-	invoiceCufe: string;
-	invoiceNumber: string;
-	currencyCode: string;
-	invoiceAmountRequired: number;
-	invoiceReadjustmentAmount: number;
-	invoiceAmount: number;
-	amountToFinance: number;
-	reserveAmount: number;
-	interestAmount: number;
-	platformInterestAmount: number;
-	deductionsAmount: number;
-	payableAmount: number;
-	expeditionDate: string;
-	expirationDate: string;
-	legitimateHolderLegalName: string;
-	legitimateHolderTradename: string;
-	legitimateHolderIdentificationType: string;
-	legitimateHolderIdentificationNumber: number;
-	legitimateHolderIdentificationTypeName: string;
-	idOperationDetailState: number;
-	operationDetailStateName: string;
-	isApprovedByProvider: boolean;
-	idProviderOperationDetailState: number;
-	providerOperationDetailStateName: string;
-	isApprovedByFinancier: boolean;
-	idFinancierOperationDetailState: number;
-	financierOperationDetailStateName: string;
-	isApprovedByPayer: boolean;
-	idPayerOperationDetailState: number;
-	payerOperationDetailStateName: string;
+export type TOperationTraceability = {
+	idLog: number;
+	stateName: string;
+	creationDate: string;
 };
 
-type TApiGetOperationDetailResponse = TApi<{
-	countItems: number;
-	countPages: number;
-	data: TInvoiceDetail[];
-}>;
+type TApiGetOperationStateTraceabilityResponse = TApi<TOperationTraceability[]>;
+type ApiGetOperationStateTraceabilityQuerySignalParams = TAccessInfo & { idOperation: string };
 
-type TApiGetOperationDetailQuerySignalParams = TAccessInfo & { idOperation: string };
-
-export class ApiGetOperationDetail extends AccessInterceptor {
+export class ApiGetOperationStateTraceability extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
-	private readonly _queryParams = signal<Nullable<TApiGetOperationDetailQuerySignalParams>>(null);
+	private readonly _queryParams = signal<Nullable<ApiGetOperationStateTraceabilityQuerySignalParams>>(null);
 
 	private readonly _resource = resource({
 		request: this._queryParams,
-		loader: (args) => this._fetchGetOperationDetail(args),
+		loader: (args) => this._fetchGetOperationStateTraceability(args),
 	});
 
-	private async _fetchGetOperationDetail(params: ResourceLoaderParams<Nullable<TApiGetOperationDetailQuerySignalParams>>) {
+	private async _fetchGetOperationStateTraceability(params: ResourceLoaderParams<Nullable<ApiGetOperationStateTraceabilityQuerySignalParams>>) {
 		const request = params.request;
 		if (!request) return null;
 
@@ -84,7 +50,7 @@ export class ApiGetOperationDetail extends AccessInterceptor {
 
 		try {
 			await apiDeferTime();
-			const response = await this._HttpRequest<TApiGetOperationDetailResponse>({
+			const response = await this._HttpRequest<TApiGetOperationStateTraceabilityResponse>({
 				path,
 				method: accessService.method,
 				headers: {
@@ -110,7 +76,7 @@ export class ApiGetOperationDetail extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public getOperationDetails(params: TApiGetOperationDetailQuerySignalParams): void {
+	public getOperationStateTraceability(params: ApiGetOperationStateTraceabilityQuerySignalParams): void {
 		this._queryParams.set(params);
 	}
 }
