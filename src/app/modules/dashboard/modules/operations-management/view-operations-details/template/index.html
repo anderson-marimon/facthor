@@ -26,7 +26,11 @@
             </button>
         </view-card>
         <view-card [title]="'Facturas de la orden'" class="flex-1">
-            <active-operations-details-order-operations-table [roleExecution]="_roleExecution()?.id || 0" />
+            <active-operations-details-order-operations-table
+                [roleExecution]="_roleExecution()?.id || 0"
+                [fnGetOrderInvoiceRadianEvents]="_getOrderInvoiceRadianEvents.bind(this)"
+                [fnGetOrderInvoiceStateTraceability]="_getOrderInvoiceStateTraceability.bind(this)"
+            />
         </view-card>
     </main>
 </section>

@@ -1,4 +1,4 @@
-import { trigger, transition, style, animate } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -7,8 +7,10 @@ import { TRoleExecution } from '@dashboard/api/user-configuration';
 import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { TAccessServices } from '@dashboard/common/enums/services';
-import { ApiGetOrderStateTraceability } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-state-traceability';
 import { ApiGetOrderInvoiceList } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-list';
+import { ApiGetOrderInvoiceRadianEvents } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-radian-events';
+import { ApiGetOrderInvoiceStateTraceability } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-state-traceability';
+import { ApiGetOrderStateTraceability } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-state-traceability';
 import { ActiveOperationsDetailsFinancierDetails } from '@dashboard/modules/operations-management/view-operations-details/components/financier-details/financier-details';
 import { ActiveOperationsDetailsOrderMinimumDetails } from '@dashboard/modules/operations-management/view-operations-details/components/order-minimum-details/order-minimum-details';
 import { ActiveOperationsDetailsOrderOperationsTable } from '@dashboard/modules/operations-management/view-operations-details/components/order-operations-table/order-operations-table';
@@ -31,7 +33,7 @@ import { ViewCard } from '@shared/components/view-card/view-card';
 			transition(':leave', [animate('600ms cubic-bezier(0.25, 1, 0.5, 1)', style({ transform: 'translateX(-100%)' }))]),
 		]),
 	],
-	providers: [ApiGetOrderInvoiceList, ApiGetOrderStateTraceability],
+	providers: [ApiGetOrderInvoiceList, ApiGetOrderStateTraceability, ApiGetOrderInvoiceRadianEvents, ApiGetOrderInvoiceStateTraceability],
 	imports: [
 		ActiveOperationsDetailsFinancierDetails,
 		ActiveOperationsDetailsProviderDetails,
@@ -49,6 +51,8 @@ export default class OperationsManagementViewOperationsDetails {
 	private readonly _storeActiveOperations = inject(StoreActiveOperations);
 	private readonly _apiGetOperationDetails = inject(ApiGetOrderInvoiceList);
 	private readonly _apiGetOperationStateTraceability = inject(ApiGetOrderStateTraceability);
+	private readonly _apiGetOrderInvoiceRadianEvents = inject(ApiGetOrderInvoiceRadianEvents);
+	private readonly _apiGetOrderInvoiceStateTraceability = inject(ApiGetOrderInvoiceStateTraceability);
 
 	private _accessToken = '';
 	private _accessModule = '';
@@ -112,9 +116,25 @@ export default class OperationsManagementViewOperationsDetails {
 		});
 	}
 
-	protected _getOrderInvoiceRadianEvents(): void {}
+	protected _getOrderInvoiceRadianEvents(orderInvoiceId: string): void {
+		this._apiGetOrderInvoiceRadianEvents.getOrderInvoiceRadianEvent({
+			accessToken: this._accessToken,
+			accessModule: this._accessModule,
+			accessService: this._accessServices?.GET_OPERATION_DETAIL_RADIAN_EVENTS_SERVICE,
+			idOperation: this._operationId,
+			idOperationDetail: orderInvoiceId,
+		});
+	}
 
-	protected _getOrderInvoiceStateTraceability(): void {}
+	protected _getOrderInvoiceStateTraceability(orderInvoiceId: string): void {
+		this._apiGetOrderInvoiceStateTraceability.getOrderInvoiceStateTraceability({
+			accessToken: this._accessToken,
+			accessModule: this._accessModule,
+			accessService: this._accessServices?.GET_OPERATION_DETAIL_STATE_TRACEABILITY_SERVICE,
+			idOperation: this._operationId,
+			idOperationDetail: orderInvoiceId,
+		});
+	}
 
 	protected _onEmitCloseRadianEventsDrawer(): void {
 		this._isOpenTraceabilityDrawer.set(false);
