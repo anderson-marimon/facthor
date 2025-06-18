@@ -7,7 +7,6 @@ import { GeneralLoader } from '@shared/components/general-loader/general-loader'
 import { RadianEventItem } from '@shared/components/radian-event-item/radian-event-item';
 import { StateTraceabilityItem } from '@shared/components/state-traceability-item/state-traceability-item';
 import { ViewCard } from '@shared/components/view-card/view-card';
-import { LucideAngularModule } from 'lucide-angular';
 
 type TModalProps = {
 	invoice: any;
