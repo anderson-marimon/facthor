@@ -55,5 +55,5 @@ export class FrsDialog {
 		this._dialogContent()?.close();
 	}
 
-	protected readonly _frsClass = computed(() => frs('fixed top-0 left-0 block h-svh w-full bg-transparent'));
+	protected readonly _frsClass = computed(() => frs('fixed top-0 left-0 z-[800] block h-svh w-full bg-transparent'));
 }

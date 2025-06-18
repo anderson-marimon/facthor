@@ -1,4 +1,4 @@
-<article class="flex gap-2.5
+<article class="flex flex-col lg:flex-row flex-wrap gap-2.5
     [&_ul]:space-y-2
     [&_ul>li]:flex 
     [&_ul>li]:items-center 
@@ -7,9 +7,11 @@
     [&_ul>li>span]:leading-5 
     [&_ul>li>span:first-child]:font-medium 
     [&_ul>li>span:last-child]:font-light 
-    [&_ul>li>span:last-child]:text-xs"
+    [&_ul>li>span:last-child]:text-xs
+    [&_>div]:flex-1 md:flex-[1_1_300px]
+    "
 >
-    <div class="flex-1 flex flex-col gap-2.5 text-sm">
+    <div class="flex flex-col gap-2.5 text-sm">
         <section class="px-2.5 py-2 bg-secondary">
             <h2 class="font-semibold text-xs uppercase">Información general</h2>
         </section>
@@ -20,7 +22,7 @@
             </li>
             <li [title]="activeInvoice()?.invoiceCufe">
                 <span>Cufe: </span>
-                <span class="inline-block max-w-[400px] overflow-ellipsis truncate">{{ activeInvoice()?.invoiceCufe }}</span>
+                <span class="inline-block max-w-[300px] lg:max-w-[400px] overflow-ellipsis truncate">{{ activeInvoice()?.invoiceCufe }}</span>
             </li>
             <li>
                 <span>Estado de la factura: </span>
