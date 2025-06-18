@@ -7,8 +7,8 @@ import { TRoleExecution } from '@dashboard/api/user-configuration';
 import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { TAccessServices } from '@dashboard/common/enums/services';
-import { ApiGetOperationStateTraceability } from '@dashboard/modules/operations-management/view-operations-details//api/get-operation-state-traceability';
-import { ApiGetOperationDetail } from '@dashboard/modules/operations-management/view-operations-details/api/get-operation-detail';
+import { ApiGetOrderStateTraceability } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-state-traceability';
+import { ApiGetOrderInvoiceList } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-list';
 import { ActiveOperationsDetailsFinancierDetails } from '@dashboard/modules/operations-management/view-operations-details/components/financier-details/financier-details';
 import { ActiveOperationsDetailsOrderMinimumDetails } from '@dashboard/modules/operations-management/view-operations-details/components/order-minimum-details/order-minimum-details';
 import { ActiveOperationsDetailsOrderOperationsTable } from '@dashboard/modules/operations-management/view-operations-details/components/order-operations-table/order-operations-table';
@@ -31,7 +31,7 @@ import { ViewCard } from '@shared/components/view-card/view-card';
 			transition(':leave', [animate('600ms cubic-bezier(0.25, 1, 0.5, 1)', style({ transform: 'translateX(-100%)' }))]),
 		]),
 	],
-	providers: [ApiGetOperationDetail, ApiGetOperationStateTraceability],
+	providers: [ApiGetOrderInvoiceList, ApiGetOrderStateTraceability],
 	imports: [
 		ActiveOperationsDetailsFinancierDetails,
 		ActiveOperationsDetailsProviderDetails,
@@ -47,8 +47,8 @@ export default class OperationsManagementViewOperationsDetails {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _storeActiveOperations = inject(StoreActiveOperations);
-	private readonly _apiGetOperationDetails = inject(ApiGetOperationDetail);
-	private readonly _apiGetOperationStateTraceability = inject(ApiGetOperationStateTraceability);
+	private readonly _apiGetOperationDetails = inject(ApiGetOrderInvoiceList);
+	private readonly _apiGetOperationStateTraceability = inject(ApiGetOrderStateTraceability);
 
 	private _accessToken = '';
 	private _accessModule = '';
@@ -66,7 +66,7 @@ export default class OperationsManagementViewOperationsDetails {
 
 	constructor() {
 		this._getAccessInformation();
-		this._getOperationsDetailsList();
+		this._getOrderInvoiceList();
 		this._addObservable();
 	}
 
@@ -83,8 +83,8 @@ export default class OperationsManagementViewOperationsDetails {
 		});
 	}
 
-	private _getOperationsDetailsList(): void {
-		this._apiGetOperationDetails.getOperationDetails({
+	private _getOrderInvoiceList(): void {
+		this._apiGetOperationDetails.getOrderInvoiceList({
 			accessToken: this._accessToken,
 			accessModule: this._accessModule,
 			accessService: this._accessServices?.GET_OPERATION_DETAIL_SERVICE,
@@ -104,7 +104,7 @@ export default class OperationsManagementViewOperationsDetails {
 		if (this._isLoadingApiGetOperationTraceability()) return;
 
 		this._isOpenTraceabilityDrawer.set(true);
-		this._apiGetOperationStateTraceability.getOperationStateTraceability({
+		this._apiGetOperationStateTraceability.getOrderStateTraceability({
 			accessToken: this._accessToken,
 			accessModule: this._accessModule,
 			accessService: this._accessServices?.GET_OPERATION_STATE_TRACEABILITY_SERVICE,

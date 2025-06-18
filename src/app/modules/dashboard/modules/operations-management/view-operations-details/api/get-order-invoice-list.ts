@@ -5,7 +5,7 @@ import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { cleanQuery } from '@shared/utils/clean-query';
 
-export type TInvoiceDetail = {
+export type TOrderInvoice = {
 	id: number;
 	idInvoice: string;
 	invoiceCufe: string;
@@ -40,24 +40,24 @@ export type TInvoiceDetail = {
 	payerOperationDetailStateName: string;
 };
 
-type TApiGetOperationDetailResponse = TApi<{
+type TApiGetOrderInvoiceListResponse = TApi<{
 	countItems: number;
 	countPages: number;
-	data: TInvoiceDetail[];
+	data: TOrderInvoice[];
 }>;
 
-type TApiGetOperationDetailQuerySignalParams = TAccessInfo & { idOperation: string };
+type TApiGetOrderInvoiceListQuerySignalParams = TAccessInfo & { idOperation: string };
 
-export class ApiGetOperationDetail extends AccessInterceptor {
+export class ApiGetOrderInvoiceList extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
-	private readonly _queryParams = signal<Nullable<TApiGetOperationDetailQuerySignalParams>>(null);
+	private readonly _queryParams = signal<Nullable<TApiGetOrderInvoiceListQuerySignalParams>>(null);
 
 	private readonly _resource = resource({
 		request: this._queryParams,
-		loader: (args) => this._fetchGetOperationDetail(args),
+		loader: (args) => this._fetchGetOrderInvoiceList(args),
 	});
 
-	private async _fetchGetOperationDetail(params: ResourceLoaderParams<Nullable<TApiGetOperationDetailQuerySignalParams>>) {
+	private async _fetchGetOrderInvoiceList(params: ResourceLoaderParams<Nullable<TApiGetOrderInvoiceListQuerySignalParams>>) {
 		const request = params.request;
 		if (!request) return null;
 
@@ -84,7 +84,7 @@ export class ApiGetOperationDetail extends AccessInterceptor {
 
 		try {
 			await apiDeferTime();
-			const response = await this._HttpRequest<TApiGetOperationDetailResponse>({
+			const response = await this._HttpRequest<TApiGetOrderInvoiceListResponse>({
 				path,
 				method: accessService.method,
 				headers: {
@@ -110,7 +110,7 @@ export class ApiGetOperationDetail extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public getOperationDetails(params: TApiGetOperationDetailQuerySignalParams): void {
+	public getOrderInvoiceList(params: TApiGetOrderInvoiceListQuerySignalParams): void {
 		this._queryParams.set(params);
 	}
 }

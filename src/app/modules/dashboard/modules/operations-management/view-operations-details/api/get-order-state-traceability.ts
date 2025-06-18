@@ -5,25 +5,25 @@ import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { cleanQuery } from '@shared/utils/clean-query';
 
-export type TOperationTraceability = {
+export type TOrderTraceability = {
 	idLog: number;
 	stateName: string;
 	creationDate: string;
 };
 
-type TApiGetOperationStateTraceabilityResponse = TApi<TOperationTraceability[]>;
-type ApiGetOperationStateTraceabilityQuerySignalParams = TAccessInfo & { idOperation: string };
+type TApiGetOrderStateTraceabilityResponse = TApi<TOrderTraceability[]>;
+type ApiGetOrderStateTraceabilityQuerySignalParams = TAccessInfo & { idOperation: string };
 
-export class ApiGetOperationStateTraceability extends AccessInterceptor {
+export class ApiGetOrderStateTraceability extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
-	private readonly _queryParams = signal<Nullable<ApiGetOperationStateTraceabilityQuerySignalParams>>(null);
+	private readonly _queryParams = signal<Nullable<ApiGetOrderStateTraceabilityQuerySignalParams>>(null);
 
 	private readonly _resource = resource({
 		request: this._queryParams,
-		loader: (args) => this._fetchGetOperationStateTraceability(args),
+		loader: (args) => this._fetchGetOrderStateTraceability(args),
 	});
 
-	private async _fetchGetOperationStateTraceability(params: ResourceLoaderParams<Nullable<ApiGetOperationStateTraceabilityQuerySignalParams>>) {
+	private async _fetchGetOrderStateTraceability(params: ResourceLoaderParams<Nullable<ApiGetOrderStateTraceabilityQuerySignalParams>>) {
 		const request = params.request;
 		if (!request) return null;
 
@@ -50,7 +50,7 @@ export class ApiGetOperationStateTraceability extends AccessInterceptor {
 
 		try {
 			await apiDeferTime();
-			const response = await this._HttpRequest<TApiGetOperationStateTraceabilityResponse>({
+			const response = await this._HttpRequest<TApiGetOrderStateTraceabilityResponse>({
 				path,
 				method: accessService.method,
 				headers: {
@@ -76,7 +76,7 @@ export class ApiGetOperationStateTraceability extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public getOperationStateTraceability(params: ApiGetOperationStateTraceabilityQuerySignalParams): void {
+	public getOrderStateTraceability(params: ApiGetOrderStateTraceabilityQuerySignalParams): void {
 		this._queryParams.set(params);
 	}
 }

@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { TOperationTraceability } from '@dashboard/modules/operations-management/view-operations-details/api/get-operation-state-traceability';
+import { TOrderTraceability } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-state-traceability';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
@@ -13,7 +13,7 @@ import { Calendar, Clock, FileX2, LucideAngularModule } from 'lucide-angular';
 export class ActiveOperationsDetailsOrderTraceabilityDrawer {
 	public readonly isLoading = input(false);
 	public readonly invoiceNumber = input('');
-	public readonly traceabilityEvents = input<TOperationTraceability[]>([]);
+	public readonly traceabilityEvents = input<TOrderTraceability[]>([]);
 	public readonly closeDrawerEmitter = output<void>();
 
 	protected readonly _clockIcon = Clock;
