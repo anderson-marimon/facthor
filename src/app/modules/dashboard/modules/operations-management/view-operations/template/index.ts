@@ -18,6 +18,7 @@ import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
 import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
+import { EmptyResult } from '@shared/components/empty-result/empty-result';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
 
@@ -27,6 +28,7 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 	providers: [ApiGetActiveOperationList],
 	imports: [
 		CommonModule,
+		EmptyResult,
 		FacthorLogoAnimated,
 		FrsButtonModule,
 		InheritTable,

@@ -52,29 +52,32 @@
                 <span>Monto total: </span>
                 <span>{{ activeInvoice()?.invoiceAmount| currency }}</span>
             </li>
-            <li>
-                <span>Monto de reajuste: </span>
-                <span>{{ activeInvoice()?.invoiceReadjustmentAmount | currency }}</span>
-            </li>
-            <li>
-                <span>Monto de Intereses: </span>
-                <span>{{ activeInvoice()?.interestAmount | currency }}</span>
-            </li>
 
-            <hr>
-
-            <li>
-                <span>Monto a financiar: </span>
-                <span>{{ activeInvoice()?.amountToFinance | currency }}</span>
-            </li>
-            <li>
-                <span>Monto de reserva: </span>
-                <span>{{ activeInvoice()?.reserveAmount | currency }}</span>
-            </li>
-            <li>
-                <span>Monto a pagar: </span>
-                <span>{{ activeInvoice()?.payableAmount | currency }}</span>
-            </li>
+            @if (roleExecution() !== _eRoleExecution.PAYER) {
+                <li>
+                    <span>Monto de reajuste: </span>
+                    <span>{{ activeInvoice()?.invoiceReadjustmentAmount | currency }}</span>
+                </li>
+                <li>
+                    <span>Monto de Intereses: </span>
+                    <span>{{ activeInvoice()?.interestAmount | currency }}</span>
+                </li>
+    
+                <hr>
+    
+                <li>
+                    <span>Monto a financiar: </span>
+                    <span>{{ activeInvoice()?.amountToFinance | currency }}</span>
+                </li>
+                <li>
+                    <span>Monto de reserva: </span>
+                    <span>{{ activeInvoice()?.reserveAmount | currency }}</span>
+                </li>
+                <li>
+                    <span>Monto a pagar: </span>
+                    <span>{{ activeInvoice()?.payableAmount | currency }}</span>
+                </li>
+            }
         </ul>
     </div>
 

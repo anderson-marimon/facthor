@@ -7,7 +7,7 @@
                 <div class="min-h-[280px] h-full gap-2.5">
                     @if (_activeVerificationFiles()) {
                         @if (_errorFiles().length > 0 || _processedFiles().length > 0) {
-                            <section class="h-full flex flex-col pb-2.5 md:overflow-hidden">
+                            <section class="h-full flex flex-col md:overflow-hidden">
                                 <div class="flex-1 flex flex-col gap-2 md:overflow-y-auto">
                                     @for (errorFile of _errorFiles(); track $index) {
                                         <upload-invoice-processed-invoice-item

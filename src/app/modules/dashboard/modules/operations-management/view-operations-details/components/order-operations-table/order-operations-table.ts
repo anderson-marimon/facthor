@@ -4,6 +4,7 @@ import { ApiGetOperationDetail, TInvoiceDetail } from '@dashboard/modules/operat
 import { ActiveOperationsDetailsOrderOperations } from '@dashboard/modules/operations-management/view-operations-details/components/order-operation-detail-modal/order-operation-detail-modal';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
+import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceDetailStatus } from '@shared/components/invoice-detail-status/invoice-detail-status';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
@@ -14,9 +15,11 @@ const HEADERS = ['n.factura', 'legitimo retenedor', 'nit legitimo retenedor', 'e
 @Component({
 	selector: 'active-operations-details-order-operations-table',
 	templateUrl: 'order-operations-table.html',
-	imports: [CommonModule, FacthorLogoAnimated, FrsButtonModule, InheritTable, LucideAngularModule, InvoiceDetailStatus],
+	imports: [CommonModule, EmptyResult, FacthorLogoAnimated, FrsButtonModule, InheritTable, LucideAngularModule, InvoiceDetailStatus],
 })
 export class ActiveOperationsDetailsOrderOperationsTable {
+	public readonly roleExecution = input.required<number>();
+
 	private readonly _apiGetOperationDetail = inject(ApiGetOperationDetail);
 	private readonly _dialogRef = inject(FrsDialogRef);
 
@@ -32,6 +35,7 @@ export class ActiveOperationsDetailsOrderOperationsTable {
 			content: ActiveOperationsDetailsOrderOperations,
 			data: {
 				invoice,
+				roleExecution: this.roleExecution(),
 			},
 		});
 	}

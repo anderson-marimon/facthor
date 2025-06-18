@@ -1,13 +1,14 @@
 import { Component, input, output } from '@angular/core';
 import { TOperationTraceability } from '@dashboard/modules/operations-management/view-operations-details/api/get-operation-state-traceability';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
 import { Calendar, Clock, FileX2, LucideAngularModule } from 'lucide-angular';
 
 @Component({
 	selector: 'active-operations-details-order-traceability-drawer',
 	templateUrl: 'order-traceability-drawer.html',
-	imports: [FrsButtonModule, FacthorLogoAnimated, LucideAngularModule],
+	imports: [EmptyResult, FrsButtonModule, FacthorLogoAnimated, LucideAngularModule],
 })
 export class ActiveOperationsDetailsOrderTraceabilityDrawer {
 	public readonly isLoading = input(false);

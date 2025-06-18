@@ -16,6 +16,7 @@ import { ApiGetInvoiceStatuses } from '@dashboard/modules/invoice-management/vie
 import { ViewUploadInvoiceRadianEventsDrawer } from '@dashboard/modules/invoice-management/view-upload-invoice/components/radian-events-drawer/radian-events-drawer';
 import { ViewUploadInvoiceTableFilters } from '@dashboard/modules/invoice-management/view-upload-invoice/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
@@ -39,6 +40,7 @@ const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'ven
 	providers: [ApiGetInvoiceList, ApiGetInvoiceStatuses],
 	imports: [
 		CommonModule,
+		EmptyResult,
 		FacthorLogoAnimated,
 		FrsButtonModule,
 		InheritTable,

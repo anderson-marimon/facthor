@@ -1,7 +1,8 @@
-import { trigger, transition, style, stagger, animate, query } from '@angular/animations';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { Component, input, output } from '@angular/core';
 import { TRadianEvent } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-list';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { Calendar, Clock, LucideAngularModule } from 'lucide-angular';
 
 @Component({
@@ -18,7 +19,7 @@ import { Calendar, Clock, LucideAngularModule } from 'lucide-angular';
 			]),
 		]),
 	],
-	imports: [FrsButtonModule, LucideAngularModule],
+	imports: [EmptyResult, FrsButtonModule, LucideAngularModule],
 })
 export class ViewUploadInvoiceRadianEventsDrawer {
 	public readonly invoiceNumber = input('');
