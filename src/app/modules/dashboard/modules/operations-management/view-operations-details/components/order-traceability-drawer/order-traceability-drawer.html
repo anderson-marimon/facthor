@@ -12,32 +12,38 @@
             </span>
         </div>
     } @else {
-        <ul class="flex-1 flex flex-col gap-2.5 px-2.5 overflow-y-auto animate-opacity-in">
-            
-            @for (radianEvent of traceabilityEvents(); track $index; let last = $last) {
-                @let date = radianEvent.creationDate.split('T');
-
-                <li class="flex gap-2">
-                    <div class="min-w-[3px] h-full bg-secondary-facthor"></div>
-                    <div class="flex flex-col gap-1">
-                        <span class="text-xxs uppercase font-semibold">{{ radianEvent.stateName }}</span>
-                        <div class="flex items-center gap-2.5 text-[0.825rem] text-foreground/60 [&_svg]:size-3.5">
-                            <div class="flex items-center gap-1">
-                                <i-lucide [img]="_clockIcon" />
-                                <p class="pt-[4px]">{{ date[1].split('.')[0] }}</p>
-                            </div>
-                            <div class="flex items-center gap-1">
-                                <i-lucide [img]="_calendarIcon" />
-                                <p class="pt-[4px]">{{ date[0] }}</p>
+        @if (traceabilityEvents().length) {
+            <ul class="flex-1 flex flex-col gap-2.5 px-2.5 overflow-y-auto animate-opacity-in">
+                @for (radianEvent of traceabilityEvents().reverse(); track $index; let last = $last) {
+                    @let date = radianEvent.creationDate.split('T');
+    
+                    <li class="flex gap-2">
+                        <div class="min-w-[3px] h-full bg-secondary-facthor"></div>
+                        <div class="flex flex-col gap-1">
+                            <span class="text-sm font-medium">{{ radianEvent.stateName }}</span>
+                            <div class="flex items-center gap-2.5 text-[0.825rem] text-foreground/60 [&_svg]:size-3.5">
+                                <div class="flex items-center gap-1">
+                                    <i-lucide [img]="_clockIcon" />
+                                    <p class="pt-[4px]">{{ date[1].split('.')[0] }}</p>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i-lucide [img]="_calendarIcon" />
+                                    <p class="pt-[4px]">{{ date[0] }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                @if (!last) {
-                    <hr>
+                    </li>
+                    @if (!last) {
+                        <hr>
+                    }
                 }
-            }
-        </ul>
+            </ul>
+        } @else {
+            <section class="flex-1 flex flex-col gap-1 items-center justify-center text-sm text-foreground/60 animate-opacity-in">
+                <i-lucide [img]="_notResultIcon" [strokeWidth]="1.5" class="size-10 text-gray-300" />
+                No se encontraron registros.
+            </section>
+        }
     }
 
     <div class="w-full pr-2.5">

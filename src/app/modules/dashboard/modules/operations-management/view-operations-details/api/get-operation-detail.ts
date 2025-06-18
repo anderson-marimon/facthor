@@ -5,7 +5,7 @@ import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { cleanQuery } from '@shared/utils/clean-query';
 
-type TInvoiceDetail = {
+export type TInvoiceDetail = {
 	id: number;
 	idInvoice: string;
 	invoiceCufe: string;

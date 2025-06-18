@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { ApiGetOperationDetail } from '@dashboard/modules/operations-management/view-operations-details/api/get-operation-detail';
+import { Component, inject, input } from '@angular/core';
+import { ApiGetOperationDetail, TInvoiceDetail } from '@dashboard/modules/operations-management/view-operations-details/api/get-operation-detail';
+import { ActiveOperationsDetailsOrderOperations } from '@dashboard/modules/operations-management/view-operations-details/components/order-operation-detail-modal/order-operation-detail-modal';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceDetailStatus } from '@shared/components/invoice-detail-status/invoice-detail-status';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
@@ -16,6 +18,7 @@ const HEADERS = ['n.factura', 'legitimo retenedor', 'nit legitimo retenedor', 'e
 })
 export class ActiveOperationsDetailsOrderOperationsTable {
 	private readonly _apiGetOperationDetail = inject(ApiGetOperationDetail);
+	private readonly _dialogRef = inject(FrsDialogRef);
 
 	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
@@ -23,5 +26,13 @@ export class ActiveOperationsDetailsOrderOperationsTable {
 	protected readonly _operations = this._apiGetOperationDetail.response;
 	protected readonly _isLoadingApiGetOperationDetail = this._apiGetOperationDetail.isLoading;
 
-	protected _onClickSelectRadianEvents(): void {}
+	protected _onClickViewOperationDetails(invoice: TInvoiceDetail): void {
+		this._dialogRef.openDialog({
+			title: 'Detalle de la operación',
+			content: ActiveOperationsDetailsOrderOperations,
+			data: {
+				invoice,
+			},
+		});
+	}
 }

@@ -13,12 +13,12 @@ import {
 	TRadianEvent,
 } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-list';
 import { ApiGetInvoiceStatuses } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-state';
-import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
 import { ViewUploadInvoiceRadianEventsDrawer } from '@dashboard/modules/invoice-management/view-upload-invoice/components/radian-events-drawer/radian-events-drawer';
 import { ViewUploadInvoiceTableFilters } from '@dashboard/modules/invoice-management/view-upload-invoice/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
+import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
 import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
 import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
 

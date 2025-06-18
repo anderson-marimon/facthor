@@ -10,7 +10,7 @@ import { TAccessServices } from '@dashboard/common/enums/services';
 import { ApiGetOperationStateTraceability } from '@dashboard/modules/operations-management/view-operations-details//api/get-operation-state-traceability';
 import { ApiGetOperationDetail } from '@dashboard/modules/operations-management/view-operations-details/api/get-operation-detail';
 import { ActiveOperationsDetailsFinancierDetails } from '@dashboard/modules/operations-management/view-operations-details/components/financier-details/financier-details';
-import { ActiveOperationsDetailsOperationDetails } from '@dashboard/modules/operations-management/view-operations-details/components/operation-details/operation-details';
+import { ActiveOperationsDetailsOrderMinimumDetails } from '@dashboard/modules/operations-management/view-operations-details/components/order-minimum-details/order-minimum-details';
 import { ActiveOperationsDetailsOrderOperationsTable } from '@dashboard/modules/operations-management/view-operations-details/components/order-operations-table/order-operations-table';
 import { ActiveOperationsDetailsOrderTraceabilityDrawer } from '@dashboard/modules/operations-management/view-operations-details/components/order-traceability-drawer/order-traceability-drawer';
 import { ActiveOperationsDetailsProviderDetails } from '@dashboard/modules/operations-management/view-operations-details/components/provider-details/provider-details';
@@ -35,7 +35,7 @@ import { ViewCard } from '@shared/components/view-card/view-card';
 	imports: [
 		ActiveOperationsDetailsFinancierDetails,
 		ActiveOperationsDetailsProviderDetails,
-		ActiveOperationsDetailsOperationDetails,
+		ActiveOperationsDetailsOrderMinimumDetails,
 		ActiveOperationsDetailsOrderOperationsTable,
 		ActiveOperationsDetailsOrderTraceabilityDrawer,
 		CommonModule,
@@ -100,7 +100,7 @@ export default class OperationsManagementViewOperationsDetails {
 		});
 	}
 
-	protected _getOperationStateTraceability(): void {
+	protected _getOrderStateTraceability(): void {
 		if (this._isLoadingApiGetOperationTraceability()) return;
 
 		this._isOpenTraceabilityDrawer.set(true);
@@ -111,6 +111,10 @@ export default class OperationsManagementViewOperationsDetails {
 			idOperation: this._operationId,
 		});
 	}
+
+	protected _getOrderInvoiceRadianEvents(): void {}
+
+	protected _getOrderInvoiceStateTraceability(): void {}
 
 	protected _onEmitCloseRadianEventsDrawer(): void {
 		this._isOpenTraceabilityDrawer.set(false);

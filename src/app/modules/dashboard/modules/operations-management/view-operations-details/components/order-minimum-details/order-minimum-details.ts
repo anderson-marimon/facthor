@@ -4,10 +4,10 @@ import { TActiveOperation } from '@dashboard/modules/operations-management/view-
 import { OrderStatus } from '@shared/components/order-status/order-status';
 
 @Component({
-	selector: 'active-operations-details-operation-details',
-	templateUrl: 'operation-details.html',
+	selector: 'active-operations-details-order-minimum-details',
+	templateUrl: 'order-minimum-details.html',
 	imports: [CommonModule, OrderStatus],
 })
-export class ActiveOperationsDetailsOperationDetails {
+export class ActiveOperationsDetailsOrderMinimumDetails {
 	public readonly activeOperation = input<Nullable<TActiveOperation>>(null);
 }

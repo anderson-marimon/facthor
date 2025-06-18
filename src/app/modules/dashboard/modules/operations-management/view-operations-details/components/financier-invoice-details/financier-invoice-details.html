@@ -1,0 +1,100 @@
+<article class="flex gap-2.5
+    [&_ul]:space-y-2
+    [&_ul>li]:flex 
+    [&_ul>li]:items-center 
+    [&_ul>li]:gap-1 
+    [&_ul>li]:font-medium
+    [&_ul>li>span]:leading-5 
+    [&_ul>li>span:first-child]:font-medium 
+    [&_ul>li>span:last-child]:font-light 
+    [&_ul>li>span:last-child]:text-xs"
+>
+    <div class="flex-1 flex flex-col gap-2.5 text-sm">
+        <section class="px-2.5 py-2 bg-secondary">
+            <h2 class="font-semibold text-xs uppercase">Información general</h2>
+        </section>
+        <ul class="px-2.5">
+            <li>
+                <span>Número de la factura: </span>
+                <span>{{ activeInvoice()?.invoiceNumber }}</span>
+            </li>
+            <li [title]="activeInvoice()?.invoiceCufe">
+                <span>Cufe: </span>
+                <span class="inline-block max-w-[400px] overflow-ellipsis truncate">{{ activeInvoice()?.invoiceCufe }}</span>
+            </li>
+            <li>
+                <span>Estado de la factura: </span>
+                <span>
+                    <invoice-detail-status [statusId]="activeInvoice()?.idOperationDetailState!"
+                        [statusName]="activeInvoice()?.operationDetailStateName!" class="[&_>span]:max-w-[300px]" />
+                </span>
+            </li>
+
+            <hr>
+
+            <li>
+                <span>Fecha de expedición de la factura: </span>
+                <span>{{ activeInvoice()?.expeditionDate?.split('T')![0]}}</span>
+            </li>
+            <li>
+                <span>Fecha de vencimiento de la factura: </span>
+                <span>{{ activeInvoice()?.expirationDate?.split('T')![0]}}</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex-1 flex flex-col gap-2.5 text-sm">
+        <section class="px-2.5 py-2 bg-secondary">
+            <h2 class="font-semibold text-xs uppercase">Información de importes</h2>
+        </section>
+        <ul class="px-2.5">
+            <li>
+                <span>Monto total: </span>
+                <span>{{ activeInvoice()?.invoiceAmount| currency }}</span>
+            </li>
+            <li>
+                <span>Monto de reajuste: </span>
+                <span>{{ activeInvoice()?.invoiceReadjustmentAmount | currency }}</span>
+            </li>
+            <li>
+                <span>Monto de Intereses: </span>
+                <span>{{ activeInvoice()?.interestAmount | currency }}</span>
+            </li>
+
+            <hr>
+
+            <li>
+                <span>Monto a financiar: </span>
+                <span>{{ activeInvoice()?.amountToFinance | currency }}</span>
+            </li>
+            <li>
+                <span>Monto de reserva: </span>
+                <span>{{ activeInvoice()?.reserveAmount | currency }}</span>
+            </li>
+            <li>
+                <span>Monto a pagar: </span>
+                <span>{{ activeInvoice()?.payableAmount | currency }}</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex-1 flex flex-col gap-2.5 text-sm">
+        <section class="px-2.5 py-2 bg-secondary">
+            <h2 class="font-semibold text-xs uppercase">Información del legitimo retenedor</h2>
+        </section>
+        <ul class="px-2.5">
+            <li>
+                <span>Nombre legal: </span>
+                <span>{{ activeInvoice()?.legitimateHolderLegalName }}</span>
+            </li>
+            <li>
+                <span>Tipo de documento: </span>
+                <span>{{ activeInvoice()?.legitimateHolderIdentificationType }}</span>
+            </li>
+            <li>
+                <span>Número de documento: </span>
+                <span>{{ activeInvoice()?.legitimateHolderIdentificationNumber }}</span>
+            </li>
+        </ul>
+    </div>
+</article>

@@ -1,0 +1,14 @@
+<section class="w-[1400px] h-[700px] flex flex-col gap-2.5 rounded-md bg-background">
+    <h2 class="text-xs uppercase font-semibold">
+        Detalles de la factura :
+        <span class="font-light">{{ data()?.invoice?.invoiceNumber }}</span>
+    </h2>
+    <main class="flex flex-col gap-2.5">
+        <view-card
+            [title]="'información general'"
+            class="flex-1"
+        >
+            <active-operations-details-financier-invoice-details [activeInvoice]="data()?.invoice" />
+        </view-card>
+    </main>
+</section>
