@@ -17,10 +17,10 @@ import { ViewUploadInvoiceRadianEventsDrawer } from '@dashboard/modules/invoice-
 import { ViewUploadInvoiceTableFilters } from '@dashboard/modules/invoice-management/view-upload-invoice/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
+import { GeneralLoader } from '@shared/components/general-loader/general-loader';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
-import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
 import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
 
 const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'vencimiento', 'valor', 'acciones'];
@@ -41,7 +41,7 @@ const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'ven
 	imports: [
 		CommonModule,
 		EmptyResult,
-		FacthorLogoAnimated,
+		GeneralLoader,
 		FrsButtonModule,
 		InheritTable,
 		InheritTableFooter,

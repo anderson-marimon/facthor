@@ -25,12 +25,7 @@
 
 <view-card [title]="'facturas subidas'" class="flex-1">
     @if (_loading()) {
-        <div class="min-h-[282px] h-full grid place-content-center gap-2.5">
-            <facthor-logo-animated class="mx-auto size-10" />
-            <span class="text-center font-light text-foreground/60 animate-pulse">
-                Subiendo facturas...
-            </span>
-        </div>
+        <general-loader [message]="'Subiendo facturas...'" />
     } @else {
         @if (_files().length > 0) {
             <div class="h-12 grid grid-cols-[5fr_1fr_1fr] gap-2.5 px-2.5 items-center text-xxs font-semibold uppercase">

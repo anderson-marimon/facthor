@@ -26,32 +26,13 @@
                 class="flex-1"
             >
                 @if(isLoadingOrderInvoiceRadianEvents()){
-                    <div class="flex-1 w-full h-full grid place-content-center gap-2.5">
-                        <facthor-logo-animated class="size-10 mx-auto" />
-                        <span class="font-light text-sm text-center text-foreground/60 animate-pulse">
-                            Cargando facturas...
-                        </span>
-                    </div>
+                    <general-loader [message]="'Cargando eventos RADIAN...'" />
                 } @else {
                     @if (orderInvoiceRadianEvents()?.length) {
                         <ul class="flex-1 w-full h-full flex flex-col gap-2.5 px-2.5 overflow-y-auto animate-opacity-in">
                             @for (radianEvent of orderInvoiceRadianEvents(); track $index; let last = $last) {
-                                <li class="flex gap-2">
-                                    <div class="min-w-[3px] h-full bg-secondary-facthor"></div>
-                                    <div class="flex flex-col gap-1">
-                                        <span class="text-sm font-medium">{{ radianEvent.name }}</span>
-                                        <div class="flex items-center gap-2.5 text-[0.825rem] text-foreground/60 [&_svg]:size-3.5">
-                                            <div class="flex items-center gap-1">
-                                                <i-lucide [img]="_clockIcon" />
-                                                <p class="pt-[4px]">{{ radianEvent.issueTime }}</p>
-                                            </div>
-                                            <div class="flex items-center gap-1">
-                                                <i-lucide [img]="_calendarIcon" />
-                                                <p class="pt-[4px]">{{ radianEvent.issueDate }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                <radian-event-item [radianEvent]="radianEvent" />
+                                
                                 @if (!last) {
                                     <hr>
                                 }
@@ -71,34 +52,13 @@
                 class="flex-1"
             >
                 @if(isLoadingOrderInvoiceStateTraceability()){
-                    <div class="flex-1 w-full h-full grid place-content-center gap-2.5">
-                        <facthor-logo-animated class="size-10 mx-auto" />
-                        <span class="font-light text-sm text-center text-foreground/60 animate-pulse">
-                            Cargando facturas...
-                        </span>
-                    </div>
+                    <general-loader [message]="'Cargando historial...'" />
                 } @else {
                     @if (orderInvoiceStateTraceability()?.length) {
                         <ul class="flex-1 w-full h-full flex flex-col gap-2.5 px-2.5 overflow-y-auto animate-opacity-in">
                             @for (stateTraceability of orderInvoiceStateTraceability(); track $index; let last = $last) {
-                                @let date = stateTraceability.creationDate.split('T');
-                
-                                <li class="flex gap-2">
-                                    <div class="inline-block min-w-[3px] h-full bg-secondary-facthor"></div>
-                                    <div class="flex flex-col gap-1">
-                                        <span class="text-sm font-medium">{{ stateTraceability.stateName }}</span>
-                                        <div class="flex items-center gap-2.5 text-[0.825rem] text-foreground/60 [&_svg]:size-3.5">
-                                            <div class="flex items-center gap-1">
-                                                <i-lucide [img]="_clockIcon" />
-                                                <p class="pt-[4px]">{{ date[1].split('.')[0] }}</p>
-                                            </div>
-                                            <div class="flex items-center gap-1">
-                                                <i-lucide [img]="_calendarIcon" />
-                                                <p class="pt-[4px]">{{ date[0] }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                <state-traceability-item [stateTraceability]="stateTraceability"/>
+                                
                                 @if (!last) {
                                     <hr>
                                 }

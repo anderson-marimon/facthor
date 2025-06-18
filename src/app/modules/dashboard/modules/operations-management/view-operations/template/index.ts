@@ -4,21 +4,21 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TIdentity, TRoleExecution } from '@dashboard/api/user-configuration';
 import { EAccessInformation } from '@dashboard/common/enums/access-information';
+import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { TAccessServices } from '@dashboard/common/enums/services';
 import {
 	ApiGetActiveOperationList,
 	TApiGetActiveOperationsListQueryParams,
 	TApiGetActiveOperationsListQuerySignalParams,
 } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
-import { OrderStatus } from '@shared/components/order-status/order-status';
 import { ViewActiveOperationsTableFilters } from '@dashboard/modules/operations-management/view-operations/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { EmptyResult } from '@shared/components/empty-result/empty-result';
+import { GeneralLoader } from '@shared/components/general-loader/general-loader';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
-import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
+import { OrderStatus } from '@shared/components/order-status/order-status';
 import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
-import { ERoleExecution } from '@dashboard/common/enums/role-execution';
-import { EmptyResult } from '@shared/components/empty-result/empty-result';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
 
@@ -29,7 +29,7 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 	imports: [
 		CommonModule,
 		EmptyResult,
-		FacthorLogoAnimated,
+		GeneralLoader,
 		FrsButtonModule,
 		InheritTable,
 		InheritTableFooter,

@@ -7,9 +7,9 @@ import { ActiveOperationsDetailsOrderOperations } from '@dashboard/modules/opera
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
+import { GeneralLoader } from '@shared/components/general-loader/general-loader';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceDetailStatus } from '@shared/components/invoice-detail-status/invoice-detail-status';
-import { FacthorLogoAnimated } from '@shared/logos/facthor-logo-animated/facthor-logo-animated';
 import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
 
 const HEADERS = ['n.factura', 'legitimo retenedor', 'nit legitimo retenedor', 'estado', 'fecha de emisión', 'monto de factura', 'detalles'];
@@ -17,7 +17,7 @@ const HEADERS = ['n.factura', 'legitimo retenedor', 'nit legitimo retenedor', 'e
 @Component({
 	selector: 'active-operations-details-order-operations-table',
 	templateUrl: 'order-operations-table.html',
-	imports: [CommonModule, EmptyResult, FacthorLogoAnimated, FrsButtonModule, InheritTable, LucideAngularModule, InvoiceDetailStatus],
+	imports: [CommonModule, EmptyResult, GeneralLoader, FrsButtonModule, InheritTable, LucideAngularModule, InvoiceDetailStatus],
 })
 export class ActiveOperationsDetailsOrderOperationsTable {
 	public readonly roleExecution = input.required<number>();

@@ -11,12 +11,7 @@
 
         <article class="flex-1 flex flex-col p-2.5">
             @if (_isLoadingApiGetInvoiceList()) {
-                <div class="flex-1 h-full grid place-content-center gap-2.5">
-                    <facthor-logo-animated class="size-10 mx-auto" />
-                    <span class="font-light text-sm text-center text-foreground/60 animate-pulse">
-                        Cargando operaciones activas...
-                    </span>
-                </div>
+                <general-loader [message]="'Cargando operaciones activas...'" />
             } @else {
                 <div class="min-w-[1364px] w-full h-[calc(100dvh-205px)] overflow-auto">
                     @if(_operations()?.data?.length) {
