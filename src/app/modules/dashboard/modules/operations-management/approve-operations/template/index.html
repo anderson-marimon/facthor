@@ -1,6 +1,6 @@
 <section class="w-full h-full flex flex-col !font-light">
     <main class="flex-1 h-full flex flex-col justify-center overflow-auto">
-        <view-active-operations-table-filters
+        <approve-operations-table-filters
             [roleExecution]="_roleExecution()?.id || 0"
             [isLoadingApiGetInvoiceList]="_isLoadingApiGetInvoiceList()"
             [filterFunction]="getActiveOperationListForFilter.bind(this)"
@@ -11,10 +11,10 @@
 
         <article class="flex-1 flex flex-col p-2.5">
             @if (_isLoadingApiGetInvoiceList()) {
-                <general-loader [message]="'Cargando operaciones activas...'" />
+                <general-loader [message]="'Cargando operaciones pendiente por aprobar...'" />
             } @else {
                 <div class="min-w-[1364px] w-full h-[calc(100dvh-205px)] overflow-auto">
-                    @if(_operations()?.data?.length) {
+                    @if(_activeOperations()?.data?.length) {
 
                         <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
                             @for (header of _headers; track $index; let first = $first) {
@@ -25,13 +25,21 @@
                                 </th>
                             }
     
-                            @for (column of _operations()?.data; track $index) {
+                            @for (column of _activeOperations()?.data; track column.orderNumber; let index = $index) {
                                 <tr>
-                                    <td class="pl-2.5">{{ column.orderNumber }}</td>
+                                    <td class="pl-2.5">
+                                        <frs-checkbox
+                                            [control]="_selectControls()[index]"
+                                            [label]="column.orderNumber"
+                                            [class]="'!text-xs'"
+                                        />
+                                    </td>
     
                                     @switch (_roleExecution()?.id) {
                                         @case (_eRoleExecution.PAYER) {
-                                            <td class="pl-2.5">{{ column.providerIdentificationNumber }}</td>
+                                            <td class="pl-2.5">
+                                                {{ column.providerIdentificationNumber }}
+                                            </td>
     
                                             <td [title]="column.providerLegalName">
                                                 <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
@@ -112,7 +120,7 @@
     <hr />
 
     <inherit-table-footer
-        [totalPages]="_operations()?.countPages || 1"
+        [totalPages]="_activeOperations()?.countPages || 1"
         [paginatorFunction]="getActiveOperationListForPaginator.bind(this)"
         class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
     />

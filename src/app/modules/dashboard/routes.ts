@@ -112,6 +112,21 @@ export const dashboardRoutes: Routes = [
 							return import('@dashboard/modules/operations-management/view-operations-details/template');
 						},
 					},
+					{
+						path: 'approve-operations',
+						canActivate: [guardModulePermissions],
+						resolve: {
+							accessToken: resolverGetAccessToken,
+							accessModule: resolverGetAccessModule,
+							accessServices: resolverGetAccessServices,
+							identity: resolverGetIdentity,
+							roleExecution: resolverGetRoleExecution,
+							sessionKey: resolverGetSessionKey,
+						},
+						loadComponent() {
+							return import('@dashboard/modules/operations-management/approve-operations/template');
+						},
+					},
 				],
 			},
 		],
