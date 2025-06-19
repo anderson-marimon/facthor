@@ -5,7 +5,7 @@ import { Calendar, Clock, LucideAngularModule } from 'lucide-angular';
 	selector: 'radian-event-item',
 	templateUrl: 'radian-event-item.html',
 	host: {
-		class: 'flex gap-2.5',
+		class: 'w-full h-fit flex gap-2.5',
 	},
 	imports: [LucideAngularModule],
 })

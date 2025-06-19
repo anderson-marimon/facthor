@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, OnDestroy } from '@angular/core';
 import { ApiGetOrderInvoiceList, TOrderInvoice } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-list';
 import { ApiGetOrderInvoiceRadianEvents } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-radian-events';
 import { ApiGetOrderInvoiceStateTraceability } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-state-traceability';
@@ -19,7 +19,7 @@ const HEADERS = ['n.factura', 'legitimo retenedor', 'nit legitimo retenedor', 'e
 	templateUrl: 'order-operations-table.html',
 	imports: [CommonModule, EmptyResult, GeneralLoader, FrsButtonModule, InheritTable, LucideAngularModule, InvoiceDetailStatus],
 })
-export class ActiveOperationsDetailsOrderOperationsTable {
+export class ActiveOperationsDetailsOrderOperationsTable implements OnDestroy {
 	public readonly roleExecution = input.required<number>();
 	public readonly fnGetOrderInvoiceRadianEvents = input.required<(orderInvoiceId: string) => void>();
 	public readonly fnGetOrderInvoiceStateTraceability = input.required<(orderInvoiceId: string) => void>();
@@ -54,5 +54,9 @@ export class ActiveOperationsDetailsOrderOperationsTable {
 				isLoadingOrderInvoiceStateTraceability: this._apiGetOrderInvoiceStateTraceability.isLoading,
 			},
 		});
+	}
+
+	public ngOnDestroy(): void {
+		this._dialogRef.closeDialog();
 	}
 }
