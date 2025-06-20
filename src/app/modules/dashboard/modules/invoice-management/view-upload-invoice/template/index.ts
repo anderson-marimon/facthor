@@ -111,14 +111,14 @@ export default class DashboardInvoiceManagementViewUploadInvoice {
 		this._radianEventsSelected.set([]);
 	}
 
-	public getInvoiceListForPaginator(page: number): void {
+	protected _getInvoiceListForPaginator(page: number): void {
 		this._apiGetInvoiceList.getInvoiceList({
 			...this._getInvoiceListParams(),
 			Page: page,
 		});
 	}
 
-	public getInvoiceListForFilter(queryFilters: Partial<Omit<TApiGetInvoiceListQueryParams, 'Size'>>): void {
+	protected _getInvoiceListForFilter(queryFilters: Partial<Omit<TApiGetInvoiceListQueryParams, 'Size'>>): void {
 		this._getInvoiceListParams.set({
 			...this._getInvoiceListParams(),
 			...queryFilters,

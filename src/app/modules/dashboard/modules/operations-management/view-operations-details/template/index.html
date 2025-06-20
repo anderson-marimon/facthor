@@ -15,9 +15,9 @@
 
             <button
                 frs-button
+                [size]="'sm'"
                 [ariaLabel]="'Var el historial de estados de la orden: ' + _activeCurrentOperation()?.orderNumber"
                 [title]="'Var el historial de estados de la orden: ' + _activeCurrentOperation()?.orderNumber"
-                [size]="'sm'"
                 [disabled]="_isLoadingApiGetOperationTraceability()"
                 (click)="_getOrderStateTraceability()"
                 class="absolute bottom-2.5 right-2.5"

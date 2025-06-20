@@ -3,7 +3,7 @@
         <approve-operations-table-filters
             [roleExecution]="_roleExecution()?.id || 0"
             [isLoadingApiGetInvoiceList]="_isLoadingApiGetInvoiceList()"
-            [filterFunction]="getActiveOperationListForFilter.bind(this)"
+            [filterFunction]="_getActiveOperationListForFilter.bind(this)"
             class="w-full flex items-center justify-end gap-2.5 p-2.5 overflow-visible"
         />
 
@@ -20,7 +20,19 @@
                             @for (header of _headers; track $index; let first = $first) {
                                 <th class="w-72">
                                     <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
-                                        {{ header }}
+                                        @if ($index === 5) {
+                                            @switch (_roleExecution()?.id) {
+                                                @case (_eRoleExecution.PAYER) {
+                                                    <td>total a pagar</td>
+                                                }
+                                                
+                                                @default {
+                                                    <td>{{ header }}</td>
+                                                }
+                                            }
+                                        } @else {
+                                            {{ header }}
+                                        }
                                     </span>
                                 </th>
                             }
@@ -31,6 +43,7 @@
                                         <frs-checkbox
                                             [control]="_selectControls()[index]"
                                             [label]="column.orderNumber"
+                                            (change)="_onChangeSelectSingleOperation(index)"
                                             [class]="'!text-xs'"
                                         />
                                     </td>
@@ -91,8 +104,17 @@
                                             [statusName]="column.operationStateName"
                                         />
                                     </td>
+
+                                    @switch (_roleExecution()?.id) {
+                                        @case (_eRoleExecution.PAYER) {
+                                            <td>{{ column.totalInvoiceAmount | currency }}</td>
+                                        }
+                                        
+                                        @default {
+                                            <td>{{ column.totalAmountToFinance | currency }}</td>
+                                        }
+                                    }
     
-                                    <td>{{ column.totalAmountToFinance | currency }}</td>
                                     <td>{{ column.operationDate.split('T')[0] }}</td>
     
                                     <td>
@@ -110,18 +132,39 @@
                             }
                         </inherit-table>
                     } @else {
-                       <empty-result />
+                       <empty-result
+                            [message]="'No hay operaciones pendientes por aprobar'"
+                       />
                     }
                 </div>
             }
         </article>
     </main>
-
     <hr />
 
     <inherit-table-footer
         [totalPages]="_activeOperations()?.countPages || 1"
-        [paginatorFunction]="getActiveOperationListForPaginator.bind(this)"
+        [paginatorFunction]="_getActiveOperationListForPaginator.bind(this)"
         class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
-    />
+    >
+        <section class="flex-1 h-full flex items-center gap-2.5 text-sm">
+            <div class="flex gap-2.5">
+                <button
+                    frs-button
+                    [disabled]="!_getSelectedOperations().length"
+                    (click)="_onClickApproveOperation()"
+                >
+                    {{ _allSelectControl.value ? 'Aprobar operaciones' : 'Aprobar operación' }}
+                </button>
+                
+                <button
+                    frs-button
+                    [variant]="'secondary'"
+                    [disabled]="!_getSelectedOperations().length"
+                >
+                    {{ _allSelectControl.value ? 'Rechazar operaciones' : 'Rechazar operación' }}
+                </button>
+            </div>
+        </section>
+    </inherit-table-footer>
 </section>

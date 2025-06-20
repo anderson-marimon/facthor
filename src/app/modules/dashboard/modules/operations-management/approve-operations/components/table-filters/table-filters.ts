@@ -143,7 +143,6 @@ export class ApproveOperationsTableFilters {
 
 		this._searchInputControl.setValue('');
 		this._searchPerDateRangeControl.setValue(null);
-		this._searchOrderStatusesControl.setValue([]);
 		this._searchSelectSearchTypeControl.setValue([]);
 	}
 }

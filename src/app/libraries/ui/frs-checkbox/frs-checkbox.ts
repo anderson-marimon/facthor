@@ -8,9 +8,6 @@ import { Check, LucideAngularModule } from 'lucide-angular';
 	selector: 'frs-checkbox',
 	standalone: true,
 	imports: [LucideAngularModule, ReactiveFormsModule],
-	host: {
-		'(click)': 'onClick.emit()',
-	},
 	template: `
 		<label [class]="_frsClass()" [attr.aria-disabled]="disabled()">
 			@if(control() !== undefined) {
@@ -56,8 +53,6 @@ export class FrsCheckbox {
 	public readonly icon = input(Check);
 	public readonly checked = input(false);
 	public readonly control = input<FormControl<boolean | null> | undefined>(undefined);
-	public readonly onChange = output<boolean>();
-	public readonly onClick = output<void>();
 
 	private readonly _destroyRef = inject(DestroyRef);
 	protected readonly _checked = signal(false);
@@ -74,7 +69,6 @@ export class FrsCheckbox {
 					.valueChanges.pipe(takeUntilDestroyed(this._destroyRef))
 					.subscribe((value) => {
 						this._checked.set(value ?? false);
-						this.onChange.emit(value ?? false);
 					});
 			}
 		});
@@ -96,8 +90,6 @@ export class FrsCheckbox {
 
 		if (this.control()) {
 			this.control()!.setValue(checked);
-		} else {
-			this.onChange.emit(checked);
 		}
 	}
 
@@ -109,8 +101,6 @@ export class FrsCheckbox {
 
 		if (this.control()) {
 			this.control()!.setValue(newValue);
-		} else {
-			this.onChange.emit(newValue);
 		}
 	}
 

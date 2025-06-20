@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, input, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,6 +16,7 @@ import {
 } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsCheckboxModule } from '@fresco-ui/frs-checkbox';
+import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { GeneralLoader } from '@shared/components/general-loader/general-loader';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
@@ -45,6 +46,7 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 })
 export default class OperationsManagementApproveOperations {
 	private readonly _destroyRef = inject(DestroyRef);
+	private readonly _frsDialogRef = inject(FrsDialogRef);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _router = inject(Router);
 	private readonly _activateRoute = inject(ActivatedRoute);
@@ -64,11 +66,13 @@ export default class OperationsManagementApproveOperations {
 	protected readonly _roleExecution = signal<Nullable<TRoleExecution>>(null);
 	protected readonly _identity = signal<Nullable<TIdentity>>(null);
 
-	protected readonly _selectControls = signal<FormControl[]>([]);
+	protected readonly _allSelectControl = this._formBuilder.control(false);
+	protected readonly _selectControls = signal<FormControl<boolean | null>[]>([]);
 
 	constructor() {
 		this._getAccessInformation();
 		this._getInitActiveOperationList();
+		this._watchActiveOperations();
 	}
 
 	private _getAccessInformation(): void {
@@ -83,12 +87,26 @@ export default class OperationsManagementApproveOperations {
 	}
 
 	private _getInitActiveOperationList(): void {
+		let idOperationState = EOrderStatus.APPROVED_FINANCIER;
+
+		switch (this._roleExecution()?.id) {
+			case ERoleExecution.PAYER:
+				idOperationState = EOrderStatus.PENDING_PAYER;
+				break;
+			case ERoleExecution.FINANCIER:
+				idOperationState = EOrderStatus.PENDING_FINANCIER;
+				break;
+			case ERoleExecution.PROVIDER:
+				idOperationState = EOrderStatus.PENDING_PROVIDER;
+				break;
+		}
+
 		this._getActiveOperationListParams.set({
 			accessToken: this._accessToken(),
 			accessModule: this._accessModule(),
 			accessService: this._accessServices()?.GET_OPERATIONS_ACTIVE_SERVICE,
 			RoleToFind: this._roleExecution()?.id,
-			IdOperationState: EOrderStatus.PENDING_PROVIDER,
+			IdOperationState: idOperationState,
 			Page: 1,
 			Size: 14,
 		});
@@ -96,20 +114,94 @@ export default class OperationsManagementApproveOperations {
 		this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
 	}
 
+	private _watchActiveOperations(): void {
+		toObservable(this._activeOperations)
+			.pipe(
+				takeUntilDestroyed(this._destroyRef),
+				tap((activeOperations) => {
+					if (!activeOperations) {
+						this._selectControls.set([]);
+						return;
+					}
+					this._syncSelectControls(activeOperations.data);
+				})
+			)
+			.subscribe();
+	}
+
+	private _syncSelectControls(operations: any[]): void {
+		const currentControls = this._selectControls();
+		const currentValues = currentControls.map((control) => control.value);
+
+		const newControls = operations.map((_, index) => {
+			const previousValue = index < currentValues.length ? currentValues[index] : false;
+			return this._formBuilder.control<boolean | null>(previousValue);
+		});
+
+		this._selectControls.set(newControls);
+	}
+
+	protected _getSelectedOperations(): any[] {
+		const controls = this._selectControls();
+		return (
+			this._activeOperations()?.data.filter((_, index) => {
+				return controls[index]?.value === true;
+			}) || []
+		);
+	}
+
+	// ==== Futura implementación ====
+	// private _areAllSelected(): boolean {
+	// 	const controls = this._selectControls();
+	// 	return controls.length > 0 && controls.every((control) => control.value);
+	// }
+
+	protected _onChangeSelectSingleOperation(index: number): void {
+		const controls = this._selectControls();
+
+		controls.forEach((control, i) => {
+			control.setValue(i === index);
+		});
+
+		const isAllChecked = controls.every((control) => control.value);
+		this._allSelectControl.setValue(isAllChecked);
+	}
+
+	// ==== Futura implementación ====
+	// protected _toggleAllSelection(): void {
+	// 	const value = this._allSelectControl.value;
+	// 	this._selectControls().forEach((control) => control.setValue(value));
+	// }
+
 	protected _onClickNavigateToOperationDetails(operation: number): void {
 		this._router.navigate(['dashboard/operations-management/view-operations/details'], {
 			queryParams: { operation, session: this._sessionKey() },
 		});
 	}
 
-	public getActiveOperationListForPaginator(page: number): void {
+	protected _onClickApproveOperation(): void {
+		if (!this._getSelectedOperations().length) return;
+
+		this._frsDialogRef.openAlertDialog({
+			title: 'Confirmar aprobación de la operación',
+			description: '¿Estás seguro de realizar esta acción, una vez aprobada la operación no puede volver a su estado anterior.',
+			action() {
+				console.log('aceptar');
+			},
+			loading: signal(false),
+		});
+
+		this._frsDialogRef.closeDialog;
+	}
+
+	protected _getActiveOperationListForPaginator(page: number): void {
 		this._apiGetActiveOperationList.getActiveOperationsList({
 			...this._getActiveOperationListParams(),
 			Page: page,
 		});
 	}
 
-	public getActiveOperationListForFilter(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {
+	protected _getActiveOperationListForFilter(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {
 		this._getActiveOperationListParams.set({
 			...this._getActiveOperationListParams(),
 			...queryFilters,

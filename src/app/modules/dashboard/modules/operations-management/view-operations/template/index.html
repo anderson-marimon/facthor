@@ -3,7 +3,7 @@
         <view-active-operations-table-filters
             [roleExecution]="_roleExecution()?.id || 0"
             [isLoadingApiGetInvoiceList]="_isLoadingApiGetInvoiceList()"
-            [filterFunction]="getActiveOperationListForFilter.bind(this)"
+            [filterFunction]="_getActiveOperationListForFilter.bind(this)"
             class="w-full flex items-center justify-end gap-2.5 p-2.5 overflow-visible"
         />
 
@@ -20,7 +20,19 @@
                             @for (header of _headers; track $index; let first = $first) {
                                 <th class="w-72">
                                     <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
-                                        {{ header }}
+                                        @if ($index === 5) {
+                                            @switch (_roleExecution()?.id) {
+                                                @case (_eRoleExecution.PAYER) {
+                                                    <td>total a pagar</td>
+                                                }
+                                                
+                                                @default {
+                                                    <td>{{ header }}</td>
+                                                }
+                                            }
+                                        } @else {
+                                            {{ header }}
+                                        }
                                     </span>
                                 </th>
                             }
@@ -84,7 +96,16 @@
                                         />
                                     </td>
     
-                                    <td>{{ column.totalAmountToFinance | currency }}</td>
+                                    @switch (_roleExecution()?.id) {
+                                        @case (_eRoleExecution.PAYER) {
+                                            <td>{{ column.totalInvoiceAmount | currency }}</td>
+                                        }
+                                        
+                                        @default {
+                                            <td>{{ column.totalAmountToFinance | currency }}</td>
+                                        }
+                                    }
+
                                     <td>{{ column.operationDate.split('T')[0] }}</td>
     
                                     <td>
@@ -113,7 +134,7 @@
 
     <inherit-table-footer
         [totalPages]="_operations()?.countPages || 1"
-        [paginatorFunction]="getActiveOperationListForPaginator.bind(this)"
+        [paginatorFunction]="_getActiveOperationListForPaginator.bind(this)"
         class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
     />
 </section>

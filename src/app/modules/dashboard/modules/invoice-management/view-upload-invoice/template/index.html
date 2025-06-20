@@ -2,7 +2,7 @@
     <main class="flex-1 h-full flex flex-col justify-center overflow-auto">
         <view-upload-invoice-table-filters
             [isLoadingApiGetInvoiceList]="_isLoadingApiGetInvoiceList()"
-            [filterFunction]="getInvoiceListForFilter.bind(this)"
+            [filterFunction]="_getInvoiceListForFilter.bind(this)"
             class="w-full flex justify-end gap-2.5 p-2.5 overflow-visible"
         />
 
@@ -78,7 +78,7 @@
 
     <inherit-table-footer
         [totalPages]="_invoices()?.countPages || 1"
-        [paginatorFunction]="getInvoiceListForPaginator.bind(this)"
+        [paginatorFunction]="_getInvoiceListForPaginator.bind(this)"
         class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
     />
 </section>

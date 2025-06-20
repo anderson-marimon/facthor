@@ -93,14 +93,14 @@ export default class OperationsManagementViewOperations {
 		});
 	}
 
-	public getActiveOperationListForPaginator(page: number): void {
+	protected _getActiveOperationListForPaginator(page: number): void {
 		this._apiGetActiveOperationList.getActiveOperationsList({
 			...this._getActiveOperationListParams(),
 			Page: page,
 		});
 	}
 
-	public getActiveOperationListForFilter(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {
+	protected _getActiveOperationListForFilter(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {
 		this._getActiveOperationListParams.set({
 			...this._getActiveOperationListParams(),
 			...queryFilters,
