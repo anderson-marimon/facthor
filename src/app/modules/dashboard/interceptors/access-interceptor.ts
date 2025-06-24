@@ -22,6 +22,10 @@ export abstract class AccessInterceptor {
 			const response = await fetch(path, options);
 			const result = (await response.json()) as TApi<unknown>;
 
+			if (!response.ok) {
+				throw new Error(`HTTP ${response.status} - ${result.message}`);
+			}
+
 			switch (result.internalCode) {
 				case 1005:
 					this._handleInternalCode({
@@ -29,7 +33,6 @@ export abstract class AccessInterceptor {
 						description: 'Sesión errada, inicie sesión nuevamente.',
 					});
 					break;
-
 				case 1004:
 					this._handleInternalCode({
 						title: 'Acceso Denegado',

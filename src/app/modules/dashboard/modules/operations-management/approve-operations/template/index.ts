@@ -8,9 +8,12 @@ import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { EOrderStatus } from '@dashboard/common/enums/order-status';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { TAccessServices } from '@dashboard/common/enums/services';
+import { ApiPostApproveOperations } from '@dashboard/modules/operations-management/approve-operations/api/post-approve-operations';
+import { ApiPostRejectOperations } from '@dashboard/modules/operations-management/approve-operations/api/post-reject-operations';
 import { ApproveOperationsTableFilters } from '@dashboard/modules/operations-management/approve-operations/components/table-filters/table-filters';
 import {
 	ApiGetActiveOperationList,
+	TActiveOperation,
 	TApiGetActiveOperationsListQueryParams,
 	TApiGetActiveOperationsListQuerySignalParams,
 } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
@@ -22,15 +25,16 @@ import { GeneralLoader } from '@shared/components/general-loader/general-loader'
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { OrderStatus } from '@shared/components/order-status/order-status';
+import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
 import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
-import { tap } from 'rxjs';
+import { merge, tap } from 'rxjs';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
 
 @Component({
 	selector: 'operations-management-approve-operations',
 	templateUrl: 'index.html',
-	providers: [ApiGetActiveOperationList],
+	providers: [ApiGetActiveOperationList, ApiPostApproveOperations, ApiPostRejectOperations],
 	imports: [
 		CommonModule,
 		EmptyResult,
@@ -39,6 +43,7 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 		FrsCheckboxModule,
 		InheritTable,
 		InheritTableFooter,
+		LoadingIcon,
 		LucideAngularModule,
 		OrderStatus,
 		ApproveOperationsTableFilters,
@@ -51,17 +56,30 @@ export default class OperationsManagementApproveOperations {
 	private readonly _router = inject(Router);
 	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
+	private readonly _apiPostApproveOperation = inject(ApiPostApproveOperations);
+	private readonly _apiPostRejectOperation = inject(ApiPostRejectOperations);
+	private readonly _selectedOrders = signal<number[]>([]);
+
 	private readonly _accessToken = signal('');
 	private readonly _accessModule = signal('');
 	private readonly _sessionKey = signal('');
 	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
 	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
+	private readonly _selectedActiveOperation = signal<Nullable<TActiveOperation>>(null);
 
 	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
+
 	protected readonly _activeOperations = this._apiGetActiveOperationList.response;
 	protected readonly _isLoadingApiGetInvoiceList = this._apiGetActiveOperationList.isLoading;
+
+	protected readonly _approveOperationResult = this._apiPostApproveOperation.response;
+	protected readonly _isLoadingApproveOperations = this._apiPostApproveOperation.isLoading;
+
+	protected readonly _rejectOperationResult = this._apiPostRejectOperation.response;
+	protected readonly _isLoadingRejectOperations = this._apiPostRejectOperation.isLoading;
+
 	protected readonly _eRoleExecution = ERoleExecution;
 	protected readonly _roleExecution = signal<Nullable<TRoleExecution>>(null);
 	protected readonly _identity = signal<Nullable<TIdentity>>(null);
@@ -102,6 +120,7 @@ export default class OperationsManagementApproveOperations {
 		}
 
 		this._getActiveOperationListParams.set({
+			...this._getActiveOperationListParams(),
 			accessToken: this._accessToken(),
 			accessModule: this._accessModule(),
 			accessService: this._accessServices()?.GET_OPERATIONS_ACTIVE_SERVICE,
@@ -112,6 +131,44 @@ export default class OperationsManagementApproveOperations {
 		});
 
 		this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
+	}
+
+	private _postApproveRejectOperations(isApproved: boolean): void {
+		let currentService: any = {};
+
+		switch (this._roleExecution()?.id) {
+			case ERoleExecution.PAYER:
+				currentService = this._accessServices()?.APPROVE_OR_REJECT_OPERATION_PAYER_SERVICE!;
+				break;
+			case ERoleExecution.FINANCIER:
+				currentService = this._accessServices()?.APPROVE_OR_REJECT_OPERATION_FINANCIER_SERVICE!;
+				break;
+			case ERoleExecution.PROVIDER:
+				currentService = this._accessServices()?.APPROVE_OR_REJECT_OPERATION_PROVIDER_SERVICE!;
+				break;
+		}
+
+		const ordersId = this._selectedOrders();
+
+		if (isApproved) {
+			this._apiPostApproveOperation.postApproveOperations({
+				accessToken: this._accessToken(),
+				accessModule: this._accessModule(),
+				accessService: currentService,
+				operations: ordersId,
+				isApproved: true,
+			});
+		} else {
+			this._apiPostRejectOperation.postRejectOperations({
+				accessToken: this._accessToken(),
+				accessModule: this._accessModule(),
+				accessService: currentService,
+				operations: ordersId,
+				isApproved: false,
+			});
+		}
+
+		this._selectControls().forEach((control) => control.setValue(false));
 	}
 
 	private _watchActiveOperations(): void {
@@ -127,6 +184,15 @@ export default class OperationsManagementApproveOperations {
 				})
 			)
 			.subscribe();
+
+		merge(toObservable(this._approveOperationResult), toObservable(this._rejectOperationResult))
+			.pipe(takeUntilDestroyed(this._destroyRef))
+			.subscribe((result) => {
+				if (result) {
+					this._frsDialogRef.closeDialog();
+					this._getInitActiveOperationList();
+				}
+			});
 	}
 
 	private _syncSelectControls(operations: any[]): void {
@@ -156,15 +222,27 @@ export default class OperationsManagementApproveOperations {
 	// 	return controls.length > 0 && controls.every((control) => control.value);
 	// }
 
-	protected _onChangeSelectSingleOperation(index: number): void {
+	protected _onChangeSelectSingleOperation(index: number, activeOperation: TActiveOperation): void {
 		const controls = this._selectControls();
 
 		controls.forEach((control, i) => {
-			control.setValue(i === index);
+			if (i === index) {
+				control.setValue(true);
+				const orderId = this._activeOperations()?.data[index].id;
+				this._selectedOrders.set([orderId!]);
+			} else {
+				control.setValue(false);
+			}
 		});
 
 		const isAllChecked = controls.every((control) => control.value);
 		this._allSelectControl.setValue(isAllChecked);
+
+		if (this._selectControls()[index].value) {
+			this._selectedActiveOperation.set(activeOperation);
+		} else {
+			this._selectedActiveOperation.set(null);
+		}
 	}
 
 	// ==== Futura implementación ====
@@ -180,18 +258,25 @@ export default class OperationsManagementApproveOperations {
 	}
 
 	protected _onClickApproveOperation(): void {
-		if (!this._getSelectedOperations().length) return;
+		if (this._isLoadingApproveOperations() || !this._getSelectedOperations().length) return;
 
 		this._frsDialogRef.openAlertDialog({
-			title: 'Confirmar aprobación de la operación',
-			description: '¿Estás seguro de realizar esta acción, una vez aprobada la operación no puede volver a su estado anterior.',
-			action() {
-				console.log('aceptar');
-			},
-			loading: signal(false),
+			title: `Confirmar la aprobación de la operación`,
+			description: '¿Está seguro de que desea aprobar esta operación? Una vez confirmada, no será posible revertir el cambio.',
+			action: () => this._postApproveRejectOperations(true),
+			loading: this._isLoadingApproveOperations,
 		});
+	}
 
-		this._frsDialogRef.closeDialog;
+	protected _onClickRejectOperation(): void {
+		if (this._isLoadingRejectOperations() || !this._getSelectedOperations().length) return;
+
+		this._frsDialogRef.openAlertDialog({
+			title: `Confirmar el rechazo de la operación`,
+			description: '¿Está seguro de que desea aprobar esta operación? Una vez confirmada, no será posible revertir el cambio.',
+			action: () => this._postApproveRejectOperations(false),
+			loading: this._isLoadingRejectOperations,
+		});
 	}
 
 	protected _getActiveOperationListForPaginator(page: number): void {

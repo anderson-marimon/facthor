@@ -6,6 +6,7 @@ import { TIdentity, TRoleExecution } from '@dashboard/api/user-configuration';
 import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { TAccessServices } from '@dashboard/common/enums/services';
+import { ApiPostApproveOperations } from '@dashboard/modules/operations-management/approve-operations/api/post-approve-operations';
 import {
 	ApiGetActiveOperationList,
 	TApiGetActiveOperationsListQueryParams,
@@ -25,7 +26,7 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 @Component({
 	selector: 'operations-management-view-operations',
 	templateUrl: 'index.html',
-	providers: [ApiGetActiveOperationList],
+	providers: [ApiGetActiveOperationList, ApiPostApproveOperations],
 	imports: [
 		CommonModule,
 		EmptyResult,

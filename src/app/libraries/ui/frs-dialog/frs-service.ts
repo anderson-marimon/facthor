@@ -66,8 +66,12 @@ export class FrsDialogRef {
 				componentRef.destroy();
 			}
 		} else {
-			this._componentRefs.at(-1)?.destroy();
-			this._componentRefs.pop();
+			this._componentRefs.at(-1)?.instance.closeDialog();
+
+			setTimeout(() => {
+				this._componentRefs.at(-1)?.destroy();
+				this._componentRefs.pop();
+			}, 300);
 		}
 	}
 }

@@ -43,7 +43,7 @@
                                         <frs-checkbox
                                             [control]="_selectControls()[index]"
                                             [label]="column.orderNumber"
-                                            (change)="_onChangeSelectSingleOperation(index)"
+                                            (change)="_onChangeSelectSingleOperation(index, column)"
                                             [class]="'!text-xs'"
                                         />
                                     </td>
@@ -151,18 +151,29 @@
             <div class="flex gap-2.5">
                 <button
                     frs-button
-                    [disabled]="!_getSelectedOperations().length"
+                    [disabled]="_isLoadingApproveOperations() || _isLoadingRejectOperations() || !_getSelectedOperations().length"
                     (click)="_onClickApproveOperation()"
+                    class="w-44"
                 >
-                    {{ _allSelectControl.value ? 'Aprobar operaciones' : 'Aprobar operación' }}
+                    @if (_isLoadingApproveOperations()) {
+                        <loading-icon [color]="'#FFFFFF'" class="size-6" />
+                    } @else {
+                        {{ _getSelectedOperations().length> 1 ? 'Aprobar operaciones' : 'Aprobar operación' }}
+                    }
                 </button>
                 
                 <button
                     frs-button
                     [variant]="'secondary'"
-                    [disabled]="!_getSelectedOperations().length"
+                    [disabled]="_isLoadingApproveOperations() || _isLoadingRejectOperations() || !_getSelectedOperations().length"
+                    (click)="_onClickRejectOperation()"
+                    class="w-44"
                 >
-                    {{ _allSelectControl.value ? 'Rechazar operaciones' : 'Rechazar operación' }}
+                    @if (_isLoadingRejectOperations()) {
+                        <loading-icon [color]="'#000000'" class="size-6" />
+                    } @else {
+                        {{ _getSelectedOperations().length> 1 ? 'Rechazar operaciones' : 'Rechazar operación' }}
+                    }
                 </button>
             </div>
         </section>
