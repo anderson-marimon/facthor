@@ -59,7 +59,11 @@ export class ApiPostApproveOperations extends AccessInterceptor {
 
 			return response.data;
 		} catch (error) {
-			catchHandlerError({ error, message: 'Error al aprobar las operaciones', description: '' });
+			catchHandlerError({
+				error,
+				message: 'Error al aprobar las operaciones',
+				description: 'Estamos teniendo aprobar las operaciones, por favor, intente más tarde.',
+			});
 			return null;
 		}
 	}

@@ -10,6 +10,7 @@ import { FrsSelectModule } from '@fresco-ui/frs-select';
 import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
 import { LucideAngularModule, RefreshCcw, Search } from 'lucide-angular';
 import { debounceTime, distinctUntilChanged, filter, startWith, withLatestFrom } from 'rxjs';
+import { ApiGetOrderStatuses } from '@dashboard/modules/operations-management/view-operations/api/get-order-statuses';
 
 const SEARCH_SELECT_OPTIONS = [
 	{ label: 'Número de orden', value: 0 },
@@ -34,6 +35,7 @@ export class ViewActiveOperationsTableFilters {
 	public readonly filterFunction = input<(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>) => void>();
 
 	private readonly _destroyRef = inject(DestroyRef);
+	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _ngZone = inject(NgZone);
 	private _isFiltersActive = false;
@@ -41,6 +43,8 @@ export class ViewActiveOperationsTableFilters {
 	protected readonly _searchIcon = Search;
 	protected readonly _resetFilterIcon = RefreshCcw;
 	protected readonly _searchSelectOptions = SEARCH_SELECT_OPTIONS;
+
+	protected readonly _orderStatuses = this._apiGetOrderStatuses.response;
 
 	protected readonly _currentSelection = signal<TSelectOption[]>([]);
 

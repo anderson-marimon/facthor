@@ -11,6 +11,15 @@
 
 <frs-select
     #field
+    [control]="_searchOrderStatusesControl"
+    [class]="'w-52'"
+>
+    <frs-select-trigger [placeholder]="'Filtrar por estado'" />
+    <frs-select-options [options]="_orderStatuses() || []" [class]="'max-h-52'" />
+</frs-select>
+
+<frs-select
+    #field
     [control]="_searchSelectSearchTypeControl"
     [class]="'w-52'"
 >

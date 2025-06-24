@@ -12,6 +12,7 @@ import {
 	TApiGetActiveOperationsListQueryParams,
 	TApiGetActiveOperationsListQuerySignalParams,
 } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
+import { ApiGetOrderStatuses } from '@dashboard/modules/operations-management/view-operations/api/get-order-statuses';
 import { ViewActiveOperationsTableFilters } from '@dashboard/modules/operations-management/view-operations/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
@@ -26,7 +27,7 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 @Component({
 	selector: 'operations-management-view-operations',
 	templateUrl: 'index.html',
-	providers: [ApiGetActiveOperationList, ApiPostApproveOperations],
+	providers: [ApiGetActiveOperationList, ApiGetOrderStatuses, ApiPostApproveOperations],
 	imports: [
 		CommonModule,
 		EmptyResult,
@@ -43,6 +44,7 @@ export default class OperationsManagementViewOperations {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _router = inject(Router);
 	private readonly _activateRoute = inject(ActivatedRoute);
+	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
 	private readonly _accessToken = signal('');
 	private readonly _accessModule = signal('');
@@ -53,14 +55,17 @@ export default class OperationsManagementViewOperations {
 	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
+
 	protected readonly _operations = this._apiGetActiveOperationList.response;
 	protected readonly _isLoadingApiGetInvoiceList = this._apiGetActiveOperationList.isLoading;
+
 	protected readonly _eRoleExecution = ERoleExecution;
 	protected readonly _roleExecution = signal<Nullable<TRoleExecution>>(null);
 	protected readonly _identity = signal<Nullable<TIdentity>>(null);
 
 	constructor() {
 		this._getAccessInformation();
+		this._getOrderStatuses();
 		this._getInitActiveOperationList();
 	}
 
@@ -73,6 +78,10 @@ export default class OperationsManagementViewOperations {
 			this._roleExecution.set(data[EAccessInformation.ROLE_EXECUTION]);
 			this._sessionKey.set(data[EAccessInformation.SESSION_KEY]);
 		});
+	}
+
+	private _getOrderStatuses(): void {
+		this._apiGetOrderStatuses.getOrderStatuses({ accessToken: this._accessToken() });
 	}
 
 	private _getInitActiveOperationList(): void {
