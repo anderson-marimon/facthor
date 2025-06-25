@@ -127,6 +127,18 @@ export const dashboardRoutes: Routes = [
 							return import('@dashboard/modules/operations-management/approve-operations/template');
 						},
 					},
+					{
+						path: 'create-operation',
+						canActivate: [guardModulePermissions],
+						resolve: {
+							accessToken: resolverGetAccessToken,
+							accessModule: resolverGetAccessModule,
+							accessServices: resolverGetAccessServices,
+						},
+						loadComponent() {
+							return import('@dashboard/modules/operations-management/create-operation/template');
+						},
+					},
 				],
 			},
 		],

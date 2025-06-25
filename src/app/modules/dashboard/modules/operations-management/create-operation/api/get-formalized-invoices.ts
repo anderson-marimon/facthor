@@ -5,63 +5,63 @@ import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { cleanQuery } from '@shared/utils/clean-query';
 
-export type TApiGetInvoiceListQueryParams = {
-	SortByMostRecent: boolean;
-	InvoiceNumber: string;
-	CUFE: string;
-	IdState: number;
+export type TApiGetFormalizedInvoiceListQueryParams = {
+	Cufe: string;
+	IdPayer: string;
 	ClientLegalName: string;
-	ClientIdentification: number;
-	ExpeditionDate: string;
-	ExpirationDate: string;
+	ClientTradename: string;
+	CLientIdentification: string;
+	InvoiceNumber: string;
+	ExpeditionDateStart: string;
+	ExpeditionDateEnd: string;
+	ExpirationDateStart: string;
+	ExpirationDateEnd: string;
+	PayableAmount: string;
 } & TPaginator;
 
-export type TRadianEvent = {
-	id: string;
-	idRadianEvent: number;
-	radianEventName: string;
-	cudeEvent: string; // Error de ortografía
-	issueDate: string;
-	issueTime: string;
-};
-
-export type TInvoice = {
+type TFormalizedInvoice = {
 	id: string;
 	idState: number;
 	stateName: string;
+	cufe: string;
+	idProvider: number;
 	billerLegalName: string;
+	billerTradename: string;
 	billerIdentification: number;
+	billerIdentificationCode: number;
+	idPayer: number;
 	clientLegalName: string;
+	clientTradename: string;
 	clientIdentification: number;
+	clientIdentificationCode: number;
 	invoiceNumber: string;
 	expeditionDate: string;
 	expeditionTime: string;
 	expirationDate: string;
+	paymentTypeCode: number;
+	paymentMethodCode: number;
 	payableAmount: number;
 	currencyCode: string;
-	creationDate: string;
-	lastModificationDate: string;
-	radianEvents: TRadianEvent[];
 };
 
-type TApiGetInvoiceListResponse = TApi<{
+type TApiGetFormalizedInvoiceListResponse = TApi<{
 	countItems: number;
 	countPages: number;
-	data: TInvoice[];
+	data: TFormalizedInvoice[];
 }>;
 
-export type TApiGetInvoiceListQuerySignalParams = TAccessInfo & Partial<TApiGetInvoiceListQueryParams>;
+export type TApiGetFormalizedInvoiceListQuerySignalParams = TAccessInfo & Partial<TApiGetFormalizedInvoiceListQueryParams>;
 
-export class ApiGetInvoiceList extends AccessInterceptor {
-	private readonly _url = `${envs.FT_URL_CLIENT_UPLOAD}`;
-	private readonly _queryParams = signal<Nullable<TApiGetInvoiceListQuerySignalParams>>(null);
+export class ApiGetFormalizedInvoiceList extends AccessInterceptor {
+	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
+	private readonly _queryParams = signal<Nullable<TApiGetFormalizedInvoiceListQuerySignalParams>>(null);
 
 	private readonly _resource = resource({
 		request: this._queryParams,
-		loader: (args) => this._fetchGetInvoiceList(args),
+		loader: (args) => this._fetchGetFormalizedInvoiceList(args),
 	});
 
-	private async _fetchGetInvoiceList(params: ResourceLoaderParams<Nullable<TApiGetInvoiceListQuerySignalParams>>) {
+	private async _fetchGetFormalizedInvoiceList(params: ResourceLoaderParams<Nullable<TApiGetFormalizedInvoiceListQuerySignalParams>>) {
 		const request = params.request;
 		if (!request) return null;
 
@@ -82,7 +82,7 @@ export class ApiGetInvoiceList extends AccessInterceptor {
 
 		try {
 			await apiDeferTime();
-			const response = await this._HttpRequest<TApiGetInvoiceListResponse>({
+			const response = await this._HttpRequest<TApiGetFormalizedInvoiceListResponse>({
 				path,
 				method: accessService.method,
 				headers: {
@@ -97,7 +97,7 @@ export class ApiGetInvoiceList extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al cagar las facturas',
+				message: 'Error al obtener la lista de facturas',
 				description: 'Estamos teniendo problemas para obtener las facturas, por favor intente más tarde.',
 			});
 
@@ -108,7 +108,7 @@ export class ApiGetInvoiceList extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public getInvoiceList(params: TApiGetInvoiceListQuerySignalParams): void {
+	public getFormalizedInvoiceList(params: TApiGetFormalizedInvoiceListQuerySignalParams): void {
 		this._queryParams.set(params);
 	}
 }

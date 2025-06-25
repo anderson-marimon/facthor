@@ -30,7 +30,7 @@ export class ApproveOperationsTableFilters {
 	public readonly roleExecution = input(0);
 	public readonly callback = input<() => void>();
 	public readonly goBackToSideBar = input(false);
-	public readonly isLoadingApiGetInvoiceList = input(false);
+	public readonly isLoadingApiGetActiveOperationsList = input(false);
 	public readonly filterFunction = input<(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>) => void>();
 
 	private readonly _destroyRef = inject(DestroyRef);
@@ -72,7 +72,7 @@ export class ApproveOperationsTableFilters {
 				filter(() => this._isFiltersActive)
 			)
 			.subscribe((status) => {
-				this._getInvoiceByFilters({
+				this._getActiveOperationsListByFilters({
 					IdOperationState: status?.[0]?.value || undefined,
 					Page: 1,
 				});
@@ -84,7 +84,7 @@ export class ApproveOperationsTableFilters {
 				filter(() => this._isFiltersActive)
 			)
 			.subscribe((rangeDates) => {
-				this._getInvoiceByFilters({
+				this._getActiveOperationsListByFilters({
 					StartOperationDate: rangeDates?.start.toLocaleDateString('en-Ca') || undefined,
 					EndOperationDate: rangeDates?.end.toLocaleDateString('en-Ca') || undefined,
 					RoleToFind: 3,
@@ -120,14 +120,14 @@ export class ApproveOperationsTableFilters {
 					return acc;
 				}, {} as Record<string, string | undefined>);
 
-				this._getInvoiceByFilters({
+				this._getActiveOperationsListByFilters({
 					...optionsToFilter,
 					Page: 1,
 				});
 			});
 	}
 
-	private _getInvoiceByFilters(args: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {
+	private _getActiveOperationsListByFilters(args: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {
 		const searchByFilter = this.filterFunction();
 
 		if (!searchByFilter) {
@@ -139,7 +139,7 @@ export class ApproveOperationsTableFilters {
 	}
 
 	protected _onClickResetFilters(): void {
-		if (this.isLoadingApiGetInvoiceList()) return;
+		if (this.isLoadingApiGetActiveOperationsList()) return;
 
 		this._searchInputControl.setValue('');
 		this._searchPerDateRangeControl.setValue(null);

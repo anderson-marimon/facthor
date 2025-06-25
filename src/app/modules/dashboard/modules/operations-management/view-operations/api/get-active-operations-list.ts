@@ -15,8 +15,6 @@ export type TApiGetActiveOperationsListQueryParams = {
 	OrderNumber: string;
 	StartOperationDate: string;
 	EndOperationDate: string;
-	Page: number;
-	Size: number;
 } & TPaginator;
 
 export type TActiveOperation = {

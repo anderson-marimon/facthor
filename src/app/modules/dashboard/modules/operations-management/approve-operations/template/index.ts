@@ -62,8 +62,9 @@ export default class OperationsManagementApproveOperations {
 
 	private readonly _accessToken = signal('');
 	private readonly _accessModule = signal('');
-	private readonly _sessionKey = signal('');
 	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
+	private readonly _sessionKey = signal('');
+
 	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 	private readonly _selectedActiveOperation = signal<Nullable<TActiveOperation>>(null);
 

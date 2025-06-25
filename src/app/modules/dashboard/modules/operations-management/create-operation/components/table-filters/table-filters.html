@@ -1,12 +1,24 @@
 <frs-date-picker
     #field
-    [rangeControl]="_searchPerDateRangeControl"
+    [rangeControl]="_searchPerExpeditionDateRangeControl"
     [rangeMode]="true"
-    [class]="'max-w-56 text-sm'"
+    [class]="'max-w-64 text-sm'"
     [calendarClass]="'placeholder:text-[0.8rem] text-[0.8rem]'"
     [formatType]="'isoShort'"
     [disabled]="false"
-    [placeholder]="'Filtrar por rango de fechas'"
+    [placeholder]="'Buscar por rango de expedición'"
+/>
+
+
+<frs-date-picker
+    #field
+    [rangeControl]="_searchPerExpirationDateRangeControl"
+    [rangeMode]="true"
+    [class]="'max-w-64 text-sm'"
+    [calendarClass]="'placeholder:text-[0.8rem] text-[0.8rem]'"
+    [formatType]="'isoShort'"
+    [disabled]="false"
+    [placeholder]="'Buscar por rango de vencimiento'"
 />
 
 <frs-select
@@ -15,7 +27,7 @@
     [class]="'w-52'"
 >
     <frs-select-trigger [placeholder]="'Tipo de búsqueda'" />
-    <frs-select-options [options]="_searchSelectOptions || []"  [class]="'!max-h-44'" />
+    <frs-select-options [options]="_searchSelectOptions || []" [class]="'max-h-fit'"/>
 </frs-select>
 
 <frs-input
@@ -29,8 +41,8 @@
 <button
     frs-button
     (click)="_onClickResetFilters()"
-    [disabled]="isLoadingApiGetActiveOperationsList()"
-    class="flex items-center flex-nowrap gap-1.5 bg-primary-facthor hover:bg-pantone/95"
+    [disabled]="isLoadingApiGetFormalizedInvoiceList()"
+    class="flex items-center flex-nowrap gap-1.5 bg-pantone hover:bg-pantone/95"
 >
     <i-lucide [img]="_resetFilterIcon" class="size-4" />
     Restablecer filtros

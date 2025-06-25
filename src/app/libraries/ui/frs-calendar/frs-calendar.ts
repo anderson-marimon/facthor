@@ -223,10 +223,6 @@ export class FrsCalendar {
 				}
 			}
 		});
-
-		this.rangeControl()?.valueChanges.subscribe((range) => {
-			console.log(range);
-		});
 	}
 
 	protected _resetYearInput(): void {

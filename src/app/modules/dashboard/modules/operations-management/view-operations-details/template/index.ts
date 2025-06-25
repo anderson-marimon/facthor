@@ -54,10 +54,10 @@ export default class OperationsManagementViewOperationsDetails {
 	private readonly _apiGetOrderInvoiceRadianEvents = inject(ApiGetOrderInvoiceRadianEvents);
 	private readonly _apiGetOrderInvoiceStateTraceability = inject(ApiGetOrderInvoiceStateTraceability);
 
-	private _accessToken = '';
-	private _accessModule = '';
-	private _accessServices: Nullable<TAccessServices> = null;
-	private _operationId = '';
+	private readonly _accessToken = signal('');
+	private readonly _accessModule = signal('');
+	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
+	private readonly _operationId = signal('');
 
 	protected readonly _eRoleExecution = ERoleExecution;
 	protected readonly _roleExecution = signal<Nullable<TRoleExecution>>(null);
@@ -76,23 +76,23 @@ export default class OperationsManagementViewOperationsDetails {
 
 	private _getAccessInformation(): void {
 		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken = data[EAccessInformation.TOKEN];
-			this._accessModule = data[EAccessInformation.MODULE];
-			this._accessServices = data[EAccessInformation.SERVICES];
+			this._accessToken.set(data[EAccessInformation.TOKEN]);
+			this._accessModule.set(data[EAccessInformation.MODULE]);
+			this._accessServices.set(data[EAccessInformation.SERVICES]);
 			this._roleExecution.set(data[EAccessInformation.ROLE_EXECUTION]);
 		});
 
 		this._activateRoute.queryParams.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(({ operation = '' }) => {
-			this._operationId = operation;
+			this._operationId.set(operation);
 		});
 	}
 
 	private _getOrderInvoiceList(): void {
 		this._apiGetOperationDetails.getOrderInvoiceList({
-			accessToken: this._accessToken,
-			accessModule: this._accessModule,
-			accessService: this._accessServices?.GET_OPERATION_DETAIL_SERVICE,
-			idOperation: this._operationId,
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.GET_OPERATION_DETAIL_SERVICE,
+			idOperation: this._operationId(),
 		});
 	}
 
@@ -109,29 +109,29 @@ export default class OperationsManagementViewOperationsDetails {
 
 		this._isOpenTraceabilityDrawer.set(true);
 		this._apiGetOperationStateTraceability.getOrderStateTraceability({
-			accessToken: this._accessToken,
-			accessModule: this._accessModule,
-			accessService: this._accessServices?.GET_OPERATION_STATE_TRACEABILITY_SERVICE,
-			idOperation: this._operationId,
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.GET_OPERATION_STATE_TRACEABILITY_SERVICE,
+			idOperation: this._operationId(),
 		});
 	}
 
 	protected _getOrderInvoiceRadianEvents(orderInvoiceId: string): void {
 		this._apiGetOrderInvoiceRadianEvents.getOrderInvoiceRadianEvent({
-			accessToken: this._accessToken,
-			accessModule: this._accessModule,
-			accessService: this._accessServices?.GET_OPERATION_DETAIL_RADIAN_EVENTS_SERVICE,
-			idOperation: this._operationId,
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.GET_OPERATION_DETAIL_RADIAN_EVENTS_SERVICE,
+			idOperation: this._operationId(),
 			idOperationDetail: orderInvoiceId,
 		});
 	}
 
 	protected _getOrderInvoiceStateTraceability(orderInvoiceId: string): void {
 		this._apiGetOrderInvoiceStateTraceability.getOrderInvoiceStateTraceability({
-			accessToken: this._accessToken,
-			accessModule: this._accessModule,
-			accessService: this._accessServices?.GET_OPERATION_DETAIL_STATE_TRACEABILITY_SERVICE,
-			idOperation: this._operationId,
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.GET_OPERATION_DETAIL_STATE_TRACEABILITY_SERVICE,
+			idOperation: this._operationId(),
 			idOperationDetail: orderInvoiceId,
 		});
 	}

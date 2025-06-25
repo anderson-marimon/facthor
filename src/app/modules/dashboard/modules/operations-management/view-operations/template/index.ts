@@ -46,10 +46,12 @@ export default class OperationsManagementViewOperations {
 	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
+
 	private readonly _accessToken = signal('');
 	private readonly _accessModule = signal('');
-	private readonly _sessionKey = signal('');
 	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
+	private readonly _sessionKey = signal('');
+
 	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 
 	protected readonly _eyeIcon = Eye;

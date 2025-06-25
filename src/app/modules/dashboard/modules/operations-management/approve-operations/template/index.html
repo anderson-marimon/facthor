@@ -2,7 +2,7 @@
     <main class="flex-1 h-full flex flex-col justify-center overflow-auto">
         <approve-operations-table-filters
             [roleExecution]="_roleExecution()?.id || 0"
-            [isLoadingApiGetInvoiceList]="_isLoadingApiGetInvoiceList()"
+            [isLoadingApiGetActiveOperationsList]="_isLoadingApiGetInvoiceList()"
             [filterFunction]="_getActiveOperationListForFilter.bind(this)"
             class="w-full flex items-center justify-end gap-2.5 p-2.5 overflow-visible"
         />
@@ -50,7 +50,7 @@
     
                                     @switch (_roleExecution()?.id) {
                                         @case (_eRoleExecution.PAYER) {
-                                            <td class="pl-2.5">
+                                            <td>
                                                 {{ column.providerIdentificationNumber }}
                                             </td>
     
@@ -67,7 +67,7 @@
                                             </td>
                                         }
                                         @case (_eRoleExecution.FINANCIER) {
-                                            <td class="pl-2.5">{{ column.providerIdentificationNumber }}</td>
+                                            <td>{{ column.providerIdentificationNumber }}</td>
     
                                             <td [title]="column.providerLegalName">
                                                 <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
@@ -82,7 +82,7 @@
                                             </td>
                                         }
                                         @case (_eRoleExecution.PROVIDER ) {
-                                            <td class="pl-2.5">{{ _identity()?.companyIdentification }}</td>
+                                            <td>{{ _identity()?.companyIdentification }}</td>
     
                                             <td [title]="_identity()?.legalName">
                                                 <span class="block w-60 line-clamp-1 overflow-hidden truncate uppercase">
