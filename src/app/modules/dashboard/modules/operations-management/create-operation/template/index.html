@@ -1,6 +1,6 @@
 
 <section class="w-full h-full flex flex-col !font-light">
-    <main class="flex-1 h-full flex flex-col justify-center overflow-auto">
+    <main class="relative flex-1 h-full flex flex-col justify-center overflow-auto">
         <create-operation-table-filters
             [isLoadingApiGetFormalizedInvoiceList]="_isLoadingApiGetFormalizedInvoiceList()"
             [filterFunction]="_getFormalizedInvoiceListForFilter.bind(this)"
@@ -13,7 +13,7 @@
             @if (_isLoadingApiGetFormalizedInvoiceList()) {
                 <general-loader [message]="'Cargando facturas formalizadas...'" />
             } @else {
-                <div class="min-w-[1364px] w-full h-[calc(100dvh-205px)] overflow-auto">
+                <div class="min-w-[1364px] w-full h-[calc(100dvh-198px)] overflow-auto">
                     @if(_invoices()?.data?.length) {
 
                         <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
@@ -25,9 +25,16 @@
                                 </th>
                             }
     
-                            @for (column of _invoices()?.data; track $index) {
+                            @for (column of _invoices()?.data; track column.id; let index = $index) {
                                 <tr>
-                                    <td class="pl-2.5">{{ column.invoiceNumber }}</td>
+                                    <td class="pl-2.5">
+                                        <frs-checkbox
+                                            [control]="_selectControls()[index]"
+                                            [label]="column.invoiceNumber"
+                                            (change)="_onChangeSelectSingleInvoice(index, column)"
+                                            [class]="'!text-xs'"
+                                        />
+                                    </td>
     
                                     <td>{{ column.clientIdentification }}</td>
                                     
@@ -62,6 +69,11 @@
                 </div>
             }
         </article>
+         @if (_showPrepareInvoiceSection()) {
+                <create-operation-prepare-operation-drawer
+                    class="absolute top-0 left-0 w-full h-full flex gap-2.5 p-2.5 bg-background"
+                />
+            }
     </main>
     
     <hr />
@@ -70,5 +82,23 @@
         [totalPages]="_invoices()?.countPages || 1"
         [paginatorFunction]="_getFormalizedInvoiceListForPaginator.bind(this)"
         class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
-    />
+    >
+        <section class="flex-1 flex gap-2.5">
+            <button
+                frs-button
+                [variant]="'secondary'"
+                [disabled]="!_getSelectedInvoices().length"
+                (click)="_onClickShowPrepareOperation()"
+            >
+                Preparar operación
+            </button>
+            
+            <button
+                frs-button
+                [disabled]="!_isOperationReadyToCreate()"
+            >
+                crear operación
+            </button>
+        </section>
+    </inherit-table-footer>
 </section>

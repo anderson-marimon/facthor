@@ -19,7 +19,7 @@ export type TApiGetFormalizedInvoiceListQueryParams = {
 	PayableAmount: string;
 } & TPaginator;
 
-type TFormalizedInvoice = {
+export type TFormalizedInvoice = {
 	id: string;
 	idState: number;
 	stateName: string;

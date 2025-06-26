@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { TAccessServices } from '@dashboard/common/enums/services';
@@ -8,15 +9,19 @@ import {
 	ApiGetFormalizedInvoiceList,
 	TApiGetFormalizedInvoiceListQueryParams,
 	TApiGetFormalizedInvoiceListQuerySignalParams,
+	TFormalizedInvoice,
 } from '@dashboard/modules/operations-management/create-operation/api/get-formalized-invoices';
+import { CreateOperationPrepareOperationDrawer } from '@dashboard/modules/operations-management/create-operation/components/prepare-operation-drawer/prepare-operation-drawer';
 import { CreateOperationTableFilters } from '@dashboard/modules/operations-management/create-operation/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
+import { FrsCheckboxModule } from '@fresco-ui/frs-checkbox';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { GeneralLoader } from '@shared/components/general-loader/general-loader';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
 import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
+import { tap } from 'rxjs';
 
 const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 'expedition', 'vencimiento', 'detalles'];
 
@@ -26,9 +31,11 @@ const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 
 	providers: [ApiGetFormalizedInvoiceList],
 	imports: [
 		CreateOperationTableFilters,
+		CreateOperationPrepareOperationDrawer,
 		CommonModule,
 		EmptyResult,
 		FrsButtonModule,
+		FrsCheckboxModule,
 		GeneralLoader,
 		InheritTable,
 		InheritTableFooter,
@@ -39,13 +46,16 @@ const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 
 export default class OperationsManagementCreateOperation {
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _activateRoute = inject(ActivatedRoute);
+	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _apiGetFormalizedInvoiceList = inject(ApiGetFormalizedInvoiceList);
-
-	private readonly _getFormalizedInvoiceListParams = signal<Partial<TApiGetFormalizedInvoiceListQuerySignalParams>>({});
+	private readonly _selectedFormalizedInvoices = signal<string[]>([]);
+	private readonly _selectedFormalizedInvoice = signal<Nullable<TFormalizedInvoice>>(null);
 
 	private readonly _accessToken = signal('');
 	private readonly _accessModule = signal('');
 	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
+
+	private readonly _getFormalizedInvoiceListParams = signal<Partial<TApiGetFormalizedInvoiceListQuerySignalParams>>({});
 
 	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
@@ -54,9 +64,15 @@ export default class OperationsManagementCreateOperation {
 	protected readonly _invoices = this._apiGetFormalizedInvoiceList.response;
 	protected readonly _isLoadingApiGetFormalizedInvoiceList = this._apiGetFormalizedInvoiceList.isLoading;
 
+	protected readonly _allSelectControl = this._formBuilder.control(false);
+	protected readonly _selectControls = signal<FormControl<boolean | null>[]>([]);
+	protected readonly _isOperationReadyToCreate = signal(false);
+	protected readonly _showPrepareInvoiceSection = signal(true);
+
 	constructor() {
 		this._getAccessInformation();
 		this._getInitFormalizedInvoiceList();
+		this._addObservables();
 	}
 
 	private _getAccessInformation(): void {
@@ -78,6 +94,77 @@ export default class OperationsManagementCreateOperation {
 
 		this._apiGetFormalizedInvoiceList.getFormalizedInvoiceList(this._getFormalizedInvoiceListParams());
 	}
+
+	private _addObservables(): void {
+		toObservable(this._invoices)
+			.pipe(
+				takeUntilDestroyed(this._destroyRef),
+				tap((invoices) => {
+					if (!invoices) {
+						this._selectControls.set([]);
+						return;
+					}
+					this._syncSelectControls(invoices.data);
+				})
+			)
+			.subscribe();
+	}
+
+	private _syncSelectControls(operations: any[]): void {
+		const currentControls = this._selectControls();
+		const currentValues = currentControls.map((control) => control.value);
+
+		const newControls = operations.map((_, index) => {
+			const previousValue = index < currentValues.length ? currentValues[index] : false;
+			return this._formBuilder.control<boolean | null>(previousValue);
+		});
+
+		this._selectControls.set(newControls);
+	}
+
+	protected _getSelectedInvoices(): any[] {
+		const controls = this._selectControls();
+		return (
+			this._invoices()?.data.filter((_, index) => {
+				return controls[index]?.value === true;
+			}) || []
+		);
+	}
+
+	// ==== Futura implementación ====
+	// private _areAllSelected(): boolean {
+	// 	const controls = this._selectControls();
+	// 	return controls.length > 0 && controls.every((control) => control.value);
+	// }
+
+	protected _onChangeSelectSingleInvoice(index: number, formalizedInvoice: TFormalizedInvoice): void {
+		const controls = this._selectControls();
+
+		controls.forEach((control, i) => {
+			if (i === index) {
+				control.setValue(true);
+				const invoiceId = this._invoices()?.data[index].id;
+				this._selectedFormalizedInvoices.set([invoiceId!]);
+				this._selectedFormalizedInvoice.set(formalizedInvoice);
+			} else {
+				control.setValue(false);
+			}
+		});
+
+		const isAllChecked = controls.every((control) => control.value);
+		this._allSelectControl.setValue(isAllChecked);
+	}
+
+	protected _onClickShowPrepareOperation(): void {
+		this._showPrepareInvoiceSection.set(true);
+		// pending
+	}
+
+	// ==== Futura implementación ====
+	// protected _toggleAllSelection(): void {
+	// 	const value = this._allSelectControl.value;
+	// 	this._selectControls().forEach((control) => control.setValue(value));
+	// }
 
 	protected _getFormalizedInvoiceListForPaginator(page: number): void {
 		this._apiGetFormalizedInvoiceList.getFormalizedInvoiceList({

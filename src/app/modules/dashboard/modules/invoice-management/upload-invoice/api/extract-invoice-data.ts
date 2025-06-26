@@ -45,10 +45,10 @@ type TApiExtractedInvoiceData = TApi<TExtractedInvoiceData>;
 
 export class ApiPostExtractInvoiceData extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_CLIENT_UPLOAD}`;
-	private readonly _files = signal<Nullable<TAccessInfo & { files: TUploadInvoiceFile[] }>>(null);
+	private readonly _body = signal<Nullable<TAccessInfo & { files: TUploadInvoiceFile[] }>>(null);
 
 	private readonly _resource = resource({
-		request: this._files,
+		request: this._body,
 		loader: (files) => this._fetchPostUploadFiles(files),
 	});
 
@@ -104,7 +104,7 @@ export class ApiPostExtractInvoiceData extends AccessInterceptor {
 			fileContent: getBase64FromTFile(file),
 		}));
 
-		this._files.set({
+		this._body.set({
 			accessToken,
 			accessModule,
 			accessService,

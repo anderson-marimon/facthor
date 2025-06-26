@@ -91,7 +91,7 @@ export default class OperationsManagementApproveOperations {
 	constructor() {
 		this._getAccessInformation();
 		this._getInitActiveOperationList();
-		this._watchActiveOperations();
+		this._addObservables();
 	}
 
 	private _getAccessInformation(): void {
@@ -172,7 +172,7 @@ export default class OperationsManagementApproveOperations {
 		this._selectControls().forEach((control) => control.setValue(false));
 	}
 
-	private _watchActiveOperations(): void {
+	private _addObservables(): void {
 		toObservable(this._activeOperations)
 			.pipe(
 				takeUntilDestroyed(this._destroyRef),
@@ -231,6 +231,7 @@ export default class OperationsManagementApproveOperations {
 				control.setValue(true);
 				const orderId = this._activeOperations()?.data[index].id;
 				this._selectedOrders.set([orderId!]);
+				this._selectedActiveOperation.set(activeOperation);
 			} else {
 				control.setValue(false);
 			}
@@ -238,12 +239,6 @@ export default class OperationsManagementApproveOperations {
 
 		const isAllChecked = controls.every((control) => control.value);
 		this._allSelectControl.setValue(isAllChecked);
-
-		if (this._selectControls()[index].value) {
-			this._selectedActiveOperation.set(activeOperation);
-		} else {
-			this._selectedActiveOperation.set(null);
-		}
 	}
 
 	// ==== Futura implementación ====

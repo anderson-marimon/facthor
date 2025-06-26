@@ -13,7 +13,7 @@
             @if (_isLoadingApiGetInvoiceList()) {
                 <general-loader [message]="'Cargando operaciones activas...'" />
             } @else {
-                <div class="min-w-[1364px] w-full h-[calc(100dvh-205px)] overflow-auto">
+                <div class="min-w-[1364px] w-full h-[calc(100dvh-198px)] overflow-auto">
                     @if(_operations()?.data?.length) {
 
                         <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">

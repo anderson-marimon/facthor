@@ -18,10 +18,10 @@ type TApiPostUploadInvoicesResponse = TApi<boolean>;
 
 export class ApiPostUploadInvoices extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_CLIENT_UPLOAD}`;
-	private readonly _invoices = signal<Nullable<TAccessInfo & TApiPostUploadInvoicesBody>>(null);
+	private readonly _body = signal<Nullable<TAccessInfo & TApiPostUploadInvoicesBody>>(null);
 
 	private readonly _resource = resource({
-		request: this._invoices,
+		request: this._body,
 		loader: (params) => this._fetchPostUploadInvoices(params),
 	});
 
@@ -70,7 +70,7 @@ export class ApiPostUploadInvoices extends AccessInterceptor {
 			fileContent: getBase64FromTFile(file),
 		}));
 
-		this._invoices.set({
+		this._body.set({
 			...accessInformation,
 			files: invoices,
 		});
