@@ -7,9 +7,9 @@
     <article class="relative z-0 flex-1 flex h-full overflow-hidden">
         <aside-nav
             [permissions]="_permissionList()"
-            class="flex-shrink-0 w-[350px] hidden xl:flex lg:flex-col py-2.5 border-r"
+            class="flex-shrink-0 w-[350px] hidden 2xl:flex lg:flex-col py-2.5 border-r"
         />
-        <div class="flex-1">
+        <div class="flex-1 overflow-x-auto">
             <router-outlet class="h-full"/>
         </div>
     </article>

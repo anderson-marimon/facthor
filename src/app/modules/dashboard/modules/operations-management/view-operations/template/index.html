@@ -1,10 +1,10 @@
 <section class="w-full h-full flex flex-col !font-light">
-    <main class="flex-1 h-full flex flex-col justify-center overflow-auto">
+    <main class="flex-1 h-full flex flex-col justify-center">
         <view-active-operations-table-filters
             [roleExecution]="_roleExecution()?.id || 0"
             [isLoadingApiGetActiveOperationsList]="_isLoadingApiGetInvoiceList()"
             [filterFunction]="_getActiveOperationListForFilter.bind(this)"
-            class="w-full flex items-center justify-end gap-2.5 p-2.5 overflow-visible"
+            class="w-full flex justify-end gap-2.5 p-2.5"
         />
 
         <hr />
@@ -13,7 +13,7 @@
             @if (_isLoadingApiGetInvoiceList()) {
                 <general-loader [message]="'Cargando operaciones activas...'" />
             } @else {
-                <div class="min-w-[1364px] w-full h-[calc(100dvh-198px)] overflow-auto">
+                <div class="w-full h-[calc(100dvh-198px)] overflow-auto">
                     @if(_operations()?.data?.length) {
 
                         <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">

@@ -1,9 +1,9 @@
 <section class="w-full h-full flex flex-col !font-light">
-    <main class="flex-1 h-full flex flex-col justify-center overflow-auto">
+    <main class="flex-1 h-full flex flex-col justify-center">
         <view-upload-invoice-table-filters
             [isLoadingApiGetInvoiceList]="_isLoadingApiGetInvoiceList()"
             [filterFunction]="_getInvoiceListForFilter.bind(this)"
-            class="w-full flex justify-end gap-2.5 p-2.5 overflow-visible"
+            class="w-full flex justify-end gap-2.5 p-2.5"
         />
 
         <hr />
@@ -12,9 +12,9 @@
             @if (_isLoadingApiGetInvoiceList()) {
                 <general-loader [message]="'Cargando facturas...'" />
             } @else {
-                <div class="min-w-[1364px] w-full h-[calc(100dvh-198px)] overflow-auto">
+                <div class="w-full h-[calc(100dvh-198px)] overflow-auto">
                     @if(_invoices()?.data?.length) {
-                        <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
+                        <inherit-table class="h-full flex-1 animate-opacity-in">
                             @for (header of _headers; track $index; let first = $first) {
                                 <th class="w-72">
                                     <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
