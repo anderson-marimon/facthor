@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TIdentity, TModulePermission, TRoleExecution, TSubmodulePermission, TUserConfig } from '@dashboard/api/user-configuration';
+import { frsGenerateId } from '@fresco-core/frs-core';
 import { ComponentStore } from '@ngrx/component-store';
 import { devReduxTool } from '@tools/dev-redux.tool';
 
@@ -30,7 +31,7 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 
 	private readonly _setUserConfig = this.updater((store, userConfig: TUserConfig) => {
 		const permissions = this._extractPermissions(userConfig?.permissions);
-		const sessionKey = btoa(crypto.randomUUID());
+		const sessionKey = btoa(frsGenerateId());
 
 		return { ...store, userConfig, permissions, sessionKey };
 	});

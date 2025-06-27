@@ -11,6 +11,7 @@ import {
 	TApiGetFormalizedInvoiceListQuerySignalParams,
 	TFormalizedInvoice,
 } from '@dashboard/modules/operations-management/create-operation/api/get-formalized-invoices';
+import { ApiGetOperationsFinancierList } from '@dashboard/modules/operations-management/create-operation/api/get-operation-financiers';
 import { CreateOperationPrepareOperationDrawer } from '@dashboard/modules/operations-management/create-operation/components/prepare-operation-drawer/prepare-operation-drawer';
 import { CreateOperationTableFilters } from '@dashboard/modules/operations-management/create-operation/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
@@ -28,7 +29,7 @@ const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 
 @Component({
 	selector: 'operations-management-create-operation',
 	templateUrl: 'index.html',
-	providers: [ApiGetFormalizedInvoiceList],
+	providers: [ApiGetFormalizedInvoiceList, ApiGetOperationsFinancierList],
 	imports: [
 		CreateOperationTableFilters,
 		CreateOperationPrepareOperationDrawer,
@@ -48,6 +49,7 @@ export default class OperationsManagementCreateOperation {
 	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _apiGetFormalizedInvoiceList = inject(ApiGetFormalizedInvoiceList);
+	private readonly _apiGetOperationFinancierList = inject(ApiGetOperationsFinancierList);
 	private readonly _selectedFormalizedInvoices = signal<string[]>([]);
 	private readonly _selectedFormalizedInvoice = signal<Nullable<TFormalizedInvoice>>(null);
 
@@ -67,7 +69,7 @@ export default class OperationsManagementCreateOperation {
 	protected readonly _allSelectControl = this._formBuilder.control(false);
 	protected readonly _selectControls = signal<FormControl<boolean | null>[]>([]);
 	protected readonly _isOperationReadyToCreate = signal(false);
-	protected readonly _showPrepareInvoiceSection = signal(true);
+	protected readonly _showPrepareInvoiceSection = signal(false);
 
 	constructor() {
 		this._getAccessInformation();
@@ -170,6 +172,14 @@ export default class OperationsManagementCreateOperation {
 		this._apiGetFormalizedInvoiceList.getFormalizedInvoiceList({
 			...this._getFormalizedInvoiceListParams(),
 			Page: page,
+		});
+	}
+
+	protected _getOperationsFinancierList(): void {
+		this._apiGetOperationFinancierList._getOperationsFinancierList({
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.GET_FINANCIER_SERVICE,
 		});
 	}
 

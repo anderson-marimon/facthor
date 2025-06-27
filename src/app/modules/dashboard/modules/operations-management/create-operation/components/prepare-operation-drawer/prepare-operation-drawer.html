@@ -1,7 +1,28 @@
 <view-card
     [title]="'seleccionar financiador'"
     class="flex-1 max-w-[450px]"
-/>
+>
+    <section class="w-full h-full">
+        @if (_isLoadingApiGetOperationFinancierList()) {
+            <general-loader [message]="'Cargando financiadores...'" />
+        } @else {
+            @if (_financierList()?.length) {
+                @for (financier of _financierList(); track $index; let last = $last) {
+                    <div class="h-8 flex gap-2.5 items-center text-xs uppercase hover:bg-secondary/30 cursor-pointer">
+                        <span class="inline-block w-[3px] h-full bg-secondary-facthor"></span>
+                        <p class="font-semibold">{{financier.tradename}}</p>
+                    </div>
+                    @if (!last) {
+                        <hr class="mt-2.5 opacity-50">
+                    }
+
+                }
+            }
+        }
+    </section>
+</view-card>
+
+
 <view-card
     [title]="'detalles de la operación'"
     class="flex-1"

@@ -71,6 +71,7 @@
         </article>
          @if (_showPrepareInvoiceSection()) {
                 <create-operation-prepare-operation-drawer
+                    [fnGetOperationFinancierList]="this._getOperationsFinancierList.bind(this)"
                     class="absolute top-0 left-0 w-full h-full flex gap-2.5 p-2.5 bg-background"
                 />
             }

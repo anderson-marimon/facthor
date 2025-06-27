@@ -27,15 +27,15 @@
                                 <tr>
                                     <td class="pl-2.5">{{ column.invoiceNumber }}</td>
     
-                                    <td [title]="column.clientLegalName">
-                                        <span class="block w-60 line-clamp-1 overflow-hidden truncate">
-                                            {{ column.clientLegalName }}
-                                        </span>
-                                    </td>
-    
                                     <td [title]="column.billerLegalName">
                                         <span class="block w-60 line-clamp-1 overflow-hidden truncate">
                                             {{ column.billerLegalName }}
+                                        </span>
+                                    </td>
+    
+                                    <td [title]="column.clientLegalName">
+                                        <span class="block w-60 line-clamp-1 overflow-hidden truncate">
+                                            {{ column.clientLegalName }}
                                         </span>
                                     </td>
     
@@ -52,7 +52,7 @@
     
                                     <td>
                                         <button
-                                            [title]="'Ver eventos radian de la factura: ' + column.invoiceNumber"
+                                            [title]="`Ver eventos radian de la factura ${column.invoiceNumber}`"
                                             frs-button
                                             [size]="'icon'"
                                             [variant]="'ghost'"
