@@ -6,43 +6,45 @@ module.exports = {
         },
         extend: {
             colors: {
-                border: "hsl(var(--border))",
-                input: "hsl(var(--input))",
-                ring: "hsl(var(--primary))",
-                background: "hsl(var(--background))",
-                foreground: "hsl(var(--foreground))",
+                border: "var(--border)",
+                input: "var(--input)",
+                ring: "var(--primary)",
+                background: "var(--background)",
+                foreground: "var(--foreground)",
                 primary: {
-                    DEFAULT: "hsl(var(--primary))",
-                    facthor: "hsl(var(--primary-facthor))",
-                    foreground: "hsl(var(--primary-foreground))",
+                    DEFAULT: "var(--primary)",
+                    facthor: "var(--primary-facthor)",
+                    foreground: "var(--primary-foreground)",
                 },
                 secondary: {
-                    DEFAULT: "hsl(var(--secondary))",
-                    facthor: "hsl(var(--secondary-facthor))",
-                    foreground: "hsl(var(--secondary-foreground))",
+                    DEFAULT: "var(--secondary)",
+                    facthor: "var(--secondary-facthor)",
+                    foreground: "var(--secondary-foreground)",
                 },
                 destructive: {
-                    DEFAULT: "hsl(var(--destructive))",
-                    foreground: "hsl(var(--destructive-foreground))",
+                    DEFAULT: "var(--destructive)",
+                    foreground: "var(--destructive-foreground)",
                 },
                 muted: {
-                    DEFAULT: "hsl(var(--muted))",
-                    facthor: "hsl(var(--muted-facthor))",
-                    foreground: "hsl(var(--muted-foreground))",
+                    DEFAULT: "var(--muted)",
+                    facthor: "var(--muted-facthor)",
+                    foreground: "var(--muted-foreground)",
                 },
                 accent: {
-                    DEFAULT: "hsl(var(--accent))",
-                    foreground: "hsl(var(--accent-foreground))",
+                    DEFAULT: "var(--accent)",
+                    foreground: "var(--accent-foreground)",
                 },
                 popover: {
-                    DEFAULT: "hsl(var(--popover))",
-                    foreground: "hsl(var(--popover-foreground))",
+                    DEFAULT: "var(--popover)",
+                    foreground: "var(--popover-foreground)",
                 },
                 card: {
-                    DEFAULT: "hsl(var(--card))",
-                    foreground: "hsl(var(--card-foreground))",
+                    DEFAULT: "var(--card)",
+                    foreground: "var(--card-foreground)",
                 },
-                pantone: '#041C2C'
+                pantone: "#041C2C",
+                alpha: '#289c64'
+
             },
             fontSize: {
                 xxs: '11px'
@@ -53,10 +55,10 @@ module.exports = {
                 sm: "calc(var(--radius) - 0.2vh)",
             },
             borderColor: {
-                DEFAULT: "hsl(var(--border))"
+                DEFAULT: "var(--border)"
             },
             ringColor: {
-                DEFAULT: "hsl(var(--secondary))"
+                DEFAULT: "var(--secondary)"
             },
             keyframes: {
                 'opacity-in': {
@@ -83,11 +85,11 @@ module.exports = {
                         height: '4px'
                     },
                     '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'hsl(var(--primary))',
+                        backgroundColor: 'var(--primary)',
                         borderRadius: 'var(--radius)',
                     },
                     '&::-webkit-scrollbar-track': {
-                        backgroundColor: 'hsl(var(--secondary))',
+                        backgroundColor: 'var(--secondary)',
                     },
                 },
             });

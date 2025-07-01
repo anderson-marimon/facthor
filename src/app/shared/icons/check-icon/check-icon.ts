@@ -6,4 +6,5 @@ import { Component, input } from '@angular/core';
 })
 export class CheckIcon {
 	public readonly color = input('#000000');
+	public readonly strokeWidth = input(1.5);
 }

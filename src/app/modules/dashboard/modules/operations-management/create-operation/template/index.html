@@ -1,5 +1,5 @@
 
-<section class="w-full h-full flex flex-col !font-light">
+<section class="w-full h-full flex flex-col !font-light overflow-hidden">
     <main class="relative flex-1 h-full flex flex-col justify-center">
         <create-operation-table-filters
             [isLoadingApiGetFormalizedInvoiceList]="_isLoadingApiGetFormalizedInvoiceList()"
@@ -71,8 +71,9 @@
         </article>
          @if (_showPrepareInvoiceSection()) {
                 <create-operation-prepare-operation-drawer
+                    [@slideEffect]
                     [fnGetOperationFinancierList]="this._getOperationsFinancierList.bind(this)"
-                    class="absolute top-0 left-0 w-full h-full flex gap-2.5 p-2.5 bg-background"
+                    class="absolute top-0 left-0 z-10 w-full h-full flex gap-2.5 p-2.5 bg-background"
                 />
             }
     </main>
@@ -82,16 +83,21 @@
     <inherit-table-footer
         [totalPages]="_invoices()?.countPages || 1"
         [paginatorFunction]="_getFormalizedInvoiceListForPaginator.bind(this)"
-        class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
+        class="reative z-20 h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 bg-background animate-opacity-in"
     >
         <section class="flex-1 flex gap-2.5">
             <button
                 frs-button
                 [variant]="'secondary'"
                 [disabled]="!_getSelectedInvoices().length"
-                (click)="_onClickShowPrepareOperation()"
+                (click)="_onClickToggleShowPrepareOperation()"
+                class="w-40"
             >
-                Preparar operación
+                @if (_showPrepareInvoiceSection()) {
+                    volver al listado
+                } @else {
+                    Preparar operación
+                }
             </button>
             
             <button

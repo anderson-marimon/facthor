@@ -8,9 +8,21 @@
         } @else {
             @if (_financierList()?.length) {
                 @for (financier of _financierList(); track $index; let last = $last) {
-                    <div class="h-8 flex gap-2.5 items-center text-xs uppercase hover:bg-secondary/30 cursor-pointer">
-                        <span class="inline-block w-[3px] h-full bg-secondary-facthor"></span>
-                        <p class="font-semibold">{{financier.tradename}}</p>
+                    <div
+                        (click)="_onClickSelectFinancier(financier.id)"
+                        [ngClass]="{
+                            'bg-alpha/10': _selectedFinancier().includes(financier.id),
+                            'bg-background hover:bg-secondary/30': _selectedFinancier().includes(financier.id),
+                        }" 
+                        class="flex gap-2.5 items-center justify-between text-xs pr-2 uppercase cursor-pointer">
+                        <span class="h-10 flex gap-2.5 items-center ">
+                            <span class="inline-block w-[3px] h-full bg-secondary-facthor"></span>
+                            <p class="font-semibold">{{financier.tradename}}</p>
+                        </span>
+                        
+                        @if (_selectedFinancier().includes(financier.id)) {
+                            <check-icon class="size-5" [color]="'#09a484'" />
+                        }
                     </div>
                     @if (!last) {
                         <hr class="mt-2.5 opacity-50">

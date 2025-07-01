@@ -4,28 +4,28 @@
 
 @layer base {
     :root {
-        --primary: 166 64% 39%;
-        --primary-facthor: 205, 83%, 9%;
-        --primary-foreground: 0 0% 98%;
-        --accent: 240 4.8% 95.9%;
-        --accent-foreground: 240 10% 3.9%;
-        --background: 0 0% 100%;
-        --foreground: 240 10% 3.9%;
-        --card: 0 0% 100%;
-        --card-foreground: 240 10% 3.9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 240 10% 3.9%;
-        --secondary: 240 4.8% 95.9%;
-        --secondary-facthor: 165, 63%, 39%;
-        --secondary-foreground: 240 5.9% 10%;
-        --muted: 240 4.8% 95.9%;
-        --muted-facthor: 162, 100%, 40%;
-        --muted-foreground: 240 3.8% 46.1%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 240 5.9% 90%;
-        --input: 240 5.9% 90%;
-        --ring: 240 5.9% 10%;
+        --primary: #269c68;
+        --primary-facthor: #061523;
+        --primary-foreground: #fafafa;
+        --accent: #f3f4f7;
+        --accent-foreground: #041C2C;
+        --background: #ffffff;
+        --foreground: #041C2C;
+        --card: #ffffff;
+        --card-foreground: #041C2C;
+        --popover: #ffffff;
+        --popover-foreground: #041C2C;
+        --secondary: #f3f4f7;
+        --secondary-facthor: #289c64;
+        --secondary-foreground: #1a1b1d;
+        --muted: #f3f4f7;
+        --muted-facthor: #00cc66;
+        --muted-foreground: #6f7078;
+        --destructive: #f24848;
+        --destructive-foreground: #fafafa;
+        --border: #e4e6eb;
+        --input: #e4e6eb;
+        --ring: #e4e6eb;
         --radius: 0rem;
     }
 
@@ -44,6 +44,6 @@
 
     body {
         font-family: 'nunito', sans-serif;
-        color: #041C2C;
+        color: var(--foreground);
     }
 }

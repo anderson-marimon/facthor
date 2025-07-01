@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
@@ -29,6 +30,15 @@ const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 
 @Component({
 	selector: 'operations-management-create-operation',
 	templateUrl: 'index.html',
+	animations: [
+		trigger('slideEffect', [
+			transition(':enter', [
+				style({ transform: 'translateY(100%)' }),
+				animate('800ms cubic-bezier(0.25, 1, 0.5, 1)', style({ transform: 'translateY(0)' })),
+			]),
+			transition(':leave', [animate('800ms cubic-bezier(0.25, 1, 0.5, 1)', style({ transform: 'translateY(100%)' }))]),
+		]),
+	],
 	providers: [ApiGetFormalizedInvoiceList, ApiGetOperationsFinancierList],
 	imports: [
 		CreateOperationTableFilters,
@@ -157,9 +167,14 @@ export default class OperationsManagementCreateOperation {
 		this._allSelectControl.setValue(isAllChecked);
 	}
 
-	protected _onClickShowPrepareOperation(): void {
-		this._showPrepareInvoiceSection.set(true);
-		// pending
+	protected _onClickToggleShowPrepareOperation(): void {
+		this._showPrepareInvoiceSection.update((prev) => {
+			if (prev) {
+				this._getInitFormalizedInvoiceList();
+			}
+
+			return !prev;
+		});
 	}
 
 	// ==== Futura implementación ====
