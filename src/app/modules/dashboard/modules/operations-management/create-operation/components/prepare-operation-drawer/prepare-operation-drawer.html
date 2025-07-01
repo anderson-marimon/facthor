@@ -1,41 +1,70 @@
 <view-card
     [title]="'seleccionar financiador'"
-    class="flex-1 max-w-[450px]"
+    class="flex-1 xl:max-w-[350px] min-h-[300px]"
 >
     <section class="w-full h-full">
         @if (_isLoadingApiGetOperationFinancierList()) {
             <general-loader [message]="'Cargando financiadores...'" />
         } @else {
             @if (_financierList()?.length) {
-                @for (financier of _financierList(); track $index; let last = $last) {
-                    <div
-                        (click)="_onClickSelectFinancier(financier.id)"
-                        [ngClass]="{
-                            'bg-alpha/10': _selectedFinancier().includes(financier.id),
-                            'bg-background hover:bg-secondary/30': _selectedFinancier().includes(financier.id),
-                        }" 
-                        class="flex gap-2.5 items-center justify-between text-xs pr-2 uppercase cursor-pointer">
-                        <span class="h-10 flex gap-2.5 items-center ">
-                            <span class="inline-block w-[3px] h-full bg-secondary-facthor"></span>
-                            <p class="font-semibold">{{financier.tradename}}</p>
-                        </span>
-                        
-                        @if (_selectedFinancier().includes(financier.id)) {
-                            <check-icon class="size-5" [color]="'#09a484'" />
+                <div class="w-full h-full animate-opacity-in">
+                    @for (financier of _financierList(); track $index; let last = $last) {
+                        <div
+                            (click)="_onClickSelectFinancier(financier.id)"
+                            [ngClass]="{
+                                'bg-alpha/10': _selectedFinancier().includes(financier.id),
+                                'bg-background hover:bg-secondary/30': _selectedFinancier().includes(financier.id),
+                            }" 
+                            class="flex gap-2.5 items-center justify-between text-xs pr-2 uppercase cursor-pointer">
+                            <span class="w-full h-10 flex gap-2.5 items-center ">
+                                <span class="inline-block w-[3px] h-full bg-secondary-facthor"></span>
+                                <p class="flex-1 font-semibold overflow-ellipsis truncate">{{financier.tradename}}</p>
+                            </span>
+                            
+                            @if (_selectedFinancier().includes(financier.id)) {
+                                <check-icon class="size-5" [color]="'#09a484'" />
+                            }
+                        </div>
+                        @if (!last) {
+                            <hr class="mt-2.5 opacity-50">
                         }
-                    </div>
-                    @if (!last) {
-                        <hr class="mt-2.5 opacity-50">
+    
                     }
-
-                }
+                </div>
+            } @else {
+                <empty-result [message]="'No se encontraron financiadores.'" />
             }
         }
     </section>
 </view-card>
 
-
 <view-card
     [title]="'detalles de la operación'"
     class="flex-1"
-/>
+>
+    <section class="w-full h-full text-sm">
+        @if (!_selectedFinancier().length) {
+            <div class="h-full min-h-[300px] grid place-content-center">
+                <i-lucide [img]="_searchIcon" [strokeWidth]="1" class="mx-auto size-14 stroke-gray-300" />
+                <span class="w-72 text-center">
+                    Por favor,
+                    <span class="font-semibold text-secondary-facthor">seleccione un financiador</span>
+                    para continuar con el proceso creación.
+                </span>
+            </div>
+        } @else {
+            @if (isLoadingApiPostGetOperationSummary()) {
+                <general-loader [message]="'Cargando detalles de la operación...'" />
+            } @else {
+                @if (operationSummary()) {
+                    <create-operation-operation-summary
+                        [operationSummary]="operationSummary()!"
+                        class="w-full h-full min-h-[300px] animate-opacity-in"
+                    />
+                } @else {
+                    <empty-result [message]="'No se encontraron detalles.'" />
+                }
+            }
+        }
+    </section>
+</view-card>

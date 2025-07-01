@@ -1,0 +1,91 @@
+<article class="w-full h-full flex flex-col lg:flex-row gap-2.5
+    [&_ul]:space-y-2
+    [&_ul>li]:flex 
+    [&_ul>li]:items-center 
+    [&_ul>li]:gap-1 
+    [&_ul>li]:font-medium
+    [&_ul>li>span]:leading-5 
+    [&_ul>li>span:first-child]:font-medium 
+    [&_ul>li>span:last-child]:font-light 
+    [&_ul>li>span:last-child]:text-nowrap 
+    [&_ul>li>span:last-child]:text-xs"
+>
+    <div class="flex-1 flex flex-col gap-2.5 lg:pr-2.5 lg:border-r">
+        <section class="px-2.5 py-2 bg-secondary">
+            <h2 class="font-semibold text-xs uppercase">Fechas de la operación</h2>
+        </section>
+        <ul class="px-2.5">
+            <li>
+                <span>Fecha de inicio de la operación: </span>
+                <span>{{ operationSummary()?.operationDate }}</span>
+            </li>
+            <li>
+                <span>Fecha final de la operación: </span>
+                <span>{{ operationSummary()?.expirationDate }}</span>
+            </li>
+            <li>
+                <span>Días de operación: </span>
+                <span>{{ operationSummary()?.operationDays }}</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex-1 flex flex-col gap-2.5 lg:pr-2.5 lg:border-r">
+        <section class="px-2.5 py-2 bg-secondary">
+            <h2 class="font-semibold text-xs uppercase">Porcentajes de la operación</h2>
+        </section>
+        <ul class="px-2.5">
+            <li>
+                <span>Porcentaje a financiar: </span>
+                <span>{{ operationSummary()?.operationPercentage }}%</span>
+            </li>
+            <li>
+                <span>Tasa de interés mensual: </span>
+                <span>{{ operationSummary()?.monthlyOperationRate }}%</span>
+            </li>
+            <li>
+                <span>Tasa de interés diario: </span>
+                <span>{{ operationSummary()?.dailyOperatingRate }}%</span>
+            </li>
+            <li>
+                <span>Porcentaje de reserva: </span>
+                <span>{{ operationSummary()?.operationReservePercentage }}%</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex-1 flex flex-col gap-2.5">
+        <section class="px-2.5 py-2 bg-secondary">
+            <h2 class="font-semibold text-xs uppercase">importes de la operación</h2>
+        </section>
+        <ul class="px-2.5">
+            <li>
+                <span>Monto total de la factura: </span>
+                <span>{{ operationSummary()?.totalInvoicesValue | currency }}</span>
+            </li>
+            <li>
+                <span>Monto a financiar: </span>
+                <span>{{ operationSummary()?.valueToFinance | currency }}</span>
+            </li>
+            <li>
+                <span>Monto de la reserva: </span>
+                <span>{{ operationSummary()?.operationReserve | currency }}</span>
+            </li>
+            <li>
+                <span>Costo de financiación: </span>
+                <span class="text-red-700">{{ operationSummary()?.totalDeductions | currency }}</span>
+            </li>
+
+            <hr>
+
+            <li>
+                <span>Monto de desembolso: </span>
+                <span class="text-green-700">{{ operationSummary()?.providerValue | currency }}</span>
+            </li>
+            <li>
+                <span>Monto a recibir con reserva: </span>
+                <span>{{ operationSummary()?.totalValueReceivedProvider | currency }}</span>
+            </li>
+        </ul>
+    </div>
+</article>

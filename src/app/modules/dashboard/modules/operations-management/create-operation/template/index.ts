@@ -13,6 +13,7 @@ import {
 	TFormalizedInvoice,
 } from '@dashboard/modules/operations-management/create-operation/api/get-formalized-invoices';
 import { ApiGetOperationsFinancierList } from '@dashboard/modules/operations-management/create-operation/api/get-operation-financiers';
+import { ApiPostGetOperationSummary } from '@dashboard/modules/operations-management/create-operation/api/post-get-operation-summary';
 import { CreateOperationPrepareOperationDrawer } from '@dashboard/modules/operations-management/create-operation/components/prepare-operation-drawer/prepare-operation-drawer';
 import { CreateOperationTableFilters } from '@dashboard/modules/operations-management/create-operation/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
@@ -39,7 +40,7 @@ const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 
 			transition(':leave', [animate('800ms cubic-bezier(0.25, 1, 0.5, 1)', style({ transform: 'translateY(100%)' }))]),
 		]),
 	],
-	providers: [ApiGetFormalizedInvoiceList, ApiGetOperationsFinancierList],
+	providers: [ApiGetFormalizedInvoiceList, ApiGetOperationsFinancierList, ApiPostGetOperationSummary],
 	imports: [
 		CreateOperationTableFilters,
 		CreateOperationPrepareOperationDrawer,
@@ -60,6 +61,7 @@ export default class OperationsManagementCreateOperation {
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _apiGetFormalizedInvoiceList = inject(ApiGetFormalizedInvoiceList);
 	private readonly _apiGetOperationFinancierList = inject(ApiGetOperationsFinancierList);
+	private readonly _apiPostGetOperationSummary = inject(ApiPostGetOperationSummary);
 	private readonly _selectedFormalizedInvoices = signal<string[]>([]);
 	private readonly _selectedFormalizedInvoice = signal<Nullable<TFormalizedInvoice>>(null);
 
@@ -76,9 +78,13 @@ export default class OperationsManagementCreateOperation {
 	protected readonly _invoices = this._apiGetFormalizedInvoiceList.response;
 	protected readonly _isLoadingApiGetFormalizedInvoiceList = this._apiGetFormalizedInvoiceList.isLoading;
 
+	protected readonly _operationSummary = this._apiPostGetOperationSummary.response;
+	protected readonly _isLoadingApiPostGetOperationSummary = this._apiPostGetOperationSummary.isLoading;
+
 	protected readonly _allSelectControl = this._formBuilder.control(false);
 	protected readonly _selectControls = signal<FormControl<boolean | null>[]>([]);
 	protected readonly _isOperationReadyToCreate = signal(false);
+	protected readonly _isSelectedFinancier = signal(false);
 	protected readonly _showPrepareInvoiceSection = signal(false);
 
 	constructor() {
@@ -167,6 +173,10 @@ export default class OperationsManagementCreateOperation {
 		this._allSelectControl.setValue(isAllChecked);
 	}
 
+	protected _onSelectFinancier(status: boolean): void {
+		this._isSelectedFinancier.set(status);
+	}
+
 	protected _onClickToggleShowPrepareOperation(): void {
 		this._showPrepareInvoiceSection.update((prev) => {
 			if (prev) {
@@ -183,18 +193,28 @@ export default class OperationsManagementCreateOperation {
 	// 	this._selectControls().forEach((control) => control.setValue(value));
 	// }
 
-	protected _getFormalizedInvoiceListForPaginator(page: number): void {
-		this._apiGetFormalizedInvoiceList.getFormalizedInvoiceList({
-			...this._getFormalizedInvoiceListParams(),
-			Page: page,
-		});
-	}
-
 	protected _getOperationsFinancierList(): void {
 		this._apiGetOperationFinancierList._getOperationsFinancierList({
 			accessToken: this._accessToken(),
 			accessModule: this._accessModule(),
 			accessService: this._accessServices()?.GET_FINANCIER_SERVICE,
+		});
+	}
+
+	protected _postGetOperationSummary(financierId: number): void {
+		this._apiPostGetOperationSummary._getOperationSummary({
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.GET_OPERATION_SUMMARY_SERVICE,
+			invoices: [this._selectedFormalizedInvoice()?.id!],
+			idFinancier: financierId,
+		});
+	}
+
+	protected _getFormalizedInvoiceListForPaginator(page: number): void {
+		this._apiGetFormalizedInvoiceList.getFormalizedInvoiceList({
+			...this._getFormalizedInvoiceListParams(),
+			Page: page,
 		});
 	}
 

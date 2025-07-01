@@ -6,7 +6,7 @@ import { LucideAngularModule } from 'lucide-angular';
 	selector: 'general-loader',
 	templateUrl: 'general-loader.html',
 	host: {
-		class: 'flex-1 w-full h-full grid place-content-center gap-2.5',
+		class: 'flex-1 w-full h-full grid place-content-center gap-2.5 animate-opacity-in',
 	},
 	imports: [FacthorLogoAnimated, LucideAngularModule],
 })

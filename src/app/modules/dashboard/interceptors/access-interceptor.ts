@@ -38,7 +38,13 @@ export abstract class AccessInterceptor {
 			}
 
 			if (!response.ok) {
-				throw new Error(`HTTP ${response.status} - ${result.message}`);
+				throw {
+					name: 'ApiError',
+					message: result.message,
+					internalCode: result.internalCode,
+					error: result.error,
+					status: response.status,
+				};
 			}
 
 			return result as T;
@@ -51,11 +57,14 @@ export abstract class AccessInterceptor {
 		const { title, description, redirect = 'authentication/sign-in' } = options;
 		Cookies.remove(envs.FT_AUTHENTICATION_TOKEN_PATH);
 
-		this._router.navigate([redirect], { replaceUrl: true }).then(() => {
-			toast.message(title, {
-				description: description,
-			});
-		});
+		this._router.navigate([redirect], { replaceUrl: true }).then(() => {});
+
+		// MENSAJES DE ERROR POR ACCESO, DESHABILITADOS.
+		// this._router.navigate([redirect], { replaceUrl: true }).then(() => {
+		// 	toast.message(title, {
+		// 		description: description,
+		// 	});
+		// });
 
 		throw new Error(description);
 	}
