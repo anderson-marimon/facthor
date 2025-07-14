@@ -62,19 +62,28 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 		return accessServices;
 	};
 
-	public readonly getModuleByRoute = (targetRoute: string): string => {
-		const permissions = this.get().userConfig?.permissions ?? [];
-		let accessModule = '';
+	private _findCodeByRoute(submodules: TSubmodulePermission[], targetRoute: string): string | undefined {
+		for (const sm of submodules) {
+			if (sm.route === targetRoute) return sm.code;
 
-		for (const module of permissions) {
-			for (const subModule of module.submodules) {
-				if (subModule.route === targetRoute) {
-					accessModule = subModule.code;
-				}
+			if (sm.submodules?.length) {
+				const found = this._findCodeByRoute(sm.submodules, targetRoute);
+				if (found) return found;
 			}
 		}
 
-		return accessModule;
+		return undefined;
+	}
+
+	public readonly getModuleByRoute = (targetRoute: string): string => {
+		const permissions = this.get().userConfig?.permissions ?? [];
+
+		for (const module of permissions) {
+			const found = this._findCodeByRoute(module.submodules, targetRoute);
+			if (found) return found;
+		}
+
+		return '';
 	};
 
 	public readonly getPermissionList = (): TModulePermission[] => {

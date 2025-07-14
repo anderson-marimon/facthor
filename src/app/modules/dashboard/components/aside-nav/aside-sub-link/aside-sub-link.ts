@@ -1,5 +1,5 @@
-import { Component, inject, input, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({

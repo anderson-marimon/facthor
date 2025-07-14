@@ -139,6 +139,29 @@ export const dashboardRoutes: Routes = [
 							return import('@dashboard/modules/operations-management/create-operation/template');
 						},
 					},
+					{
+						path: 'payments',
+						children: [
+							{
+								path: '',
+								redirectTo: 'view-proof-disbursement',
+								pathMatch: 'full',
+							},
+							{
+								path: 'view-proof-disbursement',
+								canActivate: [guardModulePermissions],
+								resolve: {
+									accessToken: resolverGetAccessToken,
+									accessModule: resolverGetAccessModule,
+									accessServices: resolverGetAccessServices,
+									roleExecution: resolverGetRoleExecution,
+								},
+								loadComponent() {
+									return import('@dashboard/modules/operations-management/view-proof-disbursement/template');
+								},
+							},
+						],
+					},
 				],
 			},
 		],

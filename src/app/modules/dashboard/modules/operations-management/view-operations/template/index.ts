@@ -1,11 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TIdentity, TRoleExecution } from '@dashboard/api/user-configuration';
-import { EAccessInformation } from '@dashboard/common/enums/access-information';
+import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
-import { TAccessServices } from '@dashboard/common/enums/services';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import { ApiPostApproveOperations } from '@dashboard/modules/operations-management/approve-operations/api/post-approve-operations';
 import {

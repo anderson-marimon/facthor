@@ -1,0 +1,122 @@
+<section class="w-full h-full flex flex-col !font-light">
+    <main class="flex-1 h-full flex flex-col justify-center">
+        <view-proof-disbursement-table-filters
+            [roleExecution]="_roleExecution()?.id || 0"
+            [isLoadingApiGetProofDisbursements]="_isLoadingApiGetProofDisbursement()"
+            [filterFunction]="_getProofDisbursementForFilter.bind(this)"
+            class="w-full flex justify-end gap-2.5 p-2.5"
+        />
+
+        <hr />
+
+        <article class="flex-1 flex flex-col p-2.5">
+            @if (_isLoadingApiGetProofDisbursement()) {
+                <general-loader [message]="'Cargando operaciones activas...'" />
+            } @else {
+                <div class="w-full h-[calc(100dvh-198px)] overflow-auto">
+                    @if(_proofDisbursements()?.data?.length) {
+
+                        <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
+                            @for (header of _headers; track $index; let first = $first) {
+                                <th class="w-72">
+                                    <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
+                                        @if ($index === 5) {
+                                            @switch (_roleExecution()?.id) {
+                                                @case (_eRoleExecution.PAYER) {
+                                                    <td>total a pagar</td>
+                                                }
+                                                
+                                                @case (_eRoleExecution.PROVIDER) {
+                                                    <td>total a financiar</td>
+                                                }
+                                                
+                                                @default {
+                                                    <td>{{ header }}</td>
+                                                }
+                                            }
+                                        } @else {
+                                            {{ header }}
+                                        }
+                                    </span>
+                                </th>
+                            }
+    
+                            @for (column of _proofDisbursements()?.data; track $index) {
+                                <tr>
+                                    <td class="pl-2.5">{{ column.orderNumber }}</td>
+
+                                    @switch (_roleExecution()?.id) {
+                                        @case (_eRoleExecution.FINANCIER) {
+                                             <td [title]="column.providerLegalName">
+                                                <span class="block line-clamp-1 overflow-hidden truncate uppercase">
+                                                    {{ column.providerLegalName }}
+                                                </span>
+                                            </td>
+                                        }     
+
+                                        @default {
+                                             <td [title]="column.financierIdentificationNumber">
+                                                <span class="block line-clamp-1 overflow-hidden truncate uppercase">
+                                                    {{ column.financierIdentificationNumber }}
+                                                </span>
+                                            </td>
+                                        }   
+                                    }
+
+                                    @switch (_roleExecution()?.id) {
+                                        @case (_eRoleExecution.FINANCIER) {
+                                            <td>{{ column.providerIdentificationNumber}}</td>
+                                        }
+
+                                        @default {
+                                            <td>{{ column.financierLegalName}}</td>
+                                        }
+                                    }
+    
+                                    <td>
+                                        <order-status
+                                            [statusId]="column.idOperationState"
+                                            [statusName]="column.operationStateName!"
+                                        />
+                                    </td>
+    
+                                    <td>{{ column.operationDate.split('T')[0] }}</td>
+
+                                     @switch (_roleExecution()?.id) {
+                                        @case (_eRoleExecution.PROVIDER) {
+                                            <td>{{ column.totalAmountToFinance | currency }}</td>
+                                        } 
+                                        @default {
+                                            <td>{{ column.totalInvoiceAmount | currency }}</td>
+                                        }
+                                    }
+    
+                                    <td>
+                                        <button
+                                            frs-button
+                                            [title]="`Ver detalles de la operación: ${column.orderNumber}`"
+                                            [size]="'icon'"
+                                            [variant]="'ghost'"
+                                        >
+                                            <i-lucide [img]="_eyeIcon" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </inherit-table>
+                    } @else {
+                       <empty-result />
+                    }
+                </div>
+            }
+        </article>
+    </main>
+
+    <hr />
+
+    <inherit-table-footer
+        [totalPages]="_proofDisbursements()?.countPages || 1"
+        [paginatorFunction]="_getProofDisbursementForPaginator.bind(this)"
+        class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
+    />
+</section>

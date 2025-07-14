@@ -16,6 +16,9 @@ export const serverRoutes: ServerRoute[] = [
 	{ path: 'dashboard/operations-management/approve-operations', renderMode: RenderMode.Server },
 	{ path: 'dashboard/operations-management/create-operation', renderMode: RenderMode.Server },
 
+	{ path: 'dashboard/operations-management/payments', renderMode: RenderMode.Server },
+	{ path: 'dashboard/operations-management/payments/view-proof-disbursement', renderMode: RenderMode.Server },
+
 	{ path: 'authentication/', renderMode: RenderMode.Server },
 	{ path: 'authentication/sign-in', renderMode: RenderMode.Server },
 	{ path: 'authentication/sign-up', renderMode: RenderMode.Server },
