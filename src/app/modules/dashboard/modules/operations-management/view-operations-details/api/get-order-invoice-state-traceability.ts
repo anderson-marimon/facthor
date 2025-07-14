@@ -75,7 +75,7 @@ export class ApiGetOrderInvoiceStateTraceability extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al obtener el historial de estado',
+				message: 'No se pudo obtener el historial de estado',
 				description: 'Estamos teniendo problemas para obtener el detalle, por favor, intente más tarde.',
 			});
 

@@ -54,7 +54,7 @@ export class ApiPostUploadInvoices extends AccessInterceptor {
 
 			return response;
 		} catch (error) {
-			catchHandlerError({ error, message: 'Error al subir las facturas', description: 'Por favor, intenta nuevamente.' });
+			catchHandlerError({ error, message: 'No se pudo subir las facturas', description: 'Por favor, intenta nuevamente.' });
 			return null;
 		}
 	}

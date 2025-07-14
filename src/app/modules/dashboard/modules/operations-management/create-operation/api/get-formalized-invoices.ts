@@ -97,7 +97,7 @@ export class ApiGetFormalizedInvoiceList extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al obtener la lista de facturas',
+				message: 'No se pudo obtener la lista de facturas',
 				description: 'Estamos teniendo problemas para obtener las facturas, por favor intente más tarde.',
 			});
 

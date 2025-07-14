@@ -133,7 +133,7 @@ export class ApiGetActiveOperationList extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al obtener las operaciones activas',
+				message: 'No se pudo obtener las operaciones activas',
 				description: 'Estamos teniendo problemas para obtener las operaciones activas, por favor, intente más tarde.',
 			});
 

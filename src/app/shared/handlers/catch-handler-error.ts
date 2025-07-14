@@ -1,10 +1,10 @@
 import { toast } from 'ngx-sonner';
 
-export function catchHandlerError(args: { error: any; message: string; description: string }): void {
-	console.error(args.error);
-
-	const { error, message, description } = args;
+export function catchHandlerError(args: { error: any; message: string; description: string; logError?: boolean }): void {
+	const { error, message, description, logError = false } = args;
 	const _error = error instanceof Error ? error : new Error(String(error));
+
+	if (logError) console.error(args.error);
 
 	if (_error.name === 'AbortError') return;
 

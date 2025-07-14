@@ -61,7 +61,7 @@ export class ApiPostRejectOperations extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al rechazar las operaciones',
+				message: 'No se pudo rechazar las operaciones',
 				description: 'Estamos teniendo rechazar las operaciones, por favor, intente más tarde.',
 			});
 			return null;

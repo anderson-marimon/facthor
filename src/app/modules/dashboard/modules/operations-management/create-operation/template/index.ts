@@ -13,7 +13,11 @@ import {
 	TFormalizedInvoice,
 } from '@dashboard/modules/operations-management/create-operation/api/get-formalized-invoices';
 import { ApiGetOperationsFinancierList } from '@dashboard/modules/operations-management/create-operation/api/get-operation-financiers';
-import { ApiPostGetOperationSummary } from '@dashboard/modules/operations-management/create-operation/api/post-get-operation-summary';
+import { ApiPostCreateOperation } from '@dashboard/modules/operations-management/create-operation/api/post-create-operation';
+import {
+	ApiPostGetOperationSummary,
+	TApiPostGetOperationSummarySignalBody,
+} from '@dashboard/modules/operations-management/create-operation/api/post-get-operation-summary';
 import { CreateOperationPrepareOperationDrawer } from '@dashboard/modules/operations-management/create-operation/components/prepare-operation-drawer/prepare-operation-drawer';
 import { CreateOperationTableFilters } from '@dashboard/modules/operations-management/create-operation/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
@@ -24,6 +28,7 @@ import { InheritTableFooter } from '@shared/components/inherit-table-footer/inhe
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
 import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
+import { toast } from 'ngx-sonner';
 import { tap } from 'rxjs';
 
 const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 'expedition', 'vencimiento', 'detalles'];
@@ -40,7 +45,7 @@ const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 
 			transition(':leave', [animate('800ms cubic-bezier(0.25, 1, 0.5, 1)', style({ transform: 'translateY(100%)' }))]),
 		]),
 	],
-	providers: [ApiGetFormalizedInvoiceList, ApiGetOperationsFinancierList, ApiPostGetOperationSummary],
+	providers: [ApiGetFormalizedInvoiceList, ApiGetOperationsFinancierList, ApiPostCreateOperation, ApiPostGetOperationSummary],
 	imports: [
 		CreateOperationTableFilters,
 		CreateOperationPrepareOperationDrawer,
@@ -62,8 +67,10 @@ export default class OperationsManagementCreateOperation {
 	private readonly _apiGetFormalizedInvoiceList = inject(ApiGetFormalizedInvoiceList);
 	private readonly _apiGetOperationFinancierList = inject(ApiGetOperationsFinancierList);
 	private readonly _apiPostGetOperationSummary = inject(ApiPostGetOperationSummary);
+	private readonly _apiPostCreateOperation = inject(ApiPostCreateOperation);
 	private readonly _selectedFormalizedInvoices = signal<string[]>([]);
 	private readonly _selectedFormalizedInvoice = signal<Nullable<TFormalizedInvoice>>(null);
+	private readonly _getOperationSummaryBody = signal<Nullable<TApiPostGetOperationSummarySignalBody>>(null);
 
 	private readonly _accessToken = signal('');
 	private readonly _accessModule = signal('');
@@ -74,6 +81,9 @@ export default class OperationsManagementCreateOperation {
 	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
+
+	protected readonly _createOperationResult = this._apiPostCreateOperation.response;
+	protected readonly _isLoadingApiPostCreateOperation = this._apiPostCreateOperation.isLoading;
 
 	protected readonly _invoices = this._apiGetFormalizedInvoiceList.response;
 	protected readonly _isLoadingApiGetFormalizedInvoiceList = this._apiGetFormalizedInvoiceList.isLoading;
@@ -126,6 +136,18 @@ export default class OperationsManagementCreateOperation {
 				})
 			)
 			.subscribe();
+
+		toObservable(this._createOperationResult)
+			.pipe(takeUntilDestroyed(this._destroyRef))
+			.subscribe((createOperationResult) => {
+				if (!createOperationResult?.ok && createOperationResult?.internalCode === 1102) {
+					toast.message('Parámetros del financiador actualizado', {
+						description: 'Se han actualizados los parámetros del financiador, revise el detalle nuevamente.',
+					});
+
+					this._reloadPostGetOperationSummary();
+				}
+			});
 	}
 
 	private _syncSelectControls(operations: any[]): void {
@@ -138,6 +160,10 @@ export default class OperationsManagementCreateOperation {
 		});
 
 		this._selectControls.set(newControls);
+	}
+
+	private _reloadPostGetOperationSummary(): void {
+		this._apiPostGetOperationSummary._getOperationSummary({ ...this._getOperationSummaryBody()! });
 	}
 
 	protected _getSelectedInvoices(): any[] {
@@ -202,13 +228,15 @@ export default class OperationsManagementCreateOperation {
 	}
 
 	protected _postGetOperationSummary(financierId: number): void {
-		this._apiPostGetOperationSummary._getOperationSummary({
+		this._getOperationSummaryBody.set({
 			accessToken: this._accessToken(),
 			accessModule: this._accessModule(),
 			accessService: this._accessServices()?.GET_OPERATION_SUMMARY_SERVICE,
 			invoices: [this._selectedFormalizedInvoice()?.id!],
 			idFinancier: financierId,
 		});
+
+		this._apiPostGetOperationSummary._getOperationSummary({ ...this._getOperationSummaryBody()! });
 	}
 
 	protected _getFormalizedInvoiceListForPaginator(page: number): void {

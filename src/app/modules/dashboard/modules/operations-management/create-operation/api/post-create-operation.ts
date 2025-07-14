@@ -1,27 +1,26 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
 import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
+import { TFactoryCalculatorParameters } from '@dashboard/modules/operations-management/create-operation/api/post-get-operation-summary';
 import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
-import { toast } from 'ngx-sonner';
 
-type TApiPostApproveOperationsBodySignal = TAccessInfo & {
-	operations: number[];
-	isApproved: boolean;
+type TAPiPostCreateOperationRequestSignal = TAccessInfo & {
+	idFinancier: number;
+	invoices: string[];
+	factoringCalculatorParameters: TFactoryCalculatorParameters;
 };
 
-type TApiPostApproveOperationsResponse = TApi<boolean>;
-
-export class ApiPostApproveOperations extends AccessInterceptor {
+export class ApiPostCreateOperation extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
-	private readonly _body = signal<Nullable<TApiPostApproveOperationsBodySignal>>(null);
+	private readonly _request = signal<Nullable<TAPiPostCreateOperationRequestSignal>>(null);
 
 	private readonly _resource = resource({
-		request: this._body,
-		loader: (args) => this._fetchPostApproveOperations(args),
+		request: this._request,
+		loader: (args) => this._fetchPostCreateOperation(args),
 	});
 
-	private async _fetchPostApproveOperations(params: ResourceLoaderParams<Nullable<TApiPostApproveOperationsBodySignal>>) {
+	protected async _fetchPostCreateOperation(params: ResourceLoaderParams<Nullable<TAPiPostCreateOperationRequestSignal>>) {
 		const request = params.request;
 		if (!request) return null;
 
@@ -41,7 +40,7 @@ export class ApiPostApproveOperations extends AccessInterceptor {
 
 		try {
 			await apiDeferTime();
-			const response = await this._HttpRequest<TApiPostApproveOperationsResponse>({
+			const response = await this._HttpRequest<TApi<boolean>>({
 				path,
 				method: accessService.method,
 				headers: {
@@ -53,17 +52,14 @@ export class ApiPostApproveOperations extends AccessInterceptor {
 				body: JSON.stringify(body),
 			});
 
-			if (response.ok) {
-				toast.message('Operaciones aprobadas correctamente', { description: 'La operación u operaciones fueron aprobadas con éxito.' });
-			}
-
-			return response.data;
+			return response;
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'No se pudo aprobar las operaciones',
-				description: 'Estamos teniendo aprobar las operaciones, por favor, intente más tarde.',
+				message: 'No se pudo obtener crear operación',
+				description: 'Estamos teniendo problemas para crear la operación, por favor intente más tarde.',
 			});
+
 			return null;
 		}
 	}
@@ -71,7 +67,7 @@ export class ApiPostApproveOperations extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public postApproveOperations(params: TApiPostApproveOperationsBodySignal): void {
-		this._body.set(params);
+	public _postCreateOperation(params: TAPiPostCreateOperationRequestSignal): void {
+		this._request.set(params);
 	}
 }

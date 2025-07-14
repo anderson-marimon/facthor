@@ -76,7 +76,7 @@ export class ApiGetOrderInvoiceRadianEvents extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al obtener los eventos radian',
+				message: 'No se pudo obtener los eventos radian',
 				description: 'Estamos teniendo problemas para obtener el detalle, por favor, intente más tarde.',
 			});
 

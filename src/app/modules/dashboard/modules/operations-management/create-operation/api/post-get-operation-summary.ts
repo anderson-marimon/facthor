@@ -21,7 +21,7 @@ export type TOperationSummary = {
 	factoringCalculatorParameters: TFactoryCalculatorParameters;
 };
 
-type TFactoryCalculatorParameters = {
+export type TFactoryCalculatorParameters = {
 	porcentualFinance: number;
 	platformInterestRate: number;
 	financierInterestRate: number;
@@ -32,7 +32,7 @@ type TFactoryCalculatorParameters = {
 
 type TApiPostGetOperationSummaryResponse = TApi<TOperationSummary>;
 
-type TApiPostGetOperationSummarySignalBody = TAccessInfo & {
+export type TApiPostGetOperationSummarySignalBody = TAccessInfo & {
 	idFinancier: number;
 	invoices: string[];
 };
@@ -81,7 +81,7 @@ export class ApiPostGetOperationSummary extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al obtener el detalle de la operación',
+				message: 'No se pudo obtener el detalle de la operación',
 				description: 'Estamos teniendo problemas para obtener el detalle de la operación, por favor intente más tarde.',
 			});
 

@@ -20,7 +20,7 @@ export class ApiGetFormBanks {
 
 			const { ok, data }: TApiBanks = await response.json();
 
-			if (!ok) throw new Error('Error al cargar los departamentos');
+			if (!ok) throw new Error('No se pudo cargar los departamentos');
 
 			return data ?? [];
 		} catch {

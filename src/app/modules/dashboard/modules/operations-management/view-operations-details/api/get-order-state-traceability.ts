@@ -65,7 +65,7 @@ export class ApiGetOrderStateTraceability extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al obtener el detalle de la operación',
+				message: 'No se pudo obtener el detalle de la operación',
 				description: 'Estamos teniendo problemas para obtener el detalle, por favor, intente más tarde.',
 			});
 

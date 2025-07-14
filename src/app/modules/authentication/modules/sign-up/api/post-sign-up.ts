@@ -39,7 +39,7 @@ export class ApiPostSignUp {
 			catchHandlerError({
 				error,
 				message: 'Registro fallido',
-				description: 'error al enviar el formulario de registro, por favor intente nuevamente',
+				description: 'No se pudo enviar el formulario de registro, por favor intente nuevamente',
 			});
 			return false;
 		}

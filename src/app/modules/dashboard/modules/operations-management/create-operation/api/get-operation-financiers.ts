@@ -58,7 +58,7 @@ export class ApiGetOperationsFinancierList extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al obtener la lista de financiadores',
+				message: 'No se pudo obtener la lista de financiadores',
 				description: 'Estamos teniendo problemas para obtener los financiadores, por favor intente más tarde.',
 			});
 

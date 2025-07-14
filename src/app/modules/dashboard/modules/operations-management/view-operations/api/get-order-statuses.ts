@@ -35,7 +35,7 @@ export class ApiGetOrderStatuses extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al obtener los estados de las ordenes',
+				message: 'No se pudo obtener los estados de las ordenes',
 				description: 'Estamos teniendo problemas para obtener los estados de las ordenes, por favor, intente más tarde.',
 			});
 			return [];

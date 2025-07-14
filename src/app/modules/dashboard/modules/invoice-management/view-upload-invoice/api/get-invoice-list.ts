@@ -97,7 +97,7 @@ export class ApiGetInvoiceList extends AccessInterceptor {
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'Error al cagar las facturas',
+				message: 'No se pudo cagar las facturas',
 				description: 'Estamos teniendo problemas para obtener las facturas, por favor intente más tarde.',
 			});
 
