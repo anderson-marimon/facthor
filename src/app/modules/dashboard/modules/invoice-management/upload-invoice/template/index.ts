@@ -1,8 +1,6 @@
 import { afterRenderEffect, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
-import { EAccessInformation } from '@dashboard/common/enums/access-information';
-import { TAccessServices } from '@dashboard/common/enums/services';
+import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import {
 	ApiPostExtractInvoiceData,
 	TZipErrorFiles,
@@ -11,9 +9,9 @@ import {
 import { ApiPostUploadInvoices } from '@dashboard/modules/invoice-management/upload-invoice/api/upload-invoices';
 import { UploadInvoiceDragInputFiles } from '@dashboard/modules/invoice-management/upload-invoice/components/drag-input-files/drag-input-files';
 import { UploadInvoicesProcessedInvoiceItem } from '@dashboard/modules/invoice-management/upload-invoice/components/processed-invoice-item/processed-invoice-item';
-import { ViewCard } from '@shared/components/view-card/view-card';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
+import { ViewCard } from '@shared/components/view-card/view-card';
 import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
 import { LucideAngularModule, SearchCheck, TriangleAlert } from 'lucide-angular';
 import { toast } from 'ngx-sonner';
@@ -25,15 +23,10 @@ import { timer } from 'rxjs';
 	viewProviders: [ApiPostExtractInvoiceData, ApiPostUploadInvoices],
 	imports: [FrsButtonModule, LoadingIcon, LucideAngularModule, UploadInvoiceDragInputFiles, UploadInvoicesProcessedInvoiceItem, ViewCard],
 })
-export default class DashboardInvoiceManagementUploadInvoices {
-	private readonly _destroyRef = inject(DestroyRef);
-	private readonly _activateRoute = inject(ActivatedRoute);
+export default class DashboardInvoiceManagementUploadInvoices extends AccessViewInformation {
 	private readonly _apiPostExtractInvoiceData = inject(ApiPostExtractInvoiceData);
 	private readonly _apiPostUploadInvoices = inject(ApiPostUploadInvoices);
 	private readonly _dragFilesComponent = viewChild(UploadInvoiceDragInputFiles);
-	private readonly _accessToken = signal('');
-	private readonly _accessModule = signal('');
-	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
 	private readonly _dragFiles = signal<TFile[]>([]);
 	private readonly _extractedInvoiceData = this._apiPostExtractInvoiceData.response;
 	private readonly _uploadInvoiceResult = this._apiPostUploadInvoices.response;
@@ -47,19 +40,11 @@ export default class DashboardInvoiceManagementUploadInvoices {
 	protected readonly _processedFiles = signal<TZipProcessedFiles[]>([]);
 
 	constructor() {
-		this._getAccessInformation();
+		super();
 		this._addObservables();
 
 		afterRenderEffect(() => {
 			this._watchFileChanges();
-		});
-	}
-
-	private _getAccessInformation(): void {
-		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken.set(data[EAccessInformation.TOKEN]);
-			this._accessModule.set(data[EAccessInformation.MODULE]);
-			this._accessServices.set(data[EAccessInformation.SERVICES]);
 		});
 	}
 

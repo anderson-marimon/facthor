@@ -6,6 +6,7 @@ import { TIdentity, TRoleExecution } from '@dashboard/api/user-configuration';
 import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { TAccessServices } from '@dashboard/common/enums/services';
+import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import { ApiPostApproveOperations } from '@dashboard/modules/operations-management/approve-operations/api/post-approve-operations';
 import {
 	ApiGetActiveOperationList,
@@ -40,46 +41,24 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 		ViewActiveOperationsTableFilters,
 	],
 })
-export default class OperationsManagementViewOperations {
-	private readonly _destroyRef = inject(DestroyRef);
+export default class OperationsManagementViewOperations extends AccessViewInformation {
 	private readonly _router = inject(Router);
-	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
-
-	private readonly _accessToken = signal('');
-	private readonly _accessModule = signal('');
-	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
-	private readonly _sessionKey = signal('');
-
 	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 
 	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
+	protected readonly _eRoleExecution = ERoleExecution;
 
 	protected readonly _operations = this._apiGetActiveOperationList.response;
 	protected readonly _isLoadingApiGetInvoiceList = this._apiGetActiveOperationList.isLoading;
 
-	protected readonly _eRoleExecution = ERoleExecution;
-	protected readonly _roleExecution = signal<Nullable<TRoleExecution>>(null);
-	protected readonly _identity = signal<Nullable<TIdentity>>(null);
-
 	constructor() {
-		this._getAccessInformation();
+		super();
 		this._getOrderStatuses();
 		this._getInitActiveOperationList();
-	}
-
-	private _getAccessInformation(): void {
-		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken.set(data[EAccessInformation.TOKEN]);
-			this._accessModule.set(data[EAccessInformation.MODULE]);
-			this._accessServices.set(data[EAccessInformation.SERVICES]);
-			this._identity.set(data[EAccessInformation.IDENTITY]);
-			this._roleExecution.set(data[EAccessInformation.ROLE_EXECUTION]);
-			this._sessionKey.set(data[EAccessInformation.SESSION_KEY]);
-		});
 	}
 
 	private _getOrderStatuses(): void {

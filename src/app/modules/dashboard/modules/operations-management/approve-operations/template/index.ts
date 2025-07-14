@@ -2,12 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TIdentity, TRoleExecution } from '@dashboard/api/user-configuration';
-import { EAccessInformation } from '@dashboard/common/enums/access-information';
+import { Router } from '@angular/router';
 import { EOrderStatus } from '@dashboard/common/enums/order-status';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
-import { TAccessServices } from '@dashboard/common/enums/services';
+import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import { ApiPostApproveOperations } from '@dashboard/modules/operations-management/approve-operations/api/post-approve-operations';
 import { ApiPostRejectOperations } from '@dashboard/modules/operations-management/approve-operations/api/post-reject-operations';
 import { ApproveOperationsTableFilters } from '@dashboard/modules/operations-management/approve-operations/components/table-filters/table-filters';
@@ -49,21 +47,14 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 		ApproveOperationsTableFilters,
 	],
 })
-export default class OperationsManagementApproveOperations {
-	private readonly _destroyRef = inject(DestroyRef);
+export default class OperationsManagementApproveOperations extends AccessViewInformation {
 	private readonly _frsDialogRef = inject(FrsDialogRef);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _router = inject(Router);
-	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
 	private readonly _apiPostApproveOperation = inject(ApiPostApproveOperations);
 	private readonly _apiPostRejectOperation = inject(ApiPostRejectOperations);
 	private readonly _selectedOrders = signal<number[]>([]);
-
-	private readonly _accessToken = signal('');
-	private readonly _accessModule = signal('');
-	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
-	private readonly _sessionKey = signal('');
 
 	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 	private readonly _selectedActiveOperation = signal<Nullable<TActiveOperation>>(null);
@@ -82,27 +73,14 @@ export default class OperationsManagementApproveOperations {
 	protected readonly _isLoadingRejectOperations = this._apiPostRejectOperation.isLoading;
 
 	protected readonly _eRoleExecution = ERoleExecution;
-	protected readonly _roleExecution = signal<Nullable<TRoleExecution>>(null);
-	protected readonly _identity = signal<Nullable<TIdentity>>(null);
 
 	protected readonly _allSelectControl = this._formBuilder.control(false);
 	protected readonly _selectControls = signal<FormControl<boolean | null>[]>([]);
 
 	constructor() {
-		this._getAccessInformation();
+		super();
 		this._getInitActiveOperationList();
 		this._addObservables();
-	}
-
-	private _getAccessInformation(): void {
-		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken.set(data[EAccessInformation.TOKEN]);
-			this._accessModule.set(data[EAccessInformation.MODULE]);
-			this._accessServices.set(data[EAccessInformation.SERVICES]);
-			this._identity.set(data[EAccessInformation.IDENTITY]);
-			this._roleExecution.set(data[EAccessInformation.ROLE_EXECUTION]);
-			this._sessionKey.set(data[EAccessInformation.SESSION_KEY]);
-		});
 	}
 
 	private _getInitActiveOperationList(): void {

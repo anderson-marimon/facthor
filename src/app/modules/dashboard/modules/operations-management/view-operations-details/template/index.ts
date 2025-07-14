@@ -2,11 +2,8 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
-import { TRoleExecution } from '@dashboard/api/user-configuration';
-import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
-import { TAccessServices } from '@dashboard/common/enums/services';
+import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import { ApiGetOrderInvoiceList } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-list';
 import { ApiGetOrderInvoiceRadianEvents } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-radian-events';
 import { ApiGetOrderInvoiceStateTraceability } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-state-traceability';
@@ -45,22 +42,16 @@ import { ViewCard } from '@shared/components/view-card/view-card';
 		ViewCard,
 	],
 })
-export default class OperationsManagementViewOperationsDetails {
-	private readonly _destroyRef = inject(DestroyRef);
-	private readonly _activateRoute = inject(ActivatedRoute);
+export default class OperationsManagementViewOperationsDetails extends AccessViewInformation {
 	private readonly _storeActiveOperations = inject(StoreActiveOperations);
 	private readonly _apiGetOperationDetails = inject(ApiGetOrderInvoiceList);
 	private readonly _apiGetOperationStateTraceability = inject(ApiGetOrderStateTraceability);
 	private readonly _apiGetOrderInvoiceRadianEvents = inject(ApiGetOrderInvoiceRadianEvents);
 	private readonly _apiGetOrderInvoiceStateTraceability = inject(ApiGetOrderInvoiceStateTraceability);
 
-	private readonly _accessToken = signal('');
-	private readonly _accessModule = signal('');
-	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
 	private readonly _operationId = signal('');
 
 	protected readonly _eRoleExecution = ERoleExecution;
-	protected readonly _roleExecution = signal<Nullable<TRoleExecution>>(null);
 	protected readonly _activeCurrentOperation = signal<Nullable<TActiveOperation>>(null);
 	protected readonly _operations = this._apiGetOperationDetails.response;
 	protected readonly _isLoadingApiGetInvoiceList = this._apiGetOperationDetails.isLoading;
@@ -69,19 +60,13 @@ export default class OperationsManagementViewOperationsDetails {
 	protected readonly _isOpenTraceabilityDrawer = signal(false);
 
 	constructor() {
-		this._getAccessInformation();
+		super();
+		this.getQueryParams();
 		this._getOrderInvoiceList();
 		this._addObservable();
 	}
 
-	private _getAccessInformation(): void {
-		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken.set(data[EAccessInformation.TOKEN]);
-			this._accessModule.set(data[EAccessInformation.MODULE]);
-			this._accessServices.set(data[EAccessInformation.SERVICES]);
-			this._roleExecution.set(data[EAccessInformation.ROLE_EXECUTION]);
-		});
-
+	private getQueryParams(): void {
 		this._activateRoute.queryParams.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(({ operation = '' }) => {
 			this._operationId.set(operation);
 		});

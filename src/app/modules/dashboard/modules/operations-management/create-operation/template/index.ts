@@ -3,9 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { EAccessInformation } from '@dashboard/common/enums/access-information';
-import { TAccessServices } from '@dashboard/common/enums/services';
+import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import {
 	ApiGetFormalizedInvoiceList,
 	TApiGetFormalizedInvoiceListQueryParams,
@@ -63,10 +61,8 @@ const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 
 		LoadingIcon,
 	],
 })
-export default class OperationsManagementCreateOperation {
-	private readonly _destroyRef = inject(DestroyRef);
+export default class OperationsManagementCreateOperation extends AccessViewInformation {
 	private readonly _dialogRef = inject(FrsDialogRef);
-	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _apiGetFormalizedInvoiceList = inject(ApiGetFormalizedInvoiceList);
 	private readonly _apiGetOperationFinancierList = inject(ApiGetOperationsFinancierList);
@@ -76,11 +72,6 @@ export default class OperationsManagementCreateOperation {
 	private readonly _selectedFormalizedInvoice = signal<Nullable<TFormalizedInvoice>>(null);
 	private readonly _selectedFinancier = signal<number[]>([]);
 	private readonly _getOperationSummaryBody = signal<Nullable<TApiPostGetOperationSummarySignalBody>>(null);
-
-	private readonly _accessToken = signal('');
-	private readonly _accessModule = signal('');
-	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
-
 	private readonly _getFormalizedInvoiceListParams = signal<Partial<TApiGetFormalizedInvoiceListQuerySignalParams>>({});
 
 	protected readonly _eyeIcon = Eye;
@@ -103,7 +94,7 @@ export default class OperationsManagementCreateOperation {
 	protected readonly _showPrepareInvoiceSection = signal(false);
 
 	constructor() {
-		this._getAccessInformation();
+		super();
 		this._getInitFormalizedInvoiceList();
 		this._addObservables();
 	}
@@ -155,14 +146,6 @@ export default class OperationsManagementCreateOperation {
 		});
 
 		this._selectControls.set(newControls);
-	}
-
-	private _getAccessInformation(): void {
-		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken.set(data[EAccessInformation.TOKEN]);
-			this._accessModule.set(data[EAccessInformation.MODULE]);
-			this._accessServices.set(data[EAccessInformation.SERVICES]);
-		});
 	}
 
 	private _getInitFormalizedInvoiceList(): void {

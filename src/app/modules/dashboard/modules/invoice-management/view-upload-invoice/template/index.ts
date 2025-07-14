@@ -5,6 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { EAccessInformation } from '@dashboard/common/enums/access-information';
 import { TAccessServices } from '@dashboard/common/enums/services';
+import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import {
 	ApiGetInvoiceList,
 	TApiGetInvoiceListQueryParams,
@@ -51,14 +52,9 @@ const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'ven
 		ViewUploadInvoiceRadianEventsDrawer,
 	],
 })
-export default class DashboardInvoiceManagementViewUploadInvoice {
-	private readonly _destroyRef = inject(DestroyRef);
-	private readonly _activateRoute = inject(ActivatedRoute);
+export default class DashboardInvoiceManagementViewUploadInvoice extends AccessViewInformation {
 	private readonly _apiGetInvoiceStatuses = inject(ApiGetInvoiceStatuses);
 	private readonly _apiGetInvoiceList = inject(ApiGetInvoiceList);
-	private readonly _accessToken = signal('');
-	private readonly _accessModule = signal('');
-	private readonly _accessServices = signal<Nullable<TAccessServices>>(null);
 	private readonly _getInvoiceListParams = signal<Partial<TApiGetInvoiceListQuerySignalParams>>({});
 
 	protected readonly _eyeIcon = Eye;
@@ -70,17 +66,9 @@ export default class DashboardInvoiceManagementViewUploadInvoice {
 	protected readonly _invoiceNumberSelected = signal('');
 
 	constructor() {
-		this._getAccessInformation();
+		super();
 		this._getInvoiceStatuses();
 		this._getInitInvoiceList();
-	}
-
-	private _getAccessInformation(): void {
-		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken.set(data[EAccessInformation.TOKEN]);
-			this._accessModule.set(data[EAccessInformation.MODULE]);
-			this._accessServices.set(data[EAccessInformation.SERVICES]);
-		});
 	}
 
 	private _getInvoiceStatuses(): void {
