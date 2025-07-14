@@ -22,11 +22,13 @@ import { CreateOperationPrepareOperationDrawer } from '@dashboard/modules/operat
 import { CreateOperationTableFilters } from '@dashboard/modules/operations-management/create-operation/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsCheckboxModule } from '@fresco-ui/frs-checkbox';
+import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { GeneralLoader } from '@shared/components/general-loader/general-loader';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
+import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
 import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
 import { toast } from 'ngx-sonner';
 import { tap } from 'rxjs';
@@ -58,18 +60,21 @@ const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 
 		InheritTableFooter,
 		InvoiceStatus,
 		LucideAngularModule,
+		LoadingIcon,
 	],
 })
 export default class OperationsManagementCreateOperation {
 	private readonly _destroyRef = inject(DestroyRef);
+	private readonly _dialogRef = inject(FrsDialogRef);
 	private readonly _activateRoute = inject(ActivatedRoute);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _apiGetFormalizedInvoiceList = inject(ApiGetFormalizedInvoiceList);
 	private readonly _apiGetOperationFinancierList = inject(ApiGetOperationsFinancierList);
 	private readonly _apiPostGetOperationSummary = inject(ApiPostGetOperationSummary);
 	private readonly _apiPostCreateOperation = inject(ApiPostCreateOperation);
-	private readonly _selectedFormalizedInvoices = signal<string[]>([]);
+	private readonly _selectedFormalizedInvoicesId = signal<string[]>([]);
 	private readonly _selectedFormalizedInvoice = signal<Nullable<TFormalizedInvoice>>(null);
+	private readonly _selectedFinancier = signal<number[]>([]);
 	private readonly _getOperationSummaryBody = signal<Nullable<TApiPostGetOperationSummarySignalBody>>(null);
 
 	private readonly _accessToken = signal('');
@@ -103,26 +108,6 @@ export default class OperationsManagementCreateOperation {
 		this._addObservables();
 	}
 
-	private _getAccessInformation(): void {
-		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
-			this._accessToken.set(data[EAccessInformation.TOKEN]);
-			this._accessModule.set(data[EAccessInformation.MODULE]);
-			this._accessServices.set(data[EAccessInformation.SERVICES]);
-		});
-	}
-
-	private _getInitFormalizedInvoiceList(): void {
-		this._getFormalizedInvoiceListParams.set({
-			accessToken: this._accessToken(),
-			accessModule: this._accessModule(),
-			accessService: this._accessServices()?.GET_FORMALIZED_INVOICES_SERVICE,
-			Page: 1,
-			Size: 14,
-		});
-
-		this._apiGetFormalizedInvoiceList.getFormalizedInvoiceList(this._getFormalizedInvoiceListParams());
-	}
-
 	private _addObservables(): void {
 		toObservable(this._invoices)
 			.pipe(
@@ -147,6 +132,16 @@ export default class OperationsManagementCreateOperation {
 
 					this._reloadPostGetOperationSummary();
 				}
+
+				if (createOperationResult) {
+					this._dialogRef.closeDialog();
+					this._getInitFormalizedInvoiceList();
+
+					this._apiPostGetOperationSummary.reset();
+					this._showPrepareInvoiceSection.set(false);
+					this._selectedFormalizedInvoice.set(null);
+					this._selectedFormalizedInvoicesId.set([]);
+				}
 			});
 	}
 
@@ -162,8 +157,39 @@ export default class OperationsManagementCreateOperation {
 		this._selectControls.set(newControls);
 	}
 
+	private _getAccessInformation(): void {
+		this._activateRoute.data.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((data) => {
+			this._accessToken.set(data[EAccessInformation.TOKEN]);
+			this._accessModule.set(data[EAccessInformation.MODULE]);
+			this._accessServices.set(data[EAccessInformation.SERVICES]);
+		});
+	}
+
+	private _getInitFormalizedInvoiceList(): void {
+		this._getFormalizedInvoiceListParams.set({
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.GET_FORMALIZED_INVOICES_SERVICE,
+			Page: 1,
+			Size: 14,
+		});
+
+		this._apiGetFormalizedInvoiceList.getFormalizedInvoiceList(this._getFormalizedInvoiceListParams());
+	}
+
+	private _postCreateOperation(): void {
+		this._apiPostCreateOperation._postCreateOperation({
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.CREATE_OPERATION_SERVICE,
+			invoices: this._selectedFormalizedInvoicesId(),
+			idFinancier: this._selectedFinancier()[0],
+			factoringCalculatorParameters: this._operationSummary()!.factoringCalculatorParameters,
+		});
+	}
+
 	private _reloadPostGetOperationSummary(): void {
-		this._apiPostGetOperationSummary._getOperationSummary({ ...this._getOperationSummaryBody()! });
+		this._apiPostGetOperationSummary.getOperationSummary({ ...this._getOperationSummaryBody()! });
 	}
 
 	protected _getSelectedInvoices(): any[] {
@@ -188,7 +214,7 @@ export default class OperationsManagementCreateOperation {
 			if (i === index) {
 				control.setValue(true);
 				const invoiceId = this._invoices()?.data[index].id;
-				this._selectedFormalizedInvoices.set([invoiceId!]);
+				this._selectedFormalizedInvoicesId.set([invoiceId!]);
 				this._selectedFormalizedInvoice.set(formalizedInvoice);
 			} else {
 				control.setValue(false);
@@ -199,8 +225,9 @@ export default class OperationsManagementCreateOperation {
 		this._allSelectControl.setValue(isAllChecked);
 	}
 
-	protected _onSelectFinancier(status: boolean): void {
-		this._isSelectedFinancier.set(status);
+	protected _onSelectFinancier(financiers: number[]): void {
+		this._isSelectedFinancier.set(financiers.length > 0);
+		this._selectedFinancier.set(financiers);
 	}
 
 	protected _onClickToggleShowPrepareOperation(): void {
@@ -210,6 +237,16 @@ export default class OperationsManagementCreateOperation {
 			}
 
 			return !prev;
+		});
+	}
+
+	protected _onClickCreateOperation(): void {
+		this._dialogRef.openAlertDialog({
+			title: '¿Está seguro de crear esta operación?',
+			description: 'Por favor, revise bien toda la información antes de crear, una vez creado, no puede ser revertido.',
+			actionButtonText: 'Crear',
+			action: this._postCreateOperation.bind(this),
+			loading: this._isLoadingApiPostCreateOperation,
 		});
 	}
 
@@ -236,7 +273,7 @@ export default class OperationsManagementCreateOperation {
 			idFinancier: financierId,
 		});
 
-		this._apiPostGetOperationSummary._getOperationSummary({ ...this._getOperationSummaryBody()! });
+		this._apiPostGetOperationSummary.getOperationSummary({ ...this._getOperationSummaryBody()! });
 	}
 
 	protected _getFormalizedInvoiceListForPaginator(page: number): void {

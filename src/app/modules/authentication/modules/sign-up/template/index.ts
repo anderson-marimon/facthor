@@ -119,9 +119,9 @@ export default class SignUpPage {
 			},
 			() => {
 				this._dialogRef.openAlertDialog({
-					title: '¿Estás seguro de enviar el formulario de registro?',
+					title: '¿Está seguro de enviar el formulario de registro?',
 					description:
-						'Por favor, revisa bien toda la información antes de enviarla, una vez enviado el registro, no puede ser modificado.',
+						'Por favor, revise bien toda la información antes de enviarla, una vez enviado el registro, no puede ser modificado.',
 					action: () => this._summary().sendForm(),
 					loading: this._isLoadingApiPostSignUp,
 				});

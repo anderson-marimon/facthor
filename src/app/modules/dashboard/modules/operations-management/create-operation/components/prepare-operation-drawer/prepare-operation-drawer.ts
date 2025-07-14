@@ -20,7 +20,7 @@ export class CreateOperationPrepareOperationDrawer implements OnDestroy {
 	public readonly fnPostGetOperationSummary = input<(financierId: number) => void>();
 	public readonly operationSummary = input<Nullable<TOperationSummary>>();
 	public readonly isLoadingApiPostGetOperationSummary = input.required<boolean>();
-	public readonly onSelectFinancier = output<boolean>();
+	public readonly onSelectFinancier = output<number[]>();
 
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _apiGetOperationFinancierList = inject(ApiGetOperationsFinancierList);
@@ -52,10 +52,10 @@ export class CreateOperationPrepareOperationDrawer implements OnDestroy {
 
 	protected _onClickSelectFinancier(financierId: number): void {
 		this._selectedFinancier.set([financierId]);
-		this.onSelectFinancier.emit(true);
+		this.onSelectFinancier.emit(this._selectedFinancier());
 	}
 
 	public ngOnDestroy(): void {
-		this.onSelectFinancier.emit(false);
+		this.onSelectFinancier.emit(this._selectedFinancier());
 	}
 }

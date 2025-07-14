@@ -92,7 +92,11 @@ export class ApiPostGetOperationSummary extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public _getOperationSummary(params: TApiPostGetOperationSummarySignalBody): void {
+	public getOperationSummary(params: TApiPostGetOperationSummarySignalBody): void {
 		this._request.set(params);
+	}
+
+	public reset(): void {
+		this._request.set(null);
 	}
 }

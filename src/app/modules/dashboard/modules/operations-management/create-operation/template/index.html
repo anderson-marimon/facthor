@@ -93,7 +93,7 @@
             <button
                 frs-button
                 [variant]="'secondary'"
-                [disabled]="!_getSelectedInvoices().length"
+                [disabled]="_isLoadingApiPostCreateOperation() || !_getSelectedInvoices().length"
                 (click)="_onClickToggleShowPrepareOperation()"
                 class="w-40"
             >
@@ -106,9 +106,15 @@
             
             <button
                 frs-button
-                [disabled]="!_isSelectedFinancier() || !_operationSummary()"
+                (click)="_onClickCreateOperation()"
+                [disabled]="_isLoadingApiPostCreateOperation() || !_isSelectedFinancier() || !_operationSummary()"
+                class="w-40"
             >
-                Crear operación
+                @if (_isLoadingApiPostCreateOperation()) {
+                    <loading-icon [color]="'#FFFFFF'" class="size-6" />
+                } @else {
+                    Crear operación
+                }
             </button>
         </section>
     </inherit-table-footer>
