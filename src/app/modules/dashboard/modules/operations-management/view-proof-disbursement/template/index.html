@@ -11,7 +11,7 @@
 
         <article class="flex-1 flex flex-col p-2.5">
             @if (_isLoadingApiGetProofDisbursement()) {
-                <general-loader [message]="'Cargando operaciones activas...'" />
+                <general-loader [message]="'Cargando comprobantes...'" />
             } @else {
                 <div class="w-full h-[calc(100dvh-198px)] overflow-auto">
                     @if(_proofDisbursements()?.data?.length) {
@@ -92,20 +92,22 @@
                                     }
     
                                     <td>
-                                        <button
+                                        <a
                                             frs-button
-                                            [title]="`Ver detalles de la operación: ${column.orderNumber}`"
-                                            [size]="'icon'"
-                                            [variant]="'ghost'"
+                                            [title]="'Ver comprobantes de la operación: ' + column.orderNumber"
+                                            [variant]="'link'"
+                                            [routerLink]="['/dashboard/operations-management/payments/view-proof-disbursement/details']"
+                                            [queryParams]="{ operation: column.id, session: _sessionKey() }"
+                                            class="px-0"
                                         >
-                                            <i-lucide [img]="_eyeIcon" />
-                                        </button>
+                                            Ver comprobantes
+                                        </a>
                                     </td>
                                 </tr>
                             }
                         </inherit-table>
                     } @else {
-                       <empty-result />
+                       <empty-result [message]="'No se encontraron comprobantes'" />
                     }
                 </div>
             }

@@ -18,7 +18,7 @@ export type TApiGetProofDisbursementQueryParams = {
 } & TPaginator;
 
 export type TProofDisbursement = {
-	idOperation: number;
+	id: number;
 	orderNumber: string;
 	totalInvoiceReadjustmentAmount: number;
 	totalInvoiceAmount: number;

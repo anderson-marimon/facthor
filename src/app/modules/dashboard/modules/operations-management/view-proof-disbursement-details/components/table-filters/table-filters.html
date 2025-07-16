@@ -1,0 +1,18 @@
+<frs-select
+    #field
+    [control]="_searchOrderStatusesControl"
+    [class]="'w-52'"
+>
+    <frs-select-trigger [placeholder]="'Filtrar por estado'" />
+    <frs-select-options [options]="_orderStatuses() || []" [class]="'max-h-52'" />
+</frs-select>
+
+<button
+    frs-button
+    (click)="_onClickResetFilters()"
+    [disabled]="isLoadingApiGetProofDisbursements()"
+    class="flex items-center flex-nowrap gap-1.5 bg-primary-facthor hover:bg-pantone/95"
+>
+    <i-lucide [img]="_resetFilterIcon" class="size-4" />
+    Restablecer filtros
+</button>

@@ -1,0 +1,71 @@
+<section class="w-full h-full flex flex-col !font-light">
+    <main class="flex-1 h-full flex flex-col justify-center">
+        <view-proof-disbursement-details-table-filters
+            [roleExecution]="_roleExecution()?.id || 0"
+            [isLoadingApiGetProofDisbursements]="_isLoadingApiGetProofDisbursementDetails()"
+            [filterFunction]="_getProofDisbursementDetailsForFilter.bind(this)"
+            class="w-full flex justify-end gap-2.5 p-2.5"
+        />
+
+        <hr />
+
+        <article class="flex-1 flex flex-col p-2.5">
+            @if (_isLoadingApiGetProofDisbursementDetails()) {
+                <general-loader [message]="'Cargando comprobantes...'" />
+            } @else {
+                <div class="w-full h-[calc(100dvh-198px)] overflow-auto">
+                    @if(_proofDisbursementDetails()?.data?.length) {
+
+                        <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
+                            @for (header of _headers; track $index; let first = $first) {
+                                <th class="w-72">
+                                    <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
+                                        {{ header }}
+                                    </span>
+                                </th>
+                            }
+    
+                            @for (column of _proofDisbursementDetails()?.data; track $index) {
+                                <tr>
+                                    <td class="pl-2.5">{{ column.idOperationDisbursementTypeName }}</td>
+
+                                    <td>
+                                        <order-status
+                                            [statusId]="column.idOperationDisbusementState"
+                                            [statusName]="column.idOperationDisbusementStateName"
+                                        />
+                                    </td>
+    
+                                    <td>{{ column.amount| currency }}</td>
+
+                                    <td>{{ column.description }}</td>
+
+                                    <td>
+                                        <button
+                                            frs-button
+                                            [title]="`Ver pdf del comprobante: ${column.id}`"
+                                            [variant]="'link'"
+                                            class="px-0"
+                                        >
+                                            Ver PDF
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </inherit-table>
+                    } @else {
+                       <empty-result [message]="'No se encontraron comprobantes'" />
+                    }
+                </div>
+            }
+        </article>
+    </main>
+
+    <hr />
+
+    <inherit-table-footer
+        [totalPages]="_proofDisbursementDetails()?.countPages || 1"
+        [paginatorFunction]="_getProofDisbursementDetailsForPaginator.bind(this)"
+        class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
+    />
+</section>

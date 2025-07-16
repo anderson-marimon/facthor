@@ -108,6 +108,10 @@ export const dashboardRoutes: Routes = [
 							accessServices: resolverGetInheritAccessServices,
 							roleExecution: resolverGetRoleExecution,
 						},
+						data: {
+							permitCriteria: 1,
+							redirect: '/dashboard/operations-management/view-operations',
+						},
 						loadComponent() {
 							return import('@dashboard/modules/operations-management/view-operations-details/template');
 						},
@@ -155,9 +159,26 @@ export const dashboardRoutes: Routes = [
 									accessModule: resolverGetAccessModule,
 									accessServices: resolverGetAccessServices,
 									roleExecution: resolverGetRoleExecution,
+									sessionKey: resolverGetSessionKey,
 								},
 								loadComponent() {
 									return import('@dashboard/modules/operations-management/view-proof-disbursement/template');
+								},
+							},
+							{
+								path: 'view-proof-disbursement/details',
+								canActivate: [guardQueryParamOperation, guardInheritModulePermissions],
+								resolve: {
+									accessToken: resolverGetAccessToken,
+									accessModule: resolverGetAccessModule,
+									accessServices: resolverGetInheritAccessServices,
+								},
+								data: {
+									permitCriteria: 1,
+									redirect: '/dashboard/operations-management/view-proof-disbursement',
+								},
+								loadComponent() {
+									return import('@dashboard/modules/operations-management/view-proof-disbursement-details/template');
 								},
 							},
 						],

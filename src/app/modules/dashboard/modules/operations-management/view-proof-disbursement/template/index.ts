@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import { ApiGetOrderStatuses } from '@dashboard/modules/operations-management/view-operations/api/get-order-statuses';
@@ -31,13 +32,13 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'estado', 'fecha de oper
 		InheritTableFooter,
 		LucideAngularModule,
 		OrderStatus,
+		RouterLink,
 		ViewProofDisbursementTableFilters,
 	],
 })
 export default class OperationManagementViewProofDisbursement extends AccessViewInformation {
 	private readonly _apiGetProofDisbursement = inject(ApiGetProofDisbursement);
 	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
-
 	private readonly _getProofDisbursementParams = signal<Partial<TApiGetProofDisbursementQuerySignalParams>>({});
 
 	protected readonly _eyeIcon = Eye;
