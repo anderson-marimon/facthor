@@ -42,7 +42,7 @@ export class SignUpFormSummary {
 		const file = this._documentsForm[fileName][0] as TFile;
 
 		this._dialogRef.openDialog({
-			title: 'modal para visualizar pdf del pdf',
+			title: 'Modal para visualizar pdf',
 			content: PdfViewer,
 			data: file.base64,
 		});

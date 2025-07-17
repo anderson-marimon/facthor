@@ -9,6 +9,7 @@ export type THttpRequest = {
 	method: 'GET' | 'POST' | 'PUT';
 	headers: Record<string, string>;
 	signal: AbortSignal | null | undefined;
+	responseType?: string;
 	body?: any;
 };
 
@@ -48,6 +49,17 @@ export abstract class AccessInterceptor {
 			}
 
 			return result as T;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	protected async _HttpFileRequest<T>(args: THttpRequest) {
+		const { path, ...options } = args;
+
+		try {
+			const response = await fetch(path, options);
+			return (await response.blob()) as T;
 		} catch (error) {
 			throw error;
 		}

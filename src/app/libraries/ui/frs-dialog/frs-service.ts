@@ -8,8 +8,14 @@ export class FrsDialogRef {
 	private _componentRefs: ComponentRef<FrsDialog>[] = [];
 	private _appRef = inject(ApplicationRef);
 	private _injector = inject(EnvironmentInjector);
+	private _isClosing = false;
 
-	public openDialog(args: TFrsDialogArgs): ComponentRef<FrsDialog> {
+	public openDialog(args: TFrsDialogArgs): ComponentRef<FrsDialog> | null {
+		if (this._isClosing) {
+			console.warn('A dialog is currently closing. Please wait before opening another one.');
+			return null;
+		}
+
 		const { content, title, data } = args;
 
 		if (!content) {
@@ -42,6 +48,11 @@ export class FrsDialogRef {
 	}
 
 	public openAlertDialog(args: TFrsAlertDialogArgs): void {
+		if (this._isClosing) {
+			console.warn('A dialog is currently closing. Please wait before opening another one.');
+			return;
+		}
+
 		const componentRef = createComponent(FrsDialog, {
 			environmentInjector: this._injector,
 		});
@@ -57,6 +68,10 @@ export class FrsDialogRef {
 	}
 
 	public closeDialog(componentRef?: ComponentRef<FrsDialog>): void {
+		if (this._isClosing) return; // evita doble cierre
+
+		this._isClosing = true;
+
 		if (componentRef) {
 			const index = this._componentRefs.indexOf(componentRef);
 
@@ -65,12 +80,15 @@ export class FrsDialogRef {
 				this._appRef.detachView(componentRef.hostView);
 				componentRef.destroy();
 			}
+
+			this._isClosing = false;
 		} else {
 			this._componentRefs.at(-1)?.instance.closeDialog();
 
 			setTimeout(() => {
 				this._componentRefs.at(-1)?.destroy();
 				this._componentRefs.pop();
+				this._isClosing = false;
 			}, 300);
 		}
 	}

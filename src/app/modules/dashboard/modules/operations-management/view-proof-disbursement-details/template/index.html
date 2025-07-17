@@ -45,6 +45,7 @@
                                             frs-button
                                             [title]="`Ver pdf del comprobante: ${column.id}`"
                                             [variant]="'link'"
+                                            (click)="_onClickViewPdf(column.id)"
                                             class="px-0"
                                         >
                                             Ver PDF

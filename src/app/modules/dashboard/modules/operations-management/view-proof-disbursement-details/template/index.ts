@@ -16,13 +16,16 @@ import { InheritTableFooter } from '@shared/components/inherit-table-footer/inhe
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { OrderStatus } from '@shared/components/order-status/order-status';
 import { FileX2, LucideAngularModule } from 'lucide-angular';
+import { ModalProofDisbursementFile } from '@dashboard/modules/operations-management/view-proof-disbursement-details/components/modal-proof-disbursement-file/modal-proof-disbursement-file';
+import { ApiGetProofDisbursementFile } from '@dashboard/modules/operations-management/view-proof-disbursement-details/api/get-proof-disbursement-file';
+import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 
 const HEADERS = ['tipo de desembolso', 'estado de desembolso', 'monto', 'description', 'documento'];
 
 @Component({
 	selector: 'operation-management-view-proof-disbursement-details',
 	templateUrl: 'index.html',
-	providers: [ApiGetProofDisbursementDetails, ApiGetOrderStatuses],
+	providers: [ApiGetProofDisbursementDetails, ApiGetOrderStatuses, ApiGetProofDisbursementFile],
 	imports: [
 		CommonModule,
 		EmptyResult,
@@ -37,8 +40,11 @@ const HEADERS = ['tipo de desembolso', 'estado de desembolso', 'monto', 'descrip
 })
 export default class OperationManagementViewProofDisbursementDetails extends AccessViewInformation {
 	private readonly _apiGetProofDisbursement = inject(ApiGetProofDisbursementDetails);
+	private readonly _apiGetProofDisbursementFile = inject(ApiGetProofDisbursementFile);
 	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
+	private readonly _dialogRef = inject(FrsDialogRef);
 	private readonly _operationId = signal('');
+	private readonly _proofDisbursementSelected = signal(0);
 	private readonly _getProofDisbursementDetailsParams = signal<Partial<TApiGetProofDisbursementDetailsQuerySignalParams>>({});
 
 	protected readonly _notResultIcon = FileX2;
@@ -47,6 +53,9 @@ export default class OperationManagementViewProofDisbursementDetails extends Acc
 
 	protected readonly _isLoadingApiGetProofDisbursementDetails = this._apiGetProofDisbursement.isLoading;
 	protected readonly _proofDisbursementDetails = this._apiGetProofDisbursement.response;
+
+	public readonly _isLoadingApiGetProofDisbursementFile = this._apiGetProofDisbursementFile.isLoading;
+	public readonly _file = this._apiGetProofDisbursementFile.response;
 
 	constructor() {
 		super();
@@ -76,6 +85,34 @@ export default class OperationManagementViewProofDisbursementDetails extends Acc
 
 	private _getOrderStatuses(): void {
 		this._apiGetOrderStatuses.getOrderStatuses({ accessToken: this._accessToken() });
+	}
+
+	protected _getProofDisbursementFile(): void {
+		this._apiGetProofDisbursementFile.getProofDisbursementFile({
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.VIEW_PROOF_DISBURSEMENT_SERVICE,
+			IdOperationDisbursement: this._proofDisbursementSelected().toString(),
+		});
+	}
+
+	protected _resetProofDisbursementFile(): void {
+		this._apiGetProofDisbursementFile.reset();
+	}
+
+	protected _onClickViewPdf(proofDisbursementId: number): void {
+		this._proofDisbursementSelected.set(proofDisbursementId);
+
+		this._dialogRef.openDialog({
+			title: 'Modal para visualizar pdf',
+			content: ModalProofDisbursementFile,
+			data: {
+				fnGetProofDisbursementFile: this._getProofDisbursementFile.bind(this),
+				fnResetFile: this._resetProofDisbursementFile.bind(this),
+				file: this._file,
+				isLoadingFile: this._isLoadingApiGetProofDisbursementFile,
+			},
+		});
 	}
 
 	protected _getProofDisbursementDetailsForPaginator(page: number): void {

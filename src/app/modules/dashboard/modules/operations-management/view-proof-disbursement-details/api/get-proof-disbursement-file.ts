@@ -5,40 +5,24 @@ import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { cleanQuery } from '@shared/utils/clean-query';
 
-export type TApiGetProofDisbursementDetailsQueryParams = {
-	IdDisbursement: string;
-	IdOperationDisbursementState: number;
-	IdOperation: string;
-} & TPaginator;
-
-export type TProofDisbursementDetail = {
-	amount: number;
-	description: number;
-	id: number;
-	idOperationDisbursementType: number;
-	idOperationDisbursementTypeName: string;
-	idOperationDisbusementState: number; // Spelling
-	idOperationDisbusementStateName: string; // Spelling
+export type TApiGetProofDisbursementFileQueryParams = {
+	IdOperationDisbursement: string;
 };
 
-type TApiGetProofDisbursementDetailResponse = TApi<{
-	countItems: number;
-	countPages: number;
-	data: TProofDisbursementDetail[];
-}>;
+type TApiGetProofDisbursementFileResponse = Blob;
 
-export type TApiGetProofDisbursementDetailsQuerySignalParams = TAccessInfo & Partial<TApiGetProofDisbursementDetailsQueryParams>;
+export type TApiGetProofDisbursementFileQuerySignalParams = TAccessInfo & Partial<TApiGetProofDisbursementFileQueryParams>;
 
-export class ApiGetProofDisbursementDetails extends AccessInterceptor {
+export class ApiGetProofDisbursementFile extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
-	private readonly _queryParams = signal<Nullable<TApiGetProofDisbursementDetailsQuerySignalParams>>(null);
+	private readonly _queryParams = signal<Nullable<TApiGetProofDisbursementFileQuerySignalParams>>(null);
 
 	private readonly _resource = resource({
 		request: this._queryParams,
-		loader: (args) => this._fetchGetProofDisbursementDetail(args),
+		loader: (args) => this._fetchGetProofDisbursementFile(args),
 	});
 
-	private async _fetchGetProofDisbursementDetail(params: ResourceLoaderParams<Nullable<TApiGetProofDisbursementDetailsQuerySignalParams>>) {
+	private async _fetchGetProofDisbursementFile(params: ResourceLoaderParams<Nullable<TApiGetProofDisbursementFileQuerySignalParams>>) {
 		const request = params.request;
 		if (!request) return null;
 
@@ -58,24 +42,26 @@ export class ApiGetProofDisbursementDetails extends AccessInterceptor {
 		const path = `${this._url}${accessService.service}?${_queryParams}`;
 
 		try {
-			await apiDeferTime();
-			const response = await this._HttpRequest<TApiGetProofDisbursementDetailResponse>({
+			const response = await this._HttpFileRequest<TApiGetProofDisbursementFileResponse>({
 				path,
 				method: accessService.method,
 				headers: {
 					'Content-Type': 'application/json',
+					Accept: 'application/pdf',
 					Authorization: `Bearer ${accessToken}`,
 					'x-module': `${accessModule}`,
 				},
 				signal: params.abortSignal,
+				responseType: 'blob',
 			});
 
-			return response.data;
+			const url = URL.createObjectURL(response);
+			return url;
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'No se pudo obtener los comprobantes',
-				description: 'Estamos teniendo problemas para obtener los comprobante, por favor, intente más tarde.',
+				message: 'No se pudo obtener el PDF del comprobantes',
+				description: 'Estamos teniendo problemas para obtener el PDF del comprobante, por favor, intente más tarde.',
 			});
 
 			return null;
@@ -85,7 +71,11 @@ export class ApiGetProofDisbursementDetails extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public getProofDisbursementDetails(params: TApiGetProofDisbursementDetailsQuerySignalParams): void {
+	public getProofDisbursementFile(params: TApiGetProofDisbursementFileQuerySignalParams): void {
 		this._queryParams.set(params);
+	}
+
+	public reset(): void {
+		this._queryParams.set(null);
 	}
 }

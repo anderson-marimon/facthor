@@ -39,6 +39,7 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'estado', 'fecha de oper
 export default class OperationManagementViewProofDisbursement extends AccessViewInformation {
 	private readonly _apiGetProofDisbursement = inject(ApiGetProofDisbursement);
 	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
+	private readonly _excludeOperationFinished = signal(false);
 	private readonly _getProofDisbursementParams = signal<Partial<TApiGetProofDisbursementQuerySignalParams>>({});
 
 	protected readonly _eyeIcon = Eye;
@@ -51,8 +52,14 @@ export default class OperationManagementViewProofDisbursement extends AccessView
 
 	constructor() {
 		super();
+		this._getRouteData();
 		this._getOrderStatuses();
 		this._getInitProofDisbursement();
+	}
+
+	private _getRouteData(): void {
+		const excludeOperationFinished = this._activateRoute.routeConfig?.data?.['ExcludeOperationFinished'];
+		this._excludeOperationFinished.set(excludeOperationFinished);
 	}
 
 	private _getInitProofDisbursement(): void {
@@ -61,6 +68,7 @@ export default class OperationManagementViewProofDisbursement extends AccessView
 			accessModule: this._accessModule(),
 			accessService: this._accessServices()?.GET_OPERATIONS_DISBURSEMENT_SERVICE,
 			RoleToFind: this._roleExecution()?.id,
+			ExcludeOperationFinished: this._excludeOperationFinished(),
 			Page: 1,
 			Size: 14,
 		});
