@@ -161,7 +161,7 @@ export const dashboardRoutes: Routes = [
 									roleExecution: resolverGetRoleExecution,
 									sessionKey: resolverGetSessionKey,
 								},
-								data: { ExcludeOperationFinished: false },
+								data: { confirmationAction: false },
 								loadComponent() {
 									return import('@dashboard/modules/operations-management/view-proof-disbursement/template');
 								},
@@ -175,6 +175,7 @@ export const dashboardRoutes: Routes = [
 									accessServices: resolverGetInheritAccessServices,
 								},
 								data: {
+									confirmationAction: false,
 									permitCriteria: 1,
 									redirect: '/dashboard/operations-management/view-proof-disbursement',
 								},
@@ -192,9 +193,27 @@ export const dashboardRoutes: Routes = [
 									roleExecution: resolverGetRoleExecution,
 									sessionKey: resolverGetSessionKey,
 								},
-								data: { ExcludeOperationFinished: true },
+								data: { confirmationAction: true },
 								loadComponent() {
 									return import('@dashboard/modules/operations-management/view-proof-disbursement/template');
+								},
+							},
+							{
+								path: 'confirm-proof-disbursement/details',
+								canActivate: [guardQueryParamOperation, guardInheritModulePermissions],
+								resolve: {
+									accessToken: resolverGetAccessToken,
+									accessModule: resolverGetAccessModule,
+									accessServices: resolverGetInheritAccessServices,
+								},
+								data: {
+									confirmationAction: true,
+									permitCriteria: 1,
+									redirect: '/dashboard/operations-management/confirm-proof-disbursement',
+								},
+
+								loadComponent() {
+									return import('@dashboard/modules/operations-management/view-proof-disbursement-details/template');
 								},
 							},
 						],

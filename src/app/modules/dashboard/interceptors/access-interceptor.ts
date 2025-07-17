@@ -38,7 +38,7 @@ export abstract class AccessInterceptor {
 					break;
 			}
 
-			if (!response.ok) {
+			if (!response.ok || result.internalCode === 999) {
 				throw {
 					name: 'ApiError',
 					message: result.message,

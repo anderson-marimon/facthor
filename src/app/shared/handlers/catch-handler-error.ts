@@ -31,6 +31,6 @@ export function catchHandlerError(args: { error: any; message: string; descripti
 	}
 
 	toast.message(message, {
-		description: _error.message || description,
+		description: args.error.message || description,
 	});
 }

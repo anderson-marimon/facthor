@@ -96,9 +96,9 @@
                                             frs-button
                                             [title]="'Ver comprobantes de la operación: ' + column.orderNumber"
                                             [variant]="'link'"
-                                            [routerLink]="['/dashboard/operations-management/payments/view-proof-disbursement/details']"
+                                            [routerLink]="[_navigationRoute()]"
                                             [queryParams]="{ operation: column.id, session: _sessionKey() }"
-                                            class="px-0"
+                                            class="px-0 text-xs uppercase"
                                         >
                                             Ver comprobantes
                                         </a>

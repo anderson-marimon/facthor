@@ -1,5 +1,6 @@
 import { resource, ResourceLoaderParams, signal } from '@angular/core';
 import { envs } from '@app/envs/envs';
+import { EDisbursementStatus } from '@dashboard/common/enums/disbursement-status';
 import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
 import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
@@ -17,7 +18,7 @@ export type TProofDisbursementDetail = {
 	id: number;
 	idOperationDisbursementType: number;
 	idOperationDisbursementTypeName: string;
-	idOperationDisbusementState: number; // Spelling
+	idOperationDisbusementState: EDisbursementStatus; // Spelling
 	idOperationDisbusementStateName: string; // Spelling
 };
 
