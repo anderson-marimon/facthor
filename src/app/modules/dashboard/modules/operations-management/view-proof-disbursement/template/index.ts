@@ -39,7 +39,6 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'estado', 'fecha de oper
 export default class OperationManagementViewProofDisbursement extends AccessViewInformation {
 	private readonly _apiGetProofDisbursement = inject(ApiGetProofDisbursement);
 	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
-	private readonly _confirmationAction = signal(false);
 	private readonly _getProofDisbursementParams = signal<Partial<TApiGetProofDisbursementQuerySignalParams>>({});
 
 	protected _headers = HEADERS;
@@ -47,6 +46,7 @@ export default class OperationManagementViewProofDisbursement extends AccessView
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _eRoleExecution = ERoleExecution;
 	protected readonly _navigationRoute = signal('');
+	protected readonly _confirmationAction = signal(false);
 
 	protected readonly _isLoadingApiGetProofDisbursement = this._apiGetProofDisbursement.isLoading;
 	protected readonly _proofDisbursements = this._apiGetProofDisbursement.response;

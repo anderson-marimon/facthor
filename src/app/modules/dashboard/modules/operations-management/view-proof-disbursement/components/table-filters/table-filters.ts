@@ -2,7 +2,6 @@ import { afterNextRender, Component, computed, DestroyRef, inject, input, NgZone
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TApiGetActiveOperationsListQueryParams } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
-import { ApiGetOrderStatuses } from '@dashboard/modules/operations-management/view-operations/api/get-order-statuses';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { TCalendarRange } from '@fresco-ui/frs-calendar/frs-calendar';
 import { FrsDatePickerModule } from '@fresco-ui/frs-date-picker';
@@ -19,6 +18,12 @@ const SEARCH_SELECT_OPTIONS = [
 	{ label: 'Nit', value: 3 },
 ];
 
+const DISBURSEMENT_TYPE = [
+	{ label: 'Desembolso a proveedor', value: 1 },
+	{ label: 'Pago de financiador', value: 2 },
+	{ label: 'Retorno de reserva', value: 3 },
+];
+
 const SEARCH_OPTIONS = ['OrderNumber', 'LegalName', 'Tradename', 'IdentitificationNumber'];
 
 @Component({
@@ -30,11 +35,11 @@ export class ViewProofDisbursementTableFilters {
 	public readonly roleExecution = input(0);
 	public readonly callback = input<() => void>();
 	public readonly goBackToSideBar = input(false);
+	public readonly confirmationAction = input(false);
 	public readonly isLoadingApiGetProofDisbursements = input(false);
 	public readonly filterFunction = input<(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>) => void>();
 
 	private readonly _destroyRef = inject(DestroyRef);
-	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _ngZone = inject(NgZone);
 	private _isFiltersActive = false;
@@ -42,8 +47,7 @@ export class ViewProofDisbursementTableFilters {
 	protected readonly _searchIcon = Search;
 	protected readonly _resetFilterIcon = RefreshCcw;
 	protected readonly _searchSelectOptions = SEARCH_SELECT_OPTIONS;
-
-	protected readonly _orderStatuses = this._apiGetOrderStatuses.response;
+	protected readonly _disbursementTypes = DISBURSEMENT_TYPE;
 
 	protected readonly _currentSelection = signal<TSelectOption[]>([]);
 

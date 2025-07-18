@@ -1,0 +1,5 @@
+export enum EDisbursementType {
+	SUPPLIER_DISBURSEMENT = 1,
+	FINANCIER_PAYMENT = 2,
+	RESERVE_RETURN = 3,
+}

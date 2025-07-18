@@ -9,14 +9,16 @@
     [placeholder]="'Filtrar por rango de fechas'"
 />
 
-<frs-select
-    #field
-    [control]="_searchOrderStatusesControl"
-    [class]="'w-52'"
->
-    <frs-select-trigger [placeholder]="'Filtrar por estado'" />
-    <frs-select-options [options]="_orderStatuses() || []" [class]="'max-h-52'" />
-</frs-select>
+@if (!confirmationAction()) {
+    <frs-select
+        #field
+        [control]="_searchOrderStatusesControl"
+        [class]="'w-52'"
+    >
+        <frs-select-trigger [placeholder]="'Filtrar por estado'" />
+        <frs-select-options [options]="_disbursementTypes" [class]="'max-h-52'" />
+    </frs-select>
+}
 
 <frs-select
     #field
