@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import { ApiPostApproveOperations } from '@dashboard/modules/operations-management/approve-operations/api/post-approve-operations';
+import { UploadProofDisbursementTableFilters } from '@dashboard/modules/operations-management/upload-proof-disbursement/components/table-filters/table-filters';
 import {
 	ApiGetActiveOperationList,
 	TApiGetActiveOperationsListQueryParams,
 	TApiGetActiveOperationsListQuerySignalParams,
 } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
 import { ApiGetOrderStatuses } from '@dashboard/modules/operations-management/view-operations/api/get-order-statuses';
-import { ViewActiveOperationsTableFilters } from '@dashboard/modules/operations-management/view-operations/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { GeneralLoader } from '@shared/components/general-loader/general-loader';
@@ -22,7 +22,7 @@ import { FileX2 } from 'lucide-angular';
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
 
 @Component({
-	selector: 'operations-management-view-operations',
+	selector: 'operations-management-upload-proof-disbursement',
 	templateUrl: 'index.html',
 	providers: [ApiGetActiveOperationList, ApiGetOrderStatuses, ApiPostApproveOperations],
 	imports: [
@@ -34,10 +34,10 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 		InheritTableFooter,
 		OrderStatus,
 		RouterLink,
-		ViewActiveOperationsTableFilters,
+		UploadProofDisbursementTableFilters,
 	],
 })
-export default class OperationsManagementViewOperations extends AccessViewInformation {
+export default class OperationsManagementUploadProofDisbursement extends AccessViewInformation {
 	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
 	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
@@ -65,6 +65,7 @@ export default class OperationsManagementViewOperations extends AccessViewInform
 			accessModule: this._accessModule(),
 			accessService: this._accessServices()?.GET_OPERATIONS_ACTIVE_SERVICE,
 			RoleToFind: this._roleExecution()?.id,
+			IdOperationState: this._roleExecution()?.id === this._eRoleExecution.FINANCIER ? 13 : 17,
 			Page: 1,
 			Size: 14,
 		});

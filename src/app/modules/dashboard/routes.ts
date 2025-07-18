@@ -184,6 +184,19 @@ export const dashboardRoutes: Routes = [
 								},
 							},
 							{
+								path: 'upload-proof-disbursement',
+								canActivate: [guardModulePermissions],
+								resolve: {
+									accessToken: resolverGetAccessToken,
+									accessModule: resolverGetAccessModule,
+									accessServices: resolverGetAccessServices,
+									roleExecution: resolverGetRoleExecution,
+								},
+								loadComponent() {
+									return import('@dashboard/modules/operations-management/upload-proof-disbursement/template');
+								},
+							},
+							{
 								path: 'confirm-proof-disbursement',
 								canActivate: [guardModulePermissions],
 								resolve: {
