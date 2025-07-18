@@ -25,7 +25,7 @@ import { ApiPostRejectProofDisbursement } from '../api/post-reject-proof-disburs
 import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
 import { EDisbursementStatus } from '@dashboard/common/enums/disbursement-status';
 
-const HEADERS = ['tipo de desembolso', 'estado de desembolso', 'monto', 'description', 'documento'];
+const HEADERS = ['tipo de desembolso', 'estado de desembolso', 'monto', 'descripción', 'documento'];
 
 @Component({
 	selector: 'operation-management-view-proof-disbursement-details',

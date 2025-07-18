@@ -4,7 +4,7 @@
         [ariaLabel]="'Ir a ' + label()"
         class="flex items-baseline gap-2.5 pl-7 pr-2.5 py-1.5 rounded-md hover:bg-secondary transition-colors"
     >
-        @if (activeRoute() === href()) {
+        @if (activeRoute().includes(href())) {
             <span class="relative w-1.5 h-1.5 rounded-lg">
                 <div class="w-full h-full bg-secondary-facthor"></div>
                 <div class="absolute top-0 left-0 w-full h-full bg-secondary-facthor animate-ping"></div>
