@@ -10,14 +10,14 @@ import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { GeneralLoader } from '@shared/components/general-loader/general-loader';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceDetailStatus } from '@shared/components/invoice-detail-status/invoice-detail-status';
-import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
+import { FileX2 } from 'lucide-angular';
 
 const HEADERS = ['n.factura', 'legitimo retenedor', 'nit legitimo retenedor', 'estado', 'fecha de emisión', 'monto de factura', 'detalles'];
 
 @Component({
 	selector: 'active-operations-details-order-operations-table',
 	templateUrl: 'order-operations-table.html',
-	imports: [CommonModule, EmptyResult, GeneralLoader, FrsButtonModule, InheritTable, LucideAngularModule, InvoiceDetailStatus],
+	imports: [CommonModule, EmptyResult, GeneralLoader, FrsButtonModule, InheritTable, InvoiceDetailStatus],
 })
 export class ActiveOperationsDetailsOrderOperationsTable implements OnDestroy {
 	public readonly roleExecution = input.required<number>();
@@ -29,7 +29,6 @@ export class ActiveOperationsDetailsOrderOperationsTable implements OnDestroy {
 	private readonly _apiGetOrderInvoiceRadianEvents = inject(ApiGetOrderInvoiceRadianEvents);
 	private readonly _apiGetOrderInvoiceStateTraceability = inject(ApiGetOrderInvoiceStateTraceability);
 
-	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _operations = this._apiGetOperationDetail.response;

@@ -1,10 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
-import { EAccessInformation } from '@dashboard/common/enums/access-information';
-import { TAccessServices } from '@dashboard/common/enums/services';
+import { Component, inject, signal } from '@angular/core';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import {
 	ApiGetInvoiceList,
@@ -22,7 +18,7 @@ import { GeneralLoader } from '@shared/components/general-loader/general-loader'
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
-import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
+import { FileX2 } from 'lucide-angular';
 
 const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'vencimiento', 'valor', 'acciones'];
 
@@ -47,7 +43,6 @@ const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'ven
 		InheritTable,
 		InheritTableFooter,
 		InvoiceStatus,
-		LucideAngularModule,
 		ViewUploadInvoiceTableFilters,
 		ViewUploadInvoiceRadianEventsDrawer,
 	],
@@ -57,7 +52,6 @@ export default class DashboardInvoiceManagementViewUploadInvoice extends AccessV
 	private readonly _apiGetInvoiceList = inject(ApiGetInvoiceList);
 	private readonly _getInvoiceListParams = signal<Partial<TApiGetInvoiceListQuerySignalParams>>({});
 
-	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _invoices = this._apiGetInvoiceList.response;

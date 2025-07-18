@@ -109,15 +109,16 @@
                                     <td>{{ column.operationDate.split('T')[0] }}</td>
     
                                     <td>
-                                        <button
+                                        <a
                                             frs-button
-                                            (click)="_onClickNavigateToOperationDetails(column.id)"
                                             [title]="`Ver detalles de la operación: ${column.orderNumber}`"
-                                            [size]="'icon'"
-                                            [variant]="'ghost'"
+                                            [variant]="'link'"
+                                            [routerLink]="['/dashboard/operations-management/view-operations/details']"
+                                            [queryParams]="{ operation: column.id, session: _sessionKey() }"
+                                            [class]="'px-0 justify-start text-xs uppercase'"
                                         >
-                                            <i-lucide [img]="_eyeIcon" />
-                                        </button>
+                                            ver detalles
+                                        </a>
                                     </td>
                                 </tr>
                             }

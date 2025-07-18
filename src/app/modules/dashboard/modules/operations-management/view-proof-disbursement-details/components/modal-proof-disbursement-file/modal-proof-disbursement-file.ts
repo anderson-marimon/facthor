@@ -1,6 +1,6 @@
 import { afterNextRender, Component, computed, input, OnDestroy, Signal } from '@angular/core';
 import { GeneralLoader } from '@shared/components/general-loader/general-loader';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { /* @vite-ignore */ PdfViewerModule } from 'ng2-pdf-viewer';
 
 type ModalData = {
 	fnGetProofDisbursementFile: () => void;

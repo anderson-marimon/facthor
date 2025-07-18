@@ -123,9 +123,10 @@
                                             (click)="_onClickNavigateToOperationDetails(column.id)"
                                             [title]="`Ver detalles de la operación: ${column.orderNumber}`"
                                             [size]="'icon'"
-                                            [variant]="'ghost'"
+                                            [variant]="'link'"
+                                            [class]="'px-0 justify-start text-xs uppercase'"
                                         >
-                                            <i-lucide [img]="_eyeIcon" />
+                                            ver detalles
                                         </button>
                                     </td>
                                 </tr>

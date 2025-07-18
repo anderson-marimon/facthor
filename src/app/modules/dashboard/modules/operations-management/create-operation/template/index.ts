@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
@@ -27,7 +27,7 @@ import { InheritTableFooter } from '@shared/components/inherit-table-footer/inhe
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
 import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
-import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
+import { FileX2 } from 'lucide-angular';
 import { toast } from 'ngx-sonner';
 import { tap } from 'rxjs';
 
@@ -57,7 +57,6 @@ const HEADERS = ['n.factura', 'nit del emisor', 'emisor', 'receptor', 'estado', 
 		InheritTable,
 		InheritTableFooter,
 		InvoiceStatus,
-		LucideAngularModule,
 		LoadingIcon,
 	],
 })
@@ -74,7 +73,6 @@ export default class OperationsManagementCreateOperation extends AccessViewInfor
 	private readonly _getOperationSummaryBody = signal<Nullable<TApiPostGetOperationSummarySignalBody>>(null);
 	private readonly _getFormalizedInvoiceListParams = signal<Partial<TApiGetFormalizedInvoiceListQuerySignalParams>>({});
 
-	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 

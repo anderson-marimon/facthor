@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -24,7 +24,7 @@ import { InheritTableFooter } from '@shared/components/inherit-table-footer/inhe
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { OrderStatus } from '@shared/components/order-status/order-status';
 import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
-import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
+import { FileX2 } from 'lucide-angular';
 import { merge, tap } from 'rxjs';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
@@ -42,7 +42,6 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 		InheritTable,
 		InheritTableFooter,
 		LoadingIcon,
-		LucideAngularModule,
 		OrderStatus,
 		ApproveOperationsTableFilters,
 	],
@@ -59,7 +58,6 @@ export default class OperationsManagementApproveOperations extends AccessViewInf
 	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 	private readonly _selectedActiveOperation = signal<Nullable<TActiveOperation>>(null);
 
-	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 

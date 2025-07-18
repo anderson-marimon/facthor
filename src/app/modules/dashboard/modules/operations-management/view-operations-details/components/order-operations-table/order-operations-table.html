@@ -35,10 +35,11 @@
                                     [title]="'Ver detalles de la factura: ' + column.invoiceNumber"
                                     frs-button
                                     [size]="'icon'"
-                                    [variant]="'ghost'"
+                                    [variant]="'link'"
                                     (click)="_onClickViewOperationDetails(column)"
+                                    [class]="'px-0 justify-start text-xs uppercase'"
                                 >
-                                    <i-lucide [img]="_eyeIcon" />
+                                    ver detalles
                                 </button>
                             </td>
                         </tr>

@@ -55,11 +55,12 @@
                                             [title]="`Ver eventos radian de la factura ${column.invoiceNumber}`"
                                             frs-button
                                             [size]="'icon'"
-                                            [variant]="'ghost'"
+                                            [variant]="'link'"
                                             [disabled]="!column.radianEvents.length"
                                             (click)="_onClickSelectRadianEvents(column)"
+                                            [class]="'px-0 justify-start text-xs uppercase'"
                                         >
-                                            <i-lucide [img]="_eyeIcon" />
+                                            ver eventos
                                         </button>
                                     </td>
                                 </tr>

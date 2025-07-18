@@ -125,7 +125,7 @@ export default class OperationManagementViewProofDisbursementDetails extends Acc
 			.subscribe((result) => {
 				if (result) {
 					this._dialogRef.closeDialog();
-					this._getInitProofDisbursementDetails;
+					this._getInitProofDisbursementDetails();
 				}
 			});
 	}
@@ -134,7 +134,6 @@ export default class OperationManagementViewProofDisbursementDetails extends Acc
 		const proofDisbursement = this._proofDisbursementDetails()?.data.find((proof) => proof.id === proofDisbursementId);
 
 		if (!proofDisbursement) return false;
-
 		return proofDisbursement.idOperationDisbusementState === this._eDisbursementStatus.PENDING;
 	}
 

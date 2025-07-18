@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import { ApiPostApproveOperations } from '@dashboard/modules/operations-management/approve-operations/api/post-approve-operations';
@@ -17,7 +17,7 @@ import { GeneralLoader } from '@shared/components/general-loader/general-loader'
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { OrderStatus } from '@shared/components/order-status/order-status';
-import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
+import { FileX2 } from 'lucide-angular';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
 
@@ -32,8 +32,8 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 		FrsButtonModule,
 		InheritTable,
 		InheritTableFooter,
-		LucideAngularModule,
 		OrderStatus,
+		RouterLink,
 		ViewActiveOperationsTableFilters,
 	],
 })
@@ -43,7 +43,6 @@ export default class OperationsManagementViewOperations extends AccessViewInform
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
 	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 
-	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _eRoleExecution = ERoleExecution;
@@ -72,12 +71,6 @@ export default class OperationsManagementViewOperations extends AccessViewInform
 		});
 
 		this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
-	}
-
-	protected _onClickNavigateToOperationDetails(operation: number): void {
-		this._router.navigate(['dashboard/operations-management/view-operations/details'], {
-			queryParams: { operation, session: this._sessionKey() },
-		});
 	}
 
 	protected _getActiveOperationListForPaginator(page: number): void {
