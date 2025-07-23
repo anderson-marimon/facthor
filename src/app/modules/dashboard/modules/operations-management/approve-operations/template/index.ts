@@ -54,10 +54,9 @@ export default class OperationsManagementApproveOperations extends AccessViewInf
 	private readonly _apiPostApproveOperation = inject(ApiPostApproveOperations);
 	private readonly _apiPostRejectOperation = inject(ApiPostRejectOperations);
 	private readonly _selectedOrders = signal<number[]>([]);
-
-	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 	private readonly _selectedActiveOperation = signal<Nullable<TActiveOperation>>(null);
 
+	protected readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 
@@ -252,10 +251,11 @@ export default class OperationsManagementApproveOperations extends AccessViewInf
 	}
 
 	protected _getActiveOperationListForPaginator(page: number): void {
-		this._apiGetActiveOperationList.getActiveOperationsList({
+		this._getActiveOperationListParams.set({
 			...this._getActiveOperationListParams(),
 			Page: page,
 		});
+		this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
 	}
 
 	protected _getActiveOperationListForFilter(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {

@@ -39,9 +39,9 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'estado', 'fecha de oper
 export default class OperationManagementViewProofDisbursement extends AccessViewInformation {
 	private readonly _apiGetProofDisbursement = inject(ApiGetProofDisbursement);
 	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
-	private readonly _getProofDisbursementParams = signal<Partial<TApiGetProofDisbursementQuerySignalParams>>({});
 
 	protected _headers = HEADERS;
+	protected readonly _getProofDisbursementParams = signal<Partial<TApiGetProofDisbursementQuerySignalParams>>({});
 	protected readonly _eyeIcon = Eye;
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _eRoleExecution = ERoleExecution;
@@ -88,10 +88,12 @@ export default class OperationManagementViewProofDisbursement extends AccessView
 	}
 
 	protected _getProofDisbursementForPaginator(page: number): void {
-		this._apiGetProofDisbursement.getProofDisbursements({
-			...this._getProofDisbursementParams(),
-			Page: page,
-		});
+		this._getProofDisbursementParams.set({
+      ...this._getProofDisbursementParams(),
+      Page: page
+    })
+
+    this._apiGetProofDisbursement.getProofDisbursements(this._getProofDisbursementParams());
 	}
 
 	protected _getProofDisbursementForFilter(queryFilters: Partial<Omit<TApiGetProofDisbursementQuerySignalParams, 'Size'>>): void {

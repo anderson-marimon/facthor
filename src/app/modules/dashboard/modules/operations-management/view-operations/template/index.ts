@@ -40,9 +40,9 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 export default class OperationsManagementViewOperations extends AccessViewInformation {
 	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
-	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 
-	protected readonly _notResultIcon = FileX2;
+  protected readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
+  protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _eRoleExecution = ERoleExecution;
 
@@ -67,16 +67,16 @@ export default class OperationsManagementViewOperations extends AccessViewInform
 			RoleToFind: this._roleExecution()?.id,
 			Page: 1,
 			Size: 14,
-		});
-
-		this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
+		}); this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
 	}
 
 	protected _getActiveOperationListForPaginator(page: number): void {
-		this._apiGetActiveOperationList.getActiveOperationsList({
-			...this._getActiveOperationListParams(),
-			Page: page,
-		});
+		this._getActiveOperationListParams.set({
+		...this._getActiveOperationListParams(),
+		Page: page
+		})
+
+		this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
 	}
 
 	protected _getActiveOperationListForFilter(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {

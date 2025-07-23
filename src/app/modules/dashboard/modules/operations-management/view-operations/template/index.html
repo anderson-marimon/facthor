@@ -134,7 +134,8 @@
     <hr />
 
     <inherit-table-footer
-        [totalPages]="_operations()?.countPages || 1"
+        [totalPages]="_operations()?.countPages || 0"
+        [currentPage]="_getActiveOperationListParams().Page || 1"
         [paginatorFunction]="_getActiveOperationListForPaginator.bind(this)"
         class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
     />

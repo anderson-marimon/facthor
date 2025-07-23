@@ -79,6 +79,7 @@
 
     <inherit-table-footer
         [totalPages]="_invoices()?.countPages || 1"
+        [currentPage]="_getInvoiceListParams().Page || 1"
         [paginatorFunction]="_getInvoiceListForPaginator.bind(this)"
         class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
     />

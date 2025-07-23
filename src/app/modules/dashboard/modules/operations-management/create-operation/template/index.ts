@@ -258,10 +258,12 @@ export default class OperationsManagementCreateOperation extends AccessViewInfor
 	}
 
 	protected _getFormalizedInvoiceListForPaginator(page: number): void {
-		this._apiGetFormalizedInvoiceList.getFormalizedInvoiceList({
+		this._getFormalizedInvoiceListParams.set({
 			...this._getFormalizedInvoiceListParams(),
 			Page: page,
 		});
+
+		this._apiGetFormalizedInvoiceList.getFormalizedInvoiceList(this._getFormalizedInvoiceListParams());
 	}
 
 	protected _getFormalizedInvoiceListForFilter(queryFilters: Partial<Omit<TApiGetFormalizedInvoiceListQueryParams, 'Size'>>): void {

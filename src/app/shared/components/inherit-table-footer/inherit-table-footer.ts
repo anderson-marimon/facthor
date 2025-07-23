@@ -8,19 +8,19 @@ import { ChevronLeft, LucideAngularModule } from 'lucide-angular';
 	imports: [FrsButtonModule, LucideAngularModule],
 })
 export class InheritTableFooter {
-	public readonly totalPages = input(1);
+	public readonly totalPages = input(0);
+	public readonly currentPage = input(1);
 	public readonly paginatorFunction = input<(page: number) => void>();
 
 	protected readonly _chevronIcon = ChevronLeft;
-	protected readonly _currentPage = signal(1);
-	protected readonly _totalPages = signal(this.totalPages());
+	protected readonly _totalPages = signal(this.totalPages() || 1);
 
 	protected readonly _isActiveNextPage = computed(() => {
-		return this._totalPages() > this._currentPage();
+		return this._totalPages() > this.currentPage();
 	});
 
 	protected readonly _isActivePreviousPage = computed(() => {
-		return this._currentPage() > 1;
+		return this.currentPage() > 1;
 	});
 
 	constructor() {
@@ -32,7 +32,7 @@ export class InheritTableFooter {
 			const realTotalPages = this.totalPages();
 			const current = this._totalPages();
 
-			if (realTotalPages !== current && realTotalPages > 1) {
+			if (realTotalPages !== current && realTotalPages > 0) {
 				this._totalPages.set(realTotalPages);
 			}
 		});
@@ -47,8 +47,7 @@ export class InheritTableFooter {
 			return;
 		}
 
-		this._currentPage.update((prev) => prev - 1);
-		paginator(this._currentPage());
+		paginator(this.currentPage() - 1);
 	}
 
 	protected _onClickNextPage(): void {
@@ -60,7 +59,6 @@ export class InheritTableFooter {
 			return;
 		}
 
-		this._currentPage.update((prev) => prev + 1);
-		paginator(this._currentPage());
+		paginator(this.currentPage() + 1);
 	}
 }

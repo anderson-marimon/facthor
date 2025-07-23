@@ -32,16 +32,16 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 		FrsButtonModule,
 		InheritTable,
 		InheritTableFooter,
-		OrderStatus,
-		RouterLink,
+    OrderStatus,
+    RouterLink,
 		UploadProofDisbursementTableFilters,
 	],
 })
 export default class OperationsManagementUploadProofDisbursement extends AccessViewInformation {
-	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
+  private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
-	private readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 
+	protected readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _eRoleExecution = ERoleExecution;
@@ -74,10 +74,12 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 	}
 
 	protected _getActiveOperationListForPaginator(page: number): void {
-		this._apiGetActiveOperationList.getActiveOperationsList({
+		this._getActiveOperationListParams.set({
 			...this._getActiveOperationListParams(),
 			Page: page,
 		});
+
+		this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
 	}
 
 	protected _getActiveOperationListForFilter(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {

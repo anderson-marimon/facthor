@@ -50,8 +50,8 @@ const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'ven
 export default class DashboardInvoiceManagementViewUploadInvoice extends AccessViewInformation {
 	private readonly _apiGetInvoiceStatuses = inject(ApiGetInvoiceStatuses);
 	private readonly _apiGetInvoiceList = inject(ApiGetInvoiceList);
-	private readonly _getInvoiceListParams = signal<Partial<TApiGetInvoiceListQuerySignalParams>>({});
 
+	protected readonly _getInvoiceListParams = signal<Partial<TApiGetInvoiceListQuerySignalParams>>({});
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _invoices = this._apiGetInvoiceList.response;
@@ -94,10 +94,12 @@ export default class DashboardInvoiceManagementViewUploadInvoice extends AccessV
 	}
 
 	protected _getInvoiceListForPaginator(page: number): void {
-		this._apiGetInvoiceList.getInvoiceList({
+		this._getInvoiceListParams.set({
 			...this._getInvoiceListParams(),
 			Page: page,
 		});
+
+		this._apiGetInvoiceList.getInvoiceList(this._getInvoiceListParams());
 	}
 
 	protected _getInvoiceListForFilter(queryFilters: Partial<Omit<TApiGetInvoiceListQueryParams, 'Size'>>): void {
