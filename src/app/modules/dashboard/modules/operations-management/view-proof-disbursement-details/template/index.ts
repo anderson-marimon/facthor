@@ -59,8 +59,8 @@ export default class OperationManagementViewProofDisbursementDetails extends Acc
 	private readonly _dialogRef = inject(FrsDialogRef);
 	private readonly _operationId = signal('');
 	private readonly _proofDisbursementSelected = signal(0);
-	private readonly _getProofDisbursementDetailsParams = signal<Partial<TApiGetProofDisbursementDetailsQuerySignalParams>>({});
 
+	protected readonly _getProofDisbursementDetailsParams = signal<Partial<TApiGetProofDisbursementDetailsQuerySignalParams>>({});
 	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _eRoleExecution = ERoleExecution;
@@ -189,7 +189,7 @@ export default class OperationManagementViewProofDisbursementDetails extends Acc
 			loading: this._isLoadingApiPostConfirmProofDisbursement,
 		});
 	}
-	protected _onClickRejectProofDisbursement(operationDisbursementId: number) {
+	protected _onClickRejectProofDisbursement(operationDisbursementId: number): void {
 		if (
 			this._isLoadingApiPostConfirmProofDisbursement() ||
 			this._isLoadingApiPostRejectProofDisbursement() ||
@@ -215,10 +215,12 @@ export default class OperationManagementViewProofDisbursementDetails extends Acc
 	}
 
 	protected _getProofDisbursementDetailsForPaginator(page: number): void {
-		this._apiGetProofDisbursement.getProofDisbursementDetails({
+		this._getProofDisbursementDetailsParams.set({
 			...this._getProofDisbursementDetailsParams(),
 			Page: page,
 		});
+
+		this._apiGetProofDisbursement.getProofDisbursementDetails(this._getProofDisbursementDetailsParams());
 	}
 
 	protected _getProofDisbursementDetailsForFilter(queryFilters: Partial<Omit<TApiGetProofDisbursementDetailsQuerySignalParams, 'Size'>>): void {

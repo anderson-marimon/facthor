@@ -10,36 +10,36 @@ import { Check, LucideAngularModule } from 'lucide-angular';
 	imports: [LucideAngularModule, ReactiveFormsModule],
 	template: `
 		<label [class]="_frsClass()" [attr.aria-disabled]="disabled()">
-			@if(control() !== undefined) {
-			<input
-				hidden
-				type="checkbox"
-				[name]="name()"
-				[attr.aria-label]="ariaLabel()"
-				[attr.aria-checked]="_checked()"
-				[formControl]="control()!"
-				[checked]="_checked()"
-				(change)="_handleChange($event)"
-			/>
+			@if (control() !== undefined) {
+				<input
+					hidden
+					type="checkbox"
+					[name]="name()"
+					[attr.aria-label]="ariaLabel()"
+					[attr.aria-checked]="_checked()"
+					[formControl]="control()!"
+					[checked]="_checked()"
+					(change)="_handleChange($event)"
+				/>
 			} @else {
-			<input
-				hidden
-				type="checkbox"
-				[name]="name()"
-				[attr.aria-label]="ariaLabel()"
-				[attr.aria-checked]="_checked()"
-				[checked]="_checked()"
-				(change)="_handleChange($event)"
-			/>
+				<input
+					hidden
+					type="checkbox"
+					[name]="name()"
+					[attr.aria-label]="ariaLabel()"
+					[attr.aria-checked]="_checked()"
+					[checked]="_checked()"
+					(change)="_handleChange($event)"
+				/>
 			}
 			<div tabindex="0" (keyup.enter)="_toggle()" (keyup.space)="_toggle()" [class]="_frsIndicatorClass()">
 				@if (_checked()) {
-				<lucide-angular [img]="icon()" strokeWidth="3" />
+					<lucide-angular [img]="icon()" strokeWidth="3" />
 				}
 			</div>
 
 			@if (label()) {
-			<p>{{ label() }}</p>
+				<p>{{ label() }}</p>
 			}
 		</label>
 	`,

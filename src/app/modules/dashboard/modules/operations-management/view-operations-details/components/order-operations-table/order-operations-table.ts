@@ -10,7 +10,6 @@ import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { GeneralLoader } from '@shared/components/general-loader/general-loader';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceDetailStatus } from '@shared/components/invoice-detail-status/invoice-detail-status';
-import { FileX2 } from 'lucide-angular';
 
 const HEADERS = ['n.factura', 'legitimo retenedor', 'nit legitimo retenedor', 'estado', 'fecha de emisión', 'monto de factura', 'detalles'];
 
@@ -29,7 +28,6 @@ export class ActiveOperationsDetailsOrderOperationsTable implements OnDestroy {
 	private readonly _apiGetOrderInvoiceRadianEvents = inject(ApiGetOrderInvoiceRadianEvents);
 	private readonly _apiGetOrderInvoiceStateTraceability = inject(ApiGetOrderInvoiceStateTraceability);
 
-	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _operations = this._apiGetOperationDetail.response;
 	protected readonly _isLoadingApiGetOperationDetail = this._apiGetOperationDetail.isLoading;

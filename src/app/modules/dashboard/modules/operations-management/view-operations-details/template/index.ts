@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
@@ -77,7 +77,7 @@ export default class OperationsManagementViewOperationsDetails extends AccessVie
 			accessToken: this._accessToken(),
 			accessModule: this._accessModule(),
 			accessService: this._accessServices()?.GET_OPERATION_DETAIL_SERVICE,
-			idOperation: this._operationId(),
+			idOperation: Number(this._operationId()),
 		});
 	}
 

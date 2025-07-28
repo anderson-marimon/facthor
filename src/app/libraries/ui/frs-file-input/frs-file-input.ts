@@ -32,18 +32,17 @@ export type TFile = {
 			[attr.disabled]="disabled() ? '' : null"
 		/>
 
-		@if(currentFiles().length === 0) {
-		<p [class]="_frsPClass">
-			<strong>Seleccionar archivo{{ multiple() ? 's' : '' }}:</strong>
-			<span>Ningún archivo seleccionado</span>
-		</p>
-
+		@if (currentFiles().length === 0) {
+			<p [class]="_frsPClass">
+				<strong>Seleccionar archivo{{ multiple() ? 's' : '' }}:</strong>
+				<span>Ningún archivo seleccionado</span>
+			</p>
 		} @else {
-		<p [class]="_frsPClass">
-			@for(file of currentFiles(); track $index; let last = $last) {
-			<span>{{ file.fileName }}{{ last ? '' : ',' }}</span>
-			}
-		</p>
+			<p [class]="_frsPClass">
+				@for (file of currentFiles(); track $index; let last = $last) {
+					<span>{{ file.fileName }}{{ last ? '' : ',' }}</span>
+				}
+			</p>
 		}
 	`,
 })

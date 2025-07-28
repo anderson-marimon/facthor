@@ -112,7 +112,8 @@
     <hr />
 
     <inherit-table-footer
-        [totalPages]="_proofDisbursementDetails()?.countPages || 1"
+        [totalPages]="_proofDisbursementDetails()?.countPages || 0"
+        [currentPage]="_getProofDisbursementDetailsParams().Page || 1"
         [paginatorFunction]="_getProofDisbursementDetailsForPaginator.bind(this)"
         class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
     />

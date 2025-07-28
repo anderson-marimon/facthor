@@ -27,7 +27,6 @@ import { InheritTableFooter } from '@shared/components/inherit-table-footer/inhe
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
 import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
-import { FileX2 } from 'lucide-angular';
 import { toast } from 'ngx-sonner';
 import { tap } from 'rxjs';
 
@@ -67,14 +66,15 @@ export default class OperationsManagementCreateOperation extends AccessViewInfor
 	private readonly _apiGetOperationFinancierList = inject(ApiGetOperationsFinancierList);
 	private readonly _apiPostGetOperationSummary = inject(ApiPostGetOperationSummary);
 	private readonly _apiPostCreateOperation = inject(ApiPostCreateOperation);
+
 	private readonly _selectedFormalizedInvoicesId = signal<string[]>([]);
 	private readonly _selectedFormalizedInvoice = signal<Nullable<TFormalizedInvoice>>(null);
 	private readonly _selectedFinancier = signal<number[]>([]);
 	private readonly _getOperationSummaryBody = signal<Nullable<TApiPostGetOperationSummarySignalBody>>(null);
 	private readonly _getFormalizedInvoiceListParams = signal<Partial<TApiGetFormalizedInvoiceListQuerySignalParams>>({});
 
-	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
+	protected readonly _allSelectControl = this._formBuilder.control(false);
 
 	protected readonly _createOperationResult = this._apiPostCreateOperation.response;
 	protected readonly _isLoadingApiPostCreateOperation = this._apiPostCreateOperation.isLoading;
@@ -85,9 +85,7 @@ export default class OperationsManagementCreateOperation extends AccessViewInfor
 	protected readonly _operationSummary = this._apiPostGetOperationSummary.response;
 	protected readonly _isLoadingApiPostGetOperationSummary = this._apiPostGetOperationSummary.isLoading;
 
-	protected readonly _allSelectControl = this._formBuilder.control(false);
 	protected readonly _selectControls = signal<FormControl<boolean | null>[]>([]);
-	protected readonly _isOperationReadyToCreate = signal(false);
 	protected readonly _isSelectedFinancier = signal(false);
 	protected readonly _showPrepareInvoiceSection = signal(false);
 

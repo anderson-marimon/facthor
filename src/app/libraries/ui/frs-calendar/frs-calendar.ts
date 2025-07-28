@@ -59,28 +59,30 @@ export type TCalendarRange = { start: Date; end: Date } | null;
 
 		<section>
 			@for (day of _weekDays; track $index) {
-			<span>{{ day }}</span>
+				<span>{{ day }}</span>
 			}
 		</section>
 
 		<section>
-			@if (_showCalendar()) { @for (day of _calendarDays(); track day.date.getTime()) {
-			<button
-				[ngClass]="{
-					'opacity-50 cursor-default': !day.isCurrentMonth || !_isValidDate(day.date),
-					'!opacity-30 !cursor-not-allowed': !_isValidDate(day.date),
-					'hover:bg-primary/80 hover:cursor-pointer': day.isCurrentMonth && _isValidDate(day.date),
-					'bg-accent hover:bg-accent/80 text-accent-foreground': _isInRange(day.date),
-					'bg-primary hover:bg-primary/90 text-primary-foreground':
-						_isSelected(day.date) || _isRangeStart(day.date) || _isRangeEnd(day.date),
-					'bg-black/10 hover:bg-ring/90 text-foreground':
-						day.isToday && !(_isSelected(day.date) || _isRangeStart(day.date) || _isRangeEnd(day.date))
-				}"
-				(click)="_selectDate(day, $event)"
-			>
-				{{ day.date.getDate() }}
-			</button>
-			} }
+			@if (_showCalendar()) {
+				@for (day of _calendarDays(); track day.date.getTime()) {
+					<button
+						[ngClass]="{
+							'opacity-50 cursor-default': !day.isCurrentMonth || !_isValidDate(day.date),
+							'!opacity-30 !cursor-not-allowed': !_isValidDate(day.date),
+							'hover:bg-primary/80 hover:cursor-pointer': day.isCurrentMonth && _isValidDate(day.date),
+							'bg-accent hover:bg-accent/80 text-accent-foreground': _isInRange(day.date),
+							'bg-primary hover:bg-primary/90 text-primary-foreground':
+								_isSelected(day.date) || _isRangeStart(day.date) || _isRangeEnd(day.date),
+							'bg-black/10 hover:bg-ring/90 text-foreground':
+								day.isToday && !(_isSelected(day.date) || _isRangeStart(day.date) || _isRangeEnd(day.date)),
+						}"
+						(click)="_selectDate(day, $event)"
+					>
+						{{ day.date.getDate() }}
+					</button>
+				}
+			}
 		</section>
 	`,
 })

@@ -43,13 +43,16 @@ export class StoreUserConfig extends ComponentStore<TStoreUserConfig> {
 		const recurse = (submodules: TSubmodulePermission[]) => {
 			for (const submodule of submodules) {
 				if (submodule.route === targetRoute && submodule.services?.length) {
-					accessServices = submodule.services.reduce((acc, service) => {
-						acc[service.code] = {
-							service: service.urn,
-							method: service.method,
-						};
-						return acc;
-					}, {} as Record<string, TUserServices>);
+					accessServices = submodule.services.reduce(
+						(acc, service) => {
+							acc[service.code] = {
+								service: service.urn,
+								method: service.method,
+							};
+							return acc;
+						},
+						{} as Record<string, TUserServices>
+					);
 					return;
 				}
 				if (submodule.submodules?.length) {

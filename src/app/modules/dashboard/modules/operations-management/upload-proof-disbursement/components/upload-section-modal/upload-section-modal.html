@@ -1,0 +1,85 @@
+<section class="w-[80vw] h-[80vh] flex gap-2.5 font-light text-sm mt-5">
+	<article class="flex-1 h-full flex flex-col">
+		@if (data().isLoadingOrderInvoiceList()) {
+			<general-loader [message]="'Cargando facturas...'" />
+		} @else {
+			<div class="flex-1 w-full min-w-[600px] overflow-y-auto">
+				@if (data().orderInvoices()?.data?.length) {
+					<inherit-table class="min-w-[600px] animate-opacity-in">
+						@for (header of _headers; track $index; let first = $first) {
+							<th class="w-72">
+							<span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
+								{{ header }}
+							</span>
+							</th>
+						}
+
+						@for (column of data().orderInvoices()?.data; track column.id; let index = $index) {
+							<tr>
+								<td class="pl-2.5">
+									<frs-checkbox
+										[control]="_selectControls()[index]"
+										[label]="column.invoiceNumber"
+										(change)="_onChangeSelectSingleInvoice(index, column)"
+										[class]="'!text-xs'"
+									/>
+								</td>
+								<td [title]="column.idInvoice">
+									<span class="block w-60 truncate">{{ column.legitimateHolderLegalName }}</span>
+								</td>
+								<td [title]="column.legitimateHolderIdentificationNumber">
+									<span class="block w-60 truncate">{{ column.legitimateHolderIdentificationNumber }}</span>
+								</td>
+								<td>
+									<invoice-detail-status
+										[statusId]="column.idOperationDetailState"
+										[statusName]="column.operationDetailStateName"
+									/>
+								</td>
+								<td>{{ column.expeditionDate }}</td>
+								<td>{{ column.payableAmount | currency }}</td>
+							</tr>
+						}
+					</inherit-table>
+				} @else {
+					<empty-result />
+				}
+			</div>
+		}
+
+		@if(data().orderInvoices()?.data?.length) {
+			<p class="text-sm animate-opacity-in">Facturas seleccionadas: {{ _getSelectedInvoices().length }}</p>
+		}
+	</article>
+	<article class="w-[400px] h-full flex flex-col gap-2.5 pl-2.5 border-l animate-opacity-in">
+		@if (_getSelectedInvoices().length === 0) {
+			<div class="min-h-[282px] flex-1 grid place-content-center gap-2.5">
+				<i-lucide [img]="_cursorIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
+				<span class="max-w-[250px] text-center">
+					Seleccione las facturas que desea
+					<span class="font-semibold text-secondary-facthor">pagar</span>
+					con el comprobante.
+				</span>
+			</div>
+		} @else {
+			<upload-proof-disbursement-drag-input-files
+				(files)="_onUploadFiles($event)"
+				class="w-full flex-1 flex flex-col justify-center gap-2.5 animate-opacity-in"
+			/>
+
+			<div class="flex justify-end gap-2.5 animate-opacity-in">
+				<button
+					frs-button
+					(click)="_onClickCancel()"
+					[variant]="'secondary'"
+					title="Cancelar y cerrar modal"
+				>Cancelar</button>
+				<button
+					frs-button
+					title="Subir comprobante"
+					[disabled]="this._files().length === 0"
+				>Subir comprobante</button>
+			</div>
+		}
+	</article>
+</section>

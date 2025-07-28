@@ -5,6 +5,6 @@ import { FrsSelectTrigger } from '@fresco-ui/frs-select/frs-select-trigger';
 
 @NgModule({
 	imports: [FrsSelect, FrsSelectOptions, FrsSelectTrigger],
-	exports: [FrsSelect, FrsSelectOptions, FrsSelectTrigger]
+	exports: [FrsSelect, FrsSelectOptions, FrsSelectTrigger],
 })
 export class FrsSelectModule {}

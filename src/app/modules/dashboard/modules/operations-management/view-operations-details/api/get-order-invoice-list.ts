@@ -5,6 +5,11 @@ import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { cleanQuery } from '@shared/utils/clean-query';
 
+type TOrderInvoiceListParams = {
+	idOperation: number;
+	idOperationDetailState?: number;
+} & Partial<TPaginator>;
+
 export type TOrderInvoice = {
 	id: number;
 	idInvoice: string;
@@ -40,13 +45,13 @@ export type TOrderInvoice = {
 	payerOperationDetailStateName: string;
 };
 
-type TApiGetOrderInvoiceListResponse = TApi<{
+export type TApiGetOrderInvoiceListResponse = TApi<{
 	countItems: number;
 	countPages: number;
 	data: TOrderInvoice[];
 }>;
 
-type TApiGetOrderInvoiceListQuerySignalParams = TAccessInfo & { idOperation: string };
+type TApiGetOrderInvoiceListQuerySignalParams = TAccessInfo & TOrderInvoiceListParams;
 
 export class ApiGetOrderInvoiceList extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
@@ -61,13 +66,7 @@ export class ApiGetOrderInvoiceList extends AccessInterceptor {
 		const request = params.request;
 		if (!request) return null;
 
-		const { idOperation = '', accessToken, accessModule, accessService } = request;
-		const integerRegex = /^[1-9]\d*$/;
-
-		if (!integerRegex.test(idOperation)) {
-			console.error('The operation id is not a valid integer.');
-			return null;
-		}
+		const { accessToken, accessModule, accessService, ...queryParams } = request;
 
 		if (!accessService?.service) {
 			console.error('The service route is not being provided.');
@@ -79,7 +78,7 @@ export class ApiGetOrderInvoiceList extends AccessInterceptor {
 			return null;
 		}
 
-		const _queryParams = new URLSearchParams(cleanQuery({ idOperation })).toString();
+		const _queryParams = new URLSearchParams(cleanQuery(queryParams)).toString();
 		const path = `${this._url}${accessService.service}?${_queryParams}`;
 
 		try {

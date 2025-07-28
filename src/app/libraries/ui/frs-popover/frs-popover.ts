@@ -26,7 +26,7 @@ import { fromEvent, throttleTime, timer } from 'rxjs';
 	template: `
 		<ng-content select="frs-popover-trigger" />
 		@if (isOpen()) {
-		<ng-content select="frs-popover-content" />
+			<ng-content select="frs-popover-content" />
 		}
 	`,
 })

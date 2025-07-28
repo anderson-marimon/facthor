@@ -1,5 +1,5 @@
-import { afterRenderEffect, Component, computed, input, signal, viewChild, type ElementRef } from '@angular/core';
-import { ReactiveFormsModule, type FormControl } from '@angular/forms';
+import { afterRenderEffect, Component, computed, type ElementRef, input, signal, viewChild } from '@angular/core';
+import { type FormControl, ReactiveFormsModule } from '@angular/forms';
 import { frs, frsGenerateId, frsInputFormat, frsNumberFormat, frsPercentageFormat } from '@fresco-core/frs-core';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { Eye, EyeClosed, LucideAngularModule } from 'lucide-angular';
@@ -13,8 +13,8 @@ import { tap } from 'rxjs';
 		'[class]': '_frsContainerClass()',
 	},
 	template: `
-		@if(beforeIcon()) {
-		<i-lucide [img]="beforeIcon()!" [strokeWidth]="1.5" />
+		@if (beforeIcon()) {
+			<i-lucide [img]="beforeIcon()!" [strokeWidth]="1.5" />
 		}
 
 		<input
@@ -25,16 +25,17 @@ import { tap } from 'rxjs';
 			[placeholder]="placeholder()"
 			[id]="_inputId"
 			[name]="_inputId"
+			[autocomplete]="autocomplete()"
 			(focus)="_onFocus()"
 			(blur)="_onBlur()"
 			(keydown)="_onKeydown($event)"
 			[attr.disabled]="disabled() ? '' : null"
 		/>
 
-		@if(showEye()) {
-		<button frs-button type="button" [variant]="'ghost'" [size]="'icon'" (click)="_onClickEye()">
-			<i-lucide [img]="_eyeIcon" [strokeWidth]="1.5" />
-		</button>
+		@if (showEye()) {
+			<button frs-button type="button" [variant]="'ghost'" [size]="'icon'" (click)="_onClickEye()">
+				<i-lucide [img]="_eyeIcon" [strokeWidth]="1.5" />
+			</button>
 		}
 	`,
 	exportAs: 'frsInput',
@@ -60,6 +61,7 @@ export class FrsInput {
 	public readonly formatStyle = input<'American' | 'European'>('American');
 	public readonly showEye = input(false);
 	public readonly beforeIcon = input<any>();
+	public readonly autocomplete = input<'off' | 'on'>('off');
 
 	protected readonly _inputId = frsGenerateId();
 	protected readonly _inputValue = signal<string>('');

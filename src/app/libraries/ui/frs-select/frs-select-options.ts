@@ -28,15 +28,15 @@ import { fromEvent } from 'rxjs';
 	},
 	template: `
 		<div [tabindex]="-1">
-			@for(option of options(); track option.label; let index = $index) {
-			<span #elementOptions (click)="_select(option)" [ngClass]="{ 'bg-muted': _tabIndex() === index }">
-				{{ option.label }}
-				@if(_isSelected(option)) {
-				<i-lucide [img]="_check" />
-				}
-			</span>
+			@for (option of options(); track option.label; let index = $index) {
+				<span #elementOptions (click)="_select(option)" [ngClass]="{ 'bg-muted': _tabIndex() === index }">
+					{{ option.label }}
+					@if (_isSelected(option)) {
+						<i-lucide [img]="_check" />
+					}
+				</span>
 			} @empty {
-			<p>{{ emptyPlaceholder() }}</p>
+				<p>{{ emptyPlaceholder() }}</p>
 			}
 		</div>
 	`,

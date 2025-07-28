@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import { ApiPostApproveOperations } from '@dashboard/modules/operations-management/approve-operations/api/post-approve-operations';
@@ -41,8 +41,8 @@ export default class OperationsManagementViewOperations extends AccessViewInform
 	private readonly _apiGetOrderStatuses = inject(ApiGetOrderStatuses);
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
 
-  protected readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
-  protected readonly _notResultIcon = FileX2;
+	protected readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
+	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _eRoleExecution = ERoleExecution;
 
@@ -67,14 +67,15 @@ export default class OperationsManagementViewOperations extends AccessViewInform
 			RoleToFind: this._roleExecution()?.id,
 			Page: 1,
 			Size: 14,
-		}); this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
+		});
+		this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
 	}
 
 	protected _getActiveOperationListForPaginator(page: number): void {
 		this._getActiveOperationListParams.set({
-		...this._getActiveOperationListParams(),
-		Page: page
-		})
+			...this._getActiveOperationListParams(),
+			Page: page,
+		});
 
 		this._apiGetActiveOperationList.getActiveOperationsList(this._getActiveOperationListParams());
 	}

@@ -35,7 +35,7 @@ const variants = cva(
 		defaultVariants: {
 			size: 'md',
 		},
-	},
+	}
 );
 
 export type AvatarSizes = NonNullable<VariantProps<typeof variants>['size']>;

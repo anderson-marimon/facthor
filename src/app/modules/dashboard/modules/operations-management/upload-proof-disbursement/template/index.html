@@ -111,16 +111,15 @@
                                     <td>{{ column.operationDate.split('T')[0] }}</td>
     
                                     <td>
-                                        <a
+                                        <button
                                             frs-button
-                                            [title]="`Ver detalles de la operación: ${column.orderNumber}`"
+                                            [title]="`Subir comprobante de la operación: ${column.orderNumber}`"
                                             [variant]="'link'"
-                                            [routerLink]="['/dashboard/operations-management/view-operations/details']"
-                                            [queryParams]="{ operation: column.id, session: _sessionKey() }"
+											(click)="_onClickUploadProofDisbursement(column)"
                                             [class]="'px-0 justify-start text-xs uppercase'"
                                         >
-                                            ver detalles
-                                        </a>
+                                            subir comprobante
+                                        </button>
                                     </td>
                                 </tr>
                             }

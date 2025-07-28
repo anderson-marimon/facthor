@@ -3,6 +3,6 @@ import { FrsInput } from '@fresco-ui/frs-input/frs-input';
 
 @NgModule({
 	imports: [FrsInput],
-	exports: [FrsInput]
+	exports: [FrsInput],
 })
 export class FrsInputModule {}

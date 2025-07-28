@@ -3,6 +3,6 @@ import { FrsCalendar } from '@fresco-ui/frs-calendar/frs-calendar';
 
 @NgModule({
 	imports: [FrsCalendar],
-	exports: [FrsCalendar]
+	exports: [FrsCalendar],
 })
 export class FrsCalendarModule {}

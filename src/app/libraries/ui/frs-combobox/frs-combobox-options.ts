@@ -32,15 +32,15 @@ import { fromEvent, timer } from 'rxjs';
 			<input #searchInput (keyup.enter)="_select()" [placeholder]="searchPlaceholder()" />
 		</div>
 		<div [tabindex]="-1">
-			@for(option of filteredOptions(); track option.label; let index = $index) {
-			<span #elementOptions (click)="_select(option.label)" [ngClass]="{ 'bg-muted': _tabIndex() === index }"
-				>{{ option.label }}
-				@if(_isSelected(option)) {
-				<i-lucide [img]="_check" />
-				}
-			</span>
+			@for (option of filteredOptions(); track option.label; let index = $index) {
+				<span #elementOptions (click)="_select(option.label)" [ngClass]="{ 'bg-muted': _tabIndex() === index }"
+					>{{ option.label }}
+					@if (_isSelected(option)) {
+						<i-lucide [img]="_check" />
+					}
+				</span>
 			} @empty {
-			<p>{{ emptyPlaceholder() }}</p>
+				<p>{{ emptyPlaceholder() }}</p>
 			}
 		</div>
 	`,

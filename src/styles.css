@@ -3,47 +3,47 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
-        --primary: #269c68;
-        --primary-facthor: #061523;
-        --primary-foreground: #fafafa;
-        --accent: #f3f4f7;
-        --accent-foreground: #041C2C;
-        --background: #ffffff;
-        --foreground: #041C2C;
-        --card: #ffffff;
-        --card-foreground: #041C2C;
-        --popover: #ffffff;
-        --popover-foreground: #041C2C;
-        --secondary: #f3f4f7;
-        --secondary-facthor: #289c64;
-        --secondary-foreground: #1a1b1d;
-        --muted: #f3f4f7;
-        --muted-facthor: #00cc66;
-        --muted-foreground: #6f7078;
-        --destructive: #f24848;
-        --destructive-foreground: #fafafa;
-        --border: #e4e6eb;
-        --input: #e4e6eb;
-        --ring: #e4e6eb;
-        --radius: 0rem;
-    }
+	:root {
+		--primary: #269c68;
+		--primary-facthor: #061523;
+		--primary-foreground: #fafafa;
+		--accent: #f3f4f7;
+		--accent-foreground: #041c2c;
+		--background: #ffffff;
+		--foreground: #041c2c;
+		--card: #ffffff;
+		--card-foreground: #041c2c;
+		--popover: #ffffff;
+		--popover-foreground: #041c2c;
+		--secondary: #f3f4f7;
+		--secondary-facthor: #289c64;
+		--secondary-foreground: #1a1b1d;
+		--muted: #f3f4f7;
+		--muted-facthor: #00cc66;
+		--muted-foreground: #6f7078;
+		--destructive: #f24848;
+		--destructive-foreground: #fafafa;
+		--border: #e4e6eb;
+		--input: #e4e6eb;
+		--ring: #e4e6eb;
+		--radius: 0rem;
+	}
 
-    @font-face {
-        font-family: 'nunito';
-        src: url('/fonts/nunito.woff2') format('woff2');
-        font-weight: 100 900;
-        font-display: swap;
-    }
+	@font-face {
+		font-family: 'nunito';
+		src: url('/fonts/nunito.woff2') format('woff2');
+		font-weight: 100 900;
+		font-display: swap;
+	}
 
-    *:focus-visible {
-        outline: 1px solid hsl(var(--primary));
-        outline-offset: 4px;
-        border-radius: calc(var(--radius) - 0.1rem);
-    }
+	*:focus-visible {
+		outline: 1px solid hsl(var(--primary));
+		outline-offset: 4px;
+		border-radius: calc(var(--radius) - 0.1rem);
+	}
 
-    body {
-        font-family: 'nunito', sans-serif;
-        color: var(--foreground);
-    }
+	body {
+		font-family: 'nunito', sans-serif;
+		color: var(--foreground);
+	}
 }

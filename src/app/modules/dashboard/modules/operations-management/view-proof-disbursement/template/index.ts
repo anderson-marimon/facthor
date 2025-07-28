@@ -15,7 +15,7 @@ import { GeneralLoader } from '@shared/components/general-loader/general-loader'
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { OrderStatus } from '@shared/components/order-status/order-status';
-import { Eye, FileX2, LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'estado', 'fecha de operación', 'valor de la orden', 'detalles'];
 
@@ -42,8 +42,6 @@ export default class OperationManagementViewProofDisbursement extends AccessView
 
 	protected _headers = HEADERS;
 	protected readonly _getProofDisbursementParams = signal<Partial<TApiGetProofDisbursementQuerySignalParams>>({});
-	protected readonly _eyeIcon = Eye;
-	protected readonly _notResultIcon = FileX2;
 	protected readonly _eRoleExecution = ERoleExecution;
 	protected readonly _navigationRoute = signal('');
 	protected readonly _confirmationAction = signal(false);
@@ -89,11 +87,11 @@ export default class OperationManagementViewProofDisbursement extends AccessView
 
 	protected _getProofDisbursementForPaginator(page: number): void {
 		this._getProofDisbursementParams.set({
-      ...this._getProofDisbursementParams(),
-      Page: page
-    })
+			...this._getProofDisbursementParams(),
+			Page: page,
+		});
 
-    this._apiGetProofDisbursement.getProofDisbursements(this._getProofDisbursementParams());
+		this._apiGetProofDisbursement.getProofDisbursements(this._getProofDisbursementParams());
 	}
 
 	protected _getProofDisbursementForFilter(queryFilters: Partial<Omit<TApiGetProofDisbursementQuerySignalParams, 'Size'>>): void {

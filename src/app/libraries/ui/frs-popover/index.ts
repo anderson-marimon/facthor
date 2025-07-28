@@ -5,6 +5,6 @@ import { FrsPopoverContent } from '@fresco-ui/frs-popover/frs-popover-content';
 
 @NgModule({
 	imports: [FrsPopover, FrsPopoverTrigger, FrsPopoverContent],
-	exports: [FrsPopover, FrsPopoverTrigger, FrsPopoverContent]
+	exports: [FrsPopover, FrsPopoverTrigger, FrsPopoverContent],
 })
 export class FrsPopoverModule {}

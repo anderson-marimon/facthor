@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { envs } from '@app/envs/envs';
 import Cookies from 'js-cookie';
-import { toast } from 'ngx-sonner';
+import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
 
 export type THttpRequest = {
 	path: string;
@@ -15,6 +15,7 @@ export type THttpRequest = {
 
 export abstract class AccessInterceptor {
 	private readonly _router = inject(Router);
+	private readonly _dialogRef = inject(FrsDialogRef);
 
 	protected async _HttpRequest<T>(args: THttpRequest) {
 		const { path, ...options } = args;
@@ -66,11 +67,11 @@ export abstract class AccessInterceptor {
 	}
 
 	private _handleInternalCode(options: { title: string; description: string; redirect?: string }) {
-		const { title, description, redirect = 'authentication/sign-in' } = options;
+		const { description, redirect = 'authentication/sign-in' } = options;
 		Cookies.remove(envs.FT_AUTHENTICATION_TOKEN_PATH);
 
+		this._dialogRef.closeDialog();
 		this._router.navigate([redirect], { replaceUrl: true }).then(() => {});
-
 		// MENSAJES DE ERROR POR ACCESO, DESHABILITADOS.
 		// this._router.navigate([redirect], { replaceUrl: true }).then(() => {
 		// 	toast.message(title, {

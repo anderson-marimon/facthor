@@ -16,20 +16,24 @@ interface IControlComponent {
 		'[class]': '_frsClass()',
 	},
 	template: `
-		@if(showLabel()) {
-		<span>
-			{{ label() }}
+		@if (showLabel()) {
+			<span>
+				{{ label() }}
 
-			@if(forceShowAsterisk()){
-			<span>*</span>
-			} @else { @if(showAsterisk()) { @if(_required()) {
-			<span>*</span>
-			} } }
-		</span>
+				@if (forceShowAsterisk()) {
+					<span>*</span>
+				} @else {
+					@if (showAsterisk()) {
+						@if (_required()) {
+							<span>*</span>
+						}
+					}
+				}
+			</span>
 		}
 		<ng-content />
-		@if(_shouldShowError()) {
-		<span>{{ _errorToRender() }}</span>
+		@if (_shouldShowError()) {
+			<span>{{ _errorToRender() }}</span>
 		}
 	`,
 })

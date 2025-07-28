@@ -5,6 +5,6 @@ import { FacthorLogo } from '@shared/logos/facthor-logo/facthor-logo';
 @Component({
 	selector: 'layout-hero',
 	templateUrl: 'layout-hero.html',
-	imports: [FacthorLogo, RouterLink]
+	imports: [FacthorLogo, RouterLink],
 })
 export class LayoutHero {}

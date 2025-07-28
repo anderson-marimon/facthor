@@ -122,10 +122,13 @@ export class ViewProofDisbursementTableFilters {
 			.subscribe(([inputValue, selectedOptions]) => {
 				const selectedOptionValue = selectedOptions![0].value;
 				const selectedSearchOption = SEARCH_OPTIONS[selectedOptionValue];
-				const optionsToFilter = SEARCH_OPTIONS.reduce((acc, option) => {
-					acc[option] = option === selectedSearchOption && inputValue?.length ? inputValue : undefined;
-					return acc;
-				}, {} as Record<string, string | undefined>);
+				const optionsToFilter = SEARCH_OPTIONS.reduce(
+					(acc, option) => {
+						acc[option] = option === selectedSearchOption && inputValue?.length ? inputValue : undefined;
+						return acc;
+					},
+					{} as Record<string, string | undefined>
+				);
 
 				this._getProofDisbursementsByFilters({
 					...optionsToFilter,

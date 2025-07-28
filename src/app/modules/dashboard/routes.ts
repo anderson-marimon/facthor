@@ -191,6 +191,7 @@ export const dashboardRoutes: Routes = [
 									accessModule: resolverGetAccessModule,
 									accessServices: resolverGetAccessServices,
 									roleExecution: resolverGetRoleExecution,
+									sessionKey: resolverGetSessionKey,
 								},
 								loadComponent() {
 									return import('@dashboard/modules/operations-management/upload-proof-disbursement/template');

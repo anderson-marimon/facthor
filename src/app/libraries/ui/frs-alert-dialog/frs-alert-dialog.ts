@@ -26,10 +26,10 @@ import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
 				{{ data()?.cancelButtonText || 'Cancelar' }}
 			</button>
 			<button frs-button (click)="_acceptAction()" [disabled]="data()?.loading()">
-				@if(data()?.loading()) {
-				<loading-icon [color]="'#FFFFFF'" class="size-6" />
+				@if (data()?.loading()) {
+					<loading-icon [color]="'#FFFFFF'" class="size-6" />
 				} @else {
-				{{ data()?.actionButtonText || 'Aceptar' }}
+					{{ data()?.actionButtonText || 'Aceptar' }}
 				}
 			</button>
 		</section>

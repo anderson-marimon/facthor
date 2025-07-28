@@ -5,6 +5,6 @@ import { FrsComboboxOptions } from '@fresco-ui/frs-combobox/frs-combobox-options
 
 @NgModule({
 	imports: [FrsCombobox, FrsComboboxTrigger, FrsComboboxOptions],
-	exports: [FrsCombobox, FrsComboboxTrigger, FrsComboboxOptions]
+	exports: [FrsCombobox, FrsComboboxTrigger, FrsComboboxOptions],
 })
 export class FrsComboboxModule {}

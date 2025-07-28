@@ -22,8 +22,8 @@ export class FrsAlert {
 			variants({
 				variant: this.variant(),
 			}),
-			this.class(),
-		),
+			this.class()
+		)
 	);
 }
 
