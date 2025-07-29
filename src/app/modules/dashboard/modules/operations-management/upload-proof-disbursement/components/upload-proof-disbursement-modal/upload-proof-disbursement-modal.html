@@ -1,0 +1,31 @@
+<section class="w-[60vw] h-[60vh] flex flex-col gap-2.5 font-light text-sm mt-5">
+	<upload-proof-disbursement-drag-input-files
+		[control]="_control"
+		[disabled]="false"
+		(files)="_onUploadFiles($event)"
+		class="w-full flex-1 flex gap-2.5"
+	/>
+	<div class="min-h-fit flex justify-end gap-2.5 animate-opacity-in">
+		<button
+			frs-button
+			(click)="_onClickCancel()"
+			[variant]="'secondary'"
+			[disabled]="data().isLoadingApiPostUploadProofDisbursementFinancier()"
+			title="Cancelar y cerrar modal"
+		>Cancelar</button>
+
+		<button
+			frs-button
+			title="Subir comprobante"
+			(click)="_onClickUploadProofDisbursement()"
+			[disabled]="this._files().length === 0 || data().isLoadingApiPostUploadProofDisbursementFinancier()"
+			class="w-40"
+		>
+			@if (data().isLoadingApiPostUploadProofDisbursementFinancier()) {
+				<loading-icon [color]="'#FFFFFF'" class="size-6" />
+			} @else {
+				Subir comprobante
+			}
+		</button>
+	</div>
+</section>

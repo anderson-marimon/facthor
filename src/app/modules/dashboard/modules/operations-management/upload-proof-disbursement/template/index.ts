@@ -23,6 +23,9 @@ import { ApiGetOrderInvoiceList } from '@dashboard/modules/operations-management
 import { EOrderStatus } from '@dashboard/common/enums/order-status';
 import { ApiPostUploadProofDisbursementReserveFinancier } from '@dashboard/modules/operations-management/upload-proof-disbursement/api/post-upload-proof-disbursement-reverse-financier';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import UploadProofDisbursementModal from '@dashboard/modules/operations-management/upload-proof-disbursement/components/upload-proof-disbursement-modal/upload-proof-disbursement-modal';
+import { ApiPostUploadProofDisbursementFinancier } from '@dashboard/modules/operations-management/upload-proof-disbursement/api/post-upload-proof-disbursement-financier';
+import { merge } from 'rxjs';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
 
@@ -34,6 +37,7 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 		ApiGetOrderStatuses,
 		ApiPostApproveOperations,
 		ApiGetOrderInvoiceList,
+		ApiPostUploadProofDisbursementFinancier,
 		ApiPostUploadProofDisbursementReserveFinancier,
 	],
 	imports: [
@@ -52,6 +56,7 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 	private readonly _apiGetActiveOperationList = inject(ApiGetActiveOperationList);
 	private readonly _apiGetOrderInvoiceList = inject(ApiGetOrderInvoiceList);
 	private readonly _apiPostUploadProofDisbursementReserveFinancier = inject(ApiPostUploadProofDisbursementReserveFinancier);
+	private readonly _apiPostUploadProofDisbursementFinancier = inject(ApiPostUploadProofDisbursementFinancier);
 	private readonly _dialogRef = inject(FrsDialogRef);
 
 	protected readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
@@ -64,6 +69,8 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 	protected readonly _isLoadingApiGetInvoiceList = this._apiGetActiveOperationList.isLoading;
 	protected readonly _UploadProofDisbursementReserveFinancierResult = this._apiPostUploadProofDisbursementReserveFinancier.response;
 	protected readonly _isLoadingApiPostUploadProofDisbursementReserveFinancier = this._apiPostUploadProofDisbursementReserveFinancier.isLoading;
+	protected readonly _UploadProofDisbursementFinancierResult = this._apiPostUploadProofDisbursementFinancier.response;
+	protected readonly _isLoadingApiPostUploadProofDisbursementFinancier = this._apiPostUploadProofDisbursementFinancier.isLoading;
 
 	constructor() {
 		super();
@@ -73,7 +80,7 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 	}
 
 	private _addObservables(): void {
-		toObservable(this._UploadProofDisbursementReserveFinancierResult)
+		merge(toObservable(this._UploadProofDisbursementReserveFinancierResult), toObservable(this._UploadProofDisbursementFinancierResult))
 			.pipe(takeUntilDestroyed(this._destroyRef))
 			.subscribe((result) => {
 				if (result) {
@@ -119,19 +126,30 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 	protected _onClickUploadProofDisbursement(operation: TActiveOperation): void {
 		this._operationSelected.set(operation.id);
 
-		if (operation.idOperationState === EOrderStatus.PENDING_RESERVE_DISBURSEMENT) {
-			this._dialogRef.openDialog({
-				content: UploadProofReserveDisbursementModal,
-				data: {
-					fnGetOrderInvoiceList: this._getOrderInvoiceListForModal.bind(this),
-					orderInvoices: this._apiGetOrderInvoiceList.response,
-					isLoadingOrderInvoiceList: this._apiGetOrderInvoiceList.isLoading,
+		if (this._roleExecution()?.id === this._eRoleExecution.FINANCIER) {
+			if (operation.idOperationState === EOrderStatus.PENDING_RESERVE_DISBURSEMENT) {
+				this._dialogRef.openDialog({
+					content: UploadProofReserveDisbursementModal,
+					data: {
+						fnGetOrderInvoiceList: this._getOrderInvoiceListForModal.bind(this),
+						orderInvoices: this._apiGetOrderInvoiceList.response,
+						isLoadingOrderInvoiceList: this._apiGetOrderInvoiceList.isLoading,
 
-					fnUploadProofDisbursementReserveFinancier: this._postUploadProofDisbursementReserveFinancierFormModal.bind(this),
-					isLoadingApiPostUploadProofDisbursementReserveFinancier: this._isLoadingApiPostUploadProofDisbursementReserveFinancier,
-				},
-				title: 'Subir comprobante',
-			});
+						fnUploadProofDisbursementReserveFinancier: this._postUploadProofDisbursementReserveFinancierFormModal.bind(this),
+						isLoadingApiPostUploadProofDisbursementReserveFinancier: this._isLoadingApiPostUploadProofDisbursementReserveFinancier,
+					},
+					title: 'Subir comprobante',
+				});
+			} else {
+				this._dialogRef.openDialog({
+					content: UploadProofDisbursementModal,
+					data: {
+						fnUploadProofDisbursementFinancier: this._postUploadProofDisbursementFinancierFormModal.bind(this),
+						isLoadingApiPostUploadProofDisbursementFinancier: this._isLoadingApiPostUploadProofDisbursementFinancier,
+					},
+					title: 'Subir comprobante',
+				});
+			}
 		} else {
 		}
 	}
@@ -160,6 +178,17 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 			idOperation: this._operationSelected(),
 			description: params.description,
 			idsOperationDetails: params.invoices,
+			proofDisbursementBase64: params.proofDisbursement,
+		});
+	}
+
+	protected _postUploadProofDisbursementFinancierFormModal(params: { description: string; proofDisbursement: string }): void {
+		this._apiPostUploadProofDisbursementFinancier.UploadProofDisbursementFinancier({
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.UPLOAD_PROOF_DISBURSEMENT_FINANCIER_SERVICE,
+			idOperation: this._operationSelected(),
+			description: params.description,
 			proofDisbursementBase64: params.proofDisbursement,
 		});
 	}

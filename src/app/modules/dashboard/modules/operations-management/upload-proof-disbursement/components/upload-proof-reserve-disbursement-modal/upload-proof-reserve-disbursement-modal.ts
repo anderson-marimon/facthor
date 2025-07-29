@@ -12,11 +12,11 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FrsCheckboxModule } from '@fresco-ui/frs-checkbox';
 import { LucideAngularModule, MousePointer } from 'lucide-angular';
-import { UploadProofDisbursementDragInputFiles } from '@dashboard/modules/operations-management/upload-proof-disbursement/components/drag-input-files/drag-input-files';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
 import { FrsButtonDirective } from '@fresco-ui/frs-button/frs-button';
 import { getBase64FromTFile } from '@shared/utils/get-base64-from-t-file';
 import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
+import { UploadProofDisbursementReserveDragInputFiles } from '@dashboard/modules/operations-management/upload-proof-disbursement/components/reserve-drag-input-files/reserve-drag-input-files';
 
 type ModalProps = {
 	fnGetOrderInvoiceList: () => void;
@@ -42,7 +42,7 @@ const HEADERS = ['n.factura', 'emisor', 'nit del emisor', 'estado', 'fecha de em
 		InvoiceDetailStatus,
 		LoadingIcon,
 		LucideAngularModule,
-		UploadProofDisbursementDragInputFiles,
+		UploadProofDisbursementReserveDragInputFiles,
 	],
 })
 export class UploadProofReserveDisbursementModal {
