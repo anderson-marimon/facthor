@@ -10,17 +10,20 @@ import {
 } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-list';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { tap } from 'rxjs';
 import { FrsCheckboxModule } from '@fresco-ui/frs-checkbox';
 import { LucideAngularModule, MousePointer } from 'lucide-angular';
 import { UploadProofDisbursementDragInputFiles } from '@dashboard/modules/operations-management/upload-proof-disbursement/components/drag-input-files/drag-input-files';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
 import { FrsButtonDirective } from '@fresco-ui/frs-button/frs-button';
+import { getBase64FromTFile } from '@shared/utils/get-base64-from-t-file';
+import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
 
 type ModalProps = {
 	fnGetOrderInvoiceList: () => void;
 	orderInvoices: Signal<Nullable<TApiGetOrderInvoiceListResponse['data']>>;
 	isLoadingOrderInvoiceList: Signal<boolean>;
+	fnUploadProofDisbursementReserveFinancier: (params: { description: string; invoices: number[]; proofDisbursement: string }) => void;
+	isLoadingApiPostUploadProofDisbursementReserveFinancier: Signal<boolean>;
 };
 
 const HEADERS = ['n.factura', 'emisor', 'nit del emisor', 'estado', 'fecha de emisión', 'monto de factura'];
@@ -32,13 +35,14 @@ const HEADERS = ['n.factura', 'emisor', 'nit del emisor', 'estado', 'fecha de em
 		CommonModule,
 		CurrencyPipe,
 		EmptyResult,
+		FrsButtonDirective,
 		FrsCheckboxModule,
 		GeneralLoader,
-		LucideAngularModule,
 		InheritTable,
 		InvoiceDetailStatus,
+		LoadingIcon,
+		LucideAngularModule,
 		UploadProofDisbursementDragInputFiles,
-		FrsButtonDirective,
 	],
 })
 export class UploadSectionModalComponent {
@@ -55,6 +59,7 @@ export class UploadSectionModalComponent {
 
 	protected readonly _files = signal<TFile[]>([]);
 	protected readonly _selectControls = signal<FormControl<boolean | null>[]>([]);
+	protected readonly _control = this._formBuilder.control('');
 	protected readonly _cursorIcon = MousePointer;
 	protected readonly _allSelectControl = this._formBuilder.control(false);
 	protected readonly _headers = HEADERS;
@@ -68,19 +73,17 @@ export class UploadSectionModalComponent {
 	}
 
 	private _addObservables(): void {
+		const { orderInvoices } = this.data();
 		runInInjectionContext(this._injector, () => {
-			toObservable(this.data().orderInvoices)
-				.pipe(
-					takeUntilDestroyed(this._destroyRef),
-					tap((invoices) => {
-						if (!invoices) {
-							this._selectControls.set([]);
-							return;
-						}
-						this._syncSelectControls(invoices.data);
-					})
-				)
-				.subscribe();
+			toObservable(orderInvoices)
+				.pipe(takeUntilDestroyed(this._destroyRef))
+				.subscribe((invoices) => {
+					if (!invoices) {
+						this._selectControls.set([]);
+						return;
+					}
+					this._syncSelectControls(invoices.data);
+				});
 		});
 	}
 
@@ -131,5 +134,17 @@ export class UploadSectionModalComponent {
 
 	protected _onClickCancel(): void {
 		this.closeDialog()!();
+	}
+
+	protected _onClickUploadProofDisbursement(): void {
+		const { fnUploadProofDisbursementReserveFinancier, isLoadingApiPostUploadProofDisbursementReserveFinancier } = this.data();
+
+		if (isLoadingApiPostUploadProofDisbursementReserveFinancier() || !this._files()[0]) return;
+
+		fnUploadProofDisbursementReserveFinancier({
+			proofDisbursement: getBase64FromTFile(this._files()[0]),
+			invoices: this._selectedInvoicesId(),
+			description: this._control.value?.trim() || 'Sin comentarios',
+		});
 	}
 }

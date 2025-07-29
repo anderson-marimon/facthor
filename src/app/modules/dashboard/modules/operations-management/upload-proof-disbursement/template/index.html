@@ -14,7 +14,7 @@
                 <general-loader [message]="'Cargando operaciones activas...'" />
             } @else {
                 <div class="w-full h-[calc(100dvh-198px)] overflow-auto">
-                    @if(_operations()?.data?.length) {
+                    @if(_operationsFiltered().length) {
 
                         <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
                             @for (header of _headers; track $index; let first = $first) {
@@ -37,7 +37,7 @@
                                 </th>
                             }
     
-                            @for (column of _operations()?.data; track $index) {
+                            @for (column of _operationsFiltered(); track $index) {
                                 <tr>
                                     <td class="pl-2.5">{{ column.orderNumber }}</td>
     

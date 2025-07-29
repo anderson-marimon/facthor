@@ -5,23 +5,27 @@ import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { toast } from 'ngx-sonner';
 
-type TApiPostApproveOperationsBodySignal = TAccessInfo & {
-	operations: number[];
-	isApproved: boolean;
+type TApiPostUploadProofDisbursementReserveFinancierBody = TAccessInfo & {
+	idOperation: number;
+	description: string;
+	idsOperationDetails: number[];
+	proofDisbursementBase64: string;
 };
 
-type TApiPostApproveOperationsResponse = TApi<boolean>;
+type TApiPostUploadProofDisbursementReserveFinancierResponse = TApi<boolean>;
 
-export class ApiPostApproveOperations extends AccessInterceptor {
+export class ApiPostUploadProofDisbursementReserveFinancier extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
-	private readonly _body = signal<Nullable<TApiPostApproveOperationsBodySignal>>(null);
+	private readonly _body = signal<Nullable<TApiPostUploadProofDisbursementReserveFinancierBody>>(null);
 
 	private readonly _resource = resource({
 		request: this._body,
-		loader: (args) => this._fetchPostApproveOperations(args),
+		loader: (args) => this._fetchPostUploadProofDisbursementReserveFinancier(args),
 	});
 
-	private async _fetchPostApproveOperations(params: ResourceLoaderParams<Nullable<TApiPostApproveOperationsBodySignal>>) {
+	private async _fetchPostUploadProofDisbursementReserveFinancier(
+		params: ResourceLoaderParams<Nullable<TApiPostUploadProofDisbursementReserveFinancierBody>>
+	) {
 		const request = params.request;
 		if (!request) return null;
 
@@ -41,7 +45,7 @@ export class ApiPostApproveOperations extends AccessInterceptor {
 
 		try {
 			await apiDeferTime();
-			const response = await this._HttpRequest<TApiPostApproveOperationsResponse>({
+			const response = await this._HttpRequest<TApiPostUploadProofDisbursementReserveFinancierResponse>({
 				path,
 				method: accessService.method,
 				headers: {
@@ -54,15 +58,15 @@ export class ApiPostApproveOperations extends AccessInterceptor {
 			});
 
 			if (response.ok) {
-				toast.message('Operaciones aprobadas correctamente', { description: 'La operación u operaciones fueron aprobadas con éxito.' });
+				toast.message('Comprobante subido correctamente', { description: 'El comprobante de reserva fue subido exitosamente.' });
 			}
 
 			return response.data;
 		} catch (error) {
 			catchHandlerError({
 				error,
-				message: 'No se pudo aprobar las operaciones',
-				description: 'Estamos teniendo problemas para aprobar las operaciones, por favor, intente más tarde.',
+				message: 'No se pudo subir el comprobante',
+				description: 'Estamos teniendo problemas para subir el comprobante de reserva, por favor, intente más tarde.',
 			});
 			return null;
 		}
@@ -71,7 +75,7 @@ export class ApiPostApproveOperations extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public postApproveOperations(params: TApiPostApproveOperationsBodySignal): void {
+	public UploadProofDisbursementReserveFinancier(params: TApiPostUploadProofDisbursementReserveFinancierBody): void {
 		this._body.set(params);
 	}
 }

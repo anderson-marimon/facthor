@@ -1,5 +1,5 @@
 <view-card [title]="'subir comprobante'">
-    <div class="h-[250px] grid place-content-center gap-2.5 transition-colors duration-500 cursor-pointer group-hover:bg-gray-50">
+    <div class="min-h-[150px] grid place-content-center gap-2.5 transition-colors duration-500 cursor-pointer group-hover:bg-gray-50">
         <i-lucide [img]="_uploadIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
         <span class="max-w-[210px] text-center">
             Arrastra y suelta tus facturas aquí
@@ -13,8 +13,8 @@
             [multiple]="true"
             [accept]="'.pdf'"
             [allowedTypes]="_allowedTypes"
-            [maxFiles]="6"
-            [disabled]="_loading()"
+            [maxFiles]="1"
+            [disabled]="_loading() || disabled()"
             [cleanAfterEmit]="true"
             (files)="_onUploadFiles($event)"
             (errorAllowedTypes)="_onErrorTypes($event)"
@@ -23,41 +23,43 @@
     </div>
 </view-card>
 
-<view-card [title]="'comprobantes subidos'" class="flex-1">
+<view-card [title]="'comprobantes subido'">
     @if (_loading()) {
-        <general-loader [message]="'Cargando comprobantes...'" />
+        <general-loader [message]="'Cargando comprobante...'" class="w-full min-h-[150px] animate-opacity-in" />
     } @else {
         @if (_files().length > 0) {
-            <div class="h-12 grid grid-cols-[5fr_1fr_1fr] gap-2.5 px-2.5 items-center text-xxs font-semibold uppercase">
-                <span class="text-start">nombre del archivo</span>
-                <span class="text-center">tamaño</span>
-                <span class="text-end">control</span>
-            </div>
+			<div class="w-full h-[150px] overflow-y-auto">
+				<div class="h-12 grid grid-cols-[5fr_1fr_1fr] gap-2.5 px-2.5 items-center text-xxs font-semibold uppercase">
+					<span class="text-start">nombre del archivo</span>
+					<span class="text-center">tamaño</span>
+					<span class="text-end">control</span>
+				</div>
 
-            <div class="w-full min-h-[200px] overflow-y-auto">
-                @for (file of _files(); track file.fileName) {
-                    <div
-                        [@listItemAnimation]
-                        class="w-full grid grid-cols-[5fr_1fr_1fr] items-center h-14 gap-2.5 px-2.5 overflow-hidden transition-colors hover:bg-secondary"
-                    >
-                        <span class="w-[100px] truncate text-start">{{ file.fileName }}</span>
-                        <span class="text-center">{{ (file.size / 1024).toFixed(2) }}KB</span>
-                        <span class="text-end pr-3">
-                            <button
-                                frs-button
-                                [size]="'icon'"
-                                title="Eliminar factura"
-                                [variant]="'ghost'"
-                                (click)="_onClickRemoveFile(file.fileName)"
-                            >
-                                <i-lucide [img]="_trashIcon" class="stroke-destructive" />
-                            </button>
-                        </span>
-                    </div>
-                }
-            </div>
+				<div class="w-full overflow-y-auto">
+					@for (file of _files(); track file.fileName) {
+						<div
+							[@listItemAnimation]
+							class="w-full grid grid-cols-[5fr_1fr_1fr] items-center h-14 gap-2.5 px-2.5 overflow-hidden transition-colors hover:bg-secondary"
+						>
+							<span class="w-[100px] truncate text-start">{{ file.fileName }}</span>
+							<span class="text-center">{{ (file.size / 1024).toFixed(2) }}KB</span>
+							<span class="text-end pr-3">
+								<button
+									frs-button
+									[size]="'icon'"
+									title="Eliminar factura"
+									[variant]="'ghost'"
+									(click)="_onClickRemoveFile(file.fileName)"
+								>
+									<i-lucide [img]="_trashIcon" class="stroke-destructive" />
+								</button>
+							</span>
+						</div>
+					}
+				</div>
+			</div>
         } @else {
-            <div class="min-h-[200px] h-full grid place-content-center gap-2.5">
+            <div class="h-[150px] grid place-content-center gap-2.5">
                 <i-lucide [img]="_fileIcon" [strokeWidth]="1" class="mx-auto size-12 stroke-gray-300" />
                 <span class="max-w-[210px] text-center">
                     No se han subido comprobantes, máximo 1 archivo.
@@ -65,4 +67,14 @@
             </div>
         }
     }
+</view-card>
+
+<view-card [title]="'Agregar comentario'" class="flex-1">
+	<textarea
+		name="upload-proof-disbursement-reserve-financier"
+		id="upload-proof-disbursement-reserve-financier-id"
+		placeholder="Agrega un comentario"
+		[formControl]="control()"
+		class="w-full h-[calc(100%_-_10px)] resize-none"
+	></textarea>
 </view-card>

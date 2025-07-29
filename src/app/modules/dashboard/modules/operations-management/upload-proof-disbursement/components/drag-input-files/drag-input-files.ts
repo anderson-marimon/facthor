@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, DestroyRef, inject, output, signal } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
+import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { FrsFileInputModule } from '@fresco-ui/frs-file-input';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
@@ -24,9 +24,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 			]),
 		]),
 	],
-	imports: [FrsButtonModule, FrsFileInputModule, GeneralLoader, LucideAngularModule, ViewCard],
+	imports: [FrsButtonModule, FrsFileInputModule, GeneralLoader, LucideAngularModule, ViewCard, ReactiveFormsModule],
 })
 export class UploadProofDisbursementDragInputFiles {
+	public readonly control = input.required<FormControl>();
+	public readonly disabled = input.required<boolean>();
 	public readonly files = output<TFile[]>();
 
 	private readonly _formBuilder = inject(FormBuilder);
@@ -85,6 +87,8 @@ export class UploadProofDisbursementDragInputFiles {
 	}
 
 	protected _onClickRemoveFile(fileName: string): void {
+		if (this.disabled()) return;
+
 		const filteredFiles = this._files().filter((file) => file.fileName !== fileName);
 		this._files.set(filteredFiles);
 		this.files.emit(filteredFiles);

@@ -64,6 +64,8 @@
 		} @else {
 			<upload-proof-disbursement-drag-input-files
 				(files)="_onUploadFiles($event)"
+				[control]="_control"
+				[disabled]="data().isLoadingApiPostUploadProofDisbursementReserveFinancier()"
 				class="w-full flex-1 flex flex-col justify-center gap-2.5 animate-opacity-in"
 			/>
 
@@ -72,13 +74,24 @@
 					frs-button
 					(click)="_onClickCancel()"
 					[variant]="'secondary'"
-					title="Cancelar y cerrar modal"
+					[disabled]="data().isLoadingApiPostUploadProofDisbursementReserveFinancier()"
+					title="Cance
+					lar y cerrar modal"
 				>Cancelar</button>
+
 				<button
 					frs-button
 					title="Subir comprobante"
-					[disabled]="this._files().length === 0"
-				>Subir comprobante</button>
+					[disabled]="this._files().length === 0 || data().isLoadingApiPostUploadProofDisbursementReserveFinancier()"
+					(click)="_onClickUploadProofDisbursement()"
+					class="w-40"
+				>
+					@if (data().isLoadingApiPostUploadProofDisbursementReserveFinancier()) {
+						<loading-icon [color]="'#FFFFFF'" class="size-6" />
+					} @else {
+						Subir comprobante
+					}
+				</button>
 			</div>
 		}
 	</article>
