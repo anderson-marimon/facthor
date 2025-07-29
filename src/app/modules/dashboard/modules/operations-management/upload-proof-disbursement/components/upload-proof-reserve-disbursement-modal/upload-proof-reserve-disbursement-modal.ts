@@ -29,8 +29,8 @@ type ModalProps = {
 const HEADERS = ['n.factura', 'emisor', 'nit del emisor', 'estado', 'fecha de emisión', 'monto de factura'];
 
 @Component({
-	selector: 'upload-section-modal',
-	templateUrl: 'upload-section-modal.html',
+	selector: 'upload-proof-reserve-disbursement-modal',
+	templateUrl: 'upload-proof-reserve-disbursement-modal.html',
 	imports: [
 		CommonModule,
 		CurrencyPipe,
@@ -45,7 +45,7 @@ const HEADERS = ['n.factura', 'emisor', 'nit del emisor', 'estado', 'fecha de em
 		UploadProofDisbursementDragInputFiles,
 	],
 })
-export class UploadSectionModalComponent {
+export class UploadProofReserveDisbursementModal {
 	public readonly data = input.required<ModalProps>();
 	public readonly closeDialog = input<() => void>();
 

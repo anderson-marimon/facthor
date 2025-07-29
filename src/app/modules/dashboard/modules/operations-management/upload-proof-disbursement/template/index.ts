@@ -18,7 +18,7 @@ import { InheritTableFooter } from '@shared/components/inherit-table-footer/inhe
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { OrderStatus } from '@shared/components/order-status/order-status';
 import { FrsDialogRef } from '@fresco-ui/frs-dialog/frs-service';
-import { UploadSectionModalComponent } from '@dashboard/modules/operations-management/upload-proof-disbursement/components/upload-section-modal/upload-section-modal';
+import { UploadProofReserveDisbursementModal } from '@dashboard/modules/operations-management/upload-proof-disbursement/components/upload-proof-reserve-disbursement-modal/upload-proof-reserve-disbursement-modal';
 import { ApiGetOrderInvoiceList } from '@dashboard/modules/operations-management/view-operations-details/api/get-order-invoice-list';
 import { EOrderStatus } from '@dashboard/common/enums/order-status';
 import { ApiPostUploadProofDisbursementReserveFinancier } from '@dashboard/modules/operations-management/upload-proof-disbursement/api/post-upload-proof-disbursement-reverse-financier';
@@ -121,7 +121,7 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 
 		if (operation.idOperationState === EOrderStatus.PENDING_RESERVE_DISBURSEMENT) {
 			this._dialogRef.openDialog({
-				content: UploadSectionModalComponent,
+				content: UploadProofReserveDisbursementModal,
 				data: {
 					fnGetOrderInvoiceList: this._getOrderInvoiceListForModal.bind(this),
 					orderInvoices: this._apiGetOrderInvoiceList.response,
