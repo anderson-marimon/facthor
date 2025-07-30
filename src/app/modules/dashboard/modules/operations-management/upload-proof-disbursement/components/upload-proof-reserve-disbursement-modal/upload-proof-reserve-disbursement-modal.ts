@@ -51,7 +51,6 @@ export class UploadProofReserveDisbursementModal {
 
 	private readonly _selectedInvoicesId = signal<number[]>([]);
 	private readonly _selectedInvoice = signal<Nullable<TOrderInvoice>>(null);
-	private readonly _activateObservable = signal(false);
 
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _injector = inject(Injector);
@@ -68,7 +67,6 @@ export class UploadProofReserveDisbursementModal {
 		afterNextRender(() => {
 			this._addObservables();
 			this.data().fnGetOrderInvoiceList();
-			this._activateObservable.set(true);
 		});
 	}
 

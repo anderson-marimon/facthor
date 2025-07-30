@@ -27,6 +27,8 @@ import UploadProofDisbursementModal from '@dashboard/modules/operations-manageme
 import { ApiPostUploadProofDisbursementFinancier } from '@dashboard/modules/operations-management/upload-proof-disbursement/api/post-upload-proof-disbursement-financier';
 import { merge } from 'rxjs';
 import { ApiPostUploadProofDisbursementPayer } from '@dashboard/modules/operations-management/upload-proof-disbursement/api/post-upload-proof-disbursement-payer';
+import { ApiGetBankAccount } from '@dashboard/modules/operations-management/upload-proof-disbursement/api/get-bank-account';
+import { BankAccountModal } from '@dashboard/modules/operations-management/upload-proof-disbursement/components/bank-account-modal/bank-account-modal';
 
 const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 'total a financiar', 'fecha de operación', 'detalles'];
 
@@ -41,6 +43,7 @@ const HEADERS = ['n.orden', 'nit del emisor', 'emisor', 'receptor', 'estado', 't
 		ApiPostUploadProofDisbursementFinancier,
 		ApiPostUploadProofDisbursementReserveFinancier,
 		ApiPostUploadProofDisbursementPayer,
+		ApiGetBankAccount,
 	],
 	imports: [
 		CommonModule,
@@ -60,6 +63,7 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 	private readonly _apiPostUploadProofDisbursementReserveFinancier = inject(ApiPostUploadProofDisbursementReserveFinancier);
 	private readonly _apiPostUploadProofDisbursementFinancier = inject(ApiPostUploadProofDisbursementFinancier);
 	private readonly _apiPostUploadProofDisbursementPayer = inject(ApiPostUploadProofDisbursementPayer);
+	private readonly _apiGetBankAccount = inject(ApiGetBankAccount);
 	private readonly _dialogRef = inject(FrsDialogRef);
 
 	protected readonly _getActiveOperationListParams = signal<Partial<TApiGetActiveOperationsListQuerySignalParams>>({});
@@ -79,6 +83,9 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 
 	protected readonly _uploadProofDisbursementPayerResult = this._apiPostUploadProofDisbursementPayer.response;
 	protected readonly _isLoadingApiPostUploadProofDisbursementPayer = this._apiPostUploadProofDisbursementPayer.isLoading;
+
+	protected readonly _bankAccount = this._apiGetBankAccount.response;
+	protected readonly _isLoadingApiGetBankAccount = this._apiGetBankAccount.isLoading;
 
 	constructor() {
 		super();
@@ -178,6 +185,20 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 		}
 	}
 
+	protected _onClickViewBankAccount(operation: TActiveOperation): void {
+		this._operationSelected.set(operation.id);
+
+		this._dialogRef.openDialog({
+			content: BankAccountModal,
+			data: {
+				fnGetBankAccount: this._getBankAccount.bind(this),
+				isLoadingApiGetBankAccount: this._isLoadingApiGetBankAccount,
+				bankAccount: this._bankAccount,
+			},
+			title: 'Subir comprobante',
+		});
+	}
+
 	protected _getOrderInvoiceListForModal(): void {
 		this._apiGetOrderInvoiceList.getOrderInvoiceList({
 			accessToken: this._accessToken(),
@@ -226,6 +247,15 @@ export default class OperationsManagementUploadProofDisbursement extends AccessV
 			description: params.description,
 			idsOperationDetails: params.invoices,
 			proofDisbursementBase64: params.proofDisbursement,
+		});
+	}
+
+	protected _getBankAccount(): void {
+		this._apiGetBankAccount.GetBankAccount({
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.GET_BUSINESS_BANK_ACCOUNT,
+			idOperation: this._operationSelected(),
 		});
 	}
 

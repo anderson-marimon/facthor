@@ -1,0 +1,57 @@
+<section class="w-[400px] h-[300px] flex flex-col gap-2.5 font-light text-sm mt-5">
+	@if (data().isLoadingApiGetBankAccount()) {
+		<general-loader [message]="'Cargando cuenta bancaria...'" />
+	} @else {
+		<view-card [title]="'Cuenta bancaria del destinatario'" class="animate-opacity-in">
+			<section class="flex gap-2.5
+				[&_ul]:space-y-2
+				[&_ul>li]:flex
+				[&_ul>li]:items-center
+				[&_ul>li]:gap-1
+				[&_ul>li]:font-medium
+				[&_ul>li>span]:leading-5
+				[&_ul>li>span:first-child]:font-medium
+				[&_ul>li>span:last-child]:font-light
+				[&_ul>li>span:last-child]:text-xs"
+			>
+			@let account = data().bankAccount();
+			<div class="flex-1 flex flex-col gap-2.5 text-sm">
+				<section class="px-2.5 py-2 bg-secondary">
+					<h2 class="font-semibold text-xs uppercase">Cuenta de: {{account?.businessTradename}}</h2>
+				</section>
+
+
+				<ul class="px-2.5">
+					<li>
+						<span>Nombre comercial del negocio: </span>
+						<span>{{ account?.businessTradename }}</span>
+					</li>
+
+					<li>
+						<span>Tipo de identificación: </span>
+						<span>{{ account?.identificationType }}</span>
+					</li>
+					<li>
+						<span>Número de identificación: </span>
+						<span>{{ account?.identificationNumber }}</span>
+					</li>
+
+					<li>
+						<span>Tipo de cuenta: </span>
+						<span>{{ account?.accountType }}</span>
+					</li>
+
+					<li>
+						<span>Número de cuenta: </span>
+						<span>{{ account?.accountNumber }}</span>
+					</li>
+					<li>
+						<span>Nombre del banco: </span>
+						<span>{{ account?.bankName }}</span>
+					</li>
+				</ul>
+			</div>
+			</section>
+		</view-card>
+	}
+</section>

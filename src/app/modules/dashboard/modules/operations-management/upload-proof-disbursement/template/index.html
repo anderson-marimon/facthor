@@ -110,15 +110,25 @@
 
                                     <td>{{ column.operationDate.split('T')[0] }}</td>
     
-                                    <td>
+                                    <td class="space-x-2.5">
                                         <button
+                                            frs-button
+                                            [title]="`Ver la cuenta bancaria`"
+                                            [variant]="'link'"
+											(click)="_onClickViewBankAccount(column)"
+                                            [class]="'px-0 justify-start text-xs uppercase'"
+                                        >
+                                            cuenta
+                                        </button>
+
+										<button
                                             frs-button
                                             [title]="`Subir comprobante de la operación: ${column.orderNumber}`"
                                             [variant]="'link'"
 											(click)="_onClickUploadProofDisbursement(column)"
                                             [class]="'px-0 justify-start text-xs uppercase'"
                                         >
-                                            subir c.
+                                            comprobante
                                         </button>
                                     </td>
                                 </tr>
