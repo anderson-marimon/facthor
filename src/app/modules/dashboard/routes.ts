@@ -234,6 +234,31 @@ export const dashboardRoutes: Routes = [
 					},
 				],
 			},
+			{
+				path: 'operations-history-management',
+				children: [
+					{
+						path: '',
+						pathMatch: 'full',
+						redirectTo: 'payer-history',
+					},
+					{
+						path: 'payer-history',
+						canActivate: [guardModulePermissions],
+						resolve: {
+							accessToken: resolverGetAccessToken,
+							accessModule: resolverGetAccessModule,
+							accessServices: resolverGetAccessServices,
+							identity: resolverGetIdentity,
+							roleExecution: resolverGetRoleExecution,
+							sessionKey: resolverGetSessionKey,
+						},
+						loadComponent() {
+							return import('@dashboard/modules/operation-history-management/payer-history/template');
+						},
+					},
+				],
+			},
 		],
 	},
 ];
