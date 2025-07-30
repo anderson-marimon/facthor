@@ -11,7 +11,7 @@
 
 		<article class="flex-1 flex flex-col p-2.5">
 			@if (_isLoadingApiGetPayerOperationsHistory()) {
-				<general-loader [message]="'Cargando operaciones activas...'" />
+				<general-loader [message]="'Cargando historial de operacioens...'" />
 			} @else {
 				<div class="w-full h-[calc(100dvh-198px)] overflow-auto">
 					@if(_payerOperationsHistory()?.data?.length) {

@@ -126,15 +126,18 @@
                 <span>{{ activeOperation()?.totalPayableAmount | currency }}</span>
             </li>
 
-             <hr>
 
-            <li>
-                <span>Estado de pago: </span>
-               <span>
-                    <order-status [statusId]="activeOperation()?.idPayerOperationState!"
-                        [statusName]="activeOperation()?.payerOperationStateName!" class="[&_>span]:max-w-[300px]" />
-                </span>
-            </li>
+			@if (historyDetails()) {
+             	<hr>
+
+				<li>
+					<span>Estado de pago: </span>
+				   <span>
+						<order-status [statusId]="activeOperation()?.idPayerOperationState!"
+							[statusName]="activeOperation()?.payerOperationStateName!" class="[&_>span]:max-w-[300px]" />
+					</span>
+				</li>
+			}
         </ul>
     </div>
 

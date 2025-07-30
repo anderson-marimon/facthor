@@ -52,21 +52,26 @@ export default class OperationsManagementViewOperationsDetails extends AccessVie
 	private readonly _operationId = signal('');
 
 	protected readonly _eRoleExecution = ERoleExecution;
+	protected readonly _historyDetails = signal(false);
 	protected readonly _activeCurrentOperation = signal<Nullable<TActiveOperation>>(null);
-	protected readonly _operations = this._apiGetOperationDetails.response;
-	protected readonly _isLoadingApiGetInvoiceList = this._apiGetOperationDetails.isLoading;
 	protected readonly _orderTraceability = this._apiGetOperationStateTraceability.response;
 	protected readonly _isLoadingApiGetOperationTraceability = this._apiGetOperationStateTraceability.isLoading;
 	protected readonly _isOpenTraceabilityDrawer = signal(false);
 
 	constructor() {
 		super();
-		this.getQueryParams();
+		this._getRouteData();
+		this._getQueryParams();
 		this._getOrderInvoiceList();
 		this._addObservable();
 	}
 
-	private getQueryParams(): void {
+	private _getRouteData(): void {
+		const confirmationAction = this._activateRoute.routeConfig?.data?.['historyDetails'];
+		this._historyDetails.set(confirmationAction || false);
+	}
+
+	private _getQueryParams(): void {
 		this._activateRoute.queryParams.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(({ operation = '' }) => {
 			this._operationId.set(operation);
 		});

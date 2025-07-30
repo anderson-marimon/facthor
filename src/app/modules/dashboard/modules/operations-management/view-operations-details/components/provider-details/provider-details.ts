@@ -9,5 +9,6 @@ import { OrderStatus } from '@shared/components/order-status/order-status';
 	imports: [CommonModule, OrderStatus],
 })
 export class ActiveOperationsDetailsProviderDetails {
+	public readonly historyDetails = input(false);
 	public readonly activeOperation = input<Nullable<TActiveOperation>>(null);
 }

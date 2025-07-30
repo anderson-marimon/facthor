@@ -6,7 +6,10 @@
                     <active-operations-details-order-minimum-details [activeOperation]="_activeCurrentOperation()" />
                 }
                 @case (_eRoleExecution.FINANCIER) {
-                    <active-operations-details-provider-details [activeOperation]="_activeCurrentOperation()" />
+                    <active-operations-details-provider-details
+						[historyDetails]="_historyDetails()"
+						[activeOperation]="_activeCurrentOperation()"
+					/>
                 }
                 @case (_eRoleExecution.PROVIDER) {
                     <active-operations-details-financier-details [activeOperation]="_activeCurrentOperation()" />
@@ -16,7 +19,6 @@
             <button
                 frs-button
                 [size]="'sm'"
-                [ariaLabel]="`Var el historial de estados de la orden: ${_activeCurrentOperation()?.orderNumber}`"
                 [title]="`Var el historial de estados de la orden: ${_activeCurrentOperation()?.orderNumber}`"
                 [disabled]="_isLoadingApiGetOperationTraceability()"
                 (click)="_getOrderStateTraceability()"

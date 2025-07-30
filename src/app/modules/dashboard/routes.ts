@@ -15,6 +15,7 @@ import { resolverGetRoleExecution } from '@dashboard/resolver/get-role-execution
 import { resolverGetSessionKey } from '@dashboard/resolver/get-session-key';
 import { resolverGetUserConfig } from '@dashboard/resolver/get-user-config';
 import { StoreUserConfig } from '@dashboard/stores/user-config';
+import { StorePayerOperationsHistory } from '@dashboard/modules/operation-history-management/payer-history/stores/payer-operations-history';
 
 export const dashboardRoutes: Routes = [
 	{
@@ -236,6 +237,7 @@ export const dashboardRoutes: Routes = [
 			},
 			{
 				path: 'operations-history-management',
+				providers: [StorePayerOperationsHistory, StoreActiveOperations],
 				children: [
 					{
 						path: '',
@@ -255,6 +257,24 @@ export const dashboardRoutes: Routes = [
 						},
 						loadComponent() {
 							return import('@dashboard/modules/operation-history-management/payer-history/template');
+						},
+					},
+					{
+						path: 'payer-history/details',
+						canActivate: [guardQueryParamOperation, guardInheritModulePermissions],
+						resolve: {
+							accessToken: resolverGetAccessToken,
+							accessModule: resolverGetAccessModule,
+							accessServices: resolverGetInheritAccessServices,
+							roleExecution: resolverGetRoleExecution,
+						},
+						data: {
+							permitCriteria: 1,
+							historyDetails: true,
+							redirect: '/dashboard/operations-management/view-operations',
+						},
+						loadComponent() {
+							return import('@dashboard/modules/operations-management/view-operations-details/template');
 						},
 					},
 				],

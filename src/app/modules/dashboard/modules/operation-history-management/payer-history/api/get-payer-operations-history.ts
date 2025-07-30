@@ -1,10 +1,12 @@
 import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
 import { envs } from '@envs/envs';
-import { resource, ResourceLoaderParams, signal } from '@angular/core';
+import { inject, resource, ResourceLoaderParams, signal } from '@angular/core';
 import { cleanQuery } from '@shared/utils/clean-query';
 import { apiDeferTime } from '@shared/utils/api-defer-time';
 import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { TApiGetActiveOperationsListQuerySignalParams } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
+import { StorePayerOperationsHistory } from '@dashboard/modules/operation-history-management/payer-history/stores/payer-operations-history';
+import { StoreActiveOperations } from '@dashboard/modules/operations-management/view-operations/stores/active-operations';
 
 export type TApiGetPayerOperationsHistoryQueryParams = {
 	IdBusiness: number;
@@ -17,7 +19,7 @@ export type TApiGetPayerOperationsHistoryQueryParams = {
 	EndOperationDate: string;
 } & TPaginator;
 
-type TOperationHistory = {
+export type TOperationHistory = {
 	id: number;
 	providerLegalName: string;
 	providerTradename: string;
@@ -72,6 +74,8 @@ type TApiGetPayerOperationsHistoryResponse = TApi<{
 export type TApiGetPayerOperationsHistoryQuerySignalParams = TAccessInfo & Partial<TApiGetPayerOperationsHistoryQueryParams>;
 
 export class ApiGetPayerOperationsHistory extends AccessInterceptor {
+	private readonly _storePayerOperationsHistory = inject(StorePayerOperationsHistory);
+	private readonly _storeActiveOperations = inject(StoreActiveOperations);
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
 	private readonly _queryParams = signal<Nullable<TAccessInfo>>(null);
 
@@ -112,6 +116,9 @@ export class ApiGetPayerOperationsHistory extends AccessInterceptor {
 				signal: params.abortSignal,
 			});
 
+			this._storePayerOperationsHistory.setPayerOperationsHistory(response.data.data);
+			this._storeActiveOperations.setActiveOperationList(response.data.data);
+			
 			return response.data;
 		} catch (error) {
 			catchHandlerError({
