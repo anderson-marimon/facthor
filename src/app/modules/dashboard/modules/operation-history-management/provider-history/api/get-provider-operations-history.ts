@@ -7,7 +7,7 @@ import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 import { TApiGetActiveOperationsListQuerySignalParams } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
 import { StoreActiveOperations } from '@dashboard/modules/operations-management/view-operations/stores/active-operations';
 
-export type TApiGetPayerOperationsHistoryQueryParams = {
+export type TApiGetProviderOperationsHistoryQueryParams = {
 	IdBusiness: number;
 	LegalName: string;
 	Tradename: string;
@@ -64,25 +64,25 @@ export type TOperationHistory = {
 	operationDate: string;
 };
 
-type TApiGetPayerOperationsHistoryResponse = TApi<{
+type TApiGetProviderOperationsHistoryResponse = TApi<{
 	countItems: number;
 	countPages: number;
 	data: TOperationHistory[];
 }>;
 
-export type TApiGetPayerOperationsHistoryQuerySignalParams = TAccessInfo & Partial<TApiGetPayerOperationsHistoryQueryParams>;
+export type TApiGetProviderOperationsHistoryQuerySignalParams = TAccessInfo & Partial<TApiGetProviderOperationsHistoryQueryParams>;
 
-export class ApiGetPayerOperationsHistory extends AccessInterceptor {
+export class ApiGetProviderOperationsHistory extends AccessInterceptor {
 	private readonly _storeActiveOperations = inject(StoreActiveOperations);
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
 	private readonly _queryParams = signal<Nullable<TAccessInfo>>(null);
 
 	private readonly _resource = resource({
 		request: this._queryParams,
-		loader: (args) => this._fetchGetPayerOperationsHistory(args),
+		loader: (args) => this._fetchGetProviderOperationsHistory(args),
 	});
 
-	private async _fetchGetPayerOperationsHistory(params: ResourceLoaderParams<Nullable<TApiGetPayerOperationsHistoryQuerySignalParams>>) {
+	private async _fetchGetProviderOperationsHistory(params: ResourceLoaderParams<Nullable<TApiGetProviderOperationsHistoryQuerySignalParams>>) {
 		const request = params.request;
 		if (!request) return null;
 
@@ -103,7 +103,7 @@ export class ApiGetPayerOperationsHistory extends AccessInterceptor {
 
 		try {
 			await apiDeferTime();
-			const response = await this._HttpRequest<TApiGetPayerOperationsHistoryResponse>({
+			const response = await this._HttpRequest<TApiGetProviderOperationsHistoryResponse>({
 				path,
 				method: accessService.method,
 				headers: {
@@ -131,7 +131,7 @@ export class ApiGetPayerOperationsHistory extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public getPayerOperationsHistory(params: TApiGetActiveOperationsListQuerySignalParams): void {
+	public getProviderOperationsHistory(params: TApiGetActiveOperationsListQuerySignalParams): void {
 		this._queryParams.set(params);
 	}
 }

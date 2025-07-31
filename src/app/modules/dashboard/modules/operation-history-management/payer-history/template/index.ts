@@ -2,9 +2,9 @@ import { Component, inject, signal } from '@angular/core';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import {
 	ApiGetPayerOperationsHistory,
+	TApiGetPayerOperationsHistoryQueryParams,
 	TApiGetPayerOperationsHistoryQuerySignalParams,
 } from '@dashboard/modules/operation-history-management/payer-history/api/get-payer-operations-history';
-import { TApiGetActiveOperationsListQueryParams } from '@dashboard/modules/operations-management/view-operations/api/get-active-operations-list';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { GeneralLoader } from '@shared/components/general-loader/general-loader';
@@ -71,7 +71,7 @@ export default class OperationsHistoryManagementPayerHistory extends AccessViewI
 		this._apiGetPayerOperationsHistory.getPayerOperationsHistory(this._getPayerOperationsHistoryParams());
 	}
 
-	protected _getPayerOperationsHistoryForFilter(queryFilters: Partial<Omit<TApiGetActiveOperationsListQueryParams, 'Size'>>): void {
+	protected _getPayerOperationsHistoryForFilter(queryFilters: Partial<Omit<TApiGetPayerOperationsHistoryQueryParams, 'Size'>>): void {
 		this._getPayerOperationsHistoryParams.set({
 			...this._getPayerOperationsHistoryParams(),
 			...queryFilters,

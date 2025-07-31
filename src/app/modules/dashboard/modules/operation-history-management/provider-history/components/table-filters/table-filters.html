@@ -1,0 +1,37 @@
+<frs-date-picker
+    #field
+    [rangeControl]="_searchPerDateRangeControl"
+    [rangeMode]="true"
+    [class]="'max-w-56 text-sm'"
+    [calendarClass]="'placeholder:text-[0.8rem] text-[0.8rem]'"
+    [formatType]="'isoShort'"
+    [disabled]="false"
+    [placeholder]="'Filtrar por rango de fechas'"
+/>
+
+<frs-select
+    #field
+    [control]="_searchSelectSearchTypeControl"
+    [class]="'w-52'"
+>
+    <frs-select-trigger [placeholder]="'Tipo de búsqueda'" />
+    <frs-select-options [options]="_searchSelectOptions || []"  [class]="'!max-h-44'" />
+</frs-select>
+
+<frs-input
+    [control]="_searchInputControl"
+    [beforeIcon]="_searchIcon"
+    [disabled]="_currentSelection().length === 0"
+    [placeholder]="_currentSelectionPlaceholder()"
+    class="w-64 flex-grow-0"
+/>
+
+<button
+    frs-button
+    (click)="_onClickResetFilters()"
+    [disabled]="isLoadingApiGetProviderOperationsHistory()"
+    class="flex items-center flex-nowrap gap-1.5 bg-primary-facthor hover:bg-pantone/95"
+>
+    <i-lucide [img]="_resetFilterIcon" class="size-4" />
+    Restablecer filtros
+</button>
