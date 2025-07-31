@@ -270,7 +270,7 @@ export const dashboardRoutes: Routes = [
 						data: {
 							permitCriteria: 1,
 							historyDetails: true,
-							redirect: '/dashboard/operations-management/view-operations',
+							redirect: '/dashboard/operations-history-management/payer-history',
 						},
 						loadComponent() {
 							return import('@dashboard/modules/operations-management/view-operations-details/template');
@@ -302,7 +302,39 @@ export const dashboardRoutes: Routes = [
 						},
 						data: {
 							permitCriteria: 1,
-							redirect: '/dashboard/operations-management/view-operations',
+							redirect: '/dashboard/operations-history-management/provider-history',
+						},
+						loadComponent() {
+							return import('@dashboard/modules/operations-management/view-operations-details/template');
+						},
+					},
+					{
+						path: 'financier-history',
+						canActivate: [guardModulePermissions],
+						resolve: {
+							accessToken: resolverGetAccessToken,
+							accessModule: resolverGetAccessModule,
+							accessServices: resolverGetAccessServices,
+							identity: resolverGetIdentity,
+							roleExecution: resolverGetRoleExecution,
+							sessionKey: resolverGetSessionKey,
+						},
+						loadComponent() {
+							return import('@dashboard/modules/operation-history-management/financier-history/template');
+						},
+					},
+					{
+						path: 'financier-history/details',
+						canActivate: [guardQueryParamOperation, guardInheritModulePermissions],
+						resolve: {
+							accessToken: resolverGetAccessToken,
+							accessModule: resolverGetAccessModule,
+							accessServices: resolverGetInheritAccessServices,
+							roleExecution: resolverGetRoleExecution,
+						},
+						data: {
+							permitCriteria: 1,
+							redirect: '/dashboard/operations-history-management/financier-history',
 						},
 						loadComponent() {
 							return import('@dashboard/modules/operations-management/view-operations-details/template');
