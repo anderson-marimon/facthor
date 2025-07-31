@@ -78,7 +78,7 @@
 											[title]="`Ver documentos del proveedor: ${column.providerTradename}`"
 											[variant]="'link'"
 											[routerLink]="['/dashboard/parameters-management/negotiation/solicitude/documents']"
-											[queryParams]="{ operation: column.idProvider, session: _sessionKey() }"
+											[queryParams]="{ provider: column.idProvider, session: _sessionKey() }"
 											[class]="'px-0 justify-start text-xs uppercase'"
 										>
 											ver docs.

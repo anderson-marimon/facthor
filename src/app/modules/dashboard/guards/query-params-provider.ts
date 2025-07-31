@@ -8,7 +8,7 @@ export const guardQueryParamProvider: CanActivateFn = (state): boolean | UrlTree
 
 	const intRegex = /^[1-9]\d*$/;
 
-	if (!intRegex.test(provider)) {
+	if (!intRegex.test(provider.toString())) {
 		return router.createUrlTree([redirect || '/dashboard/home']);
 	}
 

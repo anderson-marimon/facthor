@@ -19,7 +19,7 @@ import { GeneralLoader } from '@shared/components/general-loader/general-loader'
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { OrderStatus } from '@shared/components/order-status/order-status';
-import { FileX2, LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { merge } from 'rxjs';
 import { ApiPostRejectProofDisbursement } from '../api/post-reject-proof-disbursement';
 import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
@@ -61,7 +61,6 @@ export default class OperationManagementViewProofDisbursementDetails extends Acc
 	private readonly _proofDisbursementSelected = signal(0);
 
 	protected readonly _getProofDisbursementDetailsParams = signal<Partial<TApiGetProofDisbursementDetailsQuerySignalParams>>({});
-	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
 	protected readonly _eRoleExecution = ERoleExecution;
 	protected readonly _eDisbursementStatus = EDisbursementStatus;

@@ -371,7 +371,7 @@ export const dashboardRoutes: Routes = [
 							},
 							{
 								path: 'solicitude/documents',
-								canActivate: [guardQueryParamProvider, guardModulePermissions],
+								canActivate: [guardQueryParamProvider, guardInheritModulePermissions],
 								resolve: {
 									accessToken: resolverGetAccessToken,
 									accessModule: resolverGetAccessModule,
@@ -382,7 +382,7 @@ export const dashboardRoutes: Routes = [
 									redirect: '/dashboard/parameters-management/negotiation/solicitude',
 								},
 								loadComponent() {
-									return import('@dashboard/modules/parameters-management/financing-requests/template');
+									return import('@dashboard/modules/parameters-management/financing-requests-documents/template');
 								},
 							},
 						],

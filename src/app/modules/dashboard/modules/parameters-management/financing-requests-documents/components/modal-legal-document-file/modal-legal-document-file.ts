@@ -11,10 +11,10 @@ type ModalData = {
 
 @Component({
 	selector: 'modal-legal-document-file',
-	templateUrl: 'modal-proof-disbursement-file.html',
+	templateUrl: 'modal-legal-document-file.html',
 	imports: [GeneralLoader, PdfViewerModule],
 })
-export class ModalProofDisbursementFile implements OnDestroy {
+export class ModalLegalDocumentFile implements OnDestroy {
 	public readonly data = input.required<ModalData>();
 	public readonly closeDialog = input<() => void>();
 	public readonly zoom = computed(() => (window?.innerWidth < 768 ? 0.8 : 1));
