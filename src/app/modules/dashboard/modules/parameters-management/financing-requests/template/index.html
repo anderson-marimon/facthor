@@ -1,0 +1,136 @@
+<section class="w-full h-full flex flex-col !font-light">
+	<main class="flex-1 h-full flex flex-col justify-center">
+		<financing-request-table-filters
+			[roleExecution]="_roleExecution()?.id || 0"
+			[isLoadingApiGetFinancingRequests]="_isLoadingApiGetFinancingRequests()"
+			[filterFunction]="_getFinancierOperationsHistoryForFilter.bind(this)"
+			class="w-full flex justify-end gap-2.5 p-2.5"
+		/>
+
+		<hr />
+
+		<article class="flex-1 flex flex-col p-2.5">
+			@if (_isLoadingApiGetFinancingRequests()) {
+				<general-loader [message]="'Cargando solicitudes...'" />
+			} @else {
+				<div class="w-full h-[calc(100dvh-198px)] overflow-auto">
+					@if(_financingRequests()?.data?.length) {
+
+						<inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
+							@for (header of _headers; track $index; let first = $first) {
+								<th class="w-72">
+                                    <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
+										{{ header }}
+                                    </span>
+								</th>
+							}
+
+							@for (column of _financingRequests()?.data; track $index) {
+								<tr>
+									<td [title]="column.providerBusinessLegalName">
+										<span class="block w-40 pl-2.5 line-clamp-1 overflow-hidden truncate">
+											{{ column.providerBusinessLegalName }}
+										</span>
+									</td>
+
+									<td>{{ column.providerIdetificationType }}</td>
+
+									<td>
+										<span class="block w-24">
+											{{ column.providerIdentificationNumber }}
+										</span>
+									</td>
+
+									<td [title]="column.providerTradename">
+										<span class="block w-40 line-clamp-1 overflow-hidden truncate">
+											{{ column.providerTradename }}
+										</span>
+									</td>
+
+									<td [title]="column.providerEmail">
+										<span class="block w-60 line-clamp-1 overflow-hidden truncate">
+											{{ column.providerEmail }}
+										</span>
+									</td>
+
+
+									<td [title]="column.providerLegalRepName">
+										<span class="block w-24 line-clamp-1 overflow-hidden truncate">
+											{{ column.isAccepted || 'No aceptado' }}
+										</span>
+									</td>
+
+									<td [title]="column.providerLegalRepName">
+										<span class="block w-40 line-clamp-1 overflow-hidden truncate">
+											{{ column.providerLegalRepName }}
+										</span>
+									</td>
+
+									<td>
+										<span class="block w-24">
+											{{ column.requestDate.split('T')[0] }}
+										</span>
+									</td>
+
+									<td>
+										<a
+											frs-button
+											[title]="`Ver documentos del proveedor: ${column.providerTradename}`"
+											[variant]="'link'"
+											[routerLink]="['/dashboard/operations-history-management/financier-history/details']"
+											[queryParams]="{ operation: column.idProvider, session: _sessionKey() }"
+											[class]="'px-0 justify-start text-xs uppercase'"
+										>
+											ver docs.
+										</a>
+									</td>
+
+									<td class="space-x-5">
+										<div class="flex items-center justify-start">
+											<button
+												frs-button
+												[title]="'Aceptar comprobante'"
+												[variant]="'link'"
+												[class]="'min-w-20 px-0 justify-start text-xs uppercase'"
+											>
+												@if (false) {
+													<loading-icon [color]="'#269C68'" class="size-6" />
+												} @else {
+													Aceptar
+												}
+											</button>
+
+											<button
+												frs-button
+												[title]="'Aceptar comprobante'"
+												[variant]="'link'"
+												[class]="'min-w-20 px-0 justify-start text-xs text-destructive uppercase'"
+											>
+												@if (false) {
+													<loading-icon [color]="'#F24848'" class="size-6" />
+												} @else {
+													Rechazar
+												}
+											</button>
+										</div>
+									</td>
+								</tr>
+							}
+						</inherit-table>
+					} @else {
+						<empty-result />
+					}
+				</div>
+			}
+		</article>
+	</main>
+
+	<hr />
+
+	<inherit-table-footer
+		[totalPages]="_financingRequests()?.countPages || 0"
+		[currentPage]="_getFinancingRequestsParams().Page || 1"
+		[paginatorFunction]="_getFinancierOperationsHistoryForPaginator.bind(this)"
+		class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
+	/>
+</section>

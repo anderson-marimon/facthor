@@ -89,7 +89,7 @@
                                                     (click)="_onClickRejectProofDisbursement(column.id)"
                                                     [class]="'min-w-20 px-0 justify-start text-xs text-destructive uppercase'"
                                                 >
-                                                    @if (_isLoadingApiPostRejectProofDisbursement() && column.id === this._currentTarget() ) {
+                                                    @if (_isLoadingApiPostRejectProofDisbursement() && column.id === this._currentTarget()) {
                                                         <loading-icon [color]="'#F24848'" class="size-6" />
                                                     } @else {
                                                         Rechazar

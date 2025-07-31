@@ -342,6 +342,36 @@ export const dashboardRoutes: Routes = [
 					},
 				],
 			},
+			{
+				path: 'parameters-management',
+				children: [
+					{
+						path: '',
+						pathMatch: 'full',
+						redirectTo: 'negotiation',
+					},
+					{
+						path: 'negotiation',
+						children: [
+							{
+								path: 'solicitude',
+								canActivate: [guardModulePermissions],
+								resolve: {
+									accessToken: resolverGetAccessToken,
+									accessModule: resolverGetAccessModule,
+									accessServices: resolverGetAccessServices,
+									identity: resolverGetIdentity,
+									roleExecution: resolverGetRoleExecution,
+									sessionKey: resolverGetSessionKey,
+								},
+								loadComponent() {
+									return import('@dashboard/modules/parameters-management/financing-requests/template');
+								},
+							},
+						],
+					},
+				],
+			},
 		],
 	},
 ];
