@@ -15,6 +15,7 @@ import { resolverGetRoleExecution } from '@dashboard/resolver/get-role-execution
 import { resolverGetSessionKey } from '@dashboard/resolver/get-session-key';
 import { resolverGetUserConfig } from '@dashboard/resolver/get-user-config';
 import { StoreUserConfig } from '@dashboard/stores/user-config';
+import { guardQueryParamProvider } from '@dashboard/guards/query-params-provider';
 
 export const dashboardRoutes: Routes = [
 	{
@@ -363,6 +364,22 @@ export const dashboardRoutes: Routes = [
 									identity: resolverGetIdentity,
 									roleExecution: resolverGetRoleExecution,
 									sessionKey: resolverGetSessionKey,
+								},
+								loadComponent() {
+									return import('@dashboard/modules/parameters-management/financing-requests/template');
+								},
+							},
+							{
+								path: 'solicitude/documents',
+								canActivate: [guardQueryParamProvider, guardModulePermissions],
+								resolve: {
+									accessToken: resolverGetAccessToken,
+									accessModule: resolverGetAccessModule,
+									accessServices: resolverGetInheritAccessServices,
+								},
+								data: {
+									permitCriteria: 1,
+									redirect: '/dashboard/parameters-management/negotiation/solicitude',
 								},
 								loadComponent() {
 									return import('@dashboard/modules/parameters-management/financing-requests/template');
