@@ -12,7 +12,7 @@ export type TApiGetFinancingRequestsQueryParams = {
 	Date: string;
 } & TPaginator;
 
-export type TFinancingRequests = {
+export type TFinancingRequest = {
 	page: number;
 	totalItems: number;
 	requestDate: string;
@@ -28,7 +28,7 @@ export type TFinancingRequests = {
 export type TApiGetFinancingRequestsResponse = TApi<{
 	countItems: number;
 	countPages: number;
-	data: TFinancingRequests[];
+	data: TFinancingRequest[];
 }>;
 
 export type TApiGetFinancingRequestsQuerySignalParams = TAccessInfo & Partial<TApiGetFinancingRequestsQueryParams>;

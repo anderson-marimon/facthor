@@ -82,17 +82,17 @@
             }
     </main>
     
-    <hr />
+    <hr class="relative z-20" />
 
     <inherit-table-footer
         [totalPages]="_invoices()?.countPages || 1"
         [paginatorFunction]="_getFormalizedInvoiceListForPaginator.bind(this)"
-        class="reative z-20 h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 bg-background animate-opacity-in"
+        class="relative z-20 h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 bg-background animate-opacity-in"
     >
         <section class="flex-1 flex gap-2.5">
             <button
                 frs-button
-                [variant]="'secondary'"
+                [variant]="'outline'"
                 [disabled]="_isLoadingApiPostCreateOperation() || !_getSelectedInvoices().length"
                 (click)="_onClickToggleShowPrepareOperation()"
                 class="w-40"

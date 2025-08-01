@@ -1,0 +1,54 @@
+<view-card
+	[title]="'Formulario de asignación de parámetros'"
+	class="w-full h-full"
+>
+	<div class="w-full h-fit grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-2.5 p-1">
+		<frs-field [label]="'Días mínimos de financiación'">
+			<frs-input
+				#field
+				[control]="minDaysFinancing()"
+				[placeholder]="'Ingrese los días mínimos'"
+			/>
+		</frs-field>
+
+		<frs-field [label]="'Días máximos de financiación'">
+			<frs-input
+				#field
+				[control]="maxDaysFinancing()"
+				[placeholder]="'Ingrese los días máximos'"
+			/>
+		</frs-field>
+
+		<frs-field [label]="'Monto asignado'">
+			<frs-input
+				#field
+				[control]="amountAssigned()"
+				[placeholder]="'Ingrese el monto asignado'"
+			/>
+		</frs-field>
+
+		<frs-field [label]="'Tasa de interés'">
+			<frs-input
+				#field
+				[control]="interestPercentage()"
+				[placeholder]="'Ingrese la tasa de interés'"
+			/>
+		</frs-field>
+
+		<frs-field [label]="'Tiempo de actualización (meses)'">
+			<frs-input
+				#field
+				[control]="amountAssignedMonthUpdate()"
+				[placeholder]="'Ingrese los meses'"
+			/>
+		</frs-field>
+
+		<frs-field [label]="'Porcentaje de negociación'">
+			<frs-input
+				#field
+				[control]="operationPercentage()"
+				[placeholder]="'Ingrese el porcentaje de negociación'"
+			/>
+		</frs-field>
+	</div>
+</view-card>

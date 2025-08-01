@@ -1,5 +1,5 @@
-<section class="w-full h-full flex flex-col !font-light">
-	<main class="flex-1 h-full flex flex-col justify-center">
+<section class="w-full h-full flex flex-col !font-light overflow-hidden">
+	<main class="relative flex-1 h-full flex flex-col justify-center">
 		<financing-request-table-filters
 			[roleExecution]="_roleExecution()?.id || 0"
 			[isLoadingApiGetFinancingRequests]="_isLoadingApiGetFinancingRequests()"
@@ -25,12 +25,15 @@
 								</th>
 							}
 
-							@for (column of _financingRequests()?.data; track $index) {
+							@for (column of _financingRequests()?.data; track column.idProvider; let index = $index) {
 								<tr>
-									<td [title]="column.providerBusinessLegalName">
-										<span class="block w-40 pl-2.5 line-clamp-1 overflow-hidden truncate">
-											{{ column.providerBusinessLegalName }}
-										</span>
+									<td class="pl-2.5">
+										<frs-checkbox
+											[control]="_selectControls()[index]"
+											[label]="column.providerBusinessLegalName"
+											(change)="_onChangeSelectSingleRequest(index, column)"
+											[class]="'!text-xs'"
+										/>
 									</td>
 
 									<td>{{ column.providerIdetificationType }}</td>
@@ -81,56 +84,81 @@
 											[queryParams]="{ provider: column.idProvider, session: _sessionKey() }"
 											[class]="'px-0 justify-start text-xs uppercase'"
 										>
-											ver docs.
+											ver documentos
 										</a>
-									</td>
-
-									<td class="space-x-5">
-										<div class="flex items-center justify-start">
-											<button
-												frs-button
-												[title]="'Aceptar comprobante'"
-												[variant]="'link'"
-												[class]="'min-w-20 px-0 justify-start text-xs uppercase'"
-											>
-												@if (false) {
-													<loading-icon [color]="'#269C68'" class="size-6" />
-												} @else {
-													Aceptar
-												}
-											</button>
-
-											<button
-												frs-button
-												[title]="'Aceptar comprobante'"
-												[variant]="'link'"
-												[class]="'min-w-20 px-0 justify-start text-xs text-destructive uppercase'"
-											>
-												@if (false) {
-													<loading-icon [color]="'#F24848'" class="size-6" />
-												} @else {
-													Rechazar
-												}
-											</button>
-										</div>
 									</td>
 								</tr>
 							}
 						</inherit-table>
 					} @else {
-						<empty-result />
+						<empty-result [message]="'No se encontraron solicitudes'" />
 					}
 				</div>
 			}
 		</article>
+		@if (_showPrepareParametersSection()) {
+			<financing-requests-assign-parameters-drawer
+				[@slideEffect]
+				[minDaysFinancing]="_minDaysFinancing"
+				[maxDaysFinancing]="_maxDaysFinancing"
+				[amountAssigned]="_amountAssigned"
+				[amountAssignedMonthUpdate]="_amountAssignedMonthUpdate"
+				[amountBalance]="_amountBalance"
+				[operationPercentage]="_operationPercentage"
+				[interestPercentage]="_interestPercentage"
+				class="absolute top-0 left-0 z-10 w-full h-full flex flex-col xl:flex-row gap-2.5 p-2.5 bg-background overflow-y-auto"
+			/>
+		}
 	</main>
 
-	<hr />
+	<hr class="relative z-20" />
 
 	<inherit-table-footer
 		[totalPages]="_financingRequests()?.countPages || 0"
 		[currentPage]="_getFinancingRequestsParams().Page || 1"
 		[paginatorFunction]="_getFinancierOperationsHistoryForPaginator.bind(this)"
-		class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
-	/>
+		class="relative z-20 h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in bg-background"
+	>
+		<section class="flex-1 flex gap-2.5">
+			<button
+				frs-button
+				[variant]="'secondary'"
+				[disabled]="!_selectedRequestsId().length ||  _isLoadingApiPostApproveFinancingRequest() || _isLoadingApiPostRejectFinancingRequest()"
+				(click)="_onClickToggleShowAssignParameters()"
+				class="w-40"
+			>
+				@if (_showPrepareParametersSection()) {
+					Volver al listado
+				} @else {
+					Asignar parámetros
+				}
+			</button>
+
+			<button
+				frs-button
+				class="w-40"
+				[disabled]="!_selectedRequestsId().length || _isActiveApiRequest() || _isLoadingApiPostApproveFinancingRequest()"
+			>
+				@if (_isLoadingApiPostApproveFinancingRequest()) {
+					<loading-icon [color]="'#FFFFFF'" class="size-6" />
+				} @else {
+					Aprobar proveedor
+				}
+			</button>
+
+			<button
+				frs-button
+				class="w-40"
+				[variant]="'destructive'"
+				[disabled]="!_selectedRequestsId().length || _isLoadingApiPostRejectFinancingRequest()"
+				(click)="_onClickRejectFinancingRequest()"
+			>
+				@if (_isLoadingApiPostRejectFinancingRequest()) {
+					<loading-icon [color]="'#FFFFFF'" class="size-6" />
+				} @else {
+					Rechazar proveedor
+				}
+			</button>
+		</section>
+	</inherit-table-footer>
 </section>
