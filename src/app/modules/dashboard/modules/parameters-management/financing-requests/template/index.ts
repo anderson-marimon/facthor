@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import { CommonModule } from '@angular/common';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
@@ -25,6 +25,7 @@ import { FrsCheckbox } from '@fresco-ui/frs-checkbox/frs-checkbox';
 import { LoadingIcon } from '@shared/icons/loading-icon/loading-icon';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { FinancingRequestsAssignParameters } from '@dashboard/modules/parameters-management/financing-requests/components/assign-parameters-drawer/assign-parameters-drawer';
+import { FormValidator } from '@dashboard/modules/parameters-management/financing-requests/services/form-validator';
 
 const HEADERS = [
 	'razón social',
@@ -68,6 +69,7 @@ const HEADERS = [
 export default class ParametersManagementFinancingRequests extends AccessViewInformation {
 	private readonly _dialogRef = inject(FrsDialogRef);
 	private readonly _formBuilder = inject(FormBuilder);
+	private readonly _formValidator = inject(FormValidator);
 	private readonly _apiGetFinancingRequests = inject(ApiGetFinancingRequests);
 	private readonly _apiPostApproveFinancingRequest = inject(ApiPostApproveFinancingRequest);
 	private readonly _apiPostRejectFinancingRequest = inject(ApiPostRejectFinancingRequest);
@@ -95,23 +97,17 @@ export default class ParametersManagementFinancingRequests extends AccessViewInf
 	protected readonly _minDaysFinancing = this._formBuilder.control('', [Validators.required]);
 	protected readonly _maxDaysFinancing = this._formBuilder.control('', [Validators.required]);
 	protected readonly _amountAssigned = this._formBuilder.control('', [Validators.required]);
-	protected readonly _amountBalance = this._formBuilder.control('', [Validators.required]);
-	protected readonly _interestPercentage = this._formBuilder.control('', [Validators.required]);
+	protected readonly _interestPercentage = this._formBuilder.control('', [Validators.required, this._formValidator.percentage()]);
 	protected readonly _amountAssignedMonthUpdate = this._formBuilder.control('', [Validators.required]);
-	protected readonly _operationPercentage = this._formBuilder.control('', [Validators.required]);
+	protected readonly _operationPercentage = this._formBuilder.control('', [Validators.required, this._formValidator.percentage()]);
 
 	protected readonly _parametersForms = this._formBuilder.group({
 		minDaysFinancing: this._minDaysFinancing,
 		maxDaysFinancing: this._maxDaysFinancing,
 		amountAssigned: this._amountAssigned,
-		amountBalance: this._amountBalance,
 		interestPercentage: this._interestPercentage,
 		amountAssignedMonthUpdate: this._amountAssignedMonthUpdate,
 		operationPercentage: this._operationPercentage,
-	});
-
-	protected readonly _isActiveApiRequest = computed(() => {
-		return this._parametersForms.invalid;
 	});
 
 	constructor() {
@@ -142,6 +138,7 @@ export default class ParametersManagementFinancingRequests extends AccessViewInf
 					this._getInitFinancingRequests();
 					this._selectedRequestsId.set([]);
 					this._selectedRequest.set(null);
+					this._showPrepareParametersSection.set(false);
 				}
 			});
 	}
@@ -179,18 +176,44 @@ export default class ParametersManagementFinancingRequests extends AccessViewInf
 		});
 	}
 
-	// protected _onClickApproveRequest(request: TFinancingRequest): void {
-	// 	if (this._isLoadingApiPostApproveFinancingRequest() || this._isLoadingApiPostRejectFinancingRequest()) {
-	// 		return;
-	// 	}
+	private _postApproveFinancingRequest(): void {
+		const {
+			maxDaysFinancing = '0',
+			minDaysFinancing = '0',
+			amountAssignedMonthUpdate = '0',
+			operationPercentage = '0',
+			interestPercentage = '0',
+			amountAssigned = '0',
+		} = this._parametersForms.value;
 
-	// 	this._dialogRef.openAlertDialog({
-	// 		title: '¿Estás seguro de realizar esta acción?',
-	// 		description: 'Esta acción confirma que estás de acuerdo con la validación del comprobante.',
-	// 		action: fnAction.bind(this),
-	// 		loading: this._isLoadingApiPostApproveFinancingRequest,
-	// 	});
-	// }
+		this._apiPostApproveFinancingRequest.postApproveFinancingRequest({
+			accessToken: this._accessToken(),
+			accessModule: this._accessModule(),
+			accessService: this._accessServices()?.APROVE_OR_REJECT_NEGOTIATION_PARAMETERS_SOLICITUDE,
+			idProvider: this._selectedRequest()?.idProvider || 0,
+			paramsBusinessFinancier: {
+				maxDaysFinancing: Number(maxDaysFinancing),
+				minDaysFinancing: Number(minDaysFinancing),
+				amountAsigned: Number(amountAssigned),
+				amountAsignedMonthUpdate: Number(amountAssignedMonthUpdate),
+				interestPercentage: Number(interestPercentage),
+				operationPercentage: Number(operationPercentage),
+			},
+		});
+	}
+
+	protected _onClickApproveFinancingRequest(): void {
+		if (this._isLoadingApiPostApproveFinancingRequest() || this._isLoadingApiPostRejectFinancingRequest()) {
+			return;
+		}
+
+		this._dialogRef.openAlertDialog({
+			title: '¿Estás seguro de realizar esta acción?',
+			description: 'Esta acción confirma que estás de acuerdo con aprobación y asignación de parámetros para solicitud.',
+			action: this._postApproveFinancingRequest.bind(this),
+			loading: this._isLoadingApiPostApproveFinancingRequest,
+		});
+	}
 
 	protected _onClickRejectFinancingRequest(): void {
 		if (this._isLoadingApiPostApproveFinancingRequest() || this._isLoadingApiPostRejectFinancingRequest()) return;

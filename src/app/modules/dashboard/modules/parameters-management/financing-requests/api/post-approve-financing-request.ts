@@ -11,7 +11,6 @@ export type TApiPostApproveFinancingRequestBody = {
 		minDaysFinancing: number;
 		maxDaysFinancing: number;
 		amountAsigned: number; // Spelling
-		amountBalance: number;
 		interestPercentage: number;
 		amountAsignedMonthUpdate: number; //Spelling
 		operationPercentage: number;
@@ -84,7 +83,7 @@ export class ApiPostApproveFinancingRequest extends AccessInterceptor {
 	public readonly response = this._resource.value;
 	public readonly isLoading = this._resource.isLoading;
 
-	public postApproveFinancingRequest(params: TApiPostApproveFinancingRequestBody): void {
+	public postApproveFinancingRequest(params: TApiPostApproveFinancingRequestSignalBody): void {
 		this._queryParams.set({ ...params, isApproved: true });
 	}
 }

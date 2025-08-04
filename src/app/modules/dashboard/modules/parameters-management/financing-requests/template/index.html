@@ -103,7 +103,6 @@
 				[maxDaysFinancing]="_maxDaysFinancing"
 				[amountAssigned]="_amountAssigned"
 				[amountAssignedMonthUpdate]="_amountAssignedMonthUpdate"
-				[amountBalance]="_amountBalance"
 				[operationPercentage]="_operationPercentage"
 				[interestPercentage]="_interestPercentage"
 				class="absolute top-0 left-0 z-10 w-full h-full flex flex-col xl:flex-row gap-2.5 p-2.5 bg-background overflow-y-auto"
@@ -137,7 +136,8 @@
 			<button
 				frs-button
 				class="w-40"
-				[disabled]="!_selectedRequestsId().length || _isActiveApiRequest() || _isLoadingApiPostApproveFinancingRequest()"
+				[disabled]="!_selectedRequestsId().length ||  _isLoadingApiPostApproveFinancingRequest() || _isLoadingApiPostRejectFinancingRequest() || _parametersForms.invalid"
+				(click)="_onClickApproveFinancingRequest()"
 			>
 				@if (_isLoadingApiPostApproveFinancingRequest()) {
 					<loading-icon [color]="'#FFFFFF'" class="size-6" />
@@ -150,7 +150,7 @@
 				frs-button
 				class="w-40"
 				[variant]="'destructive'"
-				[disabled]="!_selectedRequestsId().length || _isLoadingApiPostRejectFinancingRequest()"
+				[disabled]="!_selectedRequestsId().length || _isLoadingApiPostApproveFinancingRequest() || _isLoadingApiPostRejectFinancingRequest()"
 				(click)="_onClickRejectFinancingRequest()"
 			>
 				@if (_isLoadingApiPostRejectFinancingRequest()) {

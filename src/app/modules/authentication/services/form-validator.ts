@@ -5,9 +5,7 @@ import { TSelectOption } from '@fresco-ui/frs-select/frs-select';
 import { calculateAge } from '@shared/utils/calculate-age.util';
 import { verificationNumberCalculator } from '@shared/utils/verification-number-calculator';
 
-@Injectable({
-	providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class FormValidator {
 	public text(optional = false): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors | null => {

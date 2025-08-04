@@ -11,7 +11,6 @@ export type TApiPostRejectFinancingRequestBody = {
 		minDaysFinancing: number;
 		maxDaysFinancing: number;
 		amountAsigned: number; // Spelling
-		amountBalance: number;
 		interestPercentage: number;
 		amountAsignedMonthUpdate: number; //Spelling
 		operationPercentage: number;

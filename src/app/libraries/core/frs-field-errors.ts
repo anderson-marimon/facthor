@@ -28,6 +28,7 @@ export const INPUT_ERRORS = {
 	missingSpecialChar: 'Debe contener al menos un carácter especial',
 	passwordNotMatch: 'La contraseña no coincide',
 	pattern: 'El formato no es válido',
+	invalidPercentage: 'El porcentaje no es válido'
 } as const;
 
 export type TInputErrorKey = keyof typeof INPUT_ERRORS;

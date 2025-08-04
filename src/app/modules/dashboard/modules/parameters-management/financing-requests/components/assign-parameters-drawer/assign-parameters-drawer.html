@@ -7,6 +7,9 @@
 			<frs-input
 				#field
 				[control]="minDaysFinancing()"
+				[type]="'custom'"
+				[mask]="'xx'"
+				[regex]="'(^0)|(^\\.)|[^\\d]'"
 				[placeholder]="'Ingrese los días mínimos'"
 			/>
 		</frs-field>
@@ -15,6 +18,8 @@
 			<frs-input
 				#field
 				[control]="maxDaysFinancing()"
+				[mask]="'xx'"
+				[regex]="'(^0)|(^\\.)|[^\\d]'"
 				[placeholder]="'Ingrese los días máximos'"
 			/>
 		</frs-field>
@@ -23,6 +28,10 @@
 			<frs-input
 				#field
 				[control]="amountAssigned()"
+				[type]="'currency'"
+				[regex]="'(^0)|(^\\.)|[^\\d]'"
+				[mask]="'xxxxxxxxx'"
+				[decorator]="'$'"
 				[placeholder]="'Ingrese el monto asignado'"
 			/>
 		</frs-field>
@@ -31,6 +40,10 @@
 			<frs-input
 				#field
 				[control]="interestPercentage()"
+				[type]="'custom'"
+				[mask]="'xxxxx'"
+				[decorator]="'%'"
+				[regex]="'(^0)|(^\\.)|[^\\d\\.]|(?<=10)[1-9]|(?<=1[1-9])\\d|(?<=[2-9]\\d)\\d|(?<=^100\\.)[^0]|(?<=^100\\.0)[^0]|(?<=\\d{3})(?!\\.).|\\..*\\.|(?<=\\.\\d{2})\\d'"
 				[placeholder]="'Ingrese la tasa de interés'"
 			/>
 		</frs-field>
@@ -39,6 +52,8 @@
 			<frs-input
 				#field
 				[control]="amountAssignedMonthUpdate()"
+				[mask]="'xx'"
+				[regex]="'(^0)|(^\\.)|[^\\d]'"
 				[placeholder]="'Ingrese los meses'"
 			/>
 		</frs-field>
@@ -47,6 +62,10 @@
 			<frs-input
 				#field
 				[control]="operationPercentage()"
+				[type]="'custom'"
+				[mask]="'xxxxx'"
+				[decorator]="'%'"
+				[regex]="'(^0)|(^\\.)|[^\\d\\.]|(?<=10)[1-9]|(?<=1[1-9])\\d|(?<=[2-9]\\d)\\d|(?<=^100\\.)[^0]|(?<=^100\\.0)[^0]|(?<=\\d{3})(?!\\.).|\\..*\\.|(?<=\\.\\d{2})\\d'"
 				[placeholder]="'Ingrese el porcentaje de negociación'"
 			/>
 		</frs-field>
