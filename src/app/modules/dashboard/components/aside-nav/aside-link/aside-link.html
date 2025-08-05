@@ -13,7 +13,7 @@
 @if(_openSubRoutes()) {
     <ul [@subRoutes] class="flex flex-col gap-2 overflow-hidden">
         @for (module of subModules(); track $index) {
-            @if(module.submodules && module.submodules.length > 1) {
+            @if(module.submodules && module.submodules.length > 0) {
                 <li class="py-2">
                     <aside-sub-link
                         [label]="module.name || 'nombre pendiente'"

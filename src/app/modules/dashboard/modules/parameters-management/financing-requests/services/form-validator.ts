@@ -7,7 +7,7 @@ export class FormValidator {
 		return (control: AbstractControl): ValidationErrors | null => {
 			const { value = '' } = control;
 
-			if (value.at(-1) === '.') return { invalidPercentage: true };
+			if (value && value.at(-1) === '.') return { invalidPercentage: true };
 			return null;
 		};
 	}

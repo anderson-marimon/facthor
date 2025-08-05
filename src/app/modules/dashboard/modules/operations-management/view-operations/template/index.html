@@ -18,24 +18,23 @@
 
                         <inherit-table class="min-w-[960px] h-full flex-1 animate-opacity-in">
                             @for (header of _headers; track $index; let first = $first) {
-                                <th class="w-72">
-                                    <span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
-                                        @if ($index === 5) {
-                                            @switch (_roleExecution()?.id) {
-                                                @case (_eRoleExecution.PAYER) {
-                                                    <td>total a pagar</td>
-                                                }
-                                                
-                                                @default {
-                                                    <td>{{ header }}</td>
-                                                }
-                                            }
-                                        } @else {
-                                            {{ header }}
-                                        }
-                                    </span>
-                                </th>
-                            }
+								<th class="w-72">
+									<span [ngClass]="{ 'pl-2.5': first }" class="block text-start">
+										@if ($index === 5) {
+											@switch (_roleExecution()?.id) {
+												@case (_eRoleExecution.PAYER) {
+													total a pagar
+												}
+												@default {
+													{{ header }}
+												}
+											}
+										} @else {
+											{{ header }}
+										}
+									</span>
+								</th>
+							}
     
                             @for (column of _operations()?.data; track $index) {
                                 <tr>

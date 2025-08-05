@@ -251,7 +251,6 @@ export const dashboardRoutes: Routes = [
 							accessToken: resolverGetAccessToken,
 							accessModule: resolverGetAccessModule,
 							accessServices: resolverGetAccessServices,
-							identity: resolverGetIdentity,
 							roleExecution: resolverGetRoleExecution,
 							sessionKey: resolverGetSessionKey,
 						},
@@ -284,7 +283,6 @@ export const dashboardRoutes: Routes = [
 							accessToken: resolverGetAccessToken,
 							accessModule: resolverGetAccessModule,
 							accessServices: resolverGetAccessServices,
-							identity: resolverGetIdentity,
 							roleExecution: resolverGetRoleExecution,
 							sessionKey: resolverGetSessionKey,
 						},
@@ -316,7 +314,6 @@ export const dashboardRoutes: Routes = [
 							accessToken: resolverGetAccessToken,
 							accessModule: resolverGetAccessModule,
 							accessServices: resolverGetAccessServices,
-							identity: resolverGetIdentity,
 							roleExecution: resolverGetRoleExecution,
 							sessionKey: resolverGetSessionKey,
 						},
@@ -361,7 +358,6 @@ export const dashboardRoutes: Routes = [
 									accessToken: resolverGetAccessToken,
 									accessModule: resolverGetAccessModule,
 									accessServices: resolverGetAccessServices,
-									identity: resolverGetIdentity,
 									roleExecution: resolverGetRoleExecution,
 									sessionKey: resolverGetSessionKey,
 								},
@@ -383,6 +379,19 @@ export const dashboardRoutes: Routes = [
 								},
 								loadComponent() {
 									return import('@dashboard/modules/parameters-management/financing-requests-documents/template');
+								},
+							},
+							{
+								path: 'view',
+								canActivate: [guardModulePermissions],
+								resolve: {
+									accessToken: resolverGetAccessToken,
+									accessModule: resolverGetAccessModule,
+									accessServices: resolverGetAccessServices,
+									roleExecution: resolverGetRoleExecution,
+								},
+								loadComponent() {
+									return import('@dashboard/modules/parameters-management/view-parameters/template');
 								},
 							},
 						],
