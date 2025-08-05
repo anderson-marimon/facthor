@@ -390,6 +390,25 @@ export const dashboardRoutes: Routes = [
 									accessServices: resolverGetAccessServices,
 									roleExecution: resolverGetRoleExecution,
 								},
+								data: {
+									updateAction: false,
+								},
+								loadComponent() {
+									return import('@dashboard/modules/parameters-management/view-parameters/template');
+								},
+							},
+							{
+								path: 'update',
+								canActivate: [guardModulePermissions],
+								resolve: {
+									accessToken: resolverGetAccessToken,
+									accessModule: resolverGetAccessModule,
+									accessServices: resolverGetAccessServices,
+									roleExecution: resolverGetRoleExecution,
+								},
+								data: {
+									updateAction: true,
+								},
 								loadComponent() {
 									return import('@dashboard/modules/parameters-management/view-parameters/template');
 								},

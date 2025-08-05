@@ -13,7 +13,6 @@ import {
 	TApiGetFinancierOperationsHistoryQuerySignalParams,
 } from '@dashboard/modules/operation-history-management/financier-history/api/get-financier-operations-history';
 import { ApiGetFinancingRequests, TFinancingRequest } from '@dashboard/modules/parameters-management/financing-requests/api/get-financing-requests';
-import { EDisbursementStatus } from '@dashboard/common/enums/disbursement-status';
 import { FinancingRequestTableFilters } from '@dashboard/modules/parameters-management/financing-requests/components/table-filters/table-filters';
 import { ApiPostApproveFinancingRequest } from '@dashboard/modules/parameters-management/financing-requests/api/post-approve-financing-request';
 import { ApiPostRejectFinancingRequest } from '@dashboard/modules/parameters-management/financing-requests/api/post-reject-financing-request';
@@ -211,6 +210,7 @@ export default class ParametersManagementFinancingRequests extends AccessViewInf
 			title: '¿Estás seguro de realizar esta acción?',
 			description: 'Esta acción confirma que estás de acuerdo con aprobación y asignación de parámetros para solicitud.',
 			action: this._postApproveFinancingRequest.bind(this),
+			actionButtonText: 'Aprobar',
 			loading: this._isLoadingApiPostApproveFinancingRequest,
 		});
 	}
@@ -266,6 +266,4 @@ export default class ParametersManagementFinancingRequests extends AccessViewInf
 
 		this._apiGetFinancingRequests.getFinancingRequests(this._getFinancingRequestsParams());
 	}
-
-	protected readonly _eDisbursementStatus = EDisbursementStatus;
 }

@@ -12,6 +12,7 @@ export type TApiGetNegotiationParametersQueryParams = {
 	FinancierName: string;
 	ProviderName: string;
 	Date: string;
+	State: boolean;
 } & TPaginator;
 
 export type TNegotiationParameter = {

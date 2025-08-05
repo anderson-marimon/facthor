@@ -18,13 +18,16 @@ export class FinancingRequestsAssignParameters implements OnDestroy {
 	public readonly interestPercentage = input.required<FormControl<string | null>>();
 	public readonly amountAssignedMonthUpdate = input.required<FormControl<string | null>>();
 	public readonly operationPercentage = input.required<FormControl<string | null>>();
+	public readonly clearOnClose = input(true);
 
 	public ngOnDestroy() {
-		this.minDaysFinancing().reset();
-		this.maxDaysFinancing().reset();
-		this.amountAssigned().reset();
-		this.interestPercentage().reset();
-		this.amountAssignedMonthUpdate().reset();
-		this.operationPercentage().reset();
+		if (this.clearOnClose()) {
+			this.minDaysFinancing().reset();
+			this.maxDaysFinancing().reset();
+			this.amountAssigned().reset();
+			this.interestPercentage().reset();
+			this.amountAssignedMonthUpdate().reset();
+			this.operationPercentage().reset();
+		}
 	}
 }

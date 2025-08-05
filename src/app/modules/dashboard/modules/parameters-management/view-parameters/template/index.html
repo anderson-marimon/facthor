@@ -1,5 +1,5 @@
-<section class="w-full h-full flex flex-col !font-light">
-    <main class="flex-1 h-full flex flex-col justify-center">
+<section class="w-full h-full flex flex-col !font-light overflow-hidden">
+    <main class="relative flex-1 h-full flex flex-col justify-center">
         <negotiation-parameters-table-filters
 			[roleExecution]="_roleExecution()?.id || 0"
             [isLoadingApiGetNegotiationParameters]="_isLoadingApiGetNegotiationParameters()"
@@ -11,7 +11,7 @@
 
         <article class="flex-1 flex flex-col p-2.5">
             @if (_isLoadingApiGetNegotiationParameters()) {
-                <general-loader [message]="'Cargando operaciones activas...'" />
+                <general-loader [message]="'Cargando parametros...'" />
             } @else {
                 <div class="w-full h-[calc(100dvh-198px)] overflow-auto">
                     @if(_negotiationParameters()?.data?.length) {
@@ -41,47 +41,42 @@
 									</span>
 								</th>
 							}
-    
-                            @for (column of _negotiationParameters()?.data; track $index) {
+
+                            @for (column of _negotiationParameters()?.data; track $index; let index = $index) {
                                 <tr>
-									@if (this._roleExecution()?.id === _eRoleExecution.FINANCIER) {
-										<td class="pl-2.5">{{ column.providerName }}</td>
-
-										<td>{{ column?.interestPercentage?.toFixed(2) || 0 }}%</td>
-
-										<td>{{ column.minDaysFinancing || 0}} días</td>
-
-										<td>{{ column.maxDaysFinancing || 0}} días</td>
-
-										<td>{{ column?.monthlyInterestRate?.toFixed(2) || 0 }}%</td>
-
-										<td>
-											<negotiation-parameter-status
-												[status]="column.state"
-												[statusName]="column.state ? 'Activo' : 'Inactivo'"
+									@if (_uploadAction()) {
+										<td class="pl-2.5">
+											<frs-checkbox
+												[control]="_selectControls()[index]"
+												[label]="column.providerName"
+												(change)="_onChangeSelectSingleParameter(index, column)"
+												[class]="'!text-xs'"
 											/>
 										</td>
-
-										<td>{{ column.amountAsigned || 0 | currency }}</td>
-
-										<td>{{ column.amountBalance || 0 | currency }}</td>
-
-										<td>{{ column.date.split('T')[0] }}</td>
 									} @else {
-										<td class="pl-2.5">{{ column.financierName }}</td>
-
-										<td>{{ column?.interestPercentage?.toFixed(2) || 0 }}%</td>
-
-										<td>{{ column.minDaysFinancing || 0}} días</td>
-
-										<td>{{ column.maxDaysFinancing || 0}} días</td>
-
-										<td>{{ column?.monthlyInterestRate?.toFixed(2) || 0 }}%</td>
-
-										<td>{{ column.amountAsigned || 0 | currency }}</td>
-
-										<td>{{ column.amountBalance || 0 | currency }}</td>
+										<td class="pl-2.5">{{ column.providerName }}</td>
 									}
+
+									<td>{{ column?.interestPercentage?.toFixed(2) || 0 }}%</td>
+
+									<td>{{ column.minDaysFinancing || 0}} días</td>
+
+									<td>{{ column.maxDaysFinancing || 0}} días</td>
+
+									<td>{{ column?.monthlyInterestRate?.toFixed(2) || 0 }}%</td>
+
+									<td>
+										<negotiation-parameter-status
+											[status]="column.state"
+											[statusName]="column.state ? 'Activo' : 'Inactivo'"
+										/>
+									</td>
+
+									<td>{{ column.amountAsigned || 0 | currency }}</td>
+
+									<td>{{ column.amountBalance || 0 | currency }}</td>
+
+									<td>{{ column.date.split('T')[0] }}</td>
 
                                 </tr>
                             }
@@ -92,14 +87,59 @@
                 </div>
             }
         </article>
+		@if (_showPrepareParametersSection() && _uploadAction()) {
+			<financing-requests-assign-parameters-drawer
+				[@slideEffect]
+				[minDaysFinancing]="_minDaysFinancing"
+				[maxDaysFinancing]="_maxDaysFinancing"
+				[amountAssigned]="_amountAssigned"
+				[amountAssignedMonthUpdate]="_amountAssignedMonthUpdate"
+				[operationPercentage]="_operationPercentage"
+				[interestPercentage]="_interestPercentage"
+				[clearOnClose]="false"
+				class="absolute top-0 left-0 z-10 w-full h-full flex flex-col xl:flex-row gap-2.5 p-2.5 bg-background overflow-y-auto"
+			/>
+		}
     </main>
 
-    <hr />
+	<hr class="relative z-20" />
 
     <inherit-table-footer
         [totalPages]="_negotiationParameters()?.countPages || 0"
         [currentPage]="_getNegotiationParameters().Page || 1"
         [paginatorFunction]="_getNegotiationParametersForPaginator.bind(this)"
-        class="h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in"
-    />
+        class="relative z-20 h-14 flex items-center justify-end gap-2.5 !text-[0.80rem] p-2.5 animate-opacity-in bg-background"
+	>
+		@if (_uploadAction()) {
+			<section class="flex-1 flex gap-2.5">
+				<button
+					frs-button
+					[variant]="'secondary'"
+					[disabled]="!_selectedRequestsId().length || _isLoadingApiPostUpdateNegotiationParameters()"
+					(click)="_onClickToggleShowAssignParameters()"
+					class="w-40"
+				>
+					@if (_showPrepareParametersSection()) {
+						Volver al listado
+					} @else {
+						Reasignar parámetros
+					}
+				</button>
+
+				<button
+					frs-button
+					class="w-40"
+					[disabled]="!_selectedRequestsId().length || _isAvailableUpdate || _isLoadingApiPostUpdateNegotiationParameters() || _parametersForms.invalid"
+					(click)="_onClickUpdateNegotiationParameters()"
+
+				>
+					@if (_isLoadingApiPostUpdateNegotiationParameters()) {
+						<loading-icon [color]="'#FFFFFF'" class="size-6" />
+					} @else {
+						Actualizar proveedor
+					}
+				</button>
+			</section>
+		}
+	</inherit-table-footer>
 </section>

@@ -15,8 +15,12 @@ import {
 } from '@dashboard/modules/parameters-management/view-parameters/api/get-negotiation-parameters';
 import { ERoleExecution } from '@dashboard/common/enums/role-execution';
 
-const SEARCH_SELECT_OPTIONS: { label: string; value: any }[] = [];
-const SEARCH_OPTIONS: string[] = [];
+const SEARCH_SELECT_OPTIONS = [{ label: 'Nombre del proveedor', value: 0 }];
+
+const SEARCH_SELECT_OPTIONS_PROVIDER = [{ label: 'Nombre del financiador', value: 0 }];
+
+const SEARCH_OPTIONS = ['ProviderName'];
+const SEARCH_OPTIONS_PROVIDER = ['FinancierName'];
 
 @Component({
 	selector: 'negotiation-parameters-table-filters',
@@ -30,15 +34,16 @@ export class NegotiationParametersTableFilters {
 	public readonly isLoadingApiGetNegotiationParameters = input(false);
 	public readonly filterFunction = input<(queryFilters: Partial<Omit<TApiGetNegotiationParametersQuerySignalParams, 'Size'>>) => void>();
 
+	private _isFiltersActive = false;
 	private readonly _destroyRef = inject(DestroyRef);
 	private readonly _formBuilder = inject(FormBuilder);
 	private readonly _ngZone = inject(NgZone);
-	private _isFiltersActive = false;
+
+	protected _searchSelectOptions: { label: string; value: any }[] = [];
+	protected _searchOptions: string[] = [];
 
 	protected readonly _searchIcon = Search;
 	protected readonly _resetFilterIcon = RefreshCcw;
-	protected readonly _searchSelectOptions = SEARCH_SELECT_OPTIONS;
-	protected readonly _searchOptions = SEARCH_OPTIONS;
 
 	protected readonly _currentSelection = signal<TSelectOption[]>([]);
 
@@ -53,19 +58,20 @@ export class NegotiationParametersTableFilters {
 	constructor() {
 		this._addSubscriptions();
 
+		if (this.roleExecution() === ERoleExecution.FINANCIER) {
+			this._searchSelectOptions = SEARCH_SELECT_OPTIONS;
+			this._searchOptions = SEARCH_OPTIONS;
+		} else {
+			this._searchSelectOptions = SEARCH_SELECT_OPTIONS_PROVIDER;
+			this._searchOptions = SEARCH_OPTIONS_PROVIDER;
+		}
+
 		afterNextRender(() => {
 			this._ngZone.runOutsideAngular(() => {
 				setTimeout(() => {
 					this._isFiltersActive = true;
 				}, 100);
 			});
-
-			if (this.roleExecution() === ERoleExecution.FINANCIER) {
-				this._searchSelectOptions.push({ label: 'Nombre del proveedor', value: 0 });
-			} else {
-				this._searchSelectOptions.push({ label: 'Nombre del fianciador', value: 0 });
-				this._searchOptions.push('FinancierName');
-			}
 		});
 	}
 
