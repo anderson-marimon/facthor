@@ -1,4 +1,4 @@
-import { afterRenderEffect, Component, DestroyRef, inject, signal, viewChild } from '@angular/core';
+import { afterRenderEffect, Component, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { AccessViewInformation } from '@dashboard/common/extension/access-information-view';
 import {

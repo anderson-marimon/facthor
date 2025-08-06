@@ -38,6 +38,10 @@ export const dashboardRoutes: Routes = [
 			},
 			{
 				path: 'home',
+				resolve: {
+					accessToken: resolverGetAccessToken,
+					roleExecution: resolverGetRoleExecution,
+				},
 				loadComponent() {
 					return import('@dashboard/modules/home/template');
 				},

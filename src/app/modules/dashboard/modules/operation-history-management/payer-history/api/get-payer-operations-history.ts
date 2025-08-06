@@ -75,7 +75,7 @@ export type TApiGetPayerOperationsHistoryQuerySignalParams = TAccessInfo & Parti
 export class ApiGetPayerOperationsHistory extends AccessInterceptor {
 	private readonly _storeActiveOperations = inject(StoreActiveOperations);
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
-	private readonly _queryParams = signal<Nullable<TAccessInfo>>(null);
+	private readonly _queryParams = signal<Nullable<TApiGetPayerOperationsHistoryQuerySignalParams>>(null);
 
 	private readonly _resource = resource({
 		request: this._queryParams,

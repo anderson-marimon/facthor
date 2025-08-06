@@ -1,3 +1,24 @@
-<section class="w-full h-full grid place-content-center text-2xl">
-    Welcome
+<section class="w-full h-full font-light text-sm overflow-y-hidden p-2.5 pr-0">
+	<main class="w-full h-full flex flex-col gap-2.5 pr-2.5">
+		@if (_isLoadingApiGetCompleteOperationsFinancier()) {
+			<general-loader [message]="'Cargando estadísticas...'" />
+		} @else {
+			<view-card [title]="'Información general'" class="flex-1">
+
+			</view-card>
+
+			<view-card [title]="'historial de operaciones'" class="h-1/2">
+				<home-operations-chart
+					[operations]="_completeOperationsFinancier()?.monthlyOperations || []"
+					[operationsFinished]="_completeOperationsFinancier()?.monthlyOperationsFinancied || []"
+					[maxY]="Math.max(
+							_completeOperationsFinancier()?.totalOperationCount || 0,
+							 _completeOperationsFinancier()?.totalOperationCount || 0
+						 ) + 50"
+					[minY]="0"
+					class="h-[400px]"
+				/>
+			</view-card>
+		}
+	</main>
 </section>

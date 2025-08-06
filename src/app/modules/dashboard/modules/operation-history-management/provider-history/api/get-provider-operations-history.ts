@@ -30,7 +30,7 @@ export type TApiGetProviderOperationsHistoryQuerySignalParams = TAccessInfo & Pa
 export class ApiGetProviderOperationsHistory extends AccessInterceptor {
 	private readonly _storeActiveOperations = inject(StoreActiveOperations);
 	private readonly _url = `${envs.FT_URL_NEGOTIATION}`;
-	private readonly _queryParams = signal<Nullable<TAccessInfo>>(null);
+	private readonly _queryParams = signal<Nullable<TApiGetProviderOperationsHistoryQuerySignalParams>>(null);
 
 	private readonly _resource = resource({
 		request: this._queryParams,
