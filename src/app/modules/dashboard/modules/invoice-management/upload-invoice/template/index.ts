@@ -20,7 +20,7 @@ import { timer } from 'rxjs';
 @Component({
 	selector: 'dashboard-invoice-management-upload-invoices',
 	templateUrl: 'index.html',
-	viewProviders: [ApiPostExtractInvoiceData, ApiPostUploadInvoices],
+	providers: [ApiPostExtractInvoiceData, ApiPostUploadInvoices],
 	imports: [FrsButtonModule, LoadingIcon, LucideAngularModule, UploadInvoiceDragInputFiles, UploadInvoicesProcessedInvoiceItem, ViewCard],
 })
 export default class DashboardInvoiceManagementUploadInvoices extends AccessViewInformation {
@@ -28,14 +28,17 @@ export default class DashboardInvoiceManagementUploadInvoices extends AccessView
 	private readonly _apiPostUploadInvoices = inject(ApiPostUploadInvoices);
 	private readonly _dragFilesComponent = viewChild(UploadInvoiceDragInputFiles);
 	private readonly _dragFiles = signal<TFile[]>([]);
+
 	private readonly _extractedInvoiceData = this._apiPostExtractInvoiceData.response;
 	private readonly _uploadInvoiceResult = this._apiPostUploadInvoices.response;
 
 	protected readonly _searchIcon = SearchCheck;
 	protected readonly _warningIcon = TriangleAlert;
 	protected readonly _activeVerificationFiles = signal(false);
+
 	protected readonly _isLoadingApiPostExtractInvoiceData = this._apiPostExtractInvoiceData.isLoading;
 	protected readonly _isLoadingApiPostUploadInvoice = this._apiPostUploadInvoices.isLoading;
+
 	protected readonly _errorFiles = signal<TZipErrorFiles[]>([]);
 	protected readonly _processedFiles = signal<TZipProcessedFiles[]>([]);
 
@@ -102,8 +105,7 @@ export default class DashboardInvoiceManagementUploadInvoices extends AccessView
 	}
 
 	protected _getFileNameById(fileId: string): string {
-		const fileName = this._dragFiles().find((file) => file.fileId === fileId)?.fileName || '';
-		return fileName;
+		return this._dragFiles().find((file) => file.fileId === fileId)?.fileName || '';
 	}
 
 	protected _onClickExtractInvoiceData(): void {

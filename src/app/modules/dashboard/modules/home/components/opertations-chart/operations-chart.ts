@@ -333,13 +333,11 @@ export class HomeOperationsChartComponent {
 
 		let legendX = 5;
 
-		// Primero dibujamos operaciones (siempre)
 		ctx.fillStyle = secondaryColor;
 		ctx.fillRect(legendX, legendY - 8, iconSize, iconSize);
 		ctx.fillStyle = '#333';
 		ctx.fillText(text1, legendX + iconSize + spacing, legendY + textOffsetY);
 
-		// Luego financiadas si está habilitado
 		if (this.showFinanced()) {
 			const legend2X = legendX + iconSize + spacing + text1Width + 20;
 			ctx.fillStyle = primaryColor;

@@ -10,15 +10,18 @@ import {
 	TRadianEvent,
 } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-list';
 import { ApiGetInvoiceStatuses } from '@dashboard/modules/invoice-management/view-upload-invoice/api/get-invoice-state';
-import { ViewUploadInvoiceRadianEventsDrawer } from '@dashboard/modules/invoice-management/view-upload-invoice/components/radian-events-drawer/radian-events-drawer';
-import { ViewUploadInvoiceTableFilters } from '@dashboard/modules/invoice-management/view-upload-invoice/components/table-filters/table-filters';
+import {
+	ViewUploadInvoiceRadianEventsDrawer
+} from '@dashboard/modules/invoice-management/view-upload-invoice/components/radian-events-drawer/radian-events-drawer';
+import {
+	ViewUploadInvoiceTableFilters
+} from '@dashboard/modules/invoice-management/view-upload-invoice/components/table-filters/table-filters';
 import { FrsButtonModule } from '@fresco-ui/frs-button';
 import { EmptyResult } from '@shared/components/empty-result/empty-result';
 import { GeneralLoader } from '@shared/components/general-loader/general-loader';
 import { InheritTableFooter } from '@shared/components/inherit-table-footer/inherit-table-footer';
 import { InheritTable } from '@shared/components/inherit-table/inherit-table';
 import { InvoiceStatus } from '@shared/components/invoice-status/invoice-status';
-import { FileX2 } from 'lucide-angular';
 
 const HEADERS = ['n.factura', 'emisor', 'pagador', 'estado', 'expedición', 'vencimiento', 'valor', 'acciones'];
 
@@ -52,10 +55,11 @@ export default class DashboardInvoiceManagementViewUploadInvoice extends AccessV
 	private readonly _apiGetInvoiceList = inject(ApiGetInvoiceList);
 
 	protected readonly _getInvoiceListParams = signal<Partial<TApiGetInvoiceListQuerySignalParams>>({});
-	protected readonly _notResultIcon = FileX2;
 	protected readonly _headers = HEADERS;
+
 	protected readonly _invoices = this._apiGetInvoiceList.response;
 	protected readonly _isLoadingApiGetInvoiceList = this._apiGetInvoiceList.isLoading;
+
 	protected readonly _radianEventsSelected = signal<TRadianEvent[]>([]);
 	protected readonly _invoiceNumberSelected = signal('');
 

@@ -3,7 +3,7 @@ import { envs } from '@app/envs/envs';
 import { AccessInterceptor } from '@dashboard/interceptors/access-interceptor';
 import { TFile } from '@fresco-ui/frs-file-input/frs-file-input';
 import { getBase64FromTFile } from '@shared/utils/get-base64-from-t-file';
-import { toast } from 'ngx-sonner';
+import { catchHandlerError } from '@shared/handlers/catch-handler-error';
 
 type TUploadInvoiceFile = {
 	id: string;
@@ -41,20 +41,22 @@ type TExtractedInvoiceData = Nullable<{
 	zipFileErrors: TZipErrorFiles[];
 }>;
 
-type TApiExtractedInvoiceData = TApi<TExtractedInvoiceData>;
+type TApiPostExtractInvoiceDataSignalBody = TAccessInfo & { files: TUploadInvoiceFile[] };
+type TApiExtractedInvoiceDataResponse = TApi<TExtractedInvoiceData>;
 
 export class ApiPostExtractInvoiceData extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_CLIENT_UPLOAD}`;
-	private readonly _body = signal<Nullable<TAccessInfo & { files: TUploadInvoiceFile[] }>>(null);
+	private readonly _body = signal<Nullable<TApiPostExtractInvoiceDataSignalBody>>(null);
 
 	private readonly _resource = resource({
 		request: this._body,
-		loader: (files) => this._fetchPostUploadFiles(files),
+		loader: (args) => this._fetchPostUploadFiles(args),
 	});
 
-	private async _fetchPostUploadFiles(params: ResourceLoaderParams<Nullable<TAccessInfo & { files: TUploadInvoiceFile[] }>>) {
+	private async _fetchPostUploadFiles(params: ResourceLoaderParams<Nullable<TApiPostExtractInvoiceDataSignalBody>>) {
 		if (params.request && params.request.files.length === null) return null;
-		const { accessModule = '', accessToken = '', accessService, files = [] } = params.request!;
+
+		const { accessModule, accessToken, accessService, files } = params.request!;
 
 		if (!accessService?.service) {
 			console.error('The service route is not being provided.');
@@ -69,7 +71,7 @@ export class ApiPostExtractInvoiceData extends AccessInterceptor {
 		try {
 			const path = `${this._url}${accessService.service}`;
 
-			const response = await this._HttpRequest<TApiExtractedInvoiceData>({
+			const response = await this._HttpRequest<TApiExtractedInvoiceDataResponse>({
 				path,
 				method: accessService.method,
 				headers: {
@@ -82,11 +84,11 @@ export class ApiPostExtractInvoiceData extends AccessInterceptor {
 			});
 
 			return response.data;
-		} catch (err) {
-			const error = err instanceof Error ? err : new Error(String(err));
-
-			toast.message('Envío de documentos fallido', {
-				description: error.message || 'Por favor, intenta nuevamente.',
+		} catch (error) {
+			catchHandlerError({
+				error,
+				message: 'No se pudo extraer los datos de la factura.',
+				description: 'Estamos teniendo problemas para extraer los datos de las facturas, por favor, intente más tarde.',
 			});
 
 			return null;

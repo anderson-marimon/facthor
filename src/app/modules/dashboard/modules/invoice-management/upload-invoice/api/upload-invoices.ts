@@ -14,18 +14,19 @@ type TApiPostUploadInvoicesBody = {
 	files: TUploadInvoice[];
 };
 
+type TApiPostUploadInvoicesSignalBody = TAccessInfo & TApiPostUploadInvoicesBody;
 type TApiPostUploadInvoicesResponse = TApi<boolean>;
 
 export class ApiPostUploadInvoices extends AccessInterceptor {
 	private readonly _url = `${envs.FT_URL_CLIENT_UPLOAD}`;
-	private readonly _body = signal<Nullable<TAccessInfo & TApiPostUploadInvoicesBody>>(null);
+	private readonly _body = signal<Nullable<TApiPostUploadInvoicesSignalBody>>(null);
 
 	private readonly _resource = resource({
 		request: this._body,
 		loader: (params) => this._fetchPostUploadInvoices(params),
 	});
 
-	private async _fetchPostUploadInvoices(args: ResourceLoaderParams<Nullable<TAccessInfo & TApiPostUploadInvoicesBody>>) {
+	private async _fetchPostUploadInvoices(args: ResourceLoaderParams<Nullable<TApiPostUploadInvoicesSignalBody>>) {
 		if (args.request === null) return null;
 		const { accessToken = '', accessModule = '', accessService, files } = args.request;
 
@@ -40,7 +41,7 @@ export class ApiPostUploadInvoices extends AccessInterceptor {
 		}
 
 		try {
-			const response = await this._HttpRequest<TApiPostUploadInvoicesResponse>({
+			return await this._HttpRequest<TApiPostUploadInvoicesResponse>({
 				path: `${this._url}${accessService.service}`,
 				method: accessService.method,
 				headers: {
@@ -51,10 +52,9 @@ export class ApiPostUploadInvoices extends AccessInterceptor {
 				signal: args.abortSignal,
 				body: JSON.stringify({ files }),
 			});
-
-			return response;
 		} catch (error) {
 			catchHandlerError({ error, message: 'No se pudo subir las facturas', description: 'Por favor, intenta nuevamente.' });
+
 			return null;
 		}
 	}
