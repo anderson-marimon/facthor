@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import {
-	Component,
-	DestroyRef,
-	type ElementRef,
 	afterNextRender,
 	afterRenderEffect,
+	Component,
 	computed,
+	DestroyRef,
 	effect,
+	type ElementRef,
 	inject,
 	input,
 	output,
@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { frs } from '@fresco-core/frs-core';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { Check, LucideAngularModule } from 'lucide-angular';
 import { fromEvent } from 'rxjs';
 
@@ -85,7 +85,7 @@ export class FrsSelectOptions {
 			.pipe(takeUntilDestroyed(this._destroyRef))
 			.subscribe((event) => {
 				const optionsElements = this._elementOptions();
-				if (optionsElements.length === 0 || !optionsElements[0].nativeElement.offsetParent) return;
+				if (optionsElements?.length === 0 || !optionsElements[0].nativeElement.offsetParent) return;
 
 				switch (event.key) {
 					case 'ArrowDown':

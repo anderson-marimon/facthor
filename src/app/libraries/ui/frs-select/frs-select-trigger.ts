@@ -66,13 +66,14 @@ export class FrsSelectTrigger {
 	}
 
 	public selectedText = computed(() => {
-		if (this._selectedOptions().length === 0) return '';
-		const options =
-			this._selectedOptions()
-				.map((opt) => opt?.label)
-				.join(', ') || '';
+		const options = this._selectedOptions() ?? [];
 
-		return options;
+		if (options.length === 0) return '';
+
+		return options
+			.map((opt) => opt?.label ?? '')
+			.filter(Boolean)
+			.join(', ');
 	});
 
 	@HostListener('blur')
