@@ -1,0 +1,9 @@
+<div class="flex flex-col gap-2.5 border broder-input p-2.5 rounded-md">
+	<h2>{{ label() }}</h2>
+
+	@if (isCurrency()) {
+		<p class="text-2xl semibold">{{ value()  | currency }}</p>
+	} @else {
+		<p class="text-2xl semibold">{{ value() }}</p>
+	}
+</div>

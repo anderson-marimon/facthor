@@ -21,14 +21,15 @@ type TChartData = {
 @Component({
 	selector: 'home-operations-chart',
 	standalone: true,
-	template: `<canvas #canvas class="block w-full h-full"></canvas>`,
+	templateUrl: `operations-chart.html`,
 	imports: [CommonModule],
 })
 export class HomeOperationsChartComponent {
 	public readonly operations = input<TChartData[]>([]);
-	public readonly operationsFinished = input<TChartData[]>([]);
+	public readonly operationsFinanced = input<TChartData[]>([]);
 	public readonly maxY = input(0);
 	public readonly minY = input(0);
+	public readonly showFinanced = input(true); // <-- control para mostrar/ocultar financiadas
 
 	private readonly _injector = inject(Injector);
 	private readonly _canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
@@ -58,9 +59,9 @@ export class HomeOperationsChartComponent {
 			runInInjectionContext(this._injector, () => {
 				effect(() => {
 					const ops = this.operations();
-					const opsFinished = this.operationsFinished();
+					const opsFinished = this.operationsFinanced();
 
-					if (this._ctx && ops.length > 0 && opsFinished.length > 0 && this.maxY() > this.minY()) {
+					if (this._ctx && ops.length > 0 && (this.showFinanced() ? opsFinished.length > 0 : true) && this.maxY() > this.minY()) {
 						this._animate();
 					}
 				});
@@ -110,9 +111,9 @@ export class HomeOperationsChartComponent {
 		this._tooltipVisible = true;
 
 		const targetX = paddingLeft + stepX * closestIndex;
-		const finished = this.operationsFinished()[closestIndex]?.operationsCount ?? 0;
 		const total = this.operations()[closestIndex]?.operationsCount ?? 0;
-		const maxVal = Math.max(finished, total);
+		const finished = this.showFinanced() ? (this.operationsFinanced()[closestIndex]?.operationsCount ?? 0) : 0;
+		const maxVal = this.showFinanced() ? Math.max(finished, total) : total;
 		const targetY = paddingTop + graphHeight - (maxVal - this.minY()) * scaleY;
 
 		this._targetTooltipX = targetX;
@@ -242,7 +243,7 @@ export class HomeOperationsChartComponent {
 		const scaleY = graphHeight / (this.maxY() - this.minY());
 
 		const series = [
-			{ values: this.operationsFinished().map((d) => d.operationsCount), color: primaryColor, dashed: true },
+			...(this.showFinanced() ? [{ values: this.operationsFinanced().map((d) => d.operationsCount), color: primaryColor, dashed: true }] : []),
 			{ values: this.operations().map((d) => d.operationsCount), color: secondaryColor, dashed: false },
 		];
 
@@ -327,21 +328,25 @@ export class HomeOperationsChartComponent {
 		ctx.font = '13px nunito';
 
 		const text1 = 'Número de operaciones';
-		const text2 = 'Operaciones finalizadas';
+		const text2 = 'Operaciones financiadas';
 		const text1Width = ctx.measureText(text1).width;
 
-		const legend1X = 5;
-		const legend2X = legend1X + iconSize + spacing + text1Width + 20;
+		let legendX = 5;
 
-		ctx.fillStyle = primaryColor;
-		ctx.fillRect(legend1X, legendY - 8, iconSize, iconSize);
-		ctx.fillStyle = '#333';
-		ctx.fillText(text1, legend1X + iconSize + spacing, legendY + textOffsetY);
-
+		// Primero dibujamos operaciones (siempre)
 		ctx.fillStyle = secondaryColor;
-		ctx.fillRect(legend2X, legendY - 8, iconSize, iconSize);
+		ctx.fillRect(legendX, legendY - 8, iconSize, iconSize);
 		ctx.fillStyle = '#333';
-		ctx.fillText(text2, legend2X + iconSize + spacing, legendY + textOffsetY);
+		ctx.fillText(text1, legendX + iconSize + spacing, legendY + textOffsetY);
+
+		// Luego financiadas si está habilitado
+		if (this.showFinanced()) {
+			const legend2X = legendX + iconSize + spacing + text1Width + 20;
+			ctx.fillStyle = primaryColor;
+			ctx.fillRect(legend2X, legendY - 8, iconSize, iconSize);
+			ctx.fillStyle = '#333';
+			ctx.fillText(text2, legend2X + iconSize + spacing, legendY + textOffsetY);
+		}
 	}
 
 	private _drawTooltip(width: number, height: number) {
@@ -350,12 +355,14 @@ export class HomeOperationsChartComponent {
 		const ctx = this._ctx;
 		const alpha = this._tooltipOpacity;
 
-		const finished = this.operationsFinished()[this._hoveredIndex]?.operationsCount ?? 0;
 		const total = this.operations()[this._hoveredIndex]?.operationsCount ?? 0;
+		const finished = this.showFinanced() ? (this.operationsFinanced()[this._hoveredIndex]?.operationsCount ?? 0) : null;
 
 		const values = [
-			{ label: 'Finalizadas', value: finished, color: getComputedStyle(document.documentElement).getPropertyValue('--primary') },
 			{ label: 'Operaciones', value: total, color: getComputedStyle(document.documentElement).getPropertyValue('--primary-facthor') },
+			...(this.showFinanced()
+				? [{ label: 'Financiadas', value: finished!, color: getComputedStyle(document.documentElement).getPropertyValue('--primary') }]
+				: []),
 		];
 
 		ctx.save();
@@ -370,7 +377,7 @@ export class HomeOperationsChartComponent {
 		ctx.setLineDash([]);
 
 		const tooltipWidth = 120;
-		const tooltipHeight = 40;
+		const tooltipHeight = values.length * 16 + 12;
 
 		let boxX = this._tooltipX + 10;
 		if (boxX + tooltipWidth > width) boxX = width - tooltipWidth - 10;
@@ -389,9 +396,9 @@ export class HomeOperationsChartComponent {
 		ctx.font = '12px nunito';
 		values.forEach((item, i) => {
 			ctx.fillStyle = item.color;
-			ctx.fillRect(boxX + 5, boxY + 11 + i * 16, 6, 6);
+			ctx.fillRect(boxX + 5, boxY + 12 + i * 16, 6, 6);
 			ctx.fillStyle = '#333';
-			ctx.fillText(`${item.label}: ${item.value}`, boxX + 15, boxY + 16 + i * 16);
+			ctx.fillText(`${item.label}: ${item.value}`, boxX + 15, boxY + 18 + i * 16);
 		});
 		ctx.restore();
 	}

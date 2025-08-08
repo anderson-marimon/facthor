@@ -1,6 +1,8 @@
 <nav class="h-full flex items-center px-2.5 border-b">
     <section>
-        <facthor-logo class="md:ml-[15px] block w-32 md:w-40" [textColor]="'#041C2C'" />
+		<a [routerLink]="['/dashboard/home']" aria-label="Ir al inicio">
+        	<facthor-logo class="md:ml-[15px] block w-32 md:w-40 cursor-pointer" [textColor]="'#041C2C'" />
+		</a>
     </section>
     <section class="flex-1 flex items-center justify-end gap-2.5">
         <frs-popover #popover [class]="'w-fit'">

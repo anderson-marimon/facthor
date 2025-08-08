@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { envs } from '@app/envs/envs';
 import { TIdentity, TRoleExecution } from '@dashboard/api/user-configuration';
 import { FrsAvatarModule } from '@fresco-ui/frs-avatar';
@@ -13,7 +13,7 @@ import { toast } from 'ngx-sonner';
 @Component({
 	selector: 'top-bar',
 	templateUrl: 'top-bar.html',
-	imports: [CommonModule, FacthorLogo, FrsAvatarModule, FrsButtonModule, FrsPopoverModule, LucideAngularModule],
+	imports: [CommonModule, FacthorLogo, FrsAvatarModule, FrsButtonModule, FrsPopoverModule, LucideAngularModule, RouterLink],
 })
 export class TopBar {
 	public readonly identity = input<Nullable<TIdentity>>(null);

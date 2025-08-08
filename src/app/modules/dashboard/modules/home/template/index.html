@@ -1,21 +1,110 @@
 <section class="w-full h-full font-light text-sm overflow-y-hidden p-2.5 pr-0">
-	<main class="w-full h-full flex flex-col gap-2.5 pr-2.5">
-		@if (_isLoadingApiGetCompleteOperationsFinancier()) {
+	<main class="w-full h-full flex flex-col gap-2.5 pr-2.5 overflow-y-auto">
+		@if (_isLoadingApiGetOperationsStatistics()) {
 			<general-loader [message]="'Cargando estadísticas...'" />
 		} @else {
-			<view-card [title]="'Información general'" class="flex-1">
+			<div class="flex-1 flex flex-col md:flex-row gap-2.5 animate-opacity-in">
+				<view-card [title]="'Información de operaciones'" class="flex-1">
+					<div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-2.5">
+						@if (_roleExecution()?.id === _eRoleExecution.FINANCIER) {
+							<home-statistic-card
+								[label]="'Operaciones financiadas'"
+								[value]="_operationsStatistics()?.totalOperationFinanciedCount?.toString() || ''"
+								[isCurrency]="false"
+							/>
 
-			</view-card>
+							<home-statistic-card
+								[label]="'Total financiado'"
+								[value]="_operationsStatistics()?.totalOperationFinanciedAmount?.toString() || ''"
+								[isCurrency]="true"
+							/>
 
-			<view-card [title]="'historial de operaciones'" class="h-1/2">
+							<home-statistic-card
+								[label]="'Operaciones pendientes'"
+								[value]="_operationsStatistics()?.totalOperationPendingReserveCount?.toString() || ''"
+								[isCurrency]="false"
+							/>
+						}
+
+						@if (_roleExecution()?.id === _eRoleExecution.PAYER) {
+							<home-statistic-card
+								[label]="'Operaciones pendientes'"
+								[value]="_operationsStatistics()?.operationPendingCount?.toString() || ''"
+								[isCurrency]="false"
+							/>
+
+							<home-statistic-card
+								[label]="'Total pendiente'"
+								[value]="_operationsStatistics()?.totalOperationPendingAmount?.toString() || ''"
+								[isCurrency]="true"
+							/>
+						}
+
+						@if (_roleExecution()?.id === _eRoleExecution.FINANCIER) {
+							<home-statistic-card
+								[label]="'Total en reserva'"
+								[value]="_operationsStatistics()?.totalOperationReserveAmount?.toString() || ''"
+								[isCurrency]="true"
+							/>
+						}
+
+						<home-statistic-card
+							[label]="'Operaciones completadas'"
+							[value]="_operationsStatistics()?.totalOperationCount?.toString() || ''"
+							[isCurrency]="false"
+						/>
+
+						<home-statistic-card
+							[label]="'Total opereaciones completadas'"
+							[value]="_operationsStatistics()?.totalOperationAmount?.toString() || _operationsStatistics()?.totalOperationsAmount?.toString() || ''"
+							[isCurrency]="true"
+						/>
+
+						@if (_roleExecution()?.id === _eRoleExecution.FINANCIER) {
+							<home-statistic-card
+								[label]="'Total de intereses'"
+								[value]="_operationsStatistics()?.totalInterestOperations?.toString() || ''"
+								[isCurrency]="true"
+							/>
+						}
+
+					</div>
+				</view-card>
+
+				@if (_roleExecution()?.id === _eRoleExecution.PROVIDER) {
+					<view-card [title]="'Información sobre los cupos'" class="flex-1">
+						<div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-2.5">
+							<home-statistic-card
+								[label]="'Cupo aprobado'"
+								[value]="_providerQuotas()?.approveQuota?.toString() || ''"
+								[isCurrency]="true"
+							/>
+
+							<home-statistic-card
+								[label]="'Cupo usado'"
+								[value]=" _providerQuotas()?.usedQuota?.toString() || ''"
+								[isCurrency]="true"
+							/>
+
+							<home-statistic-card
+								[label]="'Cupo disponible'"
+								[value]="_providerQuotas()?.remainingQuota?.toString() || ''"
+								[isCurrency]="true"
+							/>
+						</div>
+					</view-card>
+				}
+			</div>
+			<view-card [title]="'historial de operaciones'" class="h-1/2 min-h-[400px] animate-opacity-in">
 				<home-operations-chart
-					[operations]="_completeOperationsFinancier()?.monthlyOperations || []"
-					[operationsFinished]="_completeOperationsFinancier()?.monthlyOperationsFinancied || []"
-					[maxY]="Math.max(
-							_completeOperationsFinancier()?.totalOperationCount || 0,
-							 _completeOperationsFinancier()?.totalOperationCount || 0
+					[operations]="_operationsStatistics()?.monthlyOperations || []"
+					[operationsFinanced]="_operationsStatistics()?.monthlyOperationsFinancied || []"
+					[maxY]="_Math.max(
+							_operationsStatistics()?.totalOperationCount || 0,
+							 _operationsStatistics()?.totalOperationCount || 0
 						 ) + 50"
 					[minY]="0"
+					[showFinanced]="_roleExecution()?.id === _eRoleExecution.FINANCIER"
 					class="h-[400px]"
 				/>
 			</view-card>
